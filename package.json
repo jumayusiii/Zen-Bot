@@ -1,0 +1,39 @@
+{
+  "name": "juma-habbo-bot",
+  "version": "1.4.0-beta.1",
+  "private": true,
+  "description": "Discord bot with memes, minigames, polls, reminders, server info and detailed website uptime monitoring.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "deploy": "node src/deploy-commands.js",
+    "deploy:global": "node src/deploy-commands.js --global",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jumayusiii/Juma-Habbo-Bot.git"
+  },
+  "homepage": "https://github.com/jumayusiii/Juma-Habbo-Bot#readme",
+  "bugs": {
+    "url": "https://github.com/jumayusiii/Juma-Habbo-Bot/issues"
+  },
+  "license": "MIT",
+  "author": "jumayusiii",
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "discord.js",
+    "uptime-monitor",
+    "habbo"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
+  }
+}
