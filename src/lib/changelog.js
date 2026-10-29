@@ -2,6 +2,25 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.10.0-beta.1',
+    date: '2026-10-29',
+    title: 'Audit logs, greetings & new games',
+    summary: 'Moderation now writes to a configurable audit channel, welcome and leave messages ship with live previews, and three new commands join the directory.',
+    added: [
+      '`/modlog` selects a per-server audit channel; mutes, unmutes, kicks, bans, unbans and automatic temporary-ban expiry post a clean inline log.',
+      '`/welcome` and `/leave` configure join and leave embeds with a channel, a custom template and a test preview.',
+      '`/slots`, `/joke` and `/wouldyourather` add a slot machine, a button-revealed joke and a live two-option vote.',
+      'Greetings support `{user}`, `{username}`, `{server}`, `{count}`, `{created}` and `{joined}` placeholders.',
+      'The command directory now covers **48 commands** across six tabs.',
+    ],
+    improved: [
+      'Every new result uses a compact three-column inline layout with the shared palette, avatars and version footer.',
+      'Greeting and audit settings live in `data/greetings.json` and `data/moderation-logs.json` and survive restarts.',
+      'The bot now requests the **Server Members** intent so join and leave events can fire; message content is still never read.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.9.0-beta.1',
     date: '2026-10-29',
     title: 'XP curve, rewards & moderation',

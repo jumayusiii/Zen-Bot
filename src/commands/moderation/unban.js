@@ -7,6 +7,7 @@ const {
   moderationErrorMessage,
   sendModerationError,
 } = require('../../lib/moderation');
+const { sendModerationLog } = require('../../lib/moderationLogs');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -102,6 +103,15 @@ module.exports = {
     });
 
     const username = existing.user?.username ?? userId;
+
+    await sendModerationLog(interaction.client, guild.id, {
+      action: 'unban',
+      targetId: userId,
+      targetName: username,
+      moderatorId: interaction.user.id,
+      reason,
+    });
+
     const embed = createEmbed(interaction.client, {
       section: 'Moderation',
       title: 'User unbanned',

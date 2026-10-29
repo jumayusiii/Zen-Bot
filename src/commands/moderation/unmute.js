@@ -6,6 +6,7 @@ const {
   sendModerationError,
   targetModerationError,
 } = require('../../lib/moderation');
+const { sendModerationLog } = require('../../lib/moderationLogs');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -83,6 +84,14 @@ module.exports = {
       await sendModerationError(interaction, moderationErrorMessage(error));
       return;
     }
+
+    await sendModerationLog(interaction.client, guild.id, {
+      action: 'unmute',
+      targetId: user.id,
+      targetName: member.displayName,
+      moderatorId: interaction.user.id,
+      reason,
+    });
 
     const embed = createEmbed(interaction.client, {
       section: 'Moderation',

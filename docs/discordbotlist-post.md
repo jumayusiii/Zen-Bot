@@ -1,12 +1,13 @@
 # Discord Bot List post update
 
 Live page: https://discordbotlist.com/bots/juma-habbo
-Editor: https://discordbotlist.com/bots/juma-habbo/edit  
+Editor: https://discordbotlist.com/bots/juma-habbo/edit
 The editor redirects to Discord sign-in, so the post has to be saved from the
 owner's account.
 
-The live post carries the pre-1.8 copy. This is the exact replacement for the
-short and long descriptions, the help command and the GitHub links.
+The live post carries the pre-1.10 copy. This is the exact replacement for the
+short and long descriptions, the help command and the GitHub links for
+**v1.10.0-beta.1** and the **48-command** directory.
 
 ## Fields
 
@@ -25,23 +26,24 @@ Keep the existing **No NSFW** setting.
 
 ## Short description
 
-130 characters:
+122 characters:
 
 ```text
-Memes, minigames, chat levels and rank cards, polls, reminders and deep site uptime monitoring — all through clean slash commands.
+Fun, minigames, levels, moderation with audit logs, welcome messages, polls and site uptime — all in clean slash commands.
 ```
 
 ## Long description
 
 ```markdown
-**Juma Habbo** is a lightweight Discord bot for fun breaks, quick decisions and keeping an eye on a website.
+**Juma Habbo** is a lightweight Discord bot for fun breaks, a friendlier community and keeping an eye on a website.
 
 ### What it does
 
-- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/compliment` and `/rate`.
-- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing and a reaction test.
+- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment` and `/rate`.
+- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
-- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks and role hierarchy protection.
+- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
+- **Community** — `/welcome` and `/leave` embeds with custom templates, a test preview and clean inline member details.
 - **Server tools** — server, user and role info, plus icon, banner and avatar grabbers with size pickers and download buttons.
 - **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, `/ping`, tabbed help and an invite link.
 - **Monitoring** — `/sitestatus` checks HTTP, TLS, DNS, page metadata and security headers. `/uptime` adds seven-day bars and an incident timeline.
@@ -50,12 +52,13 @@ Memes, minigames, chat levels and rank cards, polls, reminders and deep site upt
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/higherlower` and `/reaction` for a quick round.
+3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
+4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
-**Help command:** `/helplist`  
+**Help command:** `/helplist`
 **Source and issues:** [GitHub repository](https://github.com/jumayusiii/Juma-Habbo-Bot) · [Report an issue](https://github.com/jumayusiii/Juma-Habbo-Bot/issues)
 
-Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels and scheduled temporary bans survive restarts.
+Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
 ```
 
 ## Links to add
@@ -76,8 +79,9 @@ Slash commands only. No prefix and no message content access. Polls, reminders, 
 
 ## Fix the server and user counts
 
-The page currently shows **Servers: Unknown** and **Users: Unknown**. Those
-numbers come from stats posts, not from the public page automatically.
+The page currently shows **Servers: Unknown** and **Users: Unknown** unless a
+stats token has already been configured. Those numbers come from stats posts,
+not from the public page automatically.
 
 1. Open the bot's admin page on Discord Bot List and generate an API token.
 2. Add it to `.env` on the host:
@@ -96,13 +100,14 @@ A healthy start logs:
 ```
 
 `[botLists] No list tokens configured; stats sync is off.` means the token is
-missing. Never commit `.env`, paste the token in chat or put it in the repository.
+missing. Never commit `.env`, paste the token in chat or put it in the
+repository.
 
 ## Checklist
 
 - [ ] Signed in as the listing owner.
-- [ ] Short description replaced (130 characters).
-- [ ] Long description replaced with the 1.9 copy.
+- [ ] Short description replaced (122 characters).
+- [ ] Long description replaced with the 1.10 copy.
 - [ ] Help command set to `/helplist`.
 - [ ] Tags kept: Games, Utility, Levelling, Fun, Meme.
 - [ ] GitHub repository and issues links added.

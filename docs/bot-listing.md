@@ -10,13 +10,13 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Juma Habbo |
 | Application ID | `1564936469305364480` |
-| Version | `1.9.0-beta.1` |
+| Version | `1.10.0-beta.1` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
 | Source | https://github.com/jumayusiii/Juma-Habbo-Bot |
 | Support | https://github.com/jumayusiii/Juma-Habbo-Bot/issues |
-| Privacy | No message content is read. Poll, reminder, uptime and level state stays on the host. |
+| Privacy | No message content is read. Member events require the Server Members intent. Poll, reminder, uptime, level, greeting and audit-log state stays on the host. |
 
 ## top.gg
 
@@ -31,20 +31,21 @@ The public page will be https://top.gg/bot/1564936469305364480.
 ### Short description (under 140 characters)
 
 ```text
-Memes, minigames, chat levels and rank cards, polls, reminders and deep site uptime monitoring — all through clean slash commands.
+Fun, minigames, levels, moderation with audit logs, welcome messages, polls and site uptime — all in clean slash commands.
 ```
 
 ### Long description
 
 ```markdown
-**Juma Habbo** is a lightweight Discord bot for fun breaks, quick decisions and keeping an eye on a website.
+**Juma Habbo** is a lightweight Discord bot for fun breaks, a friendlier community and keeping an eye on a website.
 
 ### What it does
 
-- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/compliment` and `/rate`.
-- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing and a reaction test.
+- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment` and `/rate`.
+- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
-- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission and role-hierarchy checks.
+- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
+- **Community** — `/welcome` and `/leave` embeds with custom templates, a test preview and clean inline member details.
 - **Server tools** — server, user and role info, plus icon, banner and avatar grabbers with size pickers and download buttons.
 - **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, `/ping`, tabbed help and an invite link.
 - **Monitoring** — `/sitestatus` checks HTTP, TLS, DNS, page metadata and security headers. `/uptime` adds seven-day bars and an incident timeline.
@@ -53,12 +54,13 @@ Memes, minigames, chat levels and rank cards, polls, reminders and deep site upt
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/higherlower` and `/reaction` for a quick round.
+3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
+4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
-**Help command:** `/helplist`  
+**Help command:** `/helplist`
 **Source and issues:** [GitHub repository](https://github.com/jumayusiii/Juma-Habbo-Bot) · [Report an issue](https://github.com/jumayusiii/Juma-Habbo-Bot/issues)
 
-Slash commands only. No prefix and no message content access. Polls, reminders, uptime history and chat levels survive restarts.
+Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
 ```
 
 ### Categories
@@ -68,11 +70,13 @@ Slash commands only. No prefix and no message content access. Polls, reminders, 
 ### Notes for the reviewer
 
 ```text
-Slash commands only. Try /helplist first for the full directory, then /rank for
-a level card and /higherlower, /hangman or /blackjack for a game. Moderation
-uses /mute, /kick and /ban behind Discord permissions and role checks.
-/sitestatus monitors https://habbo.gd and /uptime reads its history. No
-privileged intents or message content access.
+Slash commands only. Try /helplist first for the full 48-command directory,
+then /rank for a level card and /slots, /wouldyourather, /hangman or /blackjack
+for a game. Moderation uses /mute, /kick and /ban behind Discord permissions and
+role checks; /modlog records every action in a chosen channel. /welcome and
+/leave post configurable join and leave embeds. /sitestatus monitors
+https://habbo.gd and /uptime reads its history. Message content is never read.
+The Server Members intent is enabled for welcome and leave events.
 ```
 
 ## Discord Bot List
@@ -89,8 +93,8 @@ The bot is live at https://discordbotlist.com/bots/juma-habbo.
 5. Generate an API token on the bot's admin page and add it to `.env` as
    `DISCORDBOTLIST_TOKEN` so the server and user counts update.
 
-The live post still carries the pre-1.8 copy until the edit is saved. The
-ready-to-paste replacement, the exact links and the counts checklist are in
+The live post carries the pre-1.10 copy until the edit is saved. The
+ready-to-paste v1.10 replacement, the exact links and the counts checklist are in
 [docs/discordbotlist-post.md](discordbotlist-post.md).
 
 ## Keep the count in sync
@@ -116,6 +120,7 @@ A healthy start logs one of:
 
 - [ ] Bot is public in the Discord Developer Portal.
 - [ ] **Requires OAuth2 Code Grant** is off under **Bot → Authorization Flow**.
+- [ ] **Server Members** is enabled under **Bot → Privileged Gateway Intents**.
 - [ ] Global slash commands are deployed with `npm run deploy:global`.
 - [ ] The bot will stay online during review.
 - [ ] Invite uses `permissions=1099780180998` and the `bot` + `applications.commands` scopes.

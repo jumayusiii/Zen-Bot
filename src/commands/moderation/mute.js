@@ -8,6 +8,7 @@ const {
   sendModerationError,
   targetModerationError,
 } = require('../../lib/moderation');
+const { sendModerationLog } = require('../../lib/moderationLogs');
 
 function durationChoices() {
   return MUTE_DURATIONS.map(({ label, value }) => ({ name: label, value }));
@@ -112,6 +113,16 @@ module.exports = {
       await sendModerationError(interaction, moderationErrorMessage(error));
       return;
     }
+
+    await sendModerationLog(interaction.client, guild.id, {
+      action: 'mute',
+      targetId: user.id,
+      targetName: member.displayName,
+      moderatorId: interaction.user.id,
+      reason,
+      duration: duration.label,
+      expiresAt,
+    });
 
     const unix = Math.floor(expiresAt / 1000);
     const embed = createEmbed(interaction.client, {

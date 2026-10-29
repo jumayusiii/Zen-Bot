@@ -3,6 +3,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { setTimeout: delay } = require('node:timers/promises');
 const { MessageFlags } = require('discord.js');
+const { sendModerationLog } = require('./moderationLogs');
 
 const DEFAULT_FILE = path.join(__dirname, '..', '..', 'data', 'moderation.json');
 const MAX_SCHEDULED_BANS = 5000;
@@ -353,6 +354,14 @@ async function processDueUnbans(client, { now = Date.now(), logger = console } =
       await removeScheduledUnban(entry.id);
       lifted += 1;
       logger.log(`[moderation] Auto-unbanned ${entry.username} (${entry.userId}) in ${entry.guildId}.`);
+      await sendModerationLog(client, entry.guildId, {
+        action: 'auto-unban',
+        targetId: entry.userId,
+        targetName: entry.username,
+        moderatorName: 'Automatic — temporary ban expired',
+        reason: entry.reason,
+        extra: 'The temporary ban reached its scheduled end.',
+      });
     } catch (error) {
       if (Number(error?.code) === 10026 || Number(error?.code) === 10013) {
         await removeScheduledUnban(entry.id);

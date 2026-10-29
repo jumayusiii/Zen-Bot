@@ -11,6 +11,7 @@ const {
   sendModerationError,
   targetModerationError,
 } = require('../../lib/moderation');
+const { sendModerationLog } = require('../../lib/moderationLogs');
 
 function durationChoices() {
   return BAN_DURATIONS.map(({ label, value }) => ({ name: label, value }));
@@ -174,6 +175,17 @@ module.exports = {
       : scheduled
         ? `<t:${Math.floor(expiresAt / 1000)}:F> (<t:${Math.floor(expiresAt / 1000)}:R>)`
         : '⚠️ Could not schedule the auto-unban — use `/unban` manually.';
+
+    await sendModerationLog(interaction.client, guild.id, {
+      action: 'ban',
+      targetId: user.id,
+      targetName: user.username,
+      moderatorId: interaction.user.id,
+      reason,
+      duration: duration.label,
+      expiresAt,
+      extra: `Messages deleted: ${deleteLabel}`,
+    });
 
     const embed = createEmbed(interaction.client, {
       section: 'Moderation',
