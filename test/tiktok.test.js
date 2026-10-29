@@ -128,7 +128,7 @@ test('fetchTikTokInfo resolves short links through the API and enforces the link
   assert.equal(info.sourceUrl, 'https://vm.tiktok.com/ZMabc123');
   assert.equal(info.shortLink, true);
   assert.match(calls[0].url, /^https:\/\/www\.tikwm\.com\/api\/\?url=https%3A%2F%2Fvm\.tiktok\.com%2FZMabc123&hd=1$/);
-  assert.equal(calls[0].options.headers['user-agent'].includes('JumaHabboBot'), true);
+  assert.equal(calls[0].options.headers['user-agent'].includes('ZenBot'), true);
 
   await assert.rejects(
     fetchTikTokInfo('https://example.com/not-tiktok', { fetchImpl: async () => jsonResponse(apiPayload()) }),

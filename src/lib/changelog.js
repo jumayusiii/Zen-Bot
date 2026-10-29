@@ -2,6 +2,20 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.11.0-beta.2',
+    date: '2026-10-29',
+    title: 'The bot is now Zen',
+    summary: 'The bot formerly known as Juma Habbo is now Zen. Its application ID and commands are unchanged, so existing installs keep working.',
+    added: [
+      'The bot is now **Zen**; the application ID `1564936469305364480`, commands and stored data are unchanged.',
+      'The documentation, directory copy and startup examples use the new Zen name.',
+    ],
+    improved: [
+      'TikTok requests now identify as **ZenBot** in their user agent.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.11.0-beta.1',
     date: '2026-10-29',
     title: 'TikTok previews & a social command folder',

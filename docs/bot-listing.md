@@ -8,9 +8,9 @@ setup needed to keep the server count current afterwards.
 
 | Field | Value |
 | --- | --- |
-| Name | Juma Habbo |
+| Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.11.0-beta.1` |
+| Version | `1.11.0-beta.2` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
@@ -37,7 +37,7 @@ Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and s
 ### Long description
 
 ```markdown
-**Juma Habbo** is a lightweight Discord bot for fun breaks, a friendlier community and keeping an eye on a website.
+**Zen** is a lightweight Discord bot for fun breaks, a friendlier community and keeping an eye on a website.
 
 ### What it does
 
@@ -82,7 +82,7 @@ The Server Members intent is enabled for welcome and leave events.
 
 ## Discord Bot List
 
-The bot is live at https://discordbotlist.com/bots/juma-habbo.
+Zen is live at https://discordbotlist.com/bots/juma-habbo. Change the listing's display name to **Zen**; the public URL slug stays `juma-habbo`.
 
 1. Sign in at https://discordbotlist.com with the owner's Discord account and
    open https://discordbotlist.com/bots/juma-habbo/edit.
@@ -94,8 +94,8 @@ The bot is live at https://discordbotlist.com/bots/juma-habbo.
 5. Generate an API token on the bot's admin page and add it to `.env` as
    `DISCORDBOTLIST_TOKEN` so the server and user counts update.
 
-The live post carries the pre-1.11 copy until the edit is saved. The
-ready-to-paste v1.11 replacement, the exact links and the counts checklist are in
+The live post carries the earlier copy until the edit is saved. The
+ready-to-paste Zen replacement, the exact links and the counts checklist are in
 [docs/discordbotlist-post.md](discordbotlist-post.md).
 
 ## Keep the count in sync

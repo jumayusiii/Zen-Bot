@@ -5,15 +5,15 @@ Editor: https://discordbotlist.com/bots/juma-habbo/edit
 The editor redirects to Discord sign-in, so the post has to be saved from the
 owner's account.
 
-The live post carries the pre-1.11 copy. This is the exact replacement for the
-short and long descriptions, the help command and the GitHub links for
-**v1.11.0-beta.1** and the **51-command** directory.
+The live post still carries the old name and earlier copy. This is the exact
+replacement for the short and long descriptions, the help command and the GitHub
+links for **v1.11.0-beta.2** and the **51-command** directory.
 
 ## Fields
 
 | Field | Value |
 | --- | --- |
-| Bot name | Juma Habbo |
+| Bot name | Zen |
 | Prefix | `/` (slash commands only) |
 | Help command | `/helplist` |
 | Tags | Games, Utility, Levelling, Fun, Meme |
@@ -22,7 +22,7 @@ short and long descriptions, the help command and the GitHub links for
 | Issues | https://github.com/jumayusiii/Juma-Habbo-Bot/issues |
 | Invite | https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands |
 
-Keep the existing **No NSFW** setting.
+Change the listing's display name to **Zen**; the public URL slug stays `juma-habbo`. Keep the existing **No NSFW** setting.
 
 ## Short description
 
@@ -35,7 +35,7 @@ Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and s
 ## Long description
 
 ```markdown
-**Juma Habbo** is a lightweight Discord bot for fun breaks, a friendlier community and keeping an eye on a website.
+**Zen** is a lightweight Discord bot for fun breaks, a friendlier community and keeping an eye on a website.
 
 ### What it does
 
@@ -108,7 +108,7 @@ repository.
 
 - [ ] Signed in as the listing owner.
 - [ ] Short description replaced (under 140 characters).
-- [ ] Long description replaced with the 1.11 copy.
+- [ ] Long description replaced with the Zen copy.
 - [ ] Help command set to `/helplist`.
 - [ ] Tags kept: Games, Utility, Levelling, Fun, Meme.
 - [ ] GitHub repository and issues links added.

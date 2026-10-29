@@ -1,13 +1,13 @@
-# Juma Habbo Bot
+# Zen
 
-**Public beta · v1.11.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.11.0-beta.2** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, and TikTok video previews that play inline.
 
 ## Highlights
 
 - **Real slash commands** loaded automatically from `src/commands/`.
-- **Tabbed help** with an overview plus Fun, Moderation, Minigames, Levels and Utilities tabs, generated from the command modules.
+- **Tabbed help** with an overview plus Fun, Moderation, Minigames, Levels, Social and Utilities tabs, generated from the command modules.
 - **Level system** with chat XP, a rendered rank card, a top-ten server leaderboard and automatic role rewards.
 - **Moderation** with timed mutes, persistent temporary bans, kicks and reversals, plus permission and role-hierarchy checks.
 - **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
@@ -77,7 +77,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/ping` | Shows gateway latency, command round-trip, uptime and connection status. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
-| `/helplist` | Opens a tabbed directory — Overview, Fun, Moderation, Minigames, Levels and Utilities — with every command, its usage and a beta marker. |
+| `/helplist` | Opens a tabbed directory — Overview, Fun, Moderation, Minigames, Levels, Social and Utilities — with every command, its usage and a beta marker. |
 
 🧪 marks beta commands. The help directory is generated from the loaded command modules, so it stays accurate when new commands are added.
 
@@ -151,7 +151,7 @@ Each `/sitestatus` report can update itself without spamming the channel.
 
 ## Discord bot lists
 
-The bot is live on [Discord Bot List](https://discordbotlist.com/bots/juma-habbo). Its post still carries the pre-1.11 copy; [docs/discordbotlist-post.md](docs/discordbotlist-post.md) has the exact replacement text, the GitHub links and the edit checklist. The [listing editor](https://discordbotlist.com/bots/juma-habbo/edit) requires the owner's Discord sign-in.
+Zen is live on [Discord Bot List](https://discordbotlist.com/bots/juma-habbo). The listing URL keeps its `juma-habbo` slug, but its display name and copy should be updated from [docs/discordbotlist-post.md](docs/discordbotlist-post.md). The [listing editor](https://discordbotlist.com/bots/juma-habbo/edit) requires the owner's Discord sign-in.
 
 [top.gg](https://top.gg/bot/new) is the other directory target. [docs/bot-listing.md](docs/bot-listing.md) has ready-to-paste descriptions, categories, reviewer notes and a submission checklist.
 
@@ -217,7 +217,7 @@ DISCORD_TOKEN=your-bot-token
 GUILD_ID=your-server-id
 
 # Optional: defaults to the application ID read from the token.
-CLIENT_ID=your-application-id
+CLIENT_ID=1564936469305364480
 
 # Monitored site and display details.
 SITE_URL=https://habbo.gd
@@ -273,9 +273,9 @@ A healthy start looks like:
 
 ```text
 [commands] Loaded /poll
-[bot] Logged in as Juma Habbo#2257 (123456789012345678)
+[bot] Logged in as Zen#2257 (123456789012345678)
 [bot] Rich presence set: Playing I am Legend.
-[siteMonitor] Uptime sampling enabled for Juma Habbo every 5 min.
+[siteMonitor] Uptime sampling enabled for Zen every 5 min.
 [reminders] Dispatcher enabled (checking every 15s).
 [moderation] Temporary-ban scheduler enabled (checking every 30s).
 ```
