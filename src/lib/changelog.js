@@ -2,6 +2,67 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.7.0-beta.1',
+    date: '2026-10-29',
+    title: 'Picks, timestamps & directory day',
+    summary: 'A timestamp builder, a decision picker and a higher-or-lower game arrive with bot-list stats posting and submission-ready directory copy.',
+    added: [
+      '`/timestamp` builds Discord timestamps in six styles from `now`, a duration such as `2h`, a date or a Unix timestamp.',
+      '`/choose` picks one option from a 2–10 item list, with an optional question.',
+      '`/higherlower` is a beta button minigame: guess higher or lower for up to ten rounds and build a streak.',
+      'Optional stats posting to **top.gg** and **Discord Bot List** every 30 minutes when their tokens are configured.',
+      '`docs/bot-listing.md` carries ready-to-paste listing copy, reviewer notes and a submission checklist.',
+    ],
+    improved: [
+      'The command directory now covers **25 commands**, with the new utilities and game in their own tabs.',
+      'The timestamp preview switches between all six Discord styles in place, without rerunning the command.',
+      'Failed bot-list posts are logged without affecting startup, commands or monitoring.',
+    ],
+    fixed: [],
+  },
+  {
+    version: '1.6.0-beta.1',
+    date: '2026-10-28',
+    title: 'Tabs, rerolls & sharing',
+    summary: 'A tabbed command directory, five-refresh trivia rounds and new sharing tools land with a cleaner embed system.',
+    added: [
+      '`/helplist` is now a tabbed directory: overview plus Fun, Minigames and Utilities, each listing signatures and beta markers.',
+      '`/trivia` tracks your score and can refresh into a new question up to **five** times per round.',
+      '`/roll` rolls dice in `1d6`, `2d20` or `4d6+2` notation, with up to 20 dice.',
+      '`/serverbanner` grabs a server banner at a full-width size with a download button.',
+      '`/invite` builds an install link with the required permissions and a source-code link.',
+    ],
+    improved: [
+      'Every embed now shares one tighter system: plain titles, clamped text limits and a footer that no longer repeats the bot name.',
+      'Help categories are generated from the command folders, so new commands appear in the right tab automatically.',
+      'Trivia keeps the round message in place while the score and refresh counter update live.',
+    ],
+    fixed: [
+      '`/reminders` now renders real line breaks between its list entries.',
+    ],
+  },
+  {
+    version: '1.5.0-beta.1',
+    date: '2026-10-28',
+    title: 'Guild tools & games',
+    summary: 'New button minigames, reminder management and role inspection arrive with a fix for guild-only commands.',
+    added: [
+      '`/trivia` asks a multiple-choice question with live answer buttons.',
+      '`/tictactoe` starts a button board against the bot.',
+      '`/reminders` lists your pending reminders and lets you cancel one from a select menu.',
+      '`/roleinfo` shows a role\'s color, position, creation date, permissions and settings.',
+      'Guild commands now resolve an uncached server by ID, and DMs can fall back to the bot\'s only server.',
+      '`npm run deploy:global` now explicitly registers commands globally even when `GUILD_ID` is set.',
+    ],
+    improved: [
+      '`/servericon` size changes keep working in DMs by carrying the selected server in the component id.',
+      'The command directory automatically includes the new commands and their beta labels.',
+    ],
+    fixed: [
+      '`/serverinfo` and `/servericon` no longer reject valid guild interactions just because the guild was missing from the cache.',
+    ],
+  },
+  {
     version: '1.4.0-beta.1',
     date: '2026-10-28',
     title: 'Public beta',

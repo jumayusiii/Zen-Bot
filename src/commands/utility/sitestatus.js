@@ -405,7 +405,7 @@ function buildOnlineEmbed(client, result, details, hasLogo, summary24, summary7d
 
   return createEmbed(client, {
     section: 'Site Monitor',
-    title: `${stateEmoji} ${SITE_NAME} is ${state}`,
+    title: `${SITE_NAME} is ${state}`,
     url: SITE_URL,
     description: `${stateEmoji} **${state.toUpperCase()}**  ·  \`HTTP ${response.status}\`  ·  \`${responseTime} ms\`\nLive uptime, page and security report for **${SITE_NAME}**.`,
     color,
@@ -448,7 +448,7 @@ function buildOfflineEmbed(client, error, details, hasLogo, summary24, summary7d
 
   return createEmbed(client, {
     section: 'Site Monitor',
-    title: `🔴 ${SITE_NAME} is offline`,
+    title: `${SITE_NAME} is offline`,
     url: SITE_URL,
     color: COLORS.danger,
     description: `🔴 **UNREACHABLE**\n${isTimeout

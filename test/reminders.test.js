@@ -89,6 +89,26 @@ test('reminders persist, appear when due, and can be removed', async () => {
   });
 });
 
+test('reminders can only be cancelled by their owner', async () => {
+  await withReminderFile(async () => {
+    const userId = '400000000000000001';
+    const created = await reminders.createReminder({
+      userId,
+      channelId: '100000000000000001',
+      message: 'Check the event schedule',
+      dueAt: Date.now() + 10 * 60 * 1000,
+      where: 'dm',
+    });
+
+    assert.equal(await reminders.cancelReminder(created.id, '400000000000000009'), null);
+    assert.equal((await reminders.listReminders(userId)).length, 1);
+
+    const cancelled = await reminders.cancelReminder(created.id, userId);
+    assert.equal(cancelled.id, created.id);
+    assert.deepEqual(await reminders.listReminders(userId), []);
+  });
+});
+
 test('reminder delivery prefers DMs', async () => {
   const client = fakeClient();
   const reminder = {

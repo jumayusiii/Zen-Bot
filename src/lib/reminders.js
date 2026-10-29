@@ -218,6 +218,25 @@ async function removeReminder(id) {
   });
 }
 
+/**
+ * Removes a reminder only when it belongs to the requesting user.
+ *
+ * @param {string} id
+ * @param {string} userId
+ * @returns {Promise<object|null>} the cancelled reminder, or null when it does not exist
+ */
+async function cancelReminder(id, userId) {
+  return withState((state) => {
+    const index = state.reminders.findIndex(
+      (reminder) => reminder.id === id && reminder.userId === userId,
+    );
+    if (index === -1) return null;
+
+    const [removed] = state.reminders.splice(index, 1);
+    return cloneReminder(removed);
+  });
+}
+
 async function listReminders(userId) {
   return withState(
     (state) => state.reminders
@@ -354,6 +373,7 @@ module.exports = {
   MAX_DELAY_MS,
   MAX_PER_USER,
   MIN_DELAY_MS,
+  cancelReminder,
   createReminder,
   deliverReminder,
   getDueReminders,

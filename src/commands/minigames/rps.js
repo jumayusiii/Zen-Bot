@@ -47,7 +47,7 @@ module.exports = {
 
     const embed = createEmbed(interaction.client, {
       section: 'Minigames',
-      title: '🎮 Rock Paper Scissors',
+      title: 'Rock Paper Scissors',
       description: `**${result}**`,
       color,
       fields: [

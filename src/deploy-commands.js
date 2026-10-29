@@ -20,16 +20,16 @@ async function main() {
   const rest = new REST().setToken(token);
   const clientId =
     process.env.CLIENT_ID?.trim() || (await rest.get(Routes.currentApplication())).id;
-  const guildId = process.env.GUILD_ID?.trim();
+  const globalOnly = process.argv.includes('--global');
+  const guildId = globalOnly ? null : process.env.GUILD_ID?.trim();
 
-  const global = process.argv.includes('--global');
-  const route = !global && guildId
+  const route = !globalOnly && guildId
     ? Routes.applicationGuildCommands(clientId, guildId)
     : Routes.applicationCommands(clientId);
 
   const registered = await rest.put(route, { body: getCommandData(commandRegistry) });
 
-  if (!global && guildId) {
+  if (!globalOnly && guildId) {
     console.log(`[deploy] Registered ${registered.length} slash command(s) in guild ${guildId}. They are available immediately.`);
   } else {
     console.log(`[deploy] Registered ${registered.length} slash command(s) globally for every server. Discord can take up to an hour to show them.`);

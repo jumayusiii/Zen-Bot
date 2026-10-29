@@ -32,7 +32,7 @@ module.exports = {
 
     const embed = createEmbed(interaction.client, {
       section: 'Minigames',
-      title: '🪙 Coin Flip',
+      title: 'Coin Flip',
       description: `The coin landed on **${result === 'heads' ? 'Heads' : 'Tails'}**.`,
       color: choice ? (won ? COLORS.success : COLORS.danger) : COLORS.game,
       fields,

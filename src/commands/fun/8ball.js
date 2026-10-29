@@ -59,7 +59,7 @@ module.exports = {
 
     const embed = createEmbed(interaction.client, {
       section: 'Magic 8-Ball',
-      title: '🎱 The 8-Ball has spoken',
+      title: 'The 8-Ball has spoken',
       description: `> ${question}\n\n**${answer}**`,
       color: ANSWER_COLORS[type],
       footer: `Asked by ${interaction.user.username}`,

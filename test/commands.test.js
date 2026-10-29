@@ -12,9 +12,25 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 15);
+  assert.equal(registry.size, 25);
 
-  for (const name of ['uptime', 'poll', 'remind', 'sitestatus', 'helplist']) {
+  for (const name of [
+    'uptime',
+    'poll',
+    'remind',
+    'reminders',
+    'roleinfo',
+    'sitestatus',
+    'helplist',
+    'trivia',
+    'tictactoe',
+    'roll',
+    'serverbanner',
+    'invite',
+    'timestamp',
+    'choose',
+    'higherlower',
+  ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
 
@@ -28,7 +44,27 @@ test('all commands load with valid names, descriptions and unique registrations'
 
   assert.equal(registry.get('poll').beta, true);
   assert.equal(registry.get('remind').beta, true);
+  assert.equal(registry.get('reminders').beta, true);
+  assert.equal(registry.get('roleinfo').beta, true);
+  assert.equal(registry.get('trivia').beta, true);
+  assert.equal(registry.get('tictactoe').beta, true);
+  assert.equal(registry.get('roll').beta, true);
+  assert.equal(registry.get('higherlower').beta, true);
+  assert.equal(registry.get('choose').beta, undefined);
+  assert.equal(registry.get('timestamp').beta, undefined);
+  assert.equal(registry.get('serverbanner').beta, undefined);
+  assert.equal(registry.get('invite').beta, undefined);
   assert.equal(registry.get('uptime').beta, undefined);
   assert.equal(registry.get('poll').data.toJSON().options.length, 2);
   assert.equal(registry.get('remind').data.toJSON().options.length, 3);
+  assert.equal(registry.get('reminders').data.toJSON().options.length, 0);
+  assert.equal(registry.get('roleinfo').data.toJSON().options.length, 1);
+  assert.equal(registry.get('trivia').data.toJSON().options.length, 0);
+  assert.equal(registry.get('tictactoe').data.toJSON().options.length, 0);
+  assert.equal(registry.get('roll').data.toJSON().options.length, 1);
+  assert.equal(registry.get('serverbanner').data.toJSON().options.length, 0);
+  assert.equal(registry.get('invite').data.toJSON().options.length, 0);
+  assert.equal(registry.get('timestamp').data.toJSON().options.length, 1);
+  assert.equal(registry.get('choose').data.toJSON().options.length, 2);
+  assert.equal(registry.get('higherlower').data.toJSON().options.length, 0);
 });

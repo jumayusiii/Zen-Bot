@@ -52,7 +52,7 @@ function buildPollPayload(client, poll) {
 
   const embed = createEmbed(client, {
     section: 'Polls',
-    title: `📊 ${poll.question}`,
+    title: poll.question,
     description: [
       `**${totalVotes}** vote${totalVotes === 1 ? '' : 's'}  ·  ${closed ? 'Poll closed' : 'Click an option to vote. Click again to remove your vote.'}`,
       poll.ownerId ? `Poll by <@${poll.ownerId}>` : null,

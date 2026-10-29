@@ -12,6 +12,22 @@ const COLORS = Object.freeze({
   neutral: 0x2b2d31,
 });
 
+const LIMITS = Object.freeze({
+  author: 256,
+  title: 256,
+  description: 4096,
+  fieldName: 256,
+  fieldValue: 1024,
+  footer: 2048,
+  fields: 25,
+});
+
+/** Discord rejects over-long embed text, so clamp it before it is sent. */
+function clamp(text, max) {
+  if (typeof text !== 'string') return text;
+  return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+}
+
 function botIcon(client) {
   return client?.user?.displayAvatarURL({
     extension: 'png',
@@ -20,8 +36,23 @@ function botIcon(client) {
   });
 }
 
+function normalizeFields(fields) {
+  if (!Array.isArray(fields)) return [];
+
+  return fields
+    .filter((field) => field && field.name != null && field.value != null)
+    .map((field) => ({
+      name: clamp(String(field.name), LIMITS.fieldName) || '\u200b',
+      value: clamp(String(field.value), LIMITS.fieldValue) || '\u200b',
+      inline: Boolean(field.inline),
+    }))
+    .slice(0, LIMITS.fields);
+}
+
 /**
  * Creates a branded embed with the shared palette, bot identity and timestamp.
+ * The author line carries the bot name and section, so the footer only needs
+ * the command's own context plus the running version.
  *
  * @param {import('discord.js').Client} client
  * @param {object} [options]
@@ -43,12 +74,14 @@ function createEmbed(client, options = {}) {
     .setColor(options.color ?? COLORS.brand)
     .setTimestamp(options.timestamp ?? Date.now());
 
-  if (options.title) embed.setTitle(options.title);
-  if (options.description) embed.setDescription(options.description);
+  if (options.title) embed.setTitle(clamp(options.title, LIMITS.title));
+  if (options.description) embed.setDescription(clamp(options.description, LIMITS.description));
   if (options.url) embed.setURL(options.url);
   if (options.thumbnail) embed.setThumbnail(options.thumbnail);
   if (options.image) embed.setImage(options.image);
-  if (options.fields?.length) embed.addFields(options.fields);
+
+  const fields = normalizeFields(options.fields);
+  if (fields.length > 0) embed.addFields(fields);
 
   const iconURL = botIcon(client);
   if (options.author !== null) {
@@ -56,7 +89,10 @@ function createEmbed(client, options = {}) {
       ? (typeof options.author === 'string' ? { name: options.author } : { ...options.author })
       : (client?.user
         ? {
-            name: `${client.user.username}${options.section ? ` • ${options.section}` : ''}`,
+            name: clamp(
+              `${client.user.username}${options.section ? ` • ${options.section}` : ''}`,
+              LIMITS.author,
+            ),
           }
         : null);
 
@@ -69,11 +105,10 @@ function createEmbed(client, options = {}) {
   if (options.footer !== false) {
     const parts = [];
     if (options.footer) parts.push(options.footer);
-    if (client?.user) parts.push(`${client.user.username} • v${BOT_VERSION}`);
-    else parts.push(`v${BOT_VERSION}`);
+    parts.push(`v${BOT_VERSION}`);
 
     embed.setFooter({
-      text: parts.join('  •  ').slice(0, 2048),
+      text: clamp(parts.join('  •  '), LIMITS.footer),
       ...(iconURL ? { iconURL } : {}),
     });
   }
@@ -81,4 +116,4 @@ function createEmbed(client, options = {}) {
   return embed;
 }
 
-module.exports = { BOT_VERSION, COLORS, createEmbed };
+module.exports = { BOT_VERSION, COLORS, LIMITS, createEmbed };

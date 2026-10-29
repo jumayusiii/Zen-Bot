@@ -1,8 +1,8 @@
 {
   "name": "juma-habbo-bot",
-  "version": "1.4.0-beta.1",
+  "version": "1.7.0-beta.1",
   "private": true,
-  "description": "Discord bot with memes, minigames, polls, reminders, server info and detailed website uptime monitoring.",
+  "description": "Discord bot with memes, minigames, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, plus detailed website uptime monitoring.",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {

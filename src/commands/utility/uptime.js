@@ -152,7 +152,7 @@ module.exports = {
 
     const embed = createEmbed(interaction.client, {
       section: 'Uptime',
-      title: `📈 Seven-day uptime · ${siteName()}`,
+      title: `Seven-day uptime · ${siteName()}`,
       url: siteUrl(),
       description: `**${status.label}**  ·  **${formatPercent(summary.availability)}** over ${DAYS} days\n\`${summary.samples}\` checks  ·  \`${summary.incidents.length}\` incident${summary.incidents.length === 1 ? '' : 's'}  ·  \`UTC\``,
       color: status.color,

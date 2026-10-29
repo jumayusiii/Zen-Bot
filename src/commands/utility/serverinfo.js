@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, ChannelType, MessageFlags } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
+const { dmContextNote, guildFailureMessage, resolveGuild } = require('../../lib/guilds');
 
 const VERIFICATION_LEVELS = {
   0: 'None',
@@ -20,9 +21,11 @@ module.exports = {
     .setDescription('Show information about this server'),
 
   async execute(interaction) {
-    if (!interaction.inGuild() || !interaction.guild) {
+    const resolution = await resolveGuild(interaction);
+
+    if (!resolution.guild) {
       await interaction.reply({
-        content: 'This command can only be used inside a server.',
+        content: guildFailureMessage(resolution.source),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -30,7 +33,8 @@ module.exports = {
 
     await interaction.deferReply();
 
-    const guild = interaction.guild;
+    const guild = resolution.guild;
+    const contextNote = dmContextNote(resolution.source, guild);
     const owner = await guild.fetchOwner().catch(() => null);
     const channels = guild.channels.cache;
     const textChannels = channels.filter(
@@ -49,7 +53,10 @@ module.exports = {
       color: guild.members.me?.displayColor || COLORS.brand,
       thumbnail: guild.iconURL({ extension: 'png', size: 256, forceStatic: true }),
       image: guild.bannerURL({ extension: 'png', size: 1024, forceStatic: true }),
-      description: guild.description?.slice(0, 4096) || 'A snapshot of this server and its setup.',
+      description: [
+        contextNote,
+        guild.description?.slice(0, 1000) || 'A snapshot of this server and its setup.',
+      ].filter(Boolean).join('\n\n'),
       footer: `Requested by ${interaction.user.username}`,
       fields: [
         {

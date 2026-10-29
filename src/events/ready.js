@@ -1,5 +1,6 @@
 const { ActivityType, Events } = require('discord.js');
 const { presenceText } = require('../lib/config');
+const { startBotListSync } = require('../lib/botLists');
 const { startReminderScheduler } = require('../lib/reminders');
 const { startSiteMonitor } = require('../lib/siteMonitor');
 
@@ -24,6 +25,7 @@ module.exports = {
 
     startSiteMonitor(client);
     startReminderScheduler(client);
+    startBotListSync(client);
 
     const siteStatusCommand = client.commands.get('sitestatus');
     if (typeof siteStatusCommand?.resumeAutoRefresh === 'function') {

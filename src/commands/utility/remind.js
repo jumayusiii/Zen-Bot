@@ -73,7 +73,7 @@ module.exports = {
 
     const embed = createEmbed(interaction.client, {
       section: 'Reminders',
-      title: '⏰ Reminder set',
+      title: 'Reminder set',
       description: `> ${message}`,
       color: COLORS.success,
       fields: [

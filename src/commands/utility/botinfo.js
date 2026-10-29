@@ -35,7 +35,7 @@ module.exports = {
 
     const embed = createEmbed(client, {
       section: 'System',
-      title: '🤖 Bot Information',
+      title: 'Bot Information',
       description: `**${client.user.username}** is online and ready to help.`,
       color: COLORS.brand,
       thumbnail: client.user.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
