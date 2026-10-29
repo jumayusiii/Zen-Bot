@@ -38,6 +38,15 @@ const CATEGORY_META = Object.freeze({
     color: COLORS.success,
     order: 25,
   },
+  social: {
+    id: 'social',
+    label: 'Social',
+    title: 'Social & media',
+    emoji: '📱',
+    description: 'Shareable media, starting with TikTok previews that play in Discord.',
+    color: COLORS.fun,
+    order: 28,
+  },
   utility: {
     id: 'utility',
     label: 'Utilities',
@@ -158,7 +167,7 @@ function tabButtons(activeId, groups) {
   const tabs = [OVERVIEW_META, ...groups.map((group) => group.meta)];
   const rows = [];
 
-  // Discord allows five buttons per row, so six tabs need a second row.
+  // Discord allows five buttons per row, so more than five tabs need a second row.
   for (let index = 0; index < tabs.length; index += 5) {
     rows.push(
       new ActionRowBuilder().addComponents(

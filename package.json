@@ -1,8 +1,8 @@
 {
   "name": "juma-habbo-bot",
-  "version": "1.10.0-beta.2",
+  "version": "1.11.0-beta.1",
   "private": true,
-  "description": "Discord bot with memes, minigames, chat levels and rank cards, moderation with audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, plus detailed website uptime monitoring.",
+  "description": "Discord bot with memes, minigames, chat levels and rank cards, moderation with audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring and TikTok video previews.",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {

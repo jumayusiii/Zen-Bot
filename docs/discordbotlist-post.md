@@ -5,9 +5,9 @@ Editor: https://discordbotlist.com/bots/juma-habbo/edit
 The editor redirects to Discord sign-in, so the post has to be saved from the
 owner's account.
 
-The live post carries the pre-1.10 copy. This is the exact replacement for the
+The live post carries the pre-1.11 copy. This is the exact replacement for the
 short and long descriptions, the help command and the GitHub links for
-**v1.10.0-beta.2** and the **50-command** directory.
+**v1.11.0-beta.1** and the **51-command** directory.
 
 ## Fields
 
@@ -26,10 +26,10 @@ Keep the existing **No NSFW** setting.
 
 ## Short description
 
-122 characters:
+Under 140 characters:
 
 ```text
-Fun, minigames, levels, moderation with audit logs, welcome messages, polls and site uptime — all in clean slash commands.
+Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and site uptime — all in clean slash commands.
 ```
 
 ## Long description
@@ -40,6 +40,7 @@ Fun, minigames, levels, moderation with audit logs, welcome messages, polls and 
 ### What it does
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment`, `/roast` and `/rate`.
+- **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
 - **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
 - **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
@@ -106,8 +107,8 @@ repository.
 ## Checklist
 
 - [ ] Signed in as the listing owner.
-- [ ] Short description replaced (122 characters).
-- [ ] Long description replaced with the 1.10 copy.
+- [ ] Short description replaced (under 140 characters).
+- [ ] Long description replaced with the 1.11 copy.
 - [ ] Help command set to `/helplist`.
 - [ ] Tags kept: Games, Utility, Levelling, Fun, Meme.
 - [ ] GitHub repository and issues links added.

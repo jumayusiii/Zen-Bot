@@ -1,8 +1,8 @@
 # Juma Habbo Bot
 
-**Public beta · v1.10.0-beta.2** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.11.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, and TikTok video previews that play inline.
 
 ## Highlights
 
@@ -19,6 +19,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Live polls** with buttons, vote switching and a creator-only close control.
 - **Persistent reminders** delivered by DM or in the channel where they were created.
 - **Directory ready**: optional top.gg and Discord Bot List stat posting, with submission copy in `docs/`.
+- **TikTok previews**: `/tiktok` attaches a TikTok video so it plays inline in Discord, with creator and engagement details plus an **Open on TikTok** fallback for oversized or private posts.
 - **Modern embeds** with a shared palette, plain titles, branded headers, timestamps and clamped text limits.
 - **Self-host friendly**: configurable site details, no hardcoded guild IDs or tokens, and no message content access. The **Server Members** intent is used for greetings.
 
@@ -27,6 +28,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | Command | Description |
 | --- | --- |
 | `/meme` | Fetches a random meme from [meme-api.com](https://meme-api.com) and posts it in an embed. Falls back to Imgflip. |
+| `/tiktok <url>` | 🧪 Downloads a TikTok video and posts it so it plays inline, with creator, duration and engagement details. Oversized, private and photo posts fall back to a cover image and an **Open on TikTok** button. |
 | `/8ball <question>` | 🧪 Asks the Magic 8-Ball a question. |
 | `/coinflip [side]` | 🧪 Flips a coin and lets you call heads or tails. |
 | `/rps <choice>` | 🧪 Plays rock-paper-scissors against the bot. |
@@ -149,7 +151,7 @@ Each `/sitestatus` report can update itself without spamming the channel.
 
 ## Discord bot lists
 
-The bot is live on [Discord Bot List](https://discordbotlist.com/bots/juma-habbo). Its post still carries the pre-1.10 copy; [docs/discordbotlist-post.md](docs/discordbotlist-post.md) has the exact replacement text, the GitHub links and the edit checklist. The [listing editor](https://discordbotlist.com/bots/juma-habbo/edit) requires the owner's Discord sign-in.
+The bot is live on [Discord Bot List](https://discordbotlist.com/bots/juma-habbo). Its post still carries the pre-1.11 copy; [docs/discordbotlist-post.md](docs/discordbotlist-post.md) has the exact replacement text, the GitHub links and the edit checklist. The [listing editor](https://discordbotlist.com/bots/juma-habbo/edit) requires the owner's Discord sign-in.
 
 [top.gg](https://top.gg/bot/new) is the other directory target. [docs/bot-listing.md](docs/bot-listing.md) has ready-to-paste descriptions, categories, reviewer notes and a submission checklist.
 
@@ -190,6 +192,7 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 - The **Server Members** privileged intent enabled for welcome and leave events
 - A persistent disk if you want uptime, poll, reminder, level, greeting, audit-log and scheduled-ban state to survive restarts
 - `@napi-rs/canvas` for rank cards, installed automatically by `npm install`
+- Outbound HTTPS access to TikTok and `www.tikwm.com` for `/tiktok`
 
 ## 1. Create your bot
 
@@ -284,7 +287,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds and presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, TikTok link parsing, metadata mapping and download limits, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -351,6 +354,7 @@ src/
 │   ├── siteMonitor.js           # Background site probe
 │   ├── slots.js                 # Weighted slot symbols and result rules
 │   ├── tictactoe.js             # Board rules and bot move selection
+│   ├── tiktok.js                # TikTok link parsing, metadata and capped downloads
 │   ├── timestamps.js            # Discord timestamp parsing and styles
 │   ├── trivia.js                # Offline trivia question bank
 │   ├── wordScramble.js          # Word bank, scrambling and choice rounds
@@ -391,6 +395,8 @@ src/
     │   ├── trivia.js
     │   ├── wordscramble.js
     │   └── wouldyourather.js
+    ├── social/
+    │   └── tiktok.js
     └── utility/
         ├── avatar.js
         ├── botinfo.js
@@ -427,6 +433,7 @@ The bot stores only what it needs to provide its features:
 - Audit-log channel IDs in `data/moderation-logs.json` (server and channel IDs, the admin who configured it and the update time).
 - Welcome and leave settings in `data/greetings.json` (server and channel IDs, templates and the admin who last changed them).
 - Guild and member totals are sent to top.gg and Discord Bot List only when the matching token is set.
+- TikTok links are processed in memory only; no video, metadata or link history is stored.
 
 No message content is read or stored. Deleting the matching JSON file resets that feature; deleting the `data/` folder resets everything. Poll voter IDs, reminder text and moderation reasons can be removed by deleting the relevant data files.
 
@@ -437,6 +444,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - Do not commit `.env`, logs or `data/*.json`.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
+- `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.
 - Enable the privileged **Server Members** intent in the Developer Portal; without it, welcome and leave events do not fire. Message content is never requested.
 
 ## Troubleshooting
@@ -447,6 +455,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - **Logo missing from `/sitestatus`** — `SITE_LOGO_URL` is blank or the remote image could not be downloaded. The rest of the report still works.
 - **Reminder not delivered** — check that the bot can DM the user or still has access to the original channel. Closed DMs fall back to that channel.
 - **Meme fetch fails** — the command automatically falls back to Imgflip; if both APIs are down it replies with a friendly error.
+- **TikTok posts only a cover and link** — the video is private, region-locked, over the **8 MB** upload limit, or TikTok's media CDN refused the download. The metadata service is unofficial, so retry later; check that the host can reach TikTok and `www.tikwm.com`.
 - **Bot-list stats not updating** — check the token, that the listing was approved, and the `[botLists]` line in the startup log.
 - **Rich presence missing** — check `PRESENCE_TEXT` in `.env` and restart. The bot logs `[bot] Rich presence set: Playing …` at login and re-applies the activity every ten minutes and after a gateway resume.
 - **Rank card missing** — the local canvas renderer failed; `/rank` still posts the text fallback. Check the `[rank]` log line and reinstall dependencies.

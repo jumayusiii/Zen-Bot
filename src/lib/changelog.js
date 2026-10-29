@@ -2,6 +2,23 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.11.0-beta.1',
+    date: '2026-10-29',
+    title: 'TikTok previews & a social command folder',
+    summary: 'A beta TikTok player posts videos that play inline in Discord, and media commands now have their own Social tab in the directory.',
+    added: [
+      '`/tiktok` downloads a TikTok video and attaches it so it plays inline in Discord, with the creator, duration, views, likes, comments and shares.',
+      'Full links, mobile links and short `vm.tiktok.com` share links are supported, and photo posts show their first image.',
+      'A **Social** tab joins `/helplist`, raising the directory to **51 commands**.',
+    ],
+    improved: [
+      'A dedicated `social/` command folder keeps media sharing separate from fun and utility commands.',
+      'Videos over **8 MB**, private or region-locked posts fall back to the cover image and an **Open on TikTok** button instead of failing.',
+      'TikTok downloads are capped at **8 MB**, checked before and after transfer, so the attachment fits Discord\'s default upload limit.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.10.0-beta.2',
     date: '2026-10-29',
     title: 'Roasts, word scramble & a steadier presence',

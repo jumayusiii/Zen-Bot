@@ -10,7 +10,7 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Juma Habbo |
 | Application ID | `1564936469305364480` |
-| Version | `1.10.0-beta.2` |
+| Version | `1.11.0-beta.1` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
@@ -31,7 +31,7 @@ The public page will be https://top.gg/bot/1564936469305364480.
 ### Short description (under 140 characters)
 
 ```text
-Fun, minigames, levels, moderation with audit logs, welcome messages, polls and site uptime — all in clean slash commands.
+Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and site uptime — all in clean slash commands.
 ```
 
 ### Long description
@@ -42,6 +42,7 @@ Fun, minigames, levels, moderation with audit logs, welcome messages, polls and 
 ### What it does
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment`, `/roast` and `/rate`.
+- **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
 - **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
 - **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
@@ -70,9 +71,9 @@ Slash commands only. No prefix and no message content access. Polls, reminders, 
 ### Notes for the reviewer
 
 ```text
-Slash commands only. Try /helplist first for the full 50-command directory,
+Slash commands only. Try /helplist first for the full 51-command directory,
 then /rank for a level card and /slots, /wordscramble, /wouldyourather, /hangman or /blackjack
-for a game. Moderation uses /mute, /kick and /ban behind Discord permissions and
+for a game. /tiktok posts a TikTok video inline; videos over 8 MB fall back to a cover and link. Moderation uses /mute, /kick and /ban behind Discord permissions and
 role checks; /modlog records every action in a chosen channel. /welcome and
 /leave post configurable join and leave embeds. /sitestatus monitors
 https://habbo.gd and /uptime reads its history. Message content is never read.
@@ -93,8 +94,8 @@ The bot is live at https://discordbotlist.com/bots/juma-habbo.
 5. Generate an API token on the bot's admin page and add it to `.env` as
    `DISCORDBOTLIST_TOKEN` so the server and user counts update.
 
-The live post carries the pre-1.10 copy until the edit is saved. The
-ready-to-paste v1.10 replacement, the exact links and the counts checklist are in
+The live post carries the pre-1.11 copy until the edit is saved. The
+ready-to-paste v1.11 replacement, the exact links and the counts checklist are in
 [docs/discordbotlist-post.md](discordbotlist-post.md).
 
 ## Keep the count in sync
