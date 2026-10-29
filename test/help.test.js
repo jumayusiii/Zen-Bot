@@ -32,13 +32,15 @@ const commands = registry(
   fakeCommand('trivia', 'minigames', { beta: true }),
   fakeCommand('sitestatus', 'utility'),
   fakeCommand('poll', 'utility', { beta: true }),
+  fakeCommand('rank', 'levels'),
 );
 
 test('groupCommands sorts categories and omits empty groups', () => {
   const groups = groupCommands(commands);
 
-  assert.deepEqual(groups.map((group) => group.meta.id), ['fun', 'minigames', 'utility']);
-  assert.deepEqual(groups[2].commands.map((command) => command.data.name), ['poll', 'sitestatus']);
+  assert.deepEqual(groups.map((group) => group.meta.id), ['fun', 'minigames', 'levels', 'utility']);
+  assert.deepEqual(groups[2].commands.map((command) => command.data.name), ['rank']);
+  assert.deepEqual(groups[3].commands.map((command) => command.data.name), ['poll', 'sitestatus']);
 });
 
 test('signature renders required and optional options', () => {
@@ -59,11 +61,12 @@ test('the overview has a tab for every category and the active tab is highlighte
   const buttons = payload.components[0].components;
 
   assert.equal(embed.data.title, 'Everything the bot can do');
-  assert.match(embed.data.description, /\*\*4 commands\*\*/);
-  assert.equal(buttons.length, 4);
+  assert.match(embed.data.description, /\*\*5 commands\*\*/);
+  assert.equal(buttons.length, 5);
   assert.equal(buttons[0].data.custom_id, 'helplist:view:overview');
   assert.equal(buttons[0].data.style, 1);
   assert.equal(buttons[1].data.custom_id, 'helplist:view:fun');
+  assert.equal(buttons[3].data.custom_id, 'helplist:view:levels');
 });
 
 test('a category tab lists its commands and falls back to overview for unknown views', () => {

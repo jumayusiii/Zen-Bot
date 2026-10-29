@@ -1,13 +1,14 @@
 # Juma Habbo Bot
 
-**Public beta · v1.7.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [MIT license](LICENSE)
+**Public beta · v1.8.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
 
 ## Highlights
 
 - **Real slash commands** loaded automatically from `src/commands/`.
-- **Tabbed help** with an overview plus Fun, Minigames and Utilities tabs, generated from the command modules.
+- **Tabbed help** with an overview plus Fun, Minigames, Levels and Utilities tabs, generated from the command modules.
+- **Level system** with chat XP, a rendered rank card and a top-ten server leaderboard.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -27,9 +28,15 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/rps <choice>` | 🧪 Plays rock-paper-scissors against the bot. |
 | `/roll [dice]` | 🧪 Rolls dice in `1d6`, `2d20` or `4d6+2` notation, up to 20 dice. |
 | `/choose <options> [question]` | Picks one option from a 2–10 item list, with an optional question. |
+| `/ship <user> [second]` | Calculates a playful, repeatable compatibility score for two members. |
+| `/fact` | Shares a random fun fact with a reroll button. |
 | `/trivia` | 🧪 Asks a multiple-choice trivia question with live answer buttons, score tracking and up to five refreshes. |
 | `/tictactoe` | 🧪 Starts a button tic-tac-toe board against the bot. |
 | `/higherlower` | 🧪 Guess whether the next number is higher or lower, up to 10 rounds. |
+| `/hangman` | 🧪 Guess a hidden word one letter at a time, with six wrong guesses. |
+| `/blackjack` | 🧪 Plays a hand against the dealer with Hit, Stand and Play again controls. |
+| `/rank [user]` | Renders a profile card with level, XP progress, server rank and total XP. |
+| `/levels` | Shows the top ten members by chat XP, plus your rank if you are outside the top ten. |
 | `/avatar [user]` | Shows a user avatar with a 64–4096 px size selector and a **Download** button. |
 | `/servericon` | Shows the current server icon with the same size selector and download button. |
 | `/serverbanner` | Shows the current server banner with a download button. |
@@ -45,7 +52,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/botinfo` | 🧪 Shows bot uptime, gateway ping, memory, server/member counts, version and runtime versions. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
-| `/helplist` | Opens a tabbed directory — Overview, Fun, Minigames and Utilities — with every command, its usage and a beta marker. |
+| `/helplist` | Opens a tabbed directory — Overview, Fun, Minigames, Levels and Utilities — with every command, its usage and a beta marker. |
 
 🧪 marks beta commands. The help directory is generated from the loaded command modules, so it stays accurate when new commands are added.
 
@@ -55,7 +62,15 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Minigames
 
-`/trivia`, `/tictactoe` and `/higherlower` use Discord buttons and are limited to the person who started the round. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, tracks the streak, and offers **Play again** when the round ends. Trivia and Higher or Lower rounds expire after 15 minutes, and tic-tac-toe boards after 20 minutes. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+`/trivia`, `/tictactoe`, `/higherlower`, `/hangman` and `/blackjack` use Discord components and are limited to the person who started the round. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Finished games keep a **Play again** control. Rounds expire after 15 minutes, and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+
+## Levels
+
+Every member earns XP by chatting. A message awards **15–25 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts.
+
+`/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten.
+
+The level curve starts at **100 XP** for level 1 and grows with each level (`5 × level² + 50 × level + 100` XP for the next level). The bot uses the non-privileged **GuildMessages** intent for message events and never reads message content. Rank cards need `@napi-rs/canvas`, which installs prebuilt binaries through npm; if rendering fails, `/rank` falls back to a text embed.
 
 ## Site monitoring
 
@@ -126,13 +141,14 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 
 - Node.js **18 or newer**
 - A Discord application with a bot token
-- A persistent disk if you want uptime, poll and reminder state to survive restarts
+- A persistent disk if you want uptime, poll, reminder and level state to survive restarts
+- `@napi-rs/canvas` for rank cards, installed automatically by `npm install`
 
 ## 1. Create your bot
 
 1. Open the [Discord Developer Portal](https://discord.com/developers/applications) and create a **New Application**.
 2. Go to **Bot** and copy the token. Keep it private; anyone with it controls the bot.
-3. No privileged intents are required. The bot only uses the `Guilds` intent and never reads message content.
+3. No privileged intents are required. The bot uses the `Guilds` and `GuildMessages` intents and never reads message content.
 4. Under **OAuth2 → URL Generator**, select the scopes `bot` and `applications.commands`, and the permissions **View Channels**, **Send Messages**, **Embed Links** and **Attach Files**.
 5. Open the generated URL and add the bot to your server.
 
@@ -220,7 +236,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower rules, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, level math and persistence, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -251,18 +267,24 @@ src/
 │   └── eventHandler.js          # Binds src/events/*.js to the client
 ├── events/
 │   ├── ready.js                 # Presence, uptime monitor, reminders, auto-refresh, bot lists
-│   └── interactionCreate.js     # Routes slash commands and components
+│   ├── interactionCreate.js     # Routes slash commands and components
+│   └── messageCreate.js         # Chat XP, cooldowns and level-up announcements
 ├── lib/
+│   ├── blackjack.js             # Cards, hand values and dealer rules
 │   ├── botLists.js              # Optional top.gg / Discord Bot List stats
 │   ├── changelog.js             # Versioned release notes
 │   ├── choices.js               # /choose parsing and random pick
 │   ├── config.js                # Environment-backed site and presence settings
 │   ├── dice.js                  # Dice notation parsing and rolling
 │   ├── embeds.js                # Shared palette, branding and embed builder
+│   ├── fun.js                   # Ship scores and the offline fact bank
 │   ├── guilds.js                # Cache-safe guild resolution for commands
+│   ├── hangman.js               # Word list, guesses and ASCII gallows
 │   ├── help.js                  # Tabbed command directory and category metadata
 │   ├── higherlower.js           # Higher-or-lower number rules
 │   ├── images.js                # Size selector / download button helpers
+│   ├── levels.js                # Per-server XP, level maths and persistence
+│   ├── rankCard.js              # Canvas rank-card renderer
 │   ├── polls.js                 # Persistent button-poll state
 │   ├── reminders.js             # Persistent reminders and dispatcher
 │   ├── siteAutoRefresh.js       # Persisted auto-refresh subscriptions
@@ -275,10 +297,17 @@ src/
     ├── fun/
     │   ├── 8ball.js
     │   ├── choose.js
+    │   ├── fact.js
     │   ├── meme.js
-    │   └── roll.js
+    │   ├── roll.js
+    │   └── ship.js
+    ├── levels/
+    │   ├── levels.js
+    │   └── rank.js
     ├── minigames/
+    │   ├── blackjack.js
     │   ├── coinflip.js
+    │   ├── hangman.js
     │   ├── higherlower.js
     │   ├── rps.js
     │   ├── tictactoe.js
@@ -310,14 +339,15 @@ The bot stores only what it needs to provide its features:
 - Auto-refresh subscriptions in `data/sitestatus-autorefresh.json` (message, channel and owner IDs, interval, next run).
 - Poll state in `data/polls.json` (question, options, voter user IDs, owner, timestamps).
 - Reminders in `data/reminders.json` (user, source channel, reminder text, due time and delivery preference).
+- Level records in `data/levels.json` (server and user IDs, display name, XP and last award time).
 - Guild and member totals are sent to top.gg and Discord Bot List only when the matching token is set.
 
 No message content is read or stored. Deleting the matching JSON file resets that feature; deleting the `data/` folder resets everything. Poll voter IDs and reminder text can be removed by deleting the relevant data files.
 
 ## Deployment notes
 
-- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder and uptime state.
-- Trivia, tic-tac-toe and Higher or Lower rounds are in memory and intentionally reset when the process restarts.
+- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime and level state.
+- Trivia, tic-tac-toe, Higher or Lower, hangman and blackjack rounds are in memory and intentionally reset when the process restarts.
 - Do not commit `.env`, logs or `data/*.json`.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
@@ -332,6 +362,8 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - **Reminder not delivered** — check that the bot can DM the user or still has access to the original channel. Closed DMs fall back to that channel.
 - **Meme fetch fails** — the command automatically falls back to Imgflip; if both APIs are down it replies with a friendly error.
 - **Bot-list stats not updating** — check the token, that the listing was approved, and the `[botLists]` line in the startup log.
+- **Rank card missing** — the local canvas renderer failed; `/rank` still posts the text fallback. Check the `[rank]` log line and reinstall dependencies.
+- **XP not moving** — XP is per server and limited to one award per user every 60 seconds; bot messages do not earn XP.
 
 ## License
 

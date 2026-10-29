@@ -1,8 +1,8 @@
 {
   "name": "juma-habbo-bot",
-  "version": "1.7.0-beta.1",
+  "version": "1.8.0-beta.1",
   "private": true,
-  "description": "Discord bot with memes, minigames, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, plus detailed website uptime monitoring.",
+  "description": "Discord bot with memes, minigames, hangman, blackjack, chat levels and rank cards, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, plus detailed website uptime monitoring.",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
@@ -33,6 +33,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@napi-rs/canvas": "^1.0.13",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5"
   }

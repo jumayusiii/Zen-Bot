@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 25);
+  assert.equal(registry.size, 31);
 
   for (const name of [
     'uptime',
@@ -30,6 +30,12 @@ test('all commands load with valid names, descriptions and unique registrations'
     'timestamp',
     'choose',
     'higherlower',
+    'ship',
+    'fact',
+    'hangman',
+    'blackjack',
+    'rank',
+    'levels',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -50,6 +56,12 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('tictactoe').beta, true);
   assert.equal(registry.get('roll').beta, true);
   assert.equal(registry.get('higherlower').beta, true);
+  assert.equal(registry.get('hangman').beta, true);
+  assert.equal(registry.get('blackjack').beta, true);
+  assert.equal(registry.get('ship').beta, undefined);
+  assert.equal(registry.get('fact').beta, undefined);
+  assert.equal(registry.get('rank').beta, undefined);
+  assert.equal(registry.get('levels').beta, undefined);
   assert.equal(registry.get('choose').beta, undefined);
   assert.equal(registry.get('timestamp').beta, undefined);
   assert.equal(registry.get('serverbanner').beta, undefined);
@@ -67,4 +79,10 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('timestamp').data.toJSON().options.length, 1);
   assert.equal(registry.get('choose').data.toJSON().options.length, 2);
   assert.equal(registry.get('higherlower').data.toJSON().options.length, 0);
+  assert.equal(registry.get('ship').data.toJSON().options.length, 2);
+  assert.equal(registry.get('fact').data.toJSON().options.length, 0);
+  assert.equal(registry.get('hangman').data.toJSON().options.length, 0);
+  assert.equal(registry.get('blackjack').data.toJSON().options.length, 0);
+  assert.equal(registry.get('rank').data.toJSON().options.length, 1);
+  assert.equal(registry.get('levels').data.toJSON().options.length, 0);
 });

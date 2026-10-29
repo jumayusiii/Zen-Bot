@@ -10,7 +10,7 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Juma Habbo |
 | Application ID | `1564936469305364480` |
-| Version | `1.7.0-beta.1` |
+| Version | `1.8.0-beta.1` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=117760&scope=bot%20applications.commands` |
@@ -31,7 +31,7 @@ The public page will be https://top.gg/bot/1564936469305364480.
 ### Short description (under 140 characters)
 
 ```text
-Memes, minigames, polls, reminders and deep site uptime monitoring — all through clean slash commands.
+Memes, minigames, chat levels and rank cards, polls, reminders and deep site uptime monitoring — all through clean slash commands.
 ```
 
 ### Long description
@@ -42,7 +42,8 @@ Memes, minigames, polls, reminders and deep site uptime monitoring — all throu
 ### What it does
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors and a picker for everyday choices.
-- **Minigames** — trivia with five refreshes, button tic-tac-toe and Higher or Lower.
+- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman and blackjack.
+- **Levels** — chat XP with a rendered rank card, server rank, XP progress and a top-ten `/levels` leaderboard.
 - **Server tools** — server, user and role info, plus icon, banner and avatar grabbers with size pickers and download buttons.
 - **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, tabbed help and an invite link.
 - **Monitoring** — `/sitestatus` checks HTTP, TLS, DNS, page metadata and security headers. `/uptime` adds seven-day bars and an incident timeline.
@@ -51,21 +52,22 @@ Memes, minigames, polls, reminders and deep site uptime monitoring — all throu
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/sitestatus` for the monitored site or `/higherlower` for a quick round.
+3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/higherlower` for a quick round.
 
 Slash commands only. No prefix and no message content access. Polls, reminders and uptime history survive restarts. Source and issues: https://github.com/jumayusiii/Juma-Habbo-Bot
 ```
 
 ### Categories
 
-`Fun`, `Games`, `Utility`, `Website`, `Community`
+`Fun`, `Games`, `Leveling`, `Utility`, `Website`, `Community`
 
 ### Notes for the reviewer
 
 ```text
-Slash commands only. Try /helplist first for the full directory, then /higherlower
-or /trivia for the button minigames. /sitestatus monitors https://habbo.gd and
-/uptime reads its history. No privileged intents or message content access.
+Slash commands only. Try /helplist first for the full directory, then /rank for
+a level card and /higherlower, /hangman or /blackjack for a game. /sitestatus
+monitors https://habbo.gd and /uptime reads its history. No privileged intents
+or message content access.
 ```
 
 ## Discord Bot List
@@ -77,8 +79,8 @@ or /trivia for the button minigames. /sitestatus monitors https://habbo.gd and
 
 The public page will be https://discordbotlist.com/bots/1564936469305364480.
 
-Suggested tags: `fun`, `games`, `utility`, `uptime`, `polls`, `reminders`,
-`discord.js`.
+Suggested tags: `fun`, `games`, `levels`, `utility`, `uptime`, `polls`,
+`reminders`, `discord.js`.
 
 ## Keep the count in sync
 

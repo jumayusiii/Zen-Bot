@@ -20,6 +20,15 @@ const CATEGORY_META = Object.freeze({
     color: COLORS.game,
     order: 20,
   },
+  levels: {
+    id: 'levels',
+    label: 'Levels',
+    title: 'Levels & rank',
+    emoji: '📈',
+    description: 'Chat XP, rank cards and the server leaderboard.',
+    color: COLORS.success,
+    order: 25,
+  },
   utility: {
     id: 'utility',
     label: 'Utilities',
@@ -167,7 +176,7 @@ function buildHelpPayload(client, registry, view, requestedBy) {
 
   const payload = { embeds: [embed], components: [] };
 
-  // A single row holds at most five buttons: the overview plus four categories.
+  // Discord allows five buttons per row: the overview plus four categories.
   if (registry.size > 0 && groups.length <= 4) {
     payload.components = [tabButtons(activeId, groups)];
   }

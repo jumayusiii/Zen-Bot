@@ -2,6 +2,25 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.8.0-beta.1',
+    date: '2026-10-29',
+    title: 'Levels, cards & table games',
+    summary: 'A per-server XP system with rendered rank cards, two table games, two quick fun commands and a fifth help tab.',
+    added: [
+      '**Levels:** members earn **15–25 XP per message** once a minute. `/rank` renders a 900×280 profile card and `/levels` shows the top ten leaderboard.',
+      '`/ship` calculates a deterministic compatibility score, and `/fact` shares a random fun fact with a reroll button.',
+      '`/hangman` and `/blackjack` add two button/select minigames with replay controls and player-locked rounds.',
+      'A **Levels** tab joins Fun, Minigames and Utilities in `/helplist`, covering all **31 commands**.',
+      'Rank cards are drawn locally with `@napi-rs/canvas`, including a gradient card, avatar ring and XP progress bar.',
+    ],
+    improved: [
+      'Chat XP uses the non-privileged **GuildMessages** intent and never reads message content.',
+      'XP, levels and usernames persist in `data/levels.json`; rank cards fall back to text if image rendering fails.',
+      'Finished hangman and blackjack rounds stay available for **Play again** until they expire.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.7.0-beta.1',
     date: '2026-10-29',
     title: 'Picks, timestamps & directory day',
