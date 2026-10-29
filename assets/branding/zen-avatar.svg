@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="zenTitle zenDesc">
+  <title id="zenTitle">Zen</title>
+  <desc id="zenDesc">An open jade ensō ring around a bold cream Z on a deep ink field.</desc>
+
+  <defs>
+    <linearGradient id="zenBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A111D" />
+      <stop offset="0.52" stop-color="#101B2C" />
+      <stop offset="1" stop-color="#070D16" />
+    </linearGradient>
+
+    <radialGradient id="zenMint" cx="38%" cy="24%" r="72%">
+      <stop offset="0" stop-color="#2DD4BF" stop-opacity="0.22" />
+      <stop offset="0.55" stop-color="#2DD4BF" stop-opacity="0.05" />
+      <stop offset="1" stop-color="#2DD4BF" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="zenViolet" cx="6%" cy="94%" r="62%">
+      <stop offset="0" stop-color="#6D5EFC" stop-opacity="0.14" />
+      <stop offset="0.6" stop-color="#6D5EFC" stop-opacity="0.03" />
+      <stop offset="1" stop-color="#6D5EFC" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="zenRing" x1="0.18" y1="0.12" x2="0.82" y2="0.9">
+      <stop offset="0" stop-color="#B8FBE8" />
+      <stop offset="0.3" stop-color="#5EEAD4" />
+      <stop offset="0.68" stop-color="#2DD4BF" />
+      <stop offset="1" stop-color="#0F9F9A" />
+    </linearGradient>
+
+    <linearGradient id="zenZ" x1="0.3" y1="0.28" x2="0.7" y2="0.72">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.6" stop-color="#F1FFF9" />
+      <stop offset="1" stop-color="#D8F8ED" />
+    </linearGradient>
+
+    <filter id="zenRingGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="26" />
+    </filter>
+
+    <filter id="zenZGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+
+    <clipPath id="zenBadge">
+      <rect width="1024" height="1024" rx="232" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#zenBadge)">
+    <rect width="1024" height="1024" fill="url(#zenBg)" />
+    <rect width="1024" height="1024" fill="url(#zenMint)" />
+    <rect width="1024" height="1024" fill="url(#zenViolet)" />
+  </g>
+
+  <rect x="1" y="1" width="1022" height="1022" rx="231" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="2" />
+  <circle cx="512" cy="512" r="382" fill="none" stroke="#E9FDF7" stroke-opacity="0.12" stroke-width="2" />
+
+  <path
+    d="M 780.5 341.6 A 318 318 0 1 1 591.1 204.2"
+    fill="none"
+    stroke="#2DD4BF"
+    stroke-opacity="0.3"
+    stroke-width="78"
+    stroke-linecap="round"
+    filter="url(#zenRingGlow)"
+  />
+  <path
+    d="M 780.5 341.6 A 318 318 0 1 1 591.1 204.2"
+    fill="none"
+    stroke="url(#zenRing)"
+    stroke-width="64"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M 352 372 H 672 L 352 652 H 672"
+    fill="none"
+    stroke="#5EEAD4"
+    stroke-opacity="0.22"
+    stroke-width="100"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#zenZGlow)"
+  />
+  <path
+    d="M 352 372 H 672 L 352 652 H 672"
+    fill="none"
+    stroke="url(#zenZ)"
+    stroke-width="84"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
