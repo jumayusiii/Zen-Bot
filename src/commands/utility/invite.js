@@ -7,8 +7,9 @@ const {
 const { BOT_VERSION, COLORS, createEmbed } = require('../../lib/embeds');
 const pkg = require('../../../package.json');
 
-// View Channels, Send Messages, Embed Links, Attach Files and Read Message History.
-const PERMISSIONS = 117760;
+// View Channels, Send Messages, Embed Links, Attach Files, Read Message History,
+// Kick Members, Ban Members, Moderate Members and Manage Roles.
+const PERMISSIONS = 1099780180998;
 
 function sourceUrl() {
   const raw = pkg.repository?.url ?? pkg.homepage ?? '';
@@ -41,7 +42,7 @@ module.exports = {
         { name: '📦 Version', value: `\`v${BOT_VERSION}\``, inline: true },
         {
           name: '🛡️ Permissions',
-          value: 'View Channels · Send Messages · Embed Links · Attach Files · Read Message History',
+          value: 'View Channels · Send Messages · Embed Links · Attach Files · Read Message History · Kick Members · Ban Members · Moderate Members · Manage Roles',
           inline: false,
         },
       ],

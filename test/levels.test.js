@@ -19,31 +19,35 @@ async function withLevelsFile(run) {
 }
 
 test('level thresholds grow and total XP is cumulative', () => {
-  assert.equal(levels.xpForLevel(0), 100);
-  assert.equal(levels.xpForLevel(1), 155);
-  assert.equal(levels.xpForLevel(2), 220);
-  assert.equal(levels.xpForLevel(10), 1100);
+  assert.equal(levels.xpForLevel(0), 50);
+  assert.equal(levels.xpForLevel(1), 80);
+  assert.equal(levels.xpForLevel(2), 120);
+  assert.equal(levels.xpForLevel(10), 800);
 
-  assert.equal(levels.totalXpForLevel(1), 100);
-  assert.equal(levels.totalXpForLevel(2), 255);
-  assert.equal(levels.totalXpForLevel(3), 475);
+  assert.equal(levels.totalXpForLevel(1), 50);
+  assert.equal(levels.totalXpForLevel(2), 130);
+  assert.equal(levels.totalXpForLevel(3), 250);
+});
+
+test('two minimum XP awards reach the first level', () => {
+  assert.equal(levels.progressFromXp(levels.MIN_XP * 2).level, 1);
 });
 
 test('progressFromXp handles boundaries and negative input', () => {
   assert.deepEqual(levels.progressFromXp(0), {
     level: 0,
     intoLevel: 0,
-    needed: 100,
+    needed: 50,
     totalXp: 0,
     percent: 0,
   });
 
-  assert.equal(levels.progressFromXp(99).level, 0);
-  assert.equal(levels.progressFromXp(99).intoLevel, 99);
-  assert.equal(levels.progressFromXp(100).level, 1);
-  assert.equal(levels.progressFromXp(100).intoLevel, 0);
-  assert.equal(levels.progressFromXp(254).level, 1);
-  assert.equal(levels.progressFromXp(255).level, 2);
+  assert.equal(levels.progressFromXp(49).level, 0);
+  assert.equal(levels.progressFromXp(49).intoLevel, 49);
+  assert.equal(levels.progressFromXp(50).level, 1);
+  assert.equal(levels.progressFromXp(50).intoLevel, 0);
+  assert.equal(levels.progressFromXp(129).level, 1);
+  assert.equal(levels.progressFromXp(130).level, 2);
   assert.equal(levels.progressFromXp(-50).totalXp, 0);
 });
 
@@ -55,39 +59,39 @@ test('awardMessageXp grants XP, applies the cooldown and detects level ups', asy
       guildId: 'guild-1',
       userId: 'user-1',
       username: 'Tester',
-      xp: 60,
+      xp: 30,
       now,
     });
 
     assert.equal(first.awarded, true);
-    assert.equal(first.gain, 60);
-    assert.equal(first.entry.xp, 60);
+    assert.equal(first.gain, 30);
+    assert.equal(first.entry.xp, 30);
     assert.equal(first.level, 0);
     assert.equal(first.leveledUp, false);
 
     const cooldown = await levels.awardMessageXp({
       guildId: 'guild-1',
       userId: 'user-1',
-      xp: 60,
+      xp: 30,
       now: now + 59_000,
     });
 
     assert.equal(cooldown.awarded, false);
     assert.equal(cooldown.reason, 'cooldown');
-    assert.equal(cooldown.entry.xp, 60);
+    assert.equal(cooldown.entry.xp, 30);
 
     const second = await levels.awardMessageXp({
       guildId: 'guild-1',
       userId: 'user-1',
-      xp: 60,
+      xp: 30,
       now: now + 61_000,
     });
 
     assert.equal(second.awarded, true);
-    assert.equal(second.entry.xp, 120);
+    assert.equal(second.entry.xp, 60);
     assert.equal(second.level, 1);
     assert.equal(second.leveledUp, true);
-    assert.equal(second.profile.intoLevel, 20);
+    assert.equal(second.profile.intoLevel, 10);
   });
 });
 

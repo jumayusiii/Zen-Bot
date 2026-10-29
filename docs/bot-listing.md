@@ -10,10 +10,10 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Juma Habbo |
 | Application ID | `1564936469305364480` |
-| Version | `1.8.2-beta.1` |
+| Version | `1.9.0-beta.1` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
-| Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=117760&scope=bot%20applications.commands` |
+| Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
 | Source | https://github.com/jumayusiii/Juma-Habbo-Bot |
 | Support | https://github.com/jumayusiii/Juma-Habbo-Bot/issues |
 | Privacy | No message content is read. Poll, reminder, uptime and level state stays on the host. |
@@ -41,18 +41,19 @@ Memes, minigames, chat levels and rank cards, polls, reminders and deep site upt
 
 ### What it does
 
-- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship` and `/fact`.
-- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman and blackjack.
-- **Levels** — chat XP with a rendered rank card, server rank, XP progress and a top-ten `/levels` leaderboard.
+- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/compliment` and `/rate`.
+- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing and a reaction test.
+- **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
+- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission and role-hierarchy checks.
 - **Server tools** — server, user and role info, plus icon, banner and avatar grabbers with size pickers and download buttons.
-- **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, tabbed help and an invite link.
+- **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, `/ping`, tabbed help and an invite link.
 - **Monitoring** — `/sitestatus` checks HTTP, TLS, DNS, page metadata and security headers. `/uptime` adds seven-day bars and an incident timeline.
 
 ### Try it
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/higherlower` for a quick round.
+3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/higherlower` and `/reaction` for a quick round.
 
 **Help command:** `/helplist`  
 **Source and issues:** [GitHub repository](https://github.com/jumayusiii/Juma-Habbo-Bot) · [Report an issue](https://github.com/jumayusiii/Juma-Habbo-Bot/issues)
@@ -62,15 +63,16 @@ Slash commands only. No prefix and no message content access. Polls, reminders, 
 
 ### Categories
 
-`Fun`, `Games`, `Leveling`, `Utility`, `Website`, `Community`
+`Fun`, `Games`, `Leveling`, `Moderation`, `Utility`, `Website`, `Community`
 
 ### Notes for the reviewer
 
 ```text
 Slash commands only. Try /helplist first for the full directory, then /rank for
-a level card and /higherlower, /hangman or /blackjack for a game. /sitestatus
-monitors https://habbo.gd and /uptime reads its history. No privileged intents
-or message content access.
+a level card and /higherlower, /hangman or /blackjack for a game. Moderation
+uses /mute, /kick and /ban behind Discord permissions and role checks.
+/sitestatus monitors https://habbo.gd and /uptime reads its history. No
+privileged intents or message content access.
 ```
 
 ## Discord Bot List
@@ -116,7 +118,7 @@ A healthy start logs one of:
 - [ ] **Requires OAuth2 Code Grant** is off under **Bot → Authorization Flow**.
 - [ ] Global slash commands are deployed with `npm run deploy:global`.
 - [ ] The bot will stay online during review.
-- [ ] Invite uses `permissions=117760` and the `bot` + `applications.commands` scopes.
+- [ ] Invite uses `permissions=1099780180998` and the `bot` + `applications.commands` scopes.
 - [ ] Source and support links point to the GitHub repository and its issues.
 - [ ] top.gg is submitted from https://top.gg/bot/new.
 - [ ] The Discord Bot List post is updated from [discordbotlist-post.md](discordbotlist-post.md).

@@ -1,5 +1,6 @@
 const { Events } = require('discord.js');
 const { COLORS, createEmbed } = require('../lib/embeds');
+const { applyLevelReward } = require('../lib/levelRewards');
 const { COOLDOWN_MS, awardMessageXp } = require('../lib/levels');
 
 const lastAward = new Map();
@@ -54,10 +55,29 @@ module.exports = {
 
       if (!result.leveledUp) return;
 
+      let reward = null;
+      try {
+        reward = await applyLevelReward(message.member, result.level);
+      } catch (error) {
+        console.warn(`[levels] Could not assign the level reward: ${error.message}`);
+      }
+
+      if (
+        reward &&
+        !reward.assigned &&
+        !['not_configured', 'below_level', 'already_has', 'invalid_member'].includes(reward.reason)
+      ) {
+        console.warn(`[levels] Level reward not assigned (${reward.reason}).`);
+      }
+
+      const rewardLine = reward?.assigned
+        ? `\n\n🏅 You earned the **${reward.role.name}** role.`
+        : '';
+
       const embed = createEmbed(message.client, {
         section: 'Levels',
         title: 'Level up',
-        description: `🎉 **${displayName}** reached **level ${result.level}**!`,
+        description: `🎉 **${displayName}** reached **level ${result.level}**!${rewardLine}`,
         color: COLORS.success,
         footer: 'Chat XP',
       });

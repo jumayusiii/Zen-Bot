@@ -28,7 +28,7 @@ function xpForLevel(level) {
     throw new RangeError('level must be a whole number between 0 and 500.');
   }
 
-  return 5 * level * level + 50 * level + 100;
+  return 5 * level * level + 25 * level + 50;
 }
 
 /** Total XP required to reach a level from zero. */

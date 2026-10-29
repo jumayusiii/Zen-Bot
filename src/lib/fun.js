@@ -40,6 +40,38 @@ const VERDICTS = Object.freeze([
   { min: 0, label: 'Not meant to be', emoji: '💔' },
 ]);
 
+const COMPLIMENTS = Object.freeze([
+  'You make every room a little brighter.',
+  'Your energy is genuinely contagious.',
+  'You have excellent taste.',
+  'You are the kind of person who makes teamwork easy.',
+  'Your curiosity is one of your best traits.',
+  'You always know how to make someone laugh.',
+  'You handle challenges with real grace.',
+  'Your ideas are worth listening to.',
+  'You bring out the best in the people around you.',
+  'You are more capable than you give yourself credit for.',
+  'Your kindness does not go unnoticed.',
+  'You have a talent for making things feel possible.',
+  'You are a great person to have in a server.',
+  'Your creativity is seriously underrated.',
+  'You make ordinary moments feel fun.',
+  'You are doing better than you think.',
+  'Your patience is impressive.',
+  'You have a genuinely good heart.',
+  'You are the reason someone smiled today.',
+  'You bring good vibes wherever you go.',
+]);
+
+const RATE_VERDICTS = Object.freeze([
+  { min: 90, label: 'Certified elite', emoji: '🏆' },
+  { min: 75, label: 'Very good', emoji: '🔥' },
+  { min: 60, label: 'Solid', emoji: '👍' },
+  { min: 40, label: 'Mid', emoji: '😐' },
+  { min: 25, label: 'Needs work', emoji: '📉' },
+  { min: 0, label: 'Not it', emoji: '💀' },
+]);
+
 function hashString(value) {
   let hash = 2_166_136_261;
 
@@ -87,10 +119,49 @@ function randomFact(random = Math.random, excludeIndex = null) {
   return pool[index];
 }
 
+/**
+ * A deterministic 0–100 rating. The same normalized input always gets the
+ * same playful score, regardless of who runs the command.
+ *
+ * @param {string} value
+ * @returns {number}
+ */
+function rateThing(value) {
+  return hashString(String(value ?? '').trim().toLowerCase()) % 101;
+}
+
+function rateVerdict(score) {
+  const value = Math.max(0, Math.min(100, Number(score) || 0));
+  return RATE_VERDICTS.find((verdict) => value >= verdict.min) ?? RATE_VERDICTS[RATE_VERDICTS.length - 1];
+}
+
+/**
+ * @param {() => number} [random]
+ * @param {number|null} [excludeIndex]
+ * @returns {{text: string, index: number}}
+ */
+function randomCompliment(random = Math.random, excludeIndex = null) {
+  const pool = COMPLIMENTS
+    .map((text, index) => ({ text, index }))
+    .filter((compliment) => compliment.index !== excludeIndex);
+
+  const index = Math.min(
+    pool.length - 1,
+    Math.floor(Math.min(0.999999, Math.max(0, random())) * pool.length),
+  );
+
+  return pool[index];
+}
+
 module.exports = {
+  COMPLIMENTS,
   FACTS,
+  RATE_VERDICTS,
   VERDICTS,
+  randomCompliment,
   randomFact,
+  rateThing,
+  rateVerdict,
   shipScore,
   shipVerdict,
 };

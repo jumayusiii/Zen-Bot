@@ -69,6 +69,23 @@ test('the overview has a tab for every category and the active tab is highlighte
   assert.equal(buttons[3].data.custom_id, 'helplist:view:levels');
 });
 
+test('more than five tabs wrap onto a second button row', () => {
+  const withModeration = registry(
+    fakeCommand('meme', 'fun'),
+    fakeCommand('ban', 'moderation'),
+    fakeCommand('trivia', 'minigames', { beta: true }),
+    fakeCommand('sitestatus', 'utility'),
+    fakeCommand('rank', 'levels'),
+  );
+  const payload = buildHelpPayload(client, withModeration, 'overview', 'Tester');
+
+  assert.equal(payload.components.length, 2);
+  assert.equal(payload.components[0].components.length, 5);
+  assert.equal(payload.components[1].components.length, 1);
+  assert.equal(payload.components[0].components[2].data.custom_id, 'helplist:view:moderation');
+  assert.equal(payload.components[1].components[0].data.custom_id, 'helplist:view:utility');
+});
+
 test('a category tab lists its commands and falls back to overview for unknown views', () => {
   const payload = buildHelpPayload(client, commands, 'utility', 'Tester');
   const embed = payload.embeds[0];

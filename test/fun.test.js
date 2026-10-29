@@ -2,8 +2,12 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  COMPLIMENTS,
   FACTS,
+  randomCompliment,
   randomFact,
+  rateThing,
+  rateVerdict,
   shipScore,
   shipVerdict,
 } = require('../src/lib/fun');
@@ -36,4 +40,28 @@ test('randomFact returns a valid fact and respects the excluded one', () => {
   assert.notEqual(next.index, 0);
   assert.ok(next.text.length > 0);
   assert.ok(next.index < FACTS.length);
+});
+
+test('rateThing is case-insensitive, deterministic and stays in range', () => {
+  const score = rateThing('Pizza');
+
+  assert.equal(score, rateThing('  PIZZA  '));
+  assert.ok(score >= 0 && score <= 100);
+  assert.equal(rateVerdict(100).label, 'Certified elite');
+  assert.equal(rateVerdict(75).label, 'Very good');
+  assert.equal(rateVerdict(60).label, 'Solid');
+  assert.equal(rateVerdict(40).label, 'Mid');
+  assert.equal(rateVerdict(25).label, 'Needs work');
+  assert.equal(rateVerdict(0).label, 'Not it');
+});
+
+test('randomCompliment returns a valid compliment and respects the excluded one', () => {
+  const compliment = randomCompliment(() => 0);
+  assert.equal(compliment.index, 0);
+  assert.equal(compliment.text, COMPLIMENTS[0]);
+
+  const next = randomCompliment(() => 0, 0);
+  assert.notEqual(next.index, 0);
+  assert.ok(next.text.length > 0);
+  assert.ok(next.index < COMPLIMENTS.length);
 });

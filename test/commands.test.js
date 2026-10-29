@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 31);
+  assert.equal(registry.size, 42);
 
   for (const name of [
     'uptime',
@@ -36,6 +36,17 @@ test('all commands load with valid names, descriptions and unique registrations'
     'blackjack',
     'rank',
     'levels',
+    'mute',
+    'unmute',
+    'kick',
+    'ban',
+    'unban',
+    'levelreward',
+    'compliment',
+    'rate',
+    'guessnumber',
+    'reaction',
+    'ping',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -85,4 +96,15 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('blackjack').data.toJSON().options.length, 0);
   assert.equal(registry.get('rank').data.toJSON().options.length, 1);
   assert.equal(registry.get('levels').data.toJSON().options.length, 0);
+  assert.equal(registry.get('mute').data.toJSON().options.length, 3);
+  assert.equal(registry.get('unmute').data.toJSON().options.length, 2);
+  assert.equal(registry.get('kick').data.toJSON().options.length, 2);
+  assert.equal(registry.get('ban').data.toJSON().options.length, 4);
+  assert.equal(registry.get('unban').data.toJSON().options.length, 2);
+  assert.equal(registry.get('levelreward').data.toJSON().options.length, 3);
+  assert.equal(registry.get('compliment').data.toJSON().options.length, 1);
+  assert.equal(registry.get('rate').data.toJSON().options.length, 1);
+  assert.equal(registry.get('guessnumber').data.toJSON().options.length, 1);
+  assert.equal(registry.get('reaction').data.toJSON().options.length, 0);
+  assert.equal(registry.get('ping').data.toJSON().options.length, 0);
 });

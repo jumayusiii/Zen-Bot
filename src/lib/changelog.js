@@ -2,15 +2,37 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.9.0-beta.1',
+    date: '2026-10-29',
+    title: 'XP curve, rewards & moderation',
+    summary: 'The shorter XP curve ships with automatic level rewards, timed moderation, new fun and minigame commands, and a ping diagnostic.',
+    added: [
+      '`/levelreward` lets admins attach a role reward to a level; eligible members receive it automatically on level-up.',
+      '`/mute`, `/unmute`, `/kick`, `/ban` and `/unban` add timed moderation, reversals and persistent temporary bans.',
+      '`/compliment` and `/rate` add two lightweight fun commands.',
+      '`/guessnumber` and `/reaction` add two new minigames; `/ping` reports gateway latency, round-trip, uptime and status.',
+      'A **Moderation** tab joins `/helplist`, raising the directory to **42 commands**.',
+    ],
+    improved: [
+      'Chat XP keeps its **25–35 XP** cadence, with level 1 at **50 XP** and **80, 120, 170 and 230 XP** for the next levels.',
+      'Temporary bans live in `data/moderation.json`; every action checks permissions, the server owner and role hierarchy.',
+      'Level rewards live in `data/level-rewards.json`; the bot checks **Manage Roles** and its role position before assigning them.',
+      'The invite link now requests **Moderate Members**, **Kick Members**, **Ban Members** and **Manage Roles**.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.8.2-beta.1',
     date: '2026-10-29',
-    title: 'XP pacing fix',
-    summary: 'Chat XP now awards 25–35 XP per minute, and a restart no longer extends a member\'s remaining cooldown.',
+    title: 'XP pacing & curve',
+    summary: 'Chat XP awards 25–35 XP per minute, the first level now takes two awards, and a restart no longer extends a cooldown.',
     added: [
       'Members earn **25–35 XP** per eligible message, still limited to one award per server every **60 seconds**.',
       'Each award writes a `[levels]` line to `bot.log` with the gain, total XP and level.',
     ],
     improved: [
+      'The opening curve is shorter: level 1 needs **50 XP**, then **80, 120, 170 and 230 XP** for the following levels, so the first level takes two awards at the 25 XP minimum.',
+      'Stored XP totals are recalculated against the new curve; existing records are kept and no progress is reset.',
       'The in-memory cooldown now starts only after a successful award, so a failed write no longer locks the member out for a minute.',
       'On cooldown, the in-memory timer reuses the stored `lastXpAt` value instead of starting a fresh 60-second wait.',
     ],

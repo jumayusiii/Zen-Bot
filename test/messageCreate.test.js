@@ -9,11 +9,13 @@ const messageCreate = require('../src/events/messageCreate');
 async function withLevelsFile(run) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'legend-message-xp-'));
   process.env.LEVELS_FILE = path.join(directory, 'levels.json');
+  process.env.LEVEL_REWARDS_FILE = path.join(directory, 'level-rewards.json');
 
   try {
     await run(process.env.LEVELS_FILE);
   } finally {
     delete process.env.LEVELS_FILE;
+    delete process.env.LEVEL_REWARDS_FILE;
     await fs.rm(directory, { recursive: true, force: true });
   }
 }
@@ -58,7 +60,7 @@ test('a message awards XP once and a level up is announced', async () => {
             guildId: 'guild-xp-2',
             userId: 'user-xp-2',
             username: 'Tester',
-            xp: 95,
+            xp: 30,
             lastXpAt: 0,
           },
         ],
@@ -72,7 +74,7 @@ test('a message awards XP once and a level up is announced', async () => {
 
     const stored = JSON.parse(await fs.readFile(file, 'utf8'));
     const entry = stored.users.find((user) => user.userId === 'user-xp-2');
-    assert.ok(entry.xp >= 120 && entry.xp <= 130);
+    assert.ok(entry.xp >= 55 && entry.xp <= 65);
     assert.ok(entry.lastXpAt > 0);
 
     assert.equal(message.sent.length, 1);

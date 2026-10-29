@@ -11,6 +11,15 @@ const CATEGORY_META = Object.freeze({
     color: COLORS.fun,
     order: 10,
   },
+  moderation: {
+    id: 'moderation',
+    label: 'Moderation',
+    title: 'Moderation',
+    emoji: '🛡️',
+    description: 'Permission-aware tools for mutes, kicks, bans and reversals.',
+    color: COLORS.danger,
+    order: 15,
+  },
   minigames: {
     id: 'minigames',
     label: 'Minigames',
@@ -147,16 +156,24 @@ function categoryEmbed(client, group, requestedBy) {
 
 function tabButtons(activeId, groups) {
   const tabs = [OVERVIEW_META, ...groups.map((group) => group.meta)];
+  const rows = [];
 
-  return new ActionRowBuilder().addComponents(
-    tabs.map((tab) =>
-      new ButtonBuilder()
-        .setCustomId(`helplist:view:${tab.id}`)
-        .setLabel(tab.label)
-        .setEmoji(tab.emoji)
-        .setStyle(tab.id === activeId ? ButtonStyle.Primary : ButtonStyle.Secondary),
-    ),
-  );
+  // Discord allows five buttons per row, so six tabs need a second row.
+  for (let index = 0; index < tabs.length; index += 5) {
+    rows.push(
+      new ActionRowBuilder().addComponents(
+        tabs.slice(index, index + 5).map((tab) =>
+          new ButtonBuilder()
+            .setCustomId(`helplist:view:${tab.id}`)
+            .setLabel(tab.label)
+            .setEmoji(tab.emoji)
+            .setStyle(tab.id === activeId ? ButtonStyle.Primary : ButtonStyle.Secondary),
+        ),
+      ),
+    );
+  }
+
+  return rows;
 }
 
 /**
@@ -176,9 +193,8 @@ function buildHelpPayload(client, registry, view, requestedBy) {
 
   const payload = { embeds: [embed], components: [] };
 
-  // Discord allows five buttons per row: the overview plus four categories.
-  if (registry.size > 0 && groups.length <= 4) {
-    payload.components = [tabButtons(activeId, groups)];
+  if (registry.size > 0) {
+    payload.components = tabButtons(activeId, groups);
   }
 
   return payload;

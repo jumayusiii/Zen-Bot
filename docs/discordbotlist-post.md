@@ -19,7 +19,7 @@ short and long descriptions, the help command and the GitHub links.
 | Library | discord.js v14 · JavaScript · Node.js |
 | GitHub | https://github.com/jumayusiii/Juma-Habbo-Bot |
 | Issues | https://github.com/jumayusiii/Juma-Habbo-Bot/issues |
-| Invite | https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=117760&scope=bot%20applications.commands |
+| Invite | https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands |
 
 Keep the existing **No NSFW** setting.
 
@@ -38,23 +38,24 @@ Memes, minigames, chat levels and rank cards, polls, reminders and deep site upt
 
 ### What it does
 
-- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship` and `/fact`.
-- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman and blackjack.
-- **Levels** — chat XP with a rendered rank card, server rank, XP progress and a top-ten `/levels` leaderboard.
+- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/compliment` and `/rate`.
+- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing and a reaction test.
+- **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
+- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks and role hierarchy protection.
 - **Server tools** — server, user and role info, plus icon, banner and avatar grabbers with size pickers and download buttons.
-- **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, tabbed help and an invite link.
+- **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, `/ping`, tabbed help and an invite link.
 - **Monitoring** — `/sitestatus` checks HTTP, TLS, DNS, page metadata and security headers. `/uptime` adds seven-day bars and an incident timeline.
 
 ### Try it
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/higherlower` for a quick round.
+3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/higherlower` and `/reaction` for a quick round.
 
 **Help command:** `/helplist`  
 **Source and issues:** [GitHub repository](https://github.com/jumayusiii/Juma-Habbo-Bot) · [Report an issue](https://github.com/jumayusiii/Juma-Habbo-Bot/issues)
 
-Slash commands only. No prefix and no message content access. Polls, reminders, uptime history and chat levels survive restarts.
+Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels and scheduled temporary bans survive restarts.
 ```
 
 ## Links to add
@@ -101,7 +102,7 @@ missing. Never commit `.env`, paste the token in chat or put it in the repositor
 
 - [ ] Signed in as the listing owner.
 - [ ] Short description replaced (130 characters).
-- [ ] Long description replaced with the 1.8 copy.
+- [ ] Long description replaced with the 1.9 copy.
 - [ ] Help command set to `/helplist`.
 - [ ] Tags kept: Games, Utility, Levelling, Fun, Meme.
 - [ ] GitHub repository and issues links added.

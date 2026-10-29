@@ -1,14 +1,16 @@
 # Juma Habbo Bot
 
-**Public beta · v1.8.2-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.9.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation tools, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
 
 ## Highlights
 
 - **Real slash commands** loaded automatically from `src/commands/`.
-- **Tabbed help** with an overview plus Fun, Minigames, Levels and Utilities tabs, generated from the command modules.
-- **Level system** with chat XP, a rendered rank card and a top-ten server leaderboard.
+- **Tabbed help** with an overview plus Fun, Moderation, Minigames, Levels and Utilities tabs, generated from the command modules.
+- **Level system** with chat XP, a rendered rank card, a top-ten server leaderboard and automatic role rewards.
+- **Moderation** with timed mutes, persistent temporary bans, kicks and reversals, plus permission and role-hierarchy checks.
+- **More fun** with compliments, repeatable ratings, a number-guessing round and a reaction test.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -30,13 +32,23 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/choose <options> [question]` | Picks one option from a 2–10 item list, with an optional question. |
 | `/ship <user> [second]` | Calculates a playful, repeatable compatibility score for two members. |
 | `/fact` | Shares a random fun fact with a reroll button. |
+| `/compliment [user]` | Sends a random compliment to a member. |
+| `/rate <thing>` | Gives something a deterministic 0–100 rating with a verdict. |
 | `/trivia` | 🧪 Asks a multiple-choice trivia question with live answer buttons, score tracking and up to five refreshes. |
 | `/tictactoe` | 🧪 Starts a button tic-tac-toe board against the bot. |
 | `/higherlower` | 🧪 Guess whether the next number is higher or lower, up to 10 rounds. |
 | `/hangman` | 🧪 Guess a hidden word one letter at a time, with six wrong guesses. |
 | `/blackjack` | 🧪 Plays a hand against the dealer with Hit, Stand and Play again controls. |
+| `/guessnumber [guess]` | Guesses the bot's number between 1 and 100 in up to seven attempts. |
+| `/reaction` | Tests your reaction time with a button that unlocks after a random delay. |
 | `/rank [user]` | Renders a profile card with level, XP progress, server rank and total XP. |
 | `/levels` | Shows the top ten members by chat XP, plus your rank if you are outside the top ten. |
+| `/levelreward [role] [level] [clear]` | Configures a role that members earn automatically when they reach a level. |
+| `/mute <member> <duration> [reason]` | Times out a member for **5 minutes to 28 days**, with an audit-log reason. |
+| `/unmute <member> [reason]` | Removes a member's timeout. |
+| `/kick <member> [reason]` | Removes a member from the server with an audit-log reason. |
+| `/ban <user> <duration> [reason] [delete_messages]` | Bans a user for **1 hour to 30 days** or permanently, optionally deleting recent messages. |
+| `/unban <user_id> [reason]` | Lifts a ban and cancels its scheduled auto-unban. |
 | `/avatar [user]` | Shows a user avatar with a 64–4096 px size selector and a **Download** button. |
 | `/servericon` | Shows the current server icon with the same size selector and download button. |
 | `/serverbanner` | Shows the current server banner with a download button. |
@@ -50,9 +62,10 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/userinfo [user]` | Shows a user's display name, ID, account type, creation date, join date, top role, nickname and roles. |
 | `/roleinfo <role>` | 🧪 Shows a role's color, position, creation date, permissions, mentionable/hoisted/managed state and icon. |
 | `/botinfo` | 🧪 Shows bot uptime, gateway ping, memory, server/member counts, version and runtime versions. |
+| `/ping` | Shows gateway latency, command round-trip, uptime and connection status. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
-| `/helplist` | Opens a tabbed directory — Overview, Fun, Minigames, Levels and Utilities — with every command, its usage and a beta marker. |
+| `/helplist` | Opens a tabbed directory — Overview, Fun, Moderation, Minigames, Levels and Utilities — with every command, its usage and a beta marker. |
 
 🧪 marks beta commands. The help directory is generated from the loaded command modules, so it stays accurate when new commands are added.
 
@@ -62,7 +75,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Minigames
 
-`/trivia`, `/tictactoe`, `/higherlower`, `/hangman` and `/blackjack` use Discord components and are limited to the person who started the round. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Finished games keep a **Play again** control. Rounds expire after 15 minutes, and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber` and `/reaction` are limited to the person who started the round. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
 
 ## Levels
 
@@ -70,7 +83,19 @@ Every member earns XP by chatting. A message awards **25–35 XP**, with one awa
 
 `/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten.
 
-The level curve starts at **100 XP** for level 1 and grows with each level (`5 × level² + 50 × level + 100` XP for the next level). The bot uses the non-privileged **GuildMessages** intent for message events and never reads message content. Rank cards need `@napi-rs/canvas`, which installs prebuilt binaries through npm; if rendering fails, `/rank` falls back to a text embed.
+The level curve starts at **50 XP** for level 1 and grows with each level (`5 × level² + 25 × level + 50` XP for the next level), so two awards at the 25 XP minimum unlock the first level. The next thresholds are **80, 120, 170 and 230 XP**. The bot uses the non-privileged **GuildMessages** intent for message events and never reads message content. Rank cards need `@napi-rs/canvas`, which installs prebuilt binaries through npm; if rendering fails, `/rank` falls back to a text embed.
+
+`/levelreward` lets a server manager choose one reward role and the level that unlocks it. The configuration is stored in `data/level-rewards.json`. When a member levels up, the bot checks its **Manage Roles** permission and role position before assigning the role; a failed assignment is logged without interrupting the level-up announcement. Existing members receive the role on their next level-up after the reward is configured. `/levelreward clear` removes the configuration but leaves already-assigned roles in place.
+
+## Moderation
+
+Admin commands are grouped in the **Moderation** tab and are hidden from members without the matching Discord permission.
+
+- `/mute <member> <duration> [reason]` times a member out for **5 minutes to 28 days**. `/unmute` clears it early.
+- `/ban <user> <duration> [reason] [delete_messages]` supports **1-hour to 30-day temporary bans**, permanent bans, and message cleanup up to seven days. `/unban <user_id>` lifts a ban.
+- `/kick <member> [reason]` removes a member immediately; Discord does not support timed kicks.
+- Temporary bans are written to `data/moderation.json`. The scheduler checks every 30 seconds and lifts overdue bans after a restart.
+- Every command checks the caller's permission, the bot's permission, the server owner, the bot's role position and the caller's role position. The bot needs **Moderate Members**, **Kick Members** and **Ban Members**, and its role must sit above the target's highest role.
 
 ## Site monitoring
 
@@ -143,7 +168,7 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 
 - Node.js **18 or newer**
 - A Discord application with a bot token
-- A persistent disk if you want uptime, poll, reminder and level state to survive restarts
+- A persistent disk if you want uptime, poll, reminder, level and scheduled-ban state to survive restarts
 - `@napi-rs/canvas` for rank cards, installed automatically by `npm install`
 
 ## 1. Create your bot
@@ -151,7 +176,7 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 1. Open the [Discord Developer Portal](https://discord.com/developers/applications) and create a **New Application**.
 2. Go to **Bot** and copy the token. Keep it private; anyone with it controls the bot.
 3. No privileged intents are required. The bot uses the `Guilds` and `GuildMessages` intents and never reads message content.
-4. Under **OAuth2 → URL Generator**, select the scopes `bot` and `applications.commands`, and the permissions **View Channels**, **Send Messages**, **Embed Links** and **Attach Files**.
+4. Under **OAuth2 → URL Generator**, select the scopes `bot` and `applications.commands`, and the permissions **View Channels**, **Send Messages**, **Embed Links**, **Attach Files**, **Read Message History**, **Moderate Members**, **Kick Members**, **Ban Members** and **Manage Roles**.
 5. Open the generated URL and add the bot to your server.
 
 If you want other people to add your hosted instance, enable **Public Bot** in the installation settings and disable **Requires OAuth2 Code Grant** under **Bot → Authorization Flow**. Without those settings, only you can install the app.
@@ -229,6 +254,7 @@ A healthy start looks like:
 [bot] Rich presence set: Playing I am Legend.
 [siteMonitor] Uptime sampling enabled for Juma Habbo every 5 min.
 [reminders] Dispatcher enabled (checking every 15s).
+[moderation] Temporary-ban scheduler enabled (checking every 30s).
 ```
 
 ## Development
@@ -238,7 +264,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, level math and persistence, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -268,7 +294,7 @@ src/
 │   ├── commandHandler.js        # Recursively loads src/commands/**/*.js
 │   └── eventHandler.js          # Binds src/events/*.js to the client
 ├── events/
-│   ├── ready.js                 # Presence, uptime monitor, reminders, auto-refresh, bot lists
+│   ├── ready.js                 # Presence, uptime monitor, reminders, moderation, bot lists
 │   ├── interactionCreate.js     # Routes slash commands and components
 │   └── messageCreate.js         # Chat XP, cooldowns and level-up announcements
 ├── lib/
@@ -280,13 +306,17 @@ src/
 │   ├── dice.js                  # Dice notation parsing and rolling
 │   ├── embeds.js                # Shared palette, branding and embed builder
 │   ├── fun.js                   # Ship scores and the offline fact bank
+│   ├── guessNumber.js           # Number-guess rules and attempt limits
 │   ├── guilds.js                # Cache-safe guild resolution for commands
 │   ├── hangman.js               # Word list, guesses and ASCII gallows
 │   ├── help.js                  # Tabbed command directory and category metadata
 │   ├── higherlower.js           # Higher-or-lower number rules
 │   ├── images.js                # Size selector / download button helpers
 │   ├── levels.js                # Per-server XP, level maths and persistence
+│   ├── levelRewards.js          # Per-server reward roles and safe assignment
+│   ├── moderation.js            # Durations, hierarchy checks and scheduled unbans
 │   ├── rankCard.js              # Canvas rank-card renderer
+│   ├── reaction.js              # Reaction-time rating bands
 │   ├── polls.js                 # Persistent button-poll state
 │   ├── reminders.js             # Persistent reminders and dispatcher
 │   ├── siteAutoRefresh.js       # Persisted auto-refresh subscriptions
@@ -299,18 +329,29 @@ src/
     ├── fun/
     │   ├── 8ball.js
     │   ├── choose.js
+    │   ├── compliment.js
     │   ├── fact.js
     │   ├── meme.js
+    │   ├── rate.js
     │   ├── roll.js
     │   └── ship.js
     ├── levels/
+    │   ├── levelreward.js
     │   ├── levels.js
     │   └── rank.js
+    ├── moderation/
+    │   ├── ban.js
+    │   ├── kick.js
+    │   ├── mute.js
+    │   ├── unban.js
+    │   └── unmute.js
     ├── minigames/
     │   ├── blackjack.js
     │   ├── coinflip.js
+    │   ├── guessnumber.js
     │   ├── hangman.js
     │   ├── higherlower.js
+    │   ├── reaction.js
     │   ├── rps.js
     │   ├── tictactoe.js
     │   └── trivia.js
@@ -320,6 +361,7 @@ src/
         ├── changelog.js
         ├── helplist.js
         ├── invite.js
+        ├── ping.js
         ├── poll.js
         ├── remind.js
         ├── reminders.js
@@ -342,14 +384,16 @@ The bot stores only what it needs to provide its features:
 - Poll state in `data/polls.json` (question, options, voter user IDs, owner, timestamps).
 - Reminders in `data/reminders.json` (user, source channel, reminder text, due time and delivery preference).
 - Level records in `data/levels.json` (server and user IDs, display name, XP and last award time).
+- Level reward roles in `data/level-rewards.json` (server ID, role ID and required level).
+- Scheduled temporary bans in `data/moderation.json` (server and user IDs, username, moderator ID, reason and unban time).
 - Guild and member totals are sent to top.gg and Discord Bot List only when the matching token is set.
 
-No message content is read or stored. Deleting the matching JSON file resets that feature; deleting the `data/` folder resets everything. Poll voter IDs and reminder text can be removed by deleting the relevant data files.
+No message content is read or stored. Deleting the matching JSON file resets that feature; deleting the `data/` folder resets everything. Poll voter IDs, reminder text and moderation reasons can be removed by deleting the relevant data files.
 
 ## Deployment notes
 
-- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime and level state.
-- Trivia, tic-tac-toe, Higher or Lower, hangman and blackjack rounds are in memory and intentionally reset when the process restarts.
+- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level and scheduled-ban state.
+- Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number and Reaction rounds are in memory and intentionally reset when the process restarts.
 - Do not commit `.env`, logs or `data/*.json`.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
@@ -366,6 +410,8 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - **Bot-list stats not updating** — check the token, that the listing was approved, and the `[botLists]` line in the startup log.
 - **Rank card missing** — the local canvas renderer failed; `/rank` still posts the text fallback. Check the `[rank]` log line and reinstall dependencies.
 - **XP not moving** — XP is per server, awards **25–35 XP** and is limited to one award per user every 60 seconds; bot messages do not earn XP. Check `data/levels.json` and the `[levels]` line in `bot.log` after a member chats.
+- **Moderation action fails** — the bot needs the matching **Moderate Members**, **Kick Members** or **Ban Members** permission, and its highest role must be above the target's. The server owner and the bot itself cannot be moderated.
+- **Level reward not assigned** — the bot needs **Manage Roles**, and its highest role must be above the reward role. Check the `[levels]` log line for the reason.
 
 ## License
 
