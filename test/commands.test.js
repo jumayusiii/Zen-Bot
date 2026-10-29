@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 48);
+  assert.equal(registry.size, 50);
 
   for (const name of [
     'uptime',
@@ -53,6 +53,8 @@ test('all commands load with valid names, descriptions and unique registrations'
     'slots',
     'joke',
     'wouldyourather',
+    'roast',
+    'wordscramble',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -81,6 +83,8 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('slots').beta, true);
   assert.equal(registry.get('joke').beta, true);
   assert.equal(registry.get('wouldyourather').beta, true);
+  assert.equal(registry.get('roast').beta, true);
+  assert.equal(registry.get('wordscramble').beta, true);
   assert.equal(registry.get('ship').beta, undefined);
   assert.equal(registry.get('fact').beta, undefined);
   assert.equal(registry.get('rank').beta, undefined);
@@ -125,4 +129,6 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('slots').data.toJSON().options.length, 0);
   assert.equal(registry.get('joke').data.toJSON().options.length, 0);
   assert.equal(registry.get('wouldyourather').data.toJSON().options.length, 0);
+  assert.equal(registry.get('roast').data.toJSON().options.length, 1);
+  assert.equal(registry.get('wordscramble').data.toJSON().options.length, 0);
 });

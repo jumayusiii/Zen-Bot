@@ -2,6 +2,24 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.10.0-beta.2',
+    date: '2026-10-29',
+    title: 'Roasts, word scramble & a steadier presence',
+    summary: 'A quick-play word game, playful roasts and a more resilient Playing presence round out the 50-command directory.',
+    added: [
+      '`/wordscramble` starts a five-round word game with four shuffled answer buttons, a hint, live scoring and replay controls.',
+      '`/roast` serves a playful, harmless roast with compact target, tone and requester details.',
+    ],
+    improved: [
+      'The **Playing** activity is included in the initial gateway identify payload and refreshed every **10 minutes**.',
+      'A gateway resume immediately re-applies **Playing I am Legend.** so the activity survives reconnects.',
+      'The command directory now covers **50 commands** across six tabs.',
+    ],
+    fixed: [
+      'The rich presence no longer depends on a single `ClientReady` call, which could leave the bot without an activity after a reconnect.',
+    ],
+  },
+  {
     version: '1.10.0-beta.1',
     date: '2026-10-29',
     title: 'Audit logs, greetings & new games',

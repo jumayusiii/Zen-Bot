@@ -4,8 +4,10 @@ const test = require('node:test');
 const {
   COMPLIMENTS,
   FACTS,
+  ROASTS,
   randomCompliment,
   randomFact,
+  randomRoast,
   rateThing,
   rateVerdict,
   shipScore,
@@ -64,4 +66,15 @@ test('randomCompliment returns a valid compliment and respects the excluded one'
   assert.notEqual(next.index, 0);
   assert.ok(next.text.length > 0);
   assert.ok(next.index < COMPLIMENTS.length);
+});
+
+test('randomRoast returns a valid roast and respects the excluded one', () => {
+  const roast = randomRoast(() => 0);
+  assert.equal(roast.index, 0);
+  assert.equal(roast.text, ROASTS[0]);
+
+  const next = randomRoast(() => 0, 0);
+  assert.notEqual(next.index, 0);
+  assert.ok(next.text.length > 0);
+  assert.ok(next.index < ROASTS.length);
 });

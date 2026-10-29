@@ -63,6 +63,29 @@ const COMPLIMENTS = Object.freeze([
   'You bring good vibes wherever you go.',
 ]);
 
+const ROASTS = Object.freeze([
+  'You have the confidence of a browser with 47 tabs open.',
+  'Your Wi-Fi has stronger connections than your plans do.',
+  'You bring a lot to the table — mostly snacks.',
+  'You are the human equivalent of a software update at the worst possible time.',
+  'Your comebacks load slower than a dial-up modem.',
+  'You are not lazy; you are just in energy-saving mode.',
+  'Your ideas are like fireworks: bright for a second, then gone.',
+  'You have the attention span of a goldfish with a premium subscription.',
+  'You are the plot twist nobody asked for.',
+  'You have a great personality — somewhere in the backlog.',
+  'Your jokes would be funnier with a laugh track.',
+  'You are not a morning person; you are barely a person before noon.',
+  'Your playlist has more drama than a reality show.',
+  'You are the bug that somehow became a feature.',
+  'Your energy is unmatched, especially at 3 a.m.',
+  'You are one browser refresh away from a fresh start.',
+  'Your best quality is that you never run out of tabs — or confidence.',
+  'You are the reason the group chat needs an admin.',
+  'Your ideas have great uptime and terrible latency.',
+  'You are proof that a draft folder can have a personality.',
+]);
+
 const RATE_VERDICTS = Object.freeze([
   { min: 90, label: 'Certified elite', emoji: '🏆' },
   { min: 75, label: 'Very good', emoji: '🔥' },
@@ -153,13 +176,33 @@ function randomCompliment(random = Math.random, excludeIndex = null) {
   return pool[index];
 }
 
+/**
+ * @param {() => number} [random]
+ * @param {number|null} [excludeIndex]
+ * @returns {{text: string, index: number}}
+ */
+function randomRoast(random = Math.random, excludeIndex = null) {
+  const pool = ROASTS
+    .map((text, index) => ({ text, index }))
+    .filter((roast) => roast.index !== excludeIndex);
+
+  const index = Math.min(
+    pool.length - 1,
+    Math.floor(Math.min(0.999999, Math.max(0, random())) * pool.length),
+  );
+
+  return pool[index];
+}
+
 module.exports = {
   COMPLIMENTS,
   FACTS,
   RATE_VERDICTS,
+  ROASTS,
   VERDICTS,
   randomCompliment,
   randomFact,
+  randomRoast,
   rateThing,
   rateVerdict,
   shipScore,

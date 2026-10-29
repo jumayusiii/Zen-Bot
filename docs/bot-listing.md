@@ -10,7 +10,7 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Juma Habbo |
 | Application ID | `1564936469305364480` |
-| Version | `1.10.0-beta.1` |
+| Version | `1.10.0-beta.2` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
@@ -41,8 +41,8 @@ Fun, minigames, levels, moderation with audit logs, welcome messages, polls and 
 
 ### What it does
 
-- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment` and `/rate`.
-- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots and live would-you-rather votes.
+- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment`, `/roast` and `/rate`.
+- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
 - **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
 - **Community** — `/welcome` and `/leave` embeds with custom templates, a test preview and clean inline member details.
@@ -70,8 +70,8 @@ Slash commands only. No prefix and no message content access. Polls, reminders, 
 ### Notes for the reviewer
 
 ```text
-Slash commands only. Try /helplist first for the full 48-command directory,
-then /rank for a level card and /slots, /wouldyourather, /hangman or /blackjack
+Slash commands only. Try /helplist first for the full 50-command directory,
+then /rank for a level card and /slots, /wordscramble, /wouldyourather, /hangman or /blackjack
 for a game. Moderation uses /mute, /kick and /ban behind Discord permissions and
 role checks; /modlog records every action in a chosen channel. /welcome and
 /leave post configurable join and leave embeds. /sitestatus monitors

@@ -7,7 +7,7 @@ owner's account.
 
 The live post carries the pre-1.10 copy. This is the exact replacement for the
 short and long descriptions, the help command and the GitHub links for
-**v1.10.0-beta.1** and the **48-command** directory.
+**v1.10.0-beta.2** and the **50-command** directory.
 
 ## Fields
 
@@ -39,8 +39,8 @@ Fun, minigames, levels, moderation with audit logs, welcome messages, polls and 
 
 ### What it does
 
-- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment` and `/rate`.
-- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots and live would-you-rather votes.
+- **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment`, `/roast` and `/rate`.
+- **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
 - **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
 - **Community** — `/welcome` and `/leave` embeds with custom templates, a test preview and clean inline member details.

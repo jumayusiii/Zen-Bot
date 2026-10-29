@@ -3,6 +3,7 @@ require('dotenv').config();
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { loadCommands } = require('./handlers/commandHandler');
 const { loadEvents } = require('./handlers/eventHandler');
+const { buildPresence } = require('./lib/presence');
 
 const token = process.env.DISCORD_TOKEN?.trim();
 
@@ -17,6 +18,9 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMembers,
   ],
+  // Send the Playing activity in the initial IDENTIFY payload as well as from
+  // ClientReady, so a reconnect cannot leave the bot without a presence.
+  presence: buildPresence(),
 });
 client.commands = new Collection();
 

@@ -1,6 +1,6 @@
 # Juma Habbo Bot
 
-**Public beta · v1.10.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.10.0-beta.2** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
 
@@ -12,7 +12,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Moderation** with timed mutes, persistent temporary bans, kicks and reversals, plus permission and role-hierarchy checks.
 - **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
-- **More fun** with compliments, repeatable ratings, a number-guessing round, a reaction test, slots, jokes and a live would-you-rather vote.
+- **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles and a live would-you-rather vote.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -36,6 +36,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/fact` | Shares a random fun fact with a reroll button. |
 | `/joke` | 🧪 Tells a clean joke with a button that reveals the punchline. |
 | `/compliment [user]` | Sends a random compliment to a member. |
+| `/roast [user]` | 🧪 Serves a playful, harmless roast with compact target, tone and requester fields. |
 | `/rate <thing>` | Gives something a deterministic 0–100 rating with a verdict. |
 | `/trivia` | 🧪 Asks a multiple-choice trivia question with live answer buttons, score tracking and up to five refreshes. |
 | `/tictactoe` | 🧪 Starts a button tic-tac-toe board against the bot. |
@@ -46,6 +47,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/reaction` | Tests your reaction time with a button that unlocks after a random delay. |
 | `/slots` | 🧪 Spins a three-reel slot machine with weighted symbols and a compact result. |
 | `/wouldyourather` | 🧪 Starts a two-option vote with live inline results and changeable votes. |
+| `/wordscramble` | 🧪 Unscramble five words across five rounds with four answer buttons, a hint and live scoring. |
 | `/rank [user]` | Renders a profile card with level, XP progress, server rank and total XP. |
 | `/levels` | Shows the top ten members by chat XP, plus your rank if you are outside the top ten. |
 | `/levelreward [role] [level] [clear]` | Configures a role that members earn automatically when they reach a level. |
@@ -83,7 +85,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Minigames
 
-`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber` and `/reaction` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber`, `/reaction` and `/wordscramble` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
 
 ## Levels
 
@@ -282,7 +284,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes and would-you-rather voting, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds and presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -342,6 +344,7 @@ src/
 │   ├── rankCard.js              # Canvas rank-card renderer
 │   ├── reaction.js              # Reaction-time rating bands
 │   ├── polls.js                 # Persistent button-poll state
+│   ├── presence.js              # Playing rich presence and periodic refresh
 │   ├── reminders.js             # Persistent reminders and dispatcher
 │   ├── siteAutoRefresh.js       # Persisted auto-refresh subscriptions
 │   ├── siteHistory.js           # Uptime samples, summaries and daily buckets
@@ -350,6 +353,7 @@ src/
 │   ├── tictactoe.js             # Board rules and bot move selection
 │   ├── timestamps.js            # Discord timestamp parsing and styles
 │   ├── trivia.js                # Offline trivia question bank
+│   ├── wordScramble.js          # Word bank, scrambling and choice rounds
 │   └── wyr.js                   # In-memory would-you-rather rounds
 └── commands/
     ├── fun/
@@ -360,6 +364,7 @@ src/
     │   ├── joke.js
     │   ├── meme.js
     │   ├── rate.js
+    │   ├── roast.js
     │   ├── roll.js
     │   └── ship.js
     ├── levels/
@@ -384,6 +389,7 @@ src/
     │   ├── slots.js
     │   ├── tictactoe.js
     │   ├── trivia.js
+    │   ├── wordscramble.js
     │   └── wouldyourather.js
     └── utility/
         ├── avatar.js
@@ -442,6 +448,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - **Reminder not delivered** — check that the bot can DM the user or still has access to the original channel. Closed DMs fall back to that channel.
 - **Meme fetch fails** — the command automatically falls back to Imgflip; if both APIs are down it replies with a friendly error.
 - **Bot-list stats not updating** — check the token, that the listing was approved, and the `[botLists]` line in the startup log.
+- **Rich presence missing** — check `PRESENCE_TEXT` in `.env` and restart. The bot logs `[bot] Rich presence set: Playing …` at login and re-applies the activity every ten minutes and after a gateway resume.
 - **Rank card missing** — the local canvas renderer failed; `/rank` still posts the text fallback. Check the `[rank]` log line and reinstall dependencies.
 - **XP not moving** — XP is per server, awards **25–35 XP** and is limited to one award per user every 60 seconds; bot messages do not earn XP. Check `data/levels.json` and the `[levels]` line in `bot.log` after a member chats.
 - **Moderation action fails** — the bot needs the matching **Moderate Members**, **Kick Members** or **Ban Members** permission, and its highest role must be above the target's. The server owner and the bot itself cannot be moderated.
