@@ -1,6 +1,6 @@
 # Zen
 
-**Public beta · v1.12.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.12.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, and Wikipedia summaries.
 

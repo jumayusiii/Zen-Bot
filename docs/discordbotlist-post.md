@@ -18,8 +18,8 @@ links for **v1.12.0-beta.1** and the **53-command** directory.
 | Help command | `/helplist` |
 | Tags | Games, Utility, Levelling, Fun, Meme |
 | Library | discord.js v14 · JavaScript · Node.js |
-| GitHub | https://github.com/jumayusiii/Juma-Habbo-Bot |
-| Issues | https://github.com/jumayusiii/Juma-Habbo-Bot/issues |
+| GitHub | https://github.com/jumayusiii/Zen-Bot |
+| Issues | https://github.com/jumayusiii/Zen-Bot/issues |
 | Invite | https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands |
 
 Change the listing's display name to **Zen**; the public URL slug stays `juma-habbo`. Keep the existing **No NSFW** setting.
@@ -58,15 +58,15 @@ Fun, minigames, levels, moderation, polls, TikTok previews, weather, Wikipedia a
 4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
 **Help command:** `/helplist`
-**Source and issues:** [GitHub repository](https://github.com/jumayusiii/Juma-Habbo-Bot) · [Report an issue](https://github.com/jumayusiii/Juma-Habbo-Bot/issues)
+**Source and issues:** [GitHub repository](https://github.com/jumayusiii/Zen-Bot) · [Report an issue](https://github.com/jumayusiii/Zen-Bot/issues)
 
 Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
 ```
 
 ## Links to add
 
-- GitHub repository: https://github.com/jumayusiii/Juma-Habbo-Bot
-- GitHub issues: https://github.com/jumayusiii/Juma-Habbo-Bot/issues
+- GitHub repository: https://github.com/jumayusiii/Zen-Bot
+- GitHub issues: https://github.com/jumayusiii/Zen-Bot/issues
 - Invite: the URL in the fields table above
 - Support server: keep the existing Discord invite if it is still current
 

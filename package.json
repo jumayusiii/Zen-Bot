@@ -1,5 +1,5 @@
 {
-  "name": "juma-habbo-bot",
+  "name": "zen-bot",
   "version": "1.12.0-beta.1",
   "private": true,
   "description": "Zen is a Discord bot with memes, minigames, chat levels and rank cards, moderation with audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring, TikTok video previews, live weather and Wikipedia summaries.",
@@ -14,11 +14,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jumayusiii/Juma-Habbo-Bot.git"
+    "url": "git+https://github.com/jumayusiii/Zen-Bot.git"
   },
-  "homepage": "https://github.com/jumayusiii/Juma-Habbo-Bot#readme",
+  "homepage": "https://github.com/jumayusiii/Zen-Bot#readme",
   "bugs": {
-    "url": "https://github.com/jumayusiii/Juma-Habbo-Bot/issues"
+    "url": "https://github.com/jumayusiii/Zen-Bot/issues"
   },
   "license": "MIT",
   "author": "jumayusiii",

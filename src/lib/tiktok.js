@@ -4,7 +4,7 @@ const DOWNLOAD_TIMEOUT_MS = 45000;
 // Discord's default upload cap is 10 MiB. Stay below it so the attachment
 // never fails at the API for a plain, unboosted server.
 const MAX_VIDEO_BYTES = 8 * 1024 * 1024;
-const USER_AGENT = 'Mozilla/5.0 (compatible; ZenBot/1.11; +https://github.com/jumayusiii/Juma-Habbo-Bot)';
+const USER_AGENT = 'Mozilla/5.0 (compatible; ZenBot/1.12; +https://github.com/jumayusiii/Zen-Bot)';
 const UNAVAILABLE_MESSAGE = 'TikTok did not return that video. It may be private, region-locked or removed.';
 const SHORT_HOSTS = new Set(['vm.tiktok.com', 'vt.tiktok.com']);
 const VIDEO_PATH = /^\/@[^/]+\/(?:video|photo)\/(\d{6,25})\/?$/i;

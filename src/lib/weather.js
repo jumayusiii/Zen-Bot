@@ -1,7 +1,7 @@
 const GEOCODE_ENDPOINT = 'https://geocoding-api.open-meteo.com/v1/search';
 const FORECAST_ENDPOINT = 'https://api.open-meteo.com/v1/forecast';
 const REQUEST_TIMEOUT_MS = 10000;
-const USER_AGENT = 'Mozilla/5.0 (compatible; ZenBot/1.12; +https://github.com/jumayusiii/Juma-Habbo-Bot)';
+const USER_AGENT = 'Mozilla/5.0 (compatible; ZenBot/1.12; +https://github.com/jumayusiii/Zen-Bot)';
 
 const WEATHER_CODES = Object.freeze({
   0: { label: 'Clear sky', emoji: '☀️', night: '🌙' },

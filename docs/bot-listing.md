@@ -14,8 +14,8 @@ setup needed to keep the server count current afterwards.
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
-| Source | https://github.com/jumayusiii/Juma-Habbo-Bot |
-| Support | https://github.com/jumayusiii/Juma-Habbo-Bot/issues |
+| Source | https://github.com/jumayusiii/Zen-Bot |
+| Support | https://github.com/jumayusiii/Zen-Bot/issues |
 | Privacy | No message content is read. Member events require the Server Members intent. Poll, reminder, uptime, level, greeting and audit-log state stays on the host. |
 
 ## top.gg
@@ -60,7 +60,7 @@ Fun, minigames, levels, moderation, polls, TikTok previews, weather, Wikipedia a
 4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
 **Help command:** `/helplist`
-**Source and issues:** [GitHub repository](https://github.com/jumayusiii/Juma-Habbo-Bot) · [Report an issue](https://github.com/jumayusiii/Juma-Habbo-Bot/issues)
+**Source and issues:** [GitHub repository](https://github.com/jumayusiii/Zen-Bot) · [Report an issue](https://github.com/jumayusiii/Zen-Bot/issues)
 
 Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
 ```

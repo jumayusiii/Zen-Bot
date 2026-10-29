@@ -1,7 +1,7 @@
 const SEARCH_ENDPOINT = 'https://en.wikipedia.org/w/api.php';
 const SUMMARY_ENDPOINT = 'https://en.wikipedia.org/api/rest_v1/page/summary/';
 const REQUEST_TIMEOUT_MS = 10000;
-const USER_AGENT = 'Mozilla/5.0 (compatible; ZenBot/1.12; +https://github.com/jumayusiii/Juma-Habbo-Bot)';
+const USER_AGENT = 'Mozilla/5.0 (compatible; ZenBot/1.12; +https://github.com/jumayusiii/Zen-Bot)';
 
 class WikipediaError extends Error {
   constructor(code, message) {
