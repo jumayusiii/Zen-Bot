@@ -10,7 +10,7 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.11.0-beta.2` |
+| Version | `1.12.0-beta.1` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
@@ -31,7 +31,7 @@ The public page will be https://top.gg/bot/1564936469305364480.
 ### Short description (under 140 characters)
 
 ```text
-Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and site uptime — all in clean slash commands.
+Fun, minigames, levels, moderation, polls, TikTok previews, weather, Wikipedia and site uptime — all in clean slash commands.
 ```
 
 ### Long description
@@ -43,6 +43,7 @@ Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and s
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment`, `/roast` and `/rate`.
 - **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
+- **Weather & knowledge** — `/weather` gives current conditions and a four-day forecast in °C or °F, and `/wikipedia` finds an article and posts its summary with a link to the full page.
 - **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
 - **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
@@ -55,7 +56,7 @@ Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and s
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
+3. Try `/rank` for your card, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
 4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
 **Help command:** `/helplist`
@@ -71,9 +72,10 @@ Slash commands only. No prefix and no message content access. Polls, reminders, 
 ### Notes for the reviewer
 
 ```text
-Slash commands only. Try /helplist first for the full 51-command directory,
+Slash commands only. Try /helplist first for the full 53-command directory,
 then /rank for a level card and /slots, /wordscramble, /wouldyourather, /hangman or /blackjack
-for a game. /tiktok posts a TikTok video inline; videos over 8 MB fall back to a cover and link. Moderation uses /mute, /kick and /ban behind Discord permissions and
+for a game. /tiktok posts a TikTok video inline; videos over 8 MB fall back to a cover and link.
+/weather gives a live forecast for any city and /wikipedia posts an article summary. Moderation uses /mute, /kick and /ban behind Discord permissions and
 role checks; /modlog records every action in a chosen channel. /welcome and
 /leave post configurable join and leave embeds. /sitestatus monitors
 https://habbo.gd and /uptime reads its history. Message content is never read.

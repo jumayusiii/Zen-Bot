@@ -1,8 +1,8 @@
 # Zen
 
-**Public beta · v1.11.0-beta.2** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.12.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, and TikTok video previews that play inline.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, and Wikipedia summaries.
 
 ## Highlights
 
@@ -20,6 +20,8 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Persistent reminders** delivered by DM or in the channel where they were created.
 - **Directory ready**: optional top.gg and Discord Bot List stat posting, with submission copy in `docs/`.
 - **TikTok previews**: `/tiktok` attaches a TikTok video so it plays inline in Discord, with creator and engagement details plus an **Open on TikTok** fallback for oversized or private posts.
+- **Weather**: `/weather` looks up any city and posts current conditions plus a four-day forecast from [Open-Meteo](https://open-meteo.com/), in Celsius or Fahrenheit. No API key needed.
+- **Knowledge**: `/wikipedia` searches Wikipedia and posts a clean summary, article image and a **Read on Wikipedia** button.
 - **Modern embeds** with a shared palette, plain titles, branded headers, timestamps and clamped text limits.
 - **Self-host friendly**: configurable site details, no hardcoded guild IDs or tokens, and no message content access. The **Server Members** intent is used for greetings.
 
@@ -64,6 +66,8 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/serverbanner` | Shows the current server banner with a download button. |
 | `/sitestatus` | Full live report: HTTP status, response time, TLS, DNS, edge server, page details, security headers and the site logo. Includes uptime summary plus **Refresh**, **Auto-refresh** and a **5 / 15 / 30 minute** interval picker. |
 | `/uptime` | Seven-day report with one uptime bar per day, availability, average/p95/max latency, monitoring coverage and a detailed incident timeline. |
+| `/weather <location> [units]` | 🧪 Current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units. |
+| `/wikipedia <query>` | 🧪 Searches Wikipedia and posts a summary with a link to the full article. |
 | `/timestamp [time]` | Builds a Discord timestamp in six styles from now, a duration, a date or a Unix timestamp. |
 | `/poll <question> <options>` | 🧪 Creates a live button poll with 2–5 options. Votes update in place, can be changed or removed, and only the creator can close the poll. |
 | `/remind <when> <message> [where]` | 🧪 Sets a persistent reminder from 1 minute to 30 days ahead, sent by DM or in the original channel. |
@@ -193,6 +197,7 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 - A persistent disk if you want uptime, poll, reminder, level, greeting, audit-log and scheduled-ban state to survive restarts
 - `@napi-rs/canvas` for rank cards, installed automatically by `npm install`
 - Outbound HTTPS access to TikTok and `www.tikwm.com` for `/tiktok`
+- Outbound HTTPS access to Open-Meteo and Wikipedia for `/weather` and `/wikipedia`
 
 ## 1. Create your bot
 
@@ -287,7 +292,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, TikTok link parsing, metadata mapping and download limits, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -355,6 +360,8 @@ src/
 │   ├── slots.js                 # Weighted slot symbols and result rules
 │   ├── tictactoe.js             # Board rules and bot move selection
 │   ├── tiktok.js                # TikTok link parsing, metadata and capped downloads
+│   ├── weather.js               # Open-Meteo geocoding, WMO labels and forecast mapping
+│   ├── wikipedia.js             # Wikipedia search, summaries and fallbacks
 │   ├── timestamps.js            # Discord timestamp parsing and styles
 │   ├── trivia.js                # Offline trivia question bank
 │   ├── wordScramble.js          # Word bank, scrambling and choice rounds
@@ -416,7 +423,9 @@ src/
         ├── timestamp.js
         ├── uptime.js
         ├── userinfo.js
-        └── welcome.js
+        ├── weather.js
+        ├── welcome.js
+        └── wikipedia.js
 ```
 
 ## Data and privacy
@@ -434,6 +443,7 @@ The bot stores only what it needs to provide its features:
 - Welcome and leave settings in `data/greetings.json` (server and channel IDs, templates and the admin who last changed them).
 - Guild and member totals are sent to top.gg and Discord Bot List only when the matching token is set.
 - TikTok links are processed in memory only; no video, metadata or link history is stored.
+- Weather locations, Wikipedia searches and returned metadata are processed in memory only; no search history is stored.
 
 No message content is read or stored. Deleting the matching JSON file resets that feature; deleting the `data/` folder resets everything. Poll voter IDs, reminder text and moderation reasons can be removed by deleting the relevant data files.
 
@@ -445,6 +455,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.
+- `/weather` and `/wikipedia` need outbound HTTPS access to Open-Meteo and Wikipedia.
 - Enable the privileged **Server Members** intent in the Developer Portal; without it, welcome and leave events do not fire. Message content is never requested.
 
 ## Troubleshooting
@@ -456,6 +467,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - **Reminder not delivered** — check that the bot can DM the user or still has access to the original channel. Closed DMs fall back to that channel.
 - **Meme fetch fails** — the command automatically falls back to Imgflip; if both APIs are down it replies with a friendly error.
 - **TikTok posts only a cover and link** — the video is private, region-locked, over the **8 MB** upload limit, or TikTok's media CDN refused the download. The metadata service is unofficial, so retry later; check that the host can reach TikTok and `www.tikwm.com`.
+- **Weather or Wikipedia fails** — both commands need outbound HTTPS access. Open-Meteo may not resolve very small places; try a nearby city. Wikipedia occasionally rate-limits anonymous requests, so retry in a moment.
 - **Bot-list stats not updating** — check the token, that the listing was approved, and the `[botLists]` line in the startup log.
 - **Rich presence missing** — check `PRESENCE_TEXT` in `.env` and restart. The bot logs `[bot] Rich presence set: Playing …` at login and re-applies the activity every ten minutes and after a gateway resume.
 - **Rank card missing** — the local canvas renderer failed; `/rank` still posts the text fallback. Check the `[rank]` log line and reinstall dependencies.

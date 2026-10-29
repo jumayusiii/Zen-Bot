@@ -7,7 +7,7 @@ owner's account.
 
 The live post still carries the old name and earlier copy. This is the exact
 replacement for the short and long descriptions, the help command and the GitHub
-links for **v1.11.0-beta.2** and the **51-command** directory.
+links for **v1.12.0-beta.1** and the **53-command** directory.
 
 ## Fields
 
@@ -29,7 +29,7 @@ Change the listing's display name to **Zen**; the public URL slug stays `juma-ha
 Under 140 characters:
 
 ```text
-Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and site uptime — all in clean slash commands.
+Fun, minigames, levels, moderation, polls, TikTok previews, weather, Wikipedia and site uptime — all in clean slash commands.
 ```
 
 ## Long description
@@ -41,6 +41,7 @@ Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and s
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/compliment`, `/roast` and `/rate`.
 - **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
+- **Weather & knowledge** — `/weather` gives current conditions and a four-day forecast in °C or °F, and `/wikipedia` finds an article and posts its summary with a link to the full page.
 - **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
 - **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
@@ -53,7 +54,7 @@ Fun, minigames, levels, moderation with audit logs, polls, TikTok previews and s
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
+3. Try `/rank` for your card, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
 4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
 **Help command:** `/helplist`

@@ -1,8 +1,8 @@
 {
   "name": "juma-habbo-bot",
-  "version": "1.11.0-beta.2",
+  "version": "1.12.0-beta.1",
   "private": true,
-  "description": "Zen is a Discord bot with memes, minigames, chat levels and rank cards, moderation with audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring and TikTok video previews.",
+  "description": "Zen is a Discord bot with memes, minigames, chat levels and rank cards, moderation with audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring, TikTok video previews, live weather and Wikipedia summaries.",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {

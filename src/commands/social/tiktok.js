@@ -64,6 +64,7 @@ function buildEmbed(client, info, { attached, note, requestedBy }) {
     color: COLORS.fun,
     description: lines.join('\n\n') || undefined,
     image: attached ? null : (info.kind === 'images' ? info.images[0] : info.cover),
+    thumbnail: info.author.avatarUrl,
     fields: [
       { name: '👤 Creator', value: creatorValue(info), inline: true },
       {

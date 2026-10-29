@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 51);
+  assert.equal(registry.size, 53);
 
   for (const name of [
     'uptime',
@@ -56,6 +56,8 @@ test('all commands load with valid names, descriptions and unique registrations'
     'roast',
     'wordscramble',
     'tiktok',
+    'weather',
+    'wikipedia',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -87,6 +89,8 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('roast').beta, true);
   assert.equal(registry.get('wordscramble').beta, true);
   assert.equal(registry.get('tiktok').beta, true);
+  assert.equal(registry.get('weather').beta, true);
+  assert.equal(registry.get('wikipedia').beta, true);
   assert.equal(registry.get('ship').beta, undefined);
   assert.equal(registry.get('fact').beta, undefined);
   assert.equal(registry.get('rank').beta, undefined);
@@ -134,4 +138,6 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('roast').data.toJSON().options.length, 1);
   assert.equal(registry.get('wordscramble').data.toJSON().options.length, 0);
   assert.equal(registry.get('tiktok').data.toJSON().options.length, 1);
+  assert.equal(registry.get('weather').data.toJSON().options.length, 2);
+  assert.equal(registry.get('wikipedia').data.toJSON().options.length, 1);
 });

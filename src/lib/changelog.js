@@ -2,6 +2,22 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.12.0-beta.1',
+    date: '2026-10-29',
+    title: 'Weather, Wikipedia & a sharper TikTok card',
+    summary: 'Two new no-key utilities add live forecasts and Wikipedia summaries, while TikTok previews gain creator avatars.',
+    added: [
+      '`/weather` shows current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units.',
+      '`/wikipedia` searches Wikipedia and posts a summary with a link to the full article.',
+      'The command directory now covers **53 commands** across seven tabs.',
+    ],
+    improved: [
+      '`/tiktok` embeds now show the creator avatar as a thumbnail.',
+      'The default install link asks for the **bot** and **applications.commands** scopes with the required permissions.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.11.0-beta.2',
     date: '2026-10-29',
     title: 'The bot is now Zen',
