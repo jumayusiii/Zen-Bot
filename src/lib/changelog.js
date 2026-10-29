@@ -2,6 +2,24 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.8.1-beta.1',
+    date: '2026-10-29',
+    title: 'Directory refresh',
+    summary: 'A ready-to-paste Discord Bot List update carries the v1.8 feature set, the help command and GitHub links for the live post.',
+    added: [
+      '`docs/discordbotlist-post.md` holds the exact short and long descriptions, the editor link, the links list and the counts checklist for the live Discord Bot List post.',
+      'The README now links the live Discord Bot List page and its editor.',
+      'The listing copy names `/helplist` as the help command and adds the GitHub repository and issue links.',
+    ],
+    improved: [
+      'The Discord Bot List instructions use the live slug, the existing tags and the direct editor instead of the old `new` form.',
+      'Server and user counts are documented as stats posts: the page shows **Unknown** until `DISCORDBOTLIST_TOKEN` is configured and the bot posts.',
+    ],
+    fixed: [
+      'The listing guide no longer points at a placeholder page URL.',
+    ],
+  },
+  {
     version: '1.8.0-beta.1',
     date: '2026-10-29',
     title: 'Levels, cards & table games',

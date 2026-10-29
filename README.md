@@ -1,6 +1,6 @@
 # Juma Habbo Bot
 
-**Public beta · v1.8.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [MIT license](LICENSE)
+**Public beta · v1.8.1-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
 
@@ -105,9 +105,11 @@ Each `/sitestatus` report can update itself without spamming the channel.
 
 ## Discord bot lists
 
-The bot can keep its server count current on [top.gg](https://top.gg/bot/new) and [Discord Bot List](https://discordbotlist.com/new). Submitting the listing is a signed-in web step; [docs/bot-listing.md](docs/bot-listing.md) has ready-to-paste descriptions, categories, reviewer notes and a checklist.
+The bot is live on [Discord Bot List](https://discordbotlist.com/bots/juma-habbo). Its post still carries the pre-1.8 copy; [docs/discordbotlist-post.md](docs/discordbotlist-post.md) has the exact replacement text, the GitHub links and the edit checklist. The [listing editor](https://discordbotlist.com/bots/juma-habbo/edit) requires the owner's Discord sign-in.
 
-1. Submit the bot with that copy and keep it online for review.
+[top.gg](https://top.gg/bot/new) is the other directory target. [docs/bot-listing.md](docs/bot-listing.md) has ready-to-paste descriptions, categories, reviewer notes and a submission checklist.
+
+1. Update or submit the listing with that copy and keep the bot online while it is reviewed.
 2. Create an API token — top.gg under **Account → Tokens**, Discord Bot List on the bot's admin page.
 3. Add `TOPGG_TOKEN` and/or `DISCORDBOTLIST_TOKEN` to `.env`, then restart.
 

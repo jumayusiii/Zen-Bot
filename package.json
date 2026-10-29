@@ -1,6 +1,6 @@
 {
   "name": "juma-habbo-bot",
-  "version": "1.8.0-beta.1",
+  "version": "1.8.1-beta.1",
   "private": true,
   "description": "Discord bot with memes, minigames, hangman, blackjack, chat levels and rank cards, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, plus detailed website uptime monitoring.",
   "main": "src/index.js",
