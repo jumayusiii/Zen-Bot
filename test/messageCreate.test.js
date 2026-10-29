@@ -70,6 +70,11 @@ test('a message awards XP once and a level up is announced', async () => {
     await messageCreate.execute(message);
     await messageCreate.execute(message);
 
+    const stored = JSON.parse(await fs.readFile(file, 'utf8'));
+    const entry = stored.users.find((user) => user.userId === 'user-xp-2');
+    assert.ok(entry.xp >= 120 && entry.xp <= 130);
+    assert.ok(entry.lastXpAt > 0);
+
     assert.equal(message.sent.length, 1);
     assert.equal(message.sent[0].content, '<@user-xp-2>');
     assert.equal(message.sent[0].embeds[0].data.title, 'Level up');

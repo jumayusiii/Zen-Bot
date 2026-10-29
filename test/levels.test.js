@@ -91,7 +91,7 @@ test('awardMessageXp grants XP, applies the cooldown and detects level ups', asy
   });
 });
 
-test('random XP stays between 15 and 25', async () => {
+test('random XP stays between 25 and 35', async () => {
   await withLevelsFile(async () => {
     const low = await levels.awardMessageXp({
       guildId: 'guild-1',
@@ -106,8 +106,8 @@ test('random XP stays between 15 and 25', async () => {
       now: 1_000,
     });
 
-    assert.equal(low.gain, 15);
-    assert.equal(high.gain, 25);
+    assert.equal(low.gain, 25);
+    assert.equal(high.gain, 35);
   });
 });
 

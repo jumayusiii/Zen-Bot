@@ -10,7 +10,7 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Juma Habbo |
 | Application ID | `1564936469305364480` |
-| Version | `1.8.1-beta.1` |
+| Version | `1.8.2-beta.1` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=117760&scope=bot%20applications.commands` |

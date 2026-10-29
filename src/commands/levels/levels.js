@@ -54,7 +54,7 @@ module.exports = {
       color: COLORS.brand,
       thumbnail: interaction.guild.iconURL({ extension: 'png', size: 128, forceStatic: true }),
       fields,
-      footer: 'Chat XP  ·  +15–25 XP per message, once a minute  ·  top 10',
+      footer: 'Chat XP  ·  +25–35 XP per message, once a minute  ·  top 10',
     });
 
     await interaction.reply({ embeds: [embed] });

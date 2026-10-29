@@ -23,7 +23,6 @@ module.exports = {
     if (now - previous < COOLDOWN_MS) return;
 
     if (lastAward.size > 10_000) lastAward.clear();
-    lastAward.set(key, now);
 
     try {
       const displayName =
@@ -38,7 +37,22 @@ module.exports = {
         now,
       });
 
-      if (!result.awarded || !result.leveledUp) return;
+      if (!result.awarded) {
+        // A restart clears the in-memory map. Reuse the stored timestamp so
+        // the first message after a restart does not extend the cooldown.
+        lastAward.set(
+          key,
+          Number.isFinite(result.entry?.lastXpAt) ? result.entry.lastXpAt : now,
+        );
+        return;
+      }
+
+      lastAward.set(key, now);
+      console.log(
+        `[levels] +${result.gain} XP for ${displayName} (${result.entry.xp} total, level ${result.level})`,
+      );
+
+      if (!result.leveledUp) return;
 
       const embed = createEmbed(message.client, {
         section: 'Levels',
@@ -58,6 +72,7 @@ module.exports = {
           console.warn(`[levels] Could not announce a level up: ${error.message}`);
         });
     } catch (error) {
+      lastAward.delete(key);
       console.error('[levels] Could not award message XP:', error.message);
     }
   },

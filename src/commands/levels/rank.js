@@ -28,7 +28,7 @@ function textEmbed(client, profile, displayName, requestedBy, image = null) {
       { name: '🏆 Rank', value: `**${rank}**`, inline: true },
       { name: '✨ Total XP', value: `**${formatNumber(progress.totalXp)}**`, inline: true },
     ],
-    footer: `Requested by ${requestedBy}  ·  +15–25 XP per message, once a minute`,
+    footer: `Requested by ${requestedBy}  ·  +25–35 XP per message, once a minute`,
   });
 }
 

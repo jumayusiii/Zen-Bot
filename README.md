@@ -1,6 +1,6 @@
 # Juma Habbo Bot
 
-**Public beta · v1.8.1-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.8.2-beta.1** · [GitHub release](https://github.com/jumayusiii/Juma-Habbo-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, and detailed website uptime monitoring.
 
@@ -66,7 +66,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Levels
 
-Every member earns XP by chatting. A message awards **15–25 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts.
+Every member earns XP by chatting. A message awards **25–35 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts.
 
 `/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten.
 
@@ -365,7 +365,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - **Meme fetch fails** — the command automatically falls back to Imgflip; if both APIs are down it replies with a friendly error.
 - **Bot-list stats not updating** — check the token, that the listing was approved, and the `[botLists]` line in the startup log.
 - **Rank card missing** — the local canvas renderer failed; `/rank` still posts the text fallback. Check the `[rank]` log line and reinstall dependencies.
-- **XP not moving** — XP is per server and limited to one award per user every 60 seconds; bot messages do not earn XP.
+- **XP not moving** — XP is per server, awards **25–35 XP** and is limited to one award per user every 60 seconds; bot messages do not earn XP. Check `data/levels.json` and the `[levels]` line in `bot.log` after a member chats.
 
 ## License
 

@@ -2,6 +2,23 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.8.2-beta.1',
+    date: '2026-10-29',
+    title: 'XP pacing fix',
+    summary: 'Chat XP now awards 25–35 XP per minute, and a restart no longer extends a member\'s remaining cooldown.',
+    added: [
+      'Members earn **25–35 XP** per eligible message, still limited to one award per server every **60 seconds**.',
+      'Each award writes a `[levels]` line to `bot.log` with the gain, total XP and level.',
+    ],
+    improved: [
+      'The in-memory cooldown now starts only after a successful award, so a failed write no longer locks the member out for a minute.',
+      'On cooldown, the in-memory timer reuses the stored `lastXpAt` value instead of starting a fresh 60-second wait.',
+    ],
+    fixed: [
+      'The first message after a restart no longer waits an extra full minute when the member was already partway through their cooldown.',
+    ],
+  },
+  {
     version: '1.8.1-beta.1',
     date: '2026-10-29',
     title: 'Directory refresh',

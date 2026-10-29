@@ -6,8 +6,8 @@ const DEFAULT_FILE = path.join(__dirname, '..', '..', 'data', 'levels.json');
 const MAX_LEVEL = 500;
 const MAX_ENTRIES = 50_000;
 const COOLDOWN_MS = 60 * 1000;
-const MIN_XP = 15;
-const MAX_XP = 25;
+const MIN_XP = 25;
+const MAX_XP = 35;
 const RETRYABLE_RENAME_CODES = new Set(['EPERM', 'EBUSY', 'EACCES']);
 
 let stateQueue = Promise.resolve();
