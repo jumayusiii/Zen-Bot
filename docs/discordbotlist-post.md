@@ -7,7 +7,7 @@ owner's account.
 
 The live post still carries the old name and earlier copy. This is the exact
 replacement for the short and long descriptions, the help command and the GitHub
-links for **v1.14.0-beta.1** and the **58-command** directory.
+links for **v1.15.0-beta.1** and the **59-command** directory.
 
 ## Fields
 
@@ -42,6 +42,7 @@ Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/fortunecookie`, `/topic`, `/compliment`, `/roast` and `/rate`.
 - **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
 - **Weather & knowledge** — `/weather` gives current conditions and a four-day forecast in °C or °F, and `/wikipedia` finds an article and posts its summary with a link to the full page.
+- **ChatGPT (beta)** — `/chatgpt` asks OpenAI’s ChatGPT a moderated question with an optional private answer and a per-member limit; no conversation history is stored. Requires the owner’s `OPENAI_API_KEY`.
 - **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, sequence memory, a modal typing race with a fastest-time leaderboard, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
 - **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
@@ -54,7 +55,7 @@ Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/topic` for an icebreaker, `/typerace` for a speed test, `/typeraceleaderboard` for the fastest times, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
+3. Try `/rank` for your card, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/chatgpt how do I stay focused?` for an AI answer, `/topic` for an icebreaker, `/typerace` for a speed test, `/typeraceleaderboard` for the fastest times, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
 4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
 **Help command:** `/helplist`

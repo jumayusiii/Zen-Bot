@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 58);
+  assert.equal(registry.size, 59);
 
   for (const name of [
     'uptime',
@@ -63,6 +63,7 @@ test('all commands load with valid names, descriptions and unique registrations'
     'memory',
     'typerace',
     'typeraceleaderboard',
+    'chatgpt',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -101,6 +102,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('memory').beta, true);
   assert.equal(registry.get('typerace').beta, true);
   assert.equal(registry.get('typeraceleaderboard').beta, true);
+  assert.equal(registry.get('chatgpt').beta, true);
   assert.equal(registry.get('ship').beta, undefined);
   assert.equal(registry.get('fact').beta, undefined);
   assert.equal(registry.get('rank').beta, undefined);
@@ -155,4 +157,5 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('memory').data.toJSON().options.length, 0);
   assert.equal(registry.get('typerace').data.toJSON().options.length, 0);
   assert.equal(registry.get('typeraceleaderboard').data.toJSON().options.length, 0);
+  assert.equal(registry.get('chatgpt').data.toJSON().options.length, 2);
 });

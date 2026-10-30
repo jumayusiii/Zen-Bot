@@ -1,8 +1,8 @@
 {
   "name": "zen-bot",
-  "version": "1.14.0-beta.1",
+  "version": "1.15.0-beta.1",
   "private": true,
-  "description": "Zen is a Discord bot with memes, minigames, chat levels and rank cards, moderation with audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring, TikTok video previews, live weather, Wikipedia summaries, fortune cookies, conversation starters, sequence memory, typing races and a fastest-time leaderboard.",
+  "description": "Zen is a Discord bot with memes, minigames, chat levels and rank cards, moderation with audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring, TikTok video previews, live weather, Wikipedia summaries, fortune cookies, conversation starters, sequence memory, typing races, a fastest-time leaderboard and a beta ChatGPT command.",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {

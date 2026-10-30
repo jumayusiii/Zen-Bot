@@ -2,6 +2,23 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.15.0-beta.1',
+    date: '2026-10-30',
+    title: 'ChatGPT comes to Zen',
+    summary: 'A beta /chatgpt command adds moderated OpenAI answers with a per-user limit and no stored conversations.',
+    added: [
+      '`/chatgpt` asks OpenAI’s ChatGPT a question and posts the answer in a clean embed, with an optional private response.',
+      'Prompts are moderated before generation, capped at 2,000 characters and 700 output tokens.',
+      'Each member can make **8 requests per 10 minutes**; the remaining allowance is shown on the answer.',
+      'The command directory now covers **59 commands** across seven tabs.',
+    ],
+    improved: [
+      '`OPENAI_MODEL` can override the default `gpt-6-luna` model without changing code.',
+      'Zen does not store ChatGPT prompts or keep conversation history; OpenAI’s data controls apply.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.14.0-beta.1',
     date: '2026-10-30',
     title: 'A new Zen banner & Type Race records',
