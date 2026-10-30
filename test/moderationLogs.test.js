@@ -82,6 +82,34 @@ test('moderation log embeds use compact inline details', () => {
   assert.match(embed.data.fields[1].value, /910000000000000004/);
 });
 
+test('warn, purge and slowmode entries have dedicated titles', () => {
+  const warn = logs.buildModerationLogEmbed(fakeClient(() => {}), {
+    action: 'warn',
+    targetId: USER_ID,
+    targetName: 'Tester',
+    moderatorId: '910000000000000004',
+    reason: 'Rule reminder',
+  });
+  assert.equal(warn.data.title, '⚠️ Member warned');
+
+  const purge = logs.buildModerationLogEmbed(fakeClient(() => {}), {
+    action: 'purge',
+    targetName: '#general',
+    moderatorId: '910000000000000004',
+    reason: 'Cleanup',
+  });
+  assert.equal(purge.data.title, '🧹 Messages purged');
+  assert.match(purge.data.fields[0].value, /#general/);
+
+  const slowmode = logs.buildModerationLogEmbed(fakeClient(() => {}), {
+    action: 'slowmode',
+    targetName: '#general',
+    moderatorId: '910000000000000004',
+    reason: 'Calm down',
+  });
+  assert.equal(slowmode.data.title, '🐢 Slowmode updated');
+});
+
 test('the audit logger sends to the configured channel and skips when disabled', async () => {
   await withLogFile(async () => {
     const sent = [];

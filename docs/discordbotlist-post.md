@@ -7,7 +7,7 @@ owner's account.
 
 The live post still carries the old name and earlier copy. This is the exact
 replacement for the short and long descriptions, the help command and the GitHub
-links for **v1.15.0-beta.1** and the **59-command** directory.
+links for **v1.16.0** and the **70-command** directory.
 
 ## Fields
 
@@ -29,7 +29,7 @@ Change the listing's display name to **Zen**; the public URL slug stays `juma-ha
 Under 140 characters:
 
 ```text
-Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather, Wikipedia and site uptime — in clean slash commands.
+Fun, social actions, cat and dog photos, editable memes, levels, moderation, polls and TikTok — in clean slash commands.
 ```
 
 ## Long description
@@ -40,12 +40,14 @@ Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather
 ### What it does
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/fortunecookie`, `/topic`, `/compliment`, `/roast` and `/rate`.
+- **Social** — `/hug`, `/pat` and `/highfive` add friendly member interactions with clean embeds.
+- **Images** — `/cat` and `/dog` fetch random photos, and `/memegen` turns a template plus your text into an editable meme.
 - **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
 - **Weather & knowledge** — `/weather` gives current conditions and a four-day forecast in °C or °F, and `/wikipedia` finds an article and posts its summary with a link to the full page.
 - **ChatGPT (beta)** — `/chatgpt` asks OpenAI’s ChatGPT a moderated question with an optional private answer and a per-member limit; no conversation history is stored. Requires the owner’s `OPENAI_API_KEY`.
 - **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, sequence memory, a modal typing race with a fastest-time leaderboard, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
-- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
+- **Moderation** — timed mutes, persistent temporary bans, kicks, reversals, persistent warnings, purge and slowmode, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
 - **Community** — `/welcome` and `/leave` embeds with custom templates, a test preview and clean inline member details.
 - **Server tools** — server, user and role info, plus icon, banner and avatar grabbers with size pickers and download buttons.
 - **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, `/ping`, tabbed help and an invite link.
@@ -55,13 +57,13 @@ Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/chatgpt how do I stay focused?` for an AI answer, `/topic` for an icebreaker, `/typerace` for a speed test, `/typeraceleaderboard` for the fastest times, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
+3. Try `/rank` for your card, `/cat` or `/memegen` for an image, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/chatgpt how do I stay focused?` for an AI answer, `/topic` for an icebreaker, `/typerace` for a speed test, `/typeraceleaderboard` for the fastest times, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
 4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
 **Help command:** `/helplist`
 **Source and issues:** [GitHub repository](https://github.com/jumayusiii/Zen-Bot) · [Report an issue](https://github.com/jumayusiii/Zen-Bot/issues)
 
-Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
+Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, warning history, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
 ```
 
 ## Links to add

@@ -100,6 +100,25 @@ test('a category tab lists its commands and falls back to overview for unknown v
   assert.equal(fallback.embeds[0].data.title, 'Everything the bot can do');
 });
 
+test('image commands get their own tab with a dedicated view', () => {
+  const withImages = registry(
+    fakeCommand('meme', 'fun'),
+    fakeCommand('cat', 'images'),
+    fakeCommand('dog', 'images'),
+  );
+  const groups = groupCommands(withImages);
+
+  assert.deepEqual(groups.map((group) => group.meta.id), ['fun', 'images']);
+
+  const payload = buildHelpPayload(client, withImages, 'images', 'Tester');
+  const embed = payload.embeds[0];
+  assert.equal(embed.data.title, 'Images');
+  assert.deepEqual(embed.data.fields.map((field) => field.name), [
+    '**/cat**',
+    '**/dog**',
+  ]);
+});
+
 test('an empty registry still renders an overview without tabs', () => {
   const payload = buildHelpPayload(client, new Collection(), 'overview', 'Tester');
 

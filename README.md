@@ -2,19 +2,21 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.15.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.16.0** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, social actions, cat and dog photos, editable memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
 ## Highlights
 
 - **Real slash commands** loaded automatically from `src/commands/`.
-- **Tabbed help** with an overview plus Fun, Moderation, Minigames, Levels, Social and Utilities tabs, generated from the command modules.
+- **Tabbed help** with an overview plus Fun, Images, Moderation, Minigames, Levels, Social and Utilities tabs, generated from the command modules.
 - **Level system** with chat XP, a rendered rank card, a top-ten server leaderboard and automatic role rewards.
-- **Moderation** with timed mutes, persistent temporary bans, kicks and reversals, plus permission and role-hierarchy checks.
+- **Moderation** with timed mutes, persistent temporary bans, kicks, reversals, warnings, purge and slowmode, plus permission and role-hierarchy checks.
 - **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
+- **Social actions** with `/hug`, `/pat` and `/highfive`, plus compact target and mood details.
+- **Images** with random cat and dog photos, and `/memegen` for editable text memes across six templates.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -34,6 +36,9 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | Command | Description |
 | --- | --- |
 | `/meme` | Fetches a random meme from [meme-api.com](https://meme-api.com) and posts it in an embed. Falls back to Imgflip. |
+| `/cat` | Fetches a random cat photo from The Cat API. |
+| `/dog` | Fetches a random dog photo from Dog CEO, with breed details when available. |
+| `/memegen <template> <top> [bottom]` | Creates an editable meme with your own top and bottom text. |
 | `/tiktok <url>` | 🧪 Downloads a TikTok video and posts it so it plays inline, with creator, duration and engagement details. Oversized, private and photo posts fall back to a cover image and an **Open on TikTok** button. |
 | `/8ball <question>` | 🧪 Asks the Magic 8-Ball a question. |
 | `/coinflip [side]` | 🧪 Flips a coin and lets you call heads or tails. |
@@ -48,6 +53,9 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/compliment [user]` | Sends a random compliment to a member. |
 | `/roast [user]` | 🧪 Serves a playful, harmless roast with compact target, tone and requester fields. |
 | `/rate <thing>` | Gives something a deterministic 0–100 rating with a verdict. |
+| `/hug <user>` | Sends a warm hug to a member. |
+| `/pat <user>` | Gives a member a gentle head pat. |
+| `/highfive <user>` | Celebrates with a member using a high five. |
 | `/trivia` | 🧪 Asks a multiple-choice trivia question with live answer buttons, score tracking and up to five refreshes. |
 | `/tictactoe` | 🧪 Starts a button tic-tac-toe board against the bot. |
 | `/higherlower` | 🧪 Guess whether the next number is higher or lower, up to 10 rounds. |
@@ -69,6 +77,11 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/kick <member> [reason]` | Removes a member from the server with an audit-log reason. |
 | `/ban <user> <duration> [reason] [delete_messages]` | Bans a user for **1 hour to 30 days** or permanently, optionally deleting recent messages. |
 | `/unban <user_id> [reason]` | Lifts a ban and cancels its scheduled auto-unban. |
+| `/warn <member> <reason>` | Records a persistent warning, sends a DM when possible and writes to the audit log. |
+| `/warnings <member>` | Shows a member's recorded warnings, newest first. Private to moderators. |
+| `/clearwarnings <member> [reason]` | Clears a member's recorded warnings and records the cleanup. |
+| `/purge <amount> [user] [channel] [reason]` | Deletes up to 100 recent messages, optionally from one member and channel. |
+| `/slowmode <seconds> [channel] [reason]` | Sets a channel cooldown from 0 seconds to 6 hours. |
 | `/modlog [channel] [disable]` | 🧪 Chooses the channel that receives every moderation action and automatic unban. |
 | `/avatar [user]` | Shows a user avatar with a 64–4096 px size selector and a **Download** button. |
 | `/servericon` | Shows the current server icon with the same size selector and download button. |
@@ -91,9 +104,9 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/ping` | Shows gateway latency, command round-trip, uptime and connection status. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
-| `/helplist` | Opens a tabbed directory — Overview, Fun, Moderation, Minigames, Levels, Social and Utilities — with every command, its usage and a beta marker. |
+| `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Social and Utilities — with every command, its usage and a beta marker. |
 
-🧪 marks beta commands. The help directory is generated from the loaded command modules, so it stays accurate when new commands are added.
+🧪 marks beta commands. The directory covers **70 commands** across eight tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -102,6 +115,14 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 ## Minigames
 
 `/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber`, `/reaction`, `/wordscramble`, `/memory` and `/typerace` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Memory hides a symbol sequence after you start and adds one symbol per completed round, while Type Race opens a modal and scores exact phrases in words per minute. Every correct run updates that member's personal best, and `/typeraceleaderboard` shows the ten fastest times in the server. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+
+## Images
+
+`/cat` and `/dog` fetch a fresh photo from The Cat API and Dog CEO, with source and breed details where available. `/memegen` uses six templates — Drake, This is Fine, Doge, Success Kid, Feels Bad Man and Gru's Plan — and accepts editable top and bottom text. The image services need outbound HTTPS but no API keys. `/memegen` links the generated image directly; no image files are stored on the host.
+
+## Social actions
+
+`/hug`, `/pat` and `/highfive` add lightweight social interactions with a randomly chosen line, compact from/target/mood fields and safe mention handling. They reject self-targeting and work without external APIs.
 
 ## Levels
 
@@ -120,9 +141,12 @@ Admin commands are grouped in the **Moderation** tab and are hidden from members
 - `/mute <member> <duration> [reason]` times a member out for **5 minutes to 28 days**. `/unmute` clears it early.
 - `/ban <user> <duration> [reason] [delete_messages]` supports **1-hour to 30-day temporary bans**, permanent bans, and message cleanup up to seven days. `/unban <user_id>` lifts a ban.
 - `/kick <member> [reason]` removes a member immediately; Discord does not support timed kicks.
+- `/warn <member> <reason>`, `/warnings <member>` and `/clearwarnings <member> [reason]` manage warnings stored per server in `data/warnings.json`. Warnings are DM'd when possible and recorded in the audit log.
+- `/purge <amount> [user] [channel] [reason]` removes up to **100 recent messages**, optionally from one member. Messages older than 14 days are skipped because Discord cannot bulk-delete them.
+- `/slowmode <seconds> [channel] [reason]` sets a **0 second to 6 hour** cooldown and records the change.
 - Temporary bans are written to `data/moderation.json`. The scheduler checks every 30 seconds and lifts overdue bans after a restart.
 - Every command checks the caller's permission, the bot's permission, the server owner, the bot's role position and the caller's role position. The bot needs **Moderate Members**, **Kick Members** and **Ban Members**, and its role must sit above the target's highest role.
-- `/modlog channel:#audit-log` stores a channel in `data/moderation-logs.json`. Mutes, unmutes, kicks, bans, unbans and automatic temporary-ban expiry are posted there with the target, moderator, duration, reason and action time. `/modlog` shows the current setting, and `/modlog disable:true` turns it off.
+- `/modlog channel:#audit-log` stores a channel in `data/moderation-logs.json`. Mutes, unmutes, kicks, bans, unbans, warnings, cleared warnings, purges, slowmode changes and automatic temporary-ban expiry are posted there with the target, moderator, duration, reason and action time. `/modlog` shows the current setting, and `/modlog disable:true` turns it off.
 
 ## Welcome & leave messages
 
@@ -204,9 +228,10 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 - Node.js **18 or newer**
 - A Discord application with a bot token
 - The **Server Members** privileged intent enabled for welcome and leave events
-- A persistent disk if you want uptime, poll, reminder, level, greeting, audit-log, scheduled-ban and Type Race best state to survive restarts
+- A persistent disk if you want uptime, poll, reminder, level, greeting, warning, audit-log, scheduled-ban and Type Race best state to survive restarts
 - `@napi-rs/canvas` for rank cards, installed automatically by `npm install`
 - Outbound HTTPS access to TikTok and `www.tikwm.com` for `/tiktok`
+- Outbound HTTPS access to `api.thecatapi.com`, `dog.ceo` and `api.memegen.link` for the image commands
 - Outbound HTTPS access to Open-Meteo and Wikipedia for `/weather` and `/wikipedia`
 - An OpenAI API key and outbound HTTPS access to `api.openai.com` for the beta `/chatgpt` command
 
@@ -309,7 +334,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, image feed parsing, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -364,11 +389,13 @@ src/
 │   ├── help.js                  # Tabbed command directory and category metadata
 │   ├── higherlower.js           # Higher-or-lower number rules
 │   ├── images.js                # Size selector / download button helpers
+│   ├── imageFeeds.js            # Cat, dog and editable meme helpers
 │   ├── levels.js                # Per-server XP, level maths and persistence
 │   ├── levelRewards.js          # Per-server reward roles and safe assignment
 │   ├── memory.js                # Symbol sequences and step rules
 │   ├── moderation.js            # Durations, hierarchy checks and scheduled unbans
 │   ├── moderationLogs.js        # Audit-log channel settings and delivery
+│   ├── moderationTools.js       # Purge filtering, deletion and slowmode labels
 │   ├── rankCard.js              # Canvas rank-card renderer
 │   ├── reaction.js              # Reaction-time rating bands
 │   ├── polls.js                 # Persistent button-poll state
@@ -378,10 +405,13 @@ src/
 │   ├── siteHistory.js           # Uptime samples, summaries and daily buckets
 │   ├── siteMonitor.js           # Background site probe
 │   ├── slots.js                 # Weighted slot symbols and result rules
+│   ├── social.js                # Social action lines and definitions
+│   ├── socialCommand.js         # Shared /hug, /pat and /highfive builder
 │   ├── tictactoe.js             # Board rules and bot move selection
 │   ├── tiktok.js                # TikTok link parsing, metadata and capped downloads
 │   ├── typerace.js              # Phrases, matching and WPM scoring
 │   ├── typeraceLeaderboard.js   # Per-server Type Race personal bests
+│   ├── warnings.js              # Per-server warning persistence
 │   ├── weather.js               # Open-Meteo geocoding, WMO labels and forecast mapping
 │   ├── wikipedia.js             # Wikipedia search, summaries and fallbacks
 │   ├── timestamps.js            # Discord timestamp parsing and styles
@@ -403,17 +433,26 @@ src/
     │   ├── roll.js
     │   ├── ship.js
     │   └── topic.js
+    ├── images/
+    │   ├── cat.js
+    │   ├── dog.js
+    │   └── memegen.js
     ├── levels/
     │   ├── levelreward.js
     │   ├── levels.js
     │   └── rank.js
     ├── moderation/
     │   ├── ban.js
+    │   ├── clearwarnings.js
     │   ├── kick.js
     │   ├── modlog.js
     │   ├── mute.js
+    │   ├── purge.js
+    │   ├── slowmode.js
     │   ├── unban.js
-    │   └── unmute.js
+    │   ├── unmute.js
+    │   ├── warn.js
+    │   └── warnings.js
     ├── minigames/
     │   ├── blackjack.js
     │   ├── coinflip.js
@@ -431,6 +470,9 @@ src/
     │   ├── wordscramble.js
     │   └── wouldyourather.js
     ├── social/
+    │   ├── highfive.js
+    │   ├── hug.js
+    │   ├── pat.js
     │   └── tiktok.js
     └── utility/
         ├── avatar.js

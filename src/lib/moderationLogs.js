@@ -14,6 +14,10 @@ const ACTIONS = Object.freeze({
   ban: { title: '🔨 User banned', color: COLORS.danger },
   unban: { title: '🔓 User unbanned', color: COLORS.success },
   'auto-unban': { title: '⏰ Temporary ban expired', color: COLORS.info },
+  warn: { title: '⚠️ Member warned', color: COLORS.warning },
+  clearwarnings: { title: '🧹 Warnings cleared', color: COLORS.success },
+  purge: { title: '🧹 Messages purged', color: COLORS.neutral },
+  slowmode: { title: '🐢 Slowmode updated', color: COLORS.info },
   config: { title: '📋 Audit log connected', color: COLORS.brand },
 });
 
@@ -174,7 +178,9 @@ function buildModerationLogEmbed(client, entry = {}) {
       name: '🎯 Target',
       value: entry.targetId
         ? `${entry.targetName ? `**${cleanText(entry.targetName, 80)}**\n` : ''}\`${entry.targetId}\``
-        : 'Unknown user',
+        : entry.targetName
+          ? `**${cleanText(entry.targetName, 80)}**`
+          : 'Not applicable',
       inline: true,
     },
     {

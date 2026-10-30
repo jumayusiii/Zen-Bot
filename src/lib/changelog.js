@@ -2,6 +2,26 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.16.0',
+    date: '2026-10-30',
+    title: 'Social actions, stronger moderation & images',
+    summary: 'Zen adds friendly social commands, persistent warnings, purge and slowmode tools, and a new Images tab with cat, dog and editable meme commands.',
+    added: [
+      '`/hug`, `/pat` and `/highfive` add playful, mention-safe social actions for members.',
+      '`/warn`, `/warnings` and `/clearwarnings` record and manage persistent warnings in `data/warnings.json`, with audit-log entries and a warning DM.',
+      '`/purge` scans up to 100 recent messages, can filter by member, and safely removes messages from the last 14 days.',
+      '`/slowmode` sets or clears a channel cooldown from 0 seconds up to 6 hours.',
+      'A new **Images** tab brings `/cat`, `/dog` and `/memegen`; memes accept a template plus editable top and bottom text.',
+      'The command directory now covers **70 commands** across eight tabs.',
+    ],
+    improved: [
+      'The audit log now records warnings, cleared warnings, purges and slowmode changes.',
+      'The image commands use public, no-key APIs and validate returned HTTPS image URLs.',
+      'Warning history is scoped per server and survives restarts.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.15.0-beta.1',
     date: '2026-10-30',
     title: 'ChatGPT comes to Zen',

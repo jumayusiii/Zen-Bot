@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 59);
+  assert.equal(registry.size, 70);
 
   for (const name of [
     'uptime',
@@ -64,6 +64,17 @@ test('all commands load with valid names, descriptions and unique registrations'
     'typerace',
     'typeraceleaderboard',
     'chatgpt',
+    'hug',
+    'pat',
+    'highfive',
+    'warn',
+    'warnings',
+    'clearwarnings',
+    'purge',
+    'slowmode',
+    'cat',
+    'dog',
+    'memegen',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -158,4 +169,15 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('typerace').data.toJSON().options.length, 0);
   assert.equal(registry.get('typeraceleaderboard').data.toJSON().options.length, 0);
   assert.equal(registry.get('chatgpt').data.toJSON().options.length, 2);
+  assert.equal(registry.get('hug').data.toJSON().options.length, 1);
+  assert.equal(registry.get('pat').data.toJSON().options.length, 1);
+  assert.equal(registry.get('highfive').data.toJSON().options.length, 1);
+  assert.equal(registry.get('warn').data.toJSON().options.length, 2);
+  assert.equal(registry.get('warnings').data.toJSON().options.length, 1);
+  assert.equal(registry.get('clearwarnings').data.toJSON().options.length, 2);
+  assert.equal(registry.get('purge').data.toJSON().options.length, 4);
+  assert.equal(registry.get('slowmode').data.toJSON().options.length, 3);
+  assert.equal(registry.get('cat').data.toJSON().options.length, 0);
+  assert.equal(registry.get('dog').data.toJSON().options.length, 0);
+  assert.equal(registry.get('memegen').data.toJSON().options.length, 3);
 });

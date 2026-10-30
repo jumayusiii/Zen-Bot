@@ -10,13 +10,13 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.15.0-beta.1` |
+| Version | `1.16.0` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
 | Source | https://github.com/jumayusiii/Zen-Bot |
 | Support | https://github.com/jumayusiii/Zen-Bot/issues |
-| Privacy | No message content is read. Member events require the Server Members intent. Poll, reminder, uptime, level, greeting, audit-log and Type Race best state stays on the host. ChatGPT prompts are sent to OpenAI and are not stored by Zen. |
+| Privacy | No message content is read. Member events require the Server Members intent. Poll, reminder, uptime, level, greeting, warning, audit-log and Type Race best state stays on the host. ChatGPT prompts are sent to OpenAI and are not stored by Zen. |
 
 ## top.gg
 
@@ -31,7 +31,7 @@ The public page will be https://top.gg/bot/1564936469305364480.
 ### Short description (under 140 characters)
 
 ```text
-Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather, Wikipedia and site uptime — in clean slash commands.
+Fun, social actions, cat and dog photos, editable memes, levels, moderation, polls and TikTok — in clean slash commands.
 ```
 
 ### Long description
@@ -42,12 +42,14 @@ Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather
 ### What it does
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/fortunecookie`, `/topic`, `/compliment`, `/roast` and `/rate`.
+- **Social** — `/hug`, `/pat` and `/highfive` add friendly member interactions with clean embeds.
+- **Images** — `/cat` and `/dog` fetch random photos, and `/memegen` turns a template plus your text into an editable meme.
 - **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
 - **Weather & knowledge** — `/weather` gives current conditions and a four-day forecast in °C or °F, and `/wikipedia` finds an article and posts its summary with a link to the full page.
 - **ChatGPT (beta)** — `/chatgpt` asks OpenAI’s ChatGPT a moderated question with an optional private answer and a per-member limit; no conversation history is stored. Requires the owner’s `OPENAI_API_KEY`.
 - **Minigames** — trivia with five refreshes, button tic-tac-toe, Higher or Lower, hangman, blackjack, number guessing, a reaction test, slots, sequence memory, a modal typing race with a fastest-time leaderboard, five-round word scrambles and live would-you-rather votes.
 - **Levels** — chat XP with a rendered rank card, server rank, XP progress, a top-ten `/levels` leaderboard and automatic role rewards.
-- **Moderation** — timed mutes, persistent temporary bans, kicks and reversals, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
+- **Moderation** — timed mutes, persistent temporary bans, kicks, reversals, persistent warnings, purge and slowmode, with permission checks, role-hierarchy protection and a configurable `/modlog` audit channel.
 - **Community** — `/welcome` and `/leave` embeds with custom templates, a test preview and clean inline member details.
 - **Server tools** — server, user and role info, plus icon, banner and avatar grabbers with size pickers and download buttons.
 - **Utilities** — live button polls, persistent reminders, a Discord timestamp builder, `/ping`, tabbed help and an invite link.
@@ -57,27 +59,27 @@ Fun, minigames, icebreakers, levels, moderation, polls, TikTok previews, weather
 
 1. Add the bot with the invite button.
 2. Run `/helplist` to browse every command by tab.
-3. Try `/rank` for your card, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/chatgpt how do I stay focused?` for an AI answer, `/topic` for an icebreaker, `/typerace` for a speed test, `/typeraceleaderboard` for the fastest times, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
+3. Try `/rank` for your card, `/cat` or `/memegen` for an image, `/weather Tokyo` for a forecast, `/wikipedia Jupiter` for a summary, `/chatgpt how do I stay focused?` for an AI answer, `/topic` for an icebreaker, `/typerace` for a speed test, `/typeraceleaderboard` for the fastest times, `/sitestatus` for the monitored site or `/slots` and `/wouldyourather` for a quick round.
 4. Configure `/welcome`, `/leave` and `/modlog` to make the server feel finished.
 
 **Help command:** `/helplist`
 **Source and issues:** [GitHub repository](https://github.com/jumayusiii/Zen-Bot) · [Report an issue](https://github.com/jumayusiii/Zen-Bot/issues)
 
-Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
+Slash commands only. No prefix and no message content access. Polls, reminders, uptime history, chat levels, scheduled bans, warning history, greeting settings and audit-log channels survive restarts. The Server Members intent is used for welcome and leave events.
 ```
 
 ### Categories
 
-`Fun`, `Games`, `Leveling`, `Moderation`, `Utility`, `Website`, `Community`
+`Fun`, `Games`, `Leveling`, `Moderation`, `Images`, `Social`, `Utility`, `Website`, `Community`
 
 ### Notes for the reviewer
 
 ```text
-Slash commands only. Try /helplist first for the full 59-command directory,
+Slash commands only. Try /helplist first for the full 70-command directory,
 then /rank for a level card and /slots, /wordscramble, /typeraceleaderboard, /wouldyourather, /hangman or /blackjack
 for a game. /tiktok posts a TikTok video inline; videos over 8 MB fall back to a cover and link.
 /weather gives a live forecast for any city and /wikipedia posts an article summary. /chatgpt is an optional beta command that needs the owner's OPENAI_API_KEY; without it, the command explains the setup. Moderation uses /mute, /kick and /ban behind Discord permissions and
-role checks; /modlog records every action in a chosen channel. /welcome and
+role checks; /warn, /warnings and /clearwarnings add persistent warning history; /purge and /slowmode add cleanup tools; /modlog records every action in a chosen channel. /welcome and
 /leave post configurable join and leave embeds. /sitestatus monitors
 https://habbo.gd and /uptime reads its history. Message content is never read.
 The Server Members intent is enabled for welcome and leave events.
