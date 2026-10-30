@@ -10,7 +10,7 @@ setup needed to keep the server count current afterwards.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.16.0` |
+| Version | `1.17.0` |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
@@ -31,7 +31,7 @@ The public page will be https://top.gg/bot/1564936469305364480.
 ### Short description (under 140 characters)
 
 ```text
-Fun, social actions, cat and dog photos, editable memes, levels, moderation, polls and TikTok — in clean slash commands.
+Fun, social feeds, cat and dog photos, editable memes, levels, moderation, polls and TikTok — in clean slash commands.
 ```
 
 ### Long description
@@ -42,7 +42,7 @@ Fun, social actions, cat and dog photos, editable memes, levels, moderation, pol
 ### What it does
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/fortunecookie`, `/topic`, `/compliment`, `/roast` and `/rate`.
-- **Social** — `/hug`, `/pat` and `/highfive` add friendly member interactions with clean embeds.
+- **Social** — live `/bluesky`, `/reddit` and `/youtube` lookups, plus `/hug`, `/pat` and `/highfive` member interactions.
 - **Images** — `/cat` and `/dog` fetch random photos, and `/memegen` turns a template plus your text into an editable meme.
 - **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
 - **Weather & knowledge** — `/weather` gives current conditions and a four-day forecast in °C or °F, and `/wikipedia` finds an article and posts its summary with a link to the full page.
@@ -75,9 +75,10 @@ Slash commands only. No prefix and no message content access. Polls, reminders, 
 ### Notes for the reviewer
 
 ```text
-Slash commands only. Try /helplist first for the full 70-command directory,
+Slash commands only. Try /helplist first for the full 73-command directory,
 then /rank for a level card and /slots, /wordscramble, /typeraceleaderboard, /wouldyourather, /hangman or /blackjack
 for a game. /tiktok posts a TikTok video inline; videos over 8 MB fall back to a cover and link.
+/bluesky, /reddit and /youtube read live public feeds; Reddit is limited to a curated SFW list.
 /weather gives a live forecast for any city and /wikipedia posts an article summary. /chatgpt is an optional beta command that needs the owner's OPENAI_API_KEY; without it, the command explains the setup. Moderation uses /mute, /kick and /ban behind Discord permissions and
 role checks; /warn, /warnings and /clearwarnings add persistent warning history; /purge and /slowmode add cleanup tools; /modlog records every action in a chosen channel. /welcome and
 /leave post configurable join and leave embeds. /sitestatus monitors

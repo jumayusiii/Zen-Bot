@@ -2,9 +2,9 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.16.0** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.17.0** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, social actions, cat and dog photos, editable memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, social actions, cat and dog photos, editable memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
 ## Highlights
 
@@ -15,7 +15,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
-- **Social actions** with `/hug`, `/pat` and `/highfive`, plus compact target and mood details.
+- **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
 - **Images** with random cat and dog photos, and `/memegen` for editable text memes across six templates.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
@@ -24,6 +24,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Persistent reminders** delivered by DM or in the channel where they were created.
 - **Directory ready**: optional top.gg and Discord Bot List stat posting, with submission copy in `docs/`.
 - **TikTok previews**: `/tiktok` attaches a TikTok video so it plays inline in Discord, with creator and engagement details plus an **Open on TikTok** fallback for oversized or private posts.
+- **Social feeds**: `/bluesky`, `/reddit` and `/youtube` connect to live public feeds with profile, post, community and video details.
 - **Weather**: `/weather` looks up any city and posts current conditions plus a four-day forecast from [Open-Meteo](https://open-meteo.com/), in Celsius or Fahrenheit. No API key needed.
 - **Knowledge**: `/wikipedia` searches Wikipedia and posts a clean summary, article image and a **Read on Wikipedia** button.
 - **ChatGPT beta**: `/chatgpt` sends a moderated question to OpenAI and posts the answer, with an optional private reply and **8 requests per 10 minutes**. Requires `OPENAI_API_KEY`; prompts are not stored by Zen.
@@ -40,6 +41,9 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/dog` | Fetches a random dog photo from Dog CEO, with breed details when available. |
 | `/memegen <template> <top> [bottom]` | Creates an editable meme with your own top and bottom text. |
 | `/tiktok <url>` | 🧪 Downloads a TikTok video and posts it so it plays inline, with creator, duration and engagement details. Oversized, private and photo posts fall back to a cover image and an **Open on TikTok** button. |
+| `/bluesky <handle>` | 🧪 Loads a live Bluesky profile, bio, follower counts and latest public post, with profile and post links. |
+| `/reddit [subreddit]` | 🧪 Reads Reddit’s public Atom feed and posts a random hot item from a curated SFW community. Defaults to `popular`. |
+| `/youtube <url>` | 🧪 Resolves a YouTube video, Shorts or `youtu.be` link into a live title, channel, thumbnail and watch link. |
 | `/8ball <question>` | 🧪 Asks the Magic 8-Ball a question. |
 | `/coinflip [side]` | 🧪 Flips a coin and lets you call heads or tails. |
 | `/rps <choice>` | 🧪 Plays rock-paper-scissors against the bot. |
@@ -106,7 +110,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/changelog` | Shows the current version, update date and release notes. |
 | `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Social and Utilities — with every command, its usage and a beta marker. |
 
-🧪 marks beta commands. The directory covers **70 commands** across eight tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
+🧪 marks beta commands. The directory covers **73 commands** across eight tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -120,9 +124,11 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 `/cat` and `/dog` fetch a fresh photo from The Cat API and Dog CEO, with source and breed details where available. `/memegen` uses six templates — Drake, This is Fine, Doge, Success Kid, Feels Bad Man and Gru's Plan — and accepts editable top and bottom text. The image services need outbound HTTPS but no API keys. `/memegen` links the generated image directly; no image files are stored on the host.
 
-## Social actions
+## Social & media
 
-`/hug`, `/pat` and `/highfive` add lightweight social interactions with a randomly chosen line, compact from/target/mood fields and safe mention handling. They reject self-targeting and work without external APIs.
+`/bluesky`, `/reddit`, `/youtube` and `/tiktok` connect to live public feeds. `/bluesky` loads a profile and latest post from the public Bluesky AppView API. `/reddit` reads a curated SFW community’s public Atom feed, because Reddit’s JSON endpoint is often blocked. `/youtube` resolves standard, Shorts and `youtu.be` links through YouTube oEmbed.
+
+These commands need outbound HTTPS but no API keys. `/hug`, `/pat` and `/highfive` remain lightweight local interactions with a randomly chosen line, compact from/target/mood fields and safe mention handling. They reject self-targeting and work without external APIs.
 
 ## Levels
 
@@ -231,6 +237,7 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 - A persistent disk if you want uptime, poll, reminder, level, greeting, warning, audit-log, scheduled-ban and Type Race best state to survive restarts
 - `@napi-rs/canvas` for rank cards, installed automatically by `npm install`
 - Outbound HTTPS access to TikTok and `www.tikwm.com` for `/tiktok`
+- Outbound HTTPS access to `public.api.bsky.app`, `www.reddit.com` and `www.youtube.com` for the live social feeds
 - Outbound HTTPS access to `api.thecatapi.com`, `dog.ceo` and `api.memegen.link` for the image commands
 - Outbound HTTPS access to Open-Meteo and Wikipedia for `/weather` and `/wikipedia`
 - An OpenAI API key and outbound HTTPS access to `api.openai.com` for the beta `/chatgpt` command
@@ -334,7 +341,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, image feed parsing, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -407,6 +414,7 @@ src/
 │   ├── slots.js                 # Weighted slot symbols and result rules
 │   ├── social.js                # Social action lines and definitions
 │   ├── socialCommand.js         # Shared /hug, /pat and /highfive builder
+│   ├── socialMedia.js           # Bluesky, Reddit and YouTube feed helpers
 │   ├── tictactoe.js             # Board rules and bot move selection
 │   ├── tiktok.js                # TikTok link parsing, metadata and capped downloads
 │   ├── typerace.js              # Phrases, matching and WPM scoring
@@ -470,10 +478,13 @@ src/
     │   ├── wordscramble.js
     │   └── wouldyourather.js
     ├── social/
+    │   ├── bluesky.js
     │   ├── highfive.js
     │   ├── hug.js
     │   ├── pat.js
-    │   └── tiktok.js
+    │   ├── reddit.js
+    │   ├── tiktok.js
+    │   └── youtube.js
     └── utility/
         ├── avatar.js
         ├── botinfo.js

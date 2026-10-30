@@ -7,7 +7,7 @@ owner's account.
 
 The live post still carries the old name and earlier copy. This is the exact
 replacement for the short and long descriptions, the help command and the GitHub
-links for **v1.16.0** and the **70-command** directory.
+links for **v1.17.0** and the **73-command** directory.
 
 ## Fields
 
@@ -29,7 +29,7 @@ Change the listing's display name to **Zen**; the public URL slug stays `juma-ha
 Under 140 characters:
 
 ```text
-Fun, social actions, cat and dog photos, editable memes, levels, moderation, polls and TikTok — in clean slash commands.
+Fun, social feeds, cat and dog photos, editable memes, levels, moderation, polls and TikTok — in clean slash commands.
 ```
 
 ## Long description
@@ -40,7 +40,7 @@ Fun, social actions, cat and dog photos, editable memes, levels, moderation, pol
 ### What it does
 
 - **Fun** — memes, Magic 8-Ball, dice, coin flips, rock-paper-scissors, `/ship`, `/fact`, `/joke`, `/fortunecookie`, `/topic`, `/compliment`, `/roast` and `/rate`.
-- **Social** — `/hug`, `/pat` and `/highfive` add friendly member interactions with clean embeds.
+- **Social** — live `/bluesky`, `/reddit` and `/youtube` lookups, plus `/hug`, `/pat` and `/highfive` member interactions.
 - **Images** — `/cat` and `/dog` fetch random photos, and `/memegen` turns a template plus your text into an editable meme.
 - **Media** — `/tiktok` turns a TikTok link into an inline video with creator and engagement details; oversized, private or photo posts fall back to a cover and an **Open on TikTok** link.
 - **Weather & knowledge** — `/weather` gives current conditions and a four-day forecast in °C or °F, and `/wikipedia` finds an article and posts its summary with a link to the full page.

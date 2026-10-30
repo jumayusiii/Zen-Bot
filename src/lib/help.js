@@ -52,7 +52,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Social',
     title: 'Social & media',
     emoji: '📱',
-    description: 'Hugs, head pats, high fives and shareable media that play in Discord.',
+    description: 'Hugs, head pats, high fives and live Bluesky, Reddit, TikTok and YouTube lookups.',
     color: COLORS.fun,
     order: 28,
   },

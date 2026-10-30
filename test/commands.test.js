@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 70);
+  assert.equal(registry.size, 73);
 
   for (const name of [
     'uptime',
@@ -56,6 +56,9 @@ test('all commands load with valid names, descriptions and unique registrations'
     'roast',
     'wordscramble',
     'tiktok',
+    'bluesky',
+    'reddit',
+    'youtube',
     'weather',
     'wikipedia',
     'fortunecookie',
@@ -106,6 +109,9 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('roast').beta, true);
   assert.equal(registry.get('wordscramble').beta, true);
   assert.equal(registry.get('tiktok').beta, true);
+  assert.equal(registry.get('bluesky').beta, true);
+  assert.equal(registry.get('reddit').beta, true);
+  assert.equal(registry.get('youtube').beta, true);
   assert.equal(registry.get('weather').beta, true);
   assert.equal(registry.get('wikipedia').beta, true);
   assert.equal(registry.get('fortunecookie').beta, true);
@@ -161,6 +167,9 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('roast').data.toJSON().options.length, 1);
   assert.equal(registry.get('wordscramble').data.toJSON().options.length, 0);
   assert.equal(registry.get('tiktok').data.toJSON().options.length, 1);
+  assert.equal(registry.get('bluesky').data.toJSON().options.length, 1);
+  assert.equal(registry.get('reddit').data.toJSON().options.length, 1);
+  assert.equal(registry.get('youtube').data.toJSON().options.length, 1);
   assert.equal(registry.get('weather').data.toJSON().options.length, 2);
   assert.equal(registry.get('wikipedia').data.toJSON().options.length, 1);
   assert.equal(registry.get('fortunecookie').data.toJSON().options.length, 0);

@@ -2,6 +2,24 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.17.0',
+    date: '2026-10-30',
+    title: 'Live social feeds',
+    summary: 'Zen now connects to live public social feeds for Bluesky, Reddit and YouTube, while keeping the friendly member actions.',
+    added: [
+      '`/bluesky <handle>` loads a live profile, bio, follower counts and latest public post.',
+      '`/reddit [subreddit]` reads Reddit’s public Atom feed and posts a random hot item from a curated SFW community.',
+      '`/youtube <url>` resolves standard, Shorts and youtu.be links into a live title, channel and thumbnail.',
+      'The command directory now covers **73 commands** across eight tabs.',
+    ],
+    improved: [
+      'Social lookups need no API keys and use the same timeout-bounded request path as the rest of the bot.',
+      'Reddit is limited to a curated SFW list because its public JSON endpoint is blocked; the Atom feed remains available.',
+      'Links to the source profile, post or video are included on every result.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.16.0',
     date: '2026-10-30',
     title: 'Social actions, stronger moderation & images',
