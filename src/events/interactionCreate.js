@@ -8,6 +8,11 @@ module.exports = {
       return;
     }
 
+    if (interaction.isModalSubmit()) {
+      await handleModalSubmit(interaction);
+      return;
+    }
+
     if (interaction.isStringSelectMenu() || interaction.isButton()) {
       await handleComponent(interaction);
     }
@@ -41,6 +46,20 @@ async function handleComponent(interaction) {
   } catch (error) {
     console.error(`[components] ${interaction.customId} failed:`, error);
     await sendError(interaction, 'That component is no longer usable. Run the command again.');
+  }
+}
+
+async function handleModalSubmit(interaction) {
+  const [commandName] = interaction.customId.split(':');
+  const command = interaction.client.commands.get(commandName);
+
+  if (!command?.handleModalSubmit) return;
+
+  try {
+    await command.handleModalSubmit(interaction);
+  } catch (error) {
+    console.error(`[modals] ${interaction.customId} failed:`, error);
+    await sendError(interaction, 'That typing race could not be scored. Run the command again.');
   }
 }
 

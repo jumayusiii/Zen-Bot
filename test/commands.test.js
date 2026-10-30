@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 53);
+  assert.equal(registry.size, 57);
 
   for (const name of [
     'uptime',
@@ -58,6 +58,10 @@ test('all commands load with valid names, descriptions and unique registrations'
     'tiktok',
     'weather',
     'wikipedia',
+    'fortunecookie',
+    'topic',
+    'memory',
+    'typerace',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -91,6 +95,10 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('tiktok').beta, true);
   assert.equal(registry.get('weather').beta, true);
   assert.equal(registry.get('wikipedia').beta, true);
+  assert.equal(registry.get('fortunecookie').beta, true);
+  assert.equal(registry.get('topic').beta, true);
+  assert.equal(registry.get('memory').beta, true);
+  assert.equal(registry.get('typerace').beta, true);
   assert.equal(registry.get('ship').beta, undefined);
   assert.equal(registry.get('fact').beta, undefined);
   assert.equal(registry.get('rank').beta, undefined);
@@ -140,4 +148,8 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('tiktok').data.toJSON().options.length, 1);
   assert.equal(registry.get('weather').data.toJSON().options.length, 2);
   assert.equal(registry.get('wikipedia').data.toJSON().options.length, 1);
+  assert.equal(registry.get('fortunecookie').data.toJSON().options.length, 0);
+  assert.equal(registry.get('topic').data.toJSON().options.length, 1);
+  assert.equal(registry.get('memory').data.toJSON().options.length, 0);
+  assert.equal(registry.get('typerace').data.toJSON().options.length, 0);
 });

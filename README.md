@@ -1,8 +1,8 @@
 # Zen
 
-**Public beta · v1.12.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.13.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, and Wikipedia summaries.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory and modal typing races.
 
 ## Highlights
 
@@ -12,7 +12,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Moderation** with timed mutes, persistent temporary bans, kicks and reversals, plus permission and role-hierarchy checks.
 - **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
-- **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles and a live would-you-rather vote.
+- **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -39,6 +39,8 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/ship <user> [second]` | Calculates a playful, repeatable compatibility score for two members. |
 | `/fact` | Shares a random fun fact with a reroll button. |
 | `/joke` | 🧪 Tells a clean joke with a button that reveals the punchline. |
+| `/fortunecookie` | 🧪 Opens a fortune with a theme and six lucky numbers. |
+| `/topic [theme]` | 🧪 Starts a conversation with a themed prompt and a one-click shuffle. |
 | `/compliment [user]` | Sends a random compliment to a member. |
 | `/roast [user]` | 🧪 Serves a playful, harmless roast with compact target, tone and requester fields. |
 | `/rate <thing>` | Gives something a deterministic 0–100 rating with a verdict. |
@@ -52,6 +54,8 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/slots` | 🧪 Spins a three-reel slot machine with weighted symbols and a compact result. |
 | `/wouldyourather` | 🧪 Starts a two-option vote with live inline results and changeable votes. |
 | `/wordscramble` | 🧪 Unscramble five words across five rounds with four answer buttons, a hint and live scoring. |
+| `/memory` | 🧪 Shows a growing symbol sequence, hides it, then scores your repeat. |
+| `/typerace` | 🧪 Opens a typing box, times an exact phrase and reports words per minute. |
 | `/rank [user]` | Renders a profile card with level, XP progress, server rank and total XP. |
 | `/levels` | Shows the top ten members by chat XP, plus your rank if you are outside the top ten. |
 | `/levelreward [role] [level] [clear]` | Configures a role that members earn automatically when they reach a level. |
@@ -91,7 +95,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Minigames
 
-`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber`, `/reaction` and `/wordscramble` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber`, `/reaction`, `/wordscramble`, `/memory` and `/typerace` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Memory hides a symbol sequence after you start and adds one symbol per completed round, while Type Race opens a modal and scores exact phrases in words per minute. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
 
 ## Levels
 
@@ -292,7 +296,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -335,6 +339,7 @@ src/
 │   ├── config.js                # Environment-backed site and presence settings
 │   ├── dice.js                  # Dice notation parsing and rolling
 │   ├── embeds.js                # Shared palette, branding and embed builder
+│   ├── fortunes.js              # Fortune-cookie bank and lucky numbers
 │   ├── fun.js                   # Ship scores and the offline fact bank
 │   ├── greetingCommand.js       # Shared /welcome and /leave command builder
 │   ├── greetings.js             # Greeting templates, storage and member events
@@ -347,6 +352,7 @@ src/
 │   ├── images.js                # Size selector / download button helpers
 │   ├── levels.js                # Per-server XP, level maths and persistence
 │   ├── levelRewards.js          # Per-server reward roles and safe assignment
+│   ├── memory.js                # Symbol sequences and step rules
 │   ├── moderation.js            # Durations, hierarchy checks and scheduled unbans
 │   ├── moderationLogs.js        # Audit-log channel settings and delivery
 │   ├── rankCard.js              # Canvas rank-card renderer
@@ -360,9 +366,11 @@ src/
 │   ├── slots.js                 # Weighted slot symbols and result rules
 │   ├── tictactoe.js             # Board rules and bot move selection
 │   ├── tiktok.js                # TikTok link parsing, metadata and capped downloads
+│   ├── typerace.js              # Phrases, matching and WPM scoring
 │   ├── weather.js               # Open-Meteo geocoding, WMO labels and forecast mapping
 │   ├── wikipedia.js             # Wikipedia search, summaries and fallbacks
 │   ├── timestamps.js            # Discord timestamp parsing and styles
+│   ├── topics.js                # Conversation starters and themes
 │   ├── trivia.js                # Offline trivia question bank
 │   ├── wordScramble.js          # Word bank, scrambling and choice rounds
 │   └── wyr.js                   # In-memory would-you-rather rounds
@@ -372,12 +380,14 @@ src/
     │   ├── choose.js
     │   ├── compliment.js
     │   ├── fact.js
+    │   ├── fortunecookie.js
     │   ├── joke.js
     │   ├── meme.js
     │   ├── rate.js
     │   ├── roast.js
     │   ├── roll.js
-    │   └── ship.js
+    │   ├── ship.js
+    │   └── topic.js
     ├── levels/
     │   ├── levelreward.js
     │   ├── levels.js
@@ -395,11 +405,13 @@ src/
     │   ├── guessnumber.js
     │   ├── hangman.js
     │   ├── higherlower.js
+    │   ├── memory.js
     │   ├── reaction.js
     │   ├── rps.js
     │   ├── slots.js
     │   ├── tictactoe.js
     │   ├── trivia.js
+    │   ├── typerace.js
     │   ├── wordscramble.js
     │   └── wouldyourather.js
     ├── social/
@@ -450,7 +462,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 ## Deployment notes
 
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level and scheduled-ban state.
-- Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`.
+- Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`.
 - Do not commit `.env`, logs or `data/*.json`.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.

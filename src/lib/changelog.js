@@ -2,6 +2,24 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.13.0-beta.1',
+    date: '2026-10-30',
+    title: 'Icebreakers, fortunes & memory games',
+    summary: 'Four new commands add conversation starters, fortune cookies, sequence memory and a modal typing race.',
+    added: [
+      '`/topic` starts a conversation with a themed prompt and a one-click shuffle.',
+      '`/fortunecookie` opens a playful fortune with a theme and six lucky numbers.',
+      '`/memory` shows a symbol sequence, hides it, then scores your repeat as the sequence grows.',
+      '`/typerace` opens a Discord modal, times an exact phrase and reports words per minute.',
+      'The command directory now covers **57 commands** across seven tabs.',
+    ],
+    improved: [
+      'Modal submissions are routed through the interaction handler, so games can use real text inputs.',
+      'The test suite now covers fortune and topic selection, memory sequences and typing-speed scoring.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.12.0-beta.1',
     date: '2026-10-29',
     title: 'Weather, Wikipedia & a sharper TikTok card',
