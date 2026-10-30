@@ -2,6 +2,23 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.14.0-beta.1',
+    date: '2026-10-30',
+    title: 'A new Zen banner & Type Race records',
+    summary: 'The Zen profile now has a wide banner matching the avatar, and Type Race remembers the fastest time each member has set per server.',
+    added: [
+      'A **1500×600 Zen banner** extends the open ensō ring and cream Z from the avatar into a wide profile header.',
+      '`/typeraceleaderboard` ranks the ten fastest Type Race times in each server and shows your own best and rank.',
+      'Every correct `/typerace` run now updates a persistent personal best in `data/typerace.json`.',
+      'The command directory now covers **58 commands** across seven tabs.',
+    ],
+    improved: [
+      'The Type Race result card reports a new personal best or your existing record.',
+      'The bot profile banner uses the same ink, mint, jade and cream palette as the avatar.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.13.0-beta.1',
     date: '2026-10-30',
     title: 'Icebreakers, fortunes & memory games',

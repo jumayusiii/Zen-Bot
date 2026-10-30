@@ -1,8 +1,10 @@
 # Zen
 
-**Public beta · v1.13.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+![Zen banner](assets/branding/zen-banner-750x300.png)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory and modal typing races.
+**Public beta · v1.14.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races and a per-server Type Race leaderboard.
 
 ## Highlights
 
@@ -22,6 +24,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **TikTok previews**: `/tiktok` attaches a TikTok video so it plays inline in Discord, with creator and engagement details plus an **Open on TikTok** fallback for oversized or private posts.
 - **Weather**: `/weather` looks up any city and posts current conditions plus a four-day forecast from [Open-Meteo](https://open-meteo.com/), in Celsius or Fahrenheit. No API key needed.
 - **Knowledge**: `/wikipedia` searches Wikipedia and posts a clean summary, article image and a **Read on Wikipedia** button.
+- **Type Race records**: every exact run updates a per-server personal best, and `/typeraceleaderboard` ranks the ten fastest members.
 - **Modern embeds** with a shared palette, plain titles, branded headers, timestamps and clamped text limits.
 - **Self-host friendly**: configurable site details, no hardcoded guild IDs or tokens, and no message content access. The **Server Members** intent is used for greetings.
 
@@ -55,7 +58,8 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/wouldyourather` | 🧪 Starts a two-option vote with live inline results and changeable votes. |
 | `/wordscramble` | 🧪 Unscramble five words across five rounds with four answer buttons, a hint and live scoring. |
 | `/memory` | 🧪 Shows a growing symbol sequence, hides it, then scores your repeat. |
-| `/typerace` | 🧪 Opens a typing box, times an exact phrase and reports words per minute. |
+| `/typerace` | 🧪 Opens a typing box, times an exact phrase, reports words per minute and saves a personal best. |
+| `/typeraceleaderboard` | 🧪 Ranks the ten fastest Type Race times in the server and shows your best. |
 | `/rank [user]` | Renders a profile card with level, XP progress, server rank and total XP. |
 | `/levels` | Shows the top ten members by chat XP, plus your rank if you are outside the top ten. |
 | `/levelreward [role] [level] [clear]` | Configures a role that members earn automatically when they reach a level. |
@@ -95,7 +99,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Minigames
 
-`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber`, `/reaction`, `/wordscramble`, `/memory` and `/typerace` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Memory hides a symbol sequence after you start and adds one symbol per completed round, while Type Race opens a modal and scores exact phrases in words per minute. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber`, `/reaction`, `/wordscramble`, `/memory` and `/typerace` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Memory hides a symbol sequence after you start and adds one symbol per completed round, while Type Race opens a modal and scores exact phrases in words per minute. Every correct run updates that member's personal best, and `/typeraceleaderboard` shows the ten fastest times in the server. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
 
 ## Levels
 
@@ -198,7 +202,7 @@ Reminders are written to `data/reminders.json` and restored when the bot starts.
 - Node.js **18 or newer**
 - A Discord application with a bot token
 - The **Server Members** privileged intent enabled for welcome and leave events
-- A persistent disk if you want uptime, poll, reminder, level, greeting, audit-log and scheduled-ban state to survive restarts
+- A persistent disk if you want uptime, poll, reminder, level, greeting, audit-log, scheduled-ban and Type Race best state to survive restarts
 - `@napi-rs/canvas` for rank cards, installed automatically by `npm install`
 - Outbound HTTPS access to TikTok and `www.tikwm.com` for `/tiktok`
 - Outbound HTTPS access to Open-Meteo and Wikipedia for `/weather` and `/wikipedia`
@@ -296,7 +300,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -367,6 +371,7 @@ src/
 │   ├── tictactoe.js             # Board rules and bot move selection
 │   ├── tiktok.js                # TikTok link parsing, metadata and capped downloads
 │   ├── typerace.js              # Phrases, matching and WPM scoring
+│   ├── typeraceLeaderboard.js   # Per-server Type Race personal bests
 │   ├── weather.js               # Open-Meteo geocoding, WMO labels and forecast mapping
 │   ├── wikipedia.js             # Wikipedia search, summaries and fallbacks
 │   ├── timestamps.js            # Discord timestamp parsing and styles
@@ -412,6 +417,7 @@ src/
     │   ├── tictactoe.js
     │   ├── trivia.js
     │   ├── typerace.js
+    │   ├── typeraceleaderboard.js
     │   ├── wordscramble.js
     │   └── wouldyourather.js
     ├── social/
@@ -453,6 +459,7 @@ The bot stores only what it needs to provide its features:
 - Scheduled temporary bans in `data/moderation.json` (server and user IDs, username, moderator ID, reason and unban time).
 - Audit-log channel IDs in `data/moderation-logs.json` (server and channel IDs, the admin who configured it and the update time).
 - Welcome and leave settings in `data/greetings.json` (server and channel IDs, templates and the admin who last changed them).
+- Type Race personal bests in `data/typerace.json` (server and user IDs, display name, best time, WPM, phrase and timestamp).
 - Guild and member totals are sent to top.gg and Discord Bot List only when the matching token is set.
 - TikTok links are processed in memory only; no video, metadata or link history is stored.
 - Weather locations, Wikipedia searches and returned metadata are processed in memory only; no search history is stored.
@@ -461,8 +468,8 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 
 ## Deployment notes
 
-- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level and scheduled-ban state.
-- Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`.
+- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
+- Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.

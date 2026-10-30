@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" role="img" aria-labelledby="zenBannerTitle zenBannerDesc">
+  <title id="zenBannerTitle">Zen banner</title>
+  <desc id="zenBannerDesc">The open jade ensō ring and cream Z from the Zen avatar beside a wide ZEN wordmark on a deep ink field.</desc>
+
+  <defs>
+    <linearGradient id="bannerBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A111D" />
+      <stop offset="0.5" stop-color="#101B2C" />
+      <stop offset="1" stop-color="#070D16" />
+    </linearGradient>
+
+    <radialGradient id="bannerMint" cx="72%" cy="8%" r="62%">
+      <stop offset="0" stop-color="#2DD4BF" stop-opacity="0.2" />
+      <stop offset="0.55" stop-color="#2DD4BF" stop-opacity="0.045" />
+      <stop offset="1" stop-color="#2DD4BF" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="bannerViolet" cx="8%" cy="100%" r="58%">
+      <stop offset="0" stop-color="#6D5EFC" stop-opacity="0.16" />
+      <stop offset="0.6" stop-color="#6D5EFC" stop-opacity="0.035" />
+      <stop offset="1" stop-color="#6D5EFC" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="bannerRing" x1="0.18" y1="0.12" x2="0.82" y2="0.9">
+      <stop offset="0" stop-color="#B8FBE8" />
+      <stop offset="0.3" stop-color="#5EEAD4" />
+      <stop offset="0.68" stop-color="#2DD4BF" />
+      <stop offset="1" stop-color="#0F9F9A" />
+    </linearGradient>
+
+    <linearGradient id="bannerZ" x1="0.25" y1="0.2" x2="0.75" y2="0.8">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.6" stop-color="#F1FFF9" />
+      <stop offset="1" stop-color="#D8F8ED" />
+    </linearGradient>
+
+    <linearGradient id="bannerWord" x1="0" y1="0" x2="1" y2="0.25">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.65" stop-color="#F1FFF9" />
+      <stop offset="1" stop-color="#B8FBE8" />
+    </linearGradient>
+
+    <filter id="bannerRingGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="16" />
+    </filter>
+
+    <filter id="bannerZGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" />
+    </filter>
+  </defs>
+
+  <rect width="1500" height="600" fill="url(#bannerBg)" />
+  <rect width="1500" height="600" fill="url(#bannerMint)" />
+  <rect width="1500" height="600" fill="url(#bannerViolet)" />
+
+  <g opacity="0.55">
+    <circle cx="300" cy="300" r="268" fill="none" stroke="#E9FDF7" stroke-opacity="0.08" stroke-width="2" />
+    <circle cx="300" cy="300" r="228" fill="none" stroke="#5EEAD4" stroke-opacity="0.1" stroke-width="2" />
+  </g>
+
+  <g transform="translate(-17.44 -17.44) scale(0.62)">
+    <path
+      d="M 780.5 341.6 A 318 318 0 1 1 591.1 204.2"
+      fill="none"
+      stroke="#2DD4BF"
+      stroke-opacity="0.3"
+      stroke-width="78"
+      stroke-linecap="round"
+      filter="url(#bannerRingGlow)"
+    />
+    <path
+      d="M 780.5 341.6 A 318 318 0 1 1 591.1 204.2"
+      fill="none"
+      stroke="url(#bannerRing)"
+      stroke-width="64"
+      stroke-linecap="round"
+    />
+    <path
+      d="M 352 372 H 672 L 352 652 H 672"
+      fill="none"
+      stroke="#5EEAD4"
+      stroke-opacity="0.22"
+      stroke-width="100"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      filter="url(#bannerZGlow)"
+    />
+    <path
+      d="M 352 372 H 672 L 352 652 H 672"
+      fill="none"
+      stroke="url(#bannerZ)"
+      stroke-width="84"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+
+  <circle cx="1320" cy="300" r="250" fill="none" stroke="#2DD4BF" stroke-opacity="0.07" stroke-width="2" />
+  <circle cx="1320" cy="300" r="190" fill="none" stroke="#E9FDF7" stroke-opacity="0.045" stroke-width="2" />
+
+  <line x1="560" y1="142" x2="560" y2="458" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="2" />
+
+  <text
+    x="626"
+    y="308"
+    fill="url(#bannerWord)"
+    font-family="Arial Black, Arial, Segoe UI, sans-serif"
+    font-size="164"
+    font-weight="900"
+    letter-spacing="12"
+  >ZEN</text>
+  <text
+    x="632"
+    y="372"
+    fill="#5EEAD4"
+    font-family="Segoe UI, Arial, sans-serif"
+    font-size="25"
+    font-weight="600"
+    letter-spacing="10"
+  >CALM · CONTINUOUS</text>
+  <line x1="632" y1="410" x2="1136" y2="410" stroke="#2DD4BF" stroke-opacity="0.32" stroke-width="2" />
+  <text
+    x="632"
+    y="454"
+    fill="#E9FDF7"
+    fill-opacity="0.52"
+    font-family="Segoe UI, Arial, sans-serif"
+    font-size="19"
+    font-weight="500"
+    letter-spacing="5"
+  >TYPE · PLAY · BREATHE</text>
+</svg>
