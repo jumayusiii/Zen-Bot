@@ -2,6 +2,28 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.18.0-beta.1',
+    date: '2026-11-01',
+    title: 'Animal memes, card themes & a coin economy',
+    summary: 'Zen adds animal meme feeds, deeper meme styling, purchasable rank card themes and a per-server coin economy.',
+    added: [
+      '`/animalmeme` pulls a random meme from public animal communities, with source and upvote details.',
+      '`/memegen` now supports animal templates plus font, text colour, layout, uppercase and custom HTTPS backgrounds.',
+      'Six rank card themes — Aurora, Sunset, Ocean, Forest, Midnight and Candy — with themed wallpapers and accents.',
+      '`/rankcard` lets members equip owned themes; `/rank` renders the selected card.',
+      'A beta coin economy: `/daily` rewards a 24-hour streak, `/balance` tracks the wallet, `/shop` lists themes and `/buy` unlocks them.',
+      '`/inventory` shows owned themes and the equipped card.',
+      'The command directory now covers **80 commands** across nine tabs.',
+    ],
+    improved: [
+      'Daily rewards pay **100 coins**, rising by **25** per consecutive day up to a **250-coin** seventh day.',
+      'Card themes are per-server, like XP: the same member can use different wallets and cards in different servers.',
+      'Purchases deduct coins atomically and equip the new theme immediately.',
+      'Rank cards now render their wallpaper and accent palette from the selected theme, with stars, waves, leaves and confetti patterns.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.17.0',
     date: '2026-10-30',
     title: 'Live social feeds',

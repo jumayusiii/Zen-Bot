@@ -1,9 +1,19 @@
 const CAT_API = 'https://api.thecatapi.com/v1/images/search?limit=1&size=med';
 const DOG_API = 'https://dog.ceo/api/breeds/image/random';
 const MEMEGEN_BASE = 'https://api.memegen.link/images';
+const ANIMAL_MEME_BASE = 'https://meme-api.com/gimme';
 const MEME_WIDTH = 800;
 const REQUEST_TIMEOUT_MS = 8000;
 const MAX_MEME_TEXT_LENGTH = 120;
+const MAX_BACKGROUND_URL_LENGTH = 500;
+
+const ANIMAL_SUBREDDITS = Object.freeze([
+  'AnimalMemes',
+  'catmemes',
+  'dogmemes',
+  'AnimalsBeingDerps',
+  'aww',
+]);
 
 const MEME_TEMPLATES = Object.freeze([
   { name: 'Drake — approve / reject', value: 'drake' },
@@ -12,9 +22,43 @@ const MEME_TEMPLATES = Object.freeze([
   { name: 'Success kid', value: 'success' },
   { name: 'Feels bad man', value: 'sadfrog' },
   { name: "Gru's plan", value: 'gru' },
+  { name: 'Grumpy Cat', value: 'grumpycat' },
+  { name: 'Bongo Cat', value: 'bongo' },
+  { name: 'I should buy a boat cat', value: 'boat' },
+  { name: 'Persian cat room guardian', value: 'persian' },
+  { name: 'Seal of approval', value: 'soa' },
+  { name: 'Socially awesome penguin', value: 'awesome' },
+  { name: 'Sarcastic bear', value: 'sarcasticbear' },
+  { name: 'Woman yelling at a cat', value: 'woman-cat' },
+]);
+
+const MEME_FONTS = Object.freeze([
+  { name: 'Impact (classic)', value: 'impact' },
+  { name: 'Titillium Web', value: 'titilliumweb' },
+  { name: 'Noto Sans', value: 'notosans' },
+  { name: 'Kalam (handwritten)', value: 'kalam' },
+  { name: 'Segoe UI', value: 'segoe' },
+  { name: 'Ming-style serif', value: 'hgminchob' },
+]);
+
+const MEME_COLORS = Object.freeze([
+  { name: 'White text, black outline', value: 'white,black' },
+  { name: 'Black text, white outline', value: 'black,white' },
+  { name: 'Yellow text, black outline', value: 'yellow,black' },
+  { name: 'Pink text, black outline', value: '#ff6fb5,black' },
+  { name: 'Cyan text, black outline', value: '#4adede,black' },
+  { name: 'Orange text, black outline', value: '#ff8a5c,black' },
+]);
+
+const MEME_LAYOUTS = Object.freeze([
+  { name: 'Template default', value: 'default' },
+  { name: 'All text at the top', value: 'top' },
 ]);
 
 const TEMPLATE_IDS = new Set(MEME_TEMPLATES.map((template) => template.value));
+const FONT_IDS = new Set(MEME_FONTS.map((font) => font.value));
+const COLOR_VALUES = new Set(MEME_COLORS.map((color) => color.value));
+const LAYOUT_VALUES = new Set(MEME_LAYOUTS.map((layout) => layout.value));
 
 function timeoutSignal() {
   return typeof AbortSignal?.timeout === 'function'
@@ -88,6 +132,53 @@ async function fetchDogImage({ fetchImpl = globalThis.fetch } = {}) {
 }
 
 /**
+ * Fetches one random animal meme from a rotating list of public subreddits.
+ * Each source is tried once so a slow or empty community cannot fail the
+ * command on its own.
+ *
+ * @param {{fetchImpl?: typeof fetch, subreddits?: string[], random?: () => number}} [options]
+ * @returns {Promise<{url: string, title: string, link: string, source: string, subreddit: string, ups: number}>}
+ */
+async function fetchAnimalMeme({
+  fetchImpl = globalThis.fetch,
+  subreddits = ANIMAL_SUBREDDITS,
+  random = Math.random,
+} = {}) {
+  const pool = [...subreddits].filter(Boolean);
+  if (pool.length === 0) throw new Error('No animal meme communities are configured.');
+
+  const offset = Math.min(pool.length - 1, Math.floor(random() * pool.length));
+  let lastError = null;
+
+  for (let attempt = 0; attempt < pool.length; attempt += 1) {
+    const subreddit = pool[(offset + attempt) % pool.length];
+    try {
+      const payload = await fetchJson(
+        `${ANIMAL_MEME_BASE}/${encodeURIComponent(subreddit)}`,
+        fetchImpl,
+      );
+      const url = safeImageUrl(payload?.url);
+      if (!url) throw new Error('the feed returned no usable image');
+      if (payload?.nsfw) throw new Error('the feed returned an NSFW post');
+
+      const link = safeImageUrl(payload?.postLink) ?? url;
+      return {
+        url,
+        title: String(payload?.title || 'Animal meme').trim().slice(0, 256) || 'Animal meme',
+        link,
+        source: `r/${payload?.subreddit || subreddit}`,
+        subreddit: String(payload?.subreddit || subreddit),
+        ups: Math.max(0, Math.floor(Number(payload?.ups) || 0)),
+      };
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw new Error(`No animal meme was available (${lastError?.message || 'all feeds failed'}).`);
+}
+
+/**
  * Escapes text for the memegen.link path format.
  * @see https://api.memegen.link/docs/
  */
@@ -110,40 +201,82 @@ function escapeMemeText(value) {
 
 /**
  * Builds an editable meme image URL. The top line is required; the bottom line
- * is optional and is omitted cleanly when blank.
+ * is optional and is omitted cleanly when blank. Font, colour, layout,
+ * uppercase text and a custom HTTPS background are optional.
  *
  * @param {string} template
  * @param {string} top
  * @param {string} [bottom]
+ * @param {{font?: string, color?: string, layout?: string, uppercase?: boolean, background?: string}} [options]
  * @returns {string}
  */
-function buildMemeUrl(template, top, bottom = '') {
+function buildMemeUrl(template, top, bottom = '', options = {}) {
   const selected = String(template ?? '').trim();
-  const topText = String(top ?? '').trim().slice(0, MAX_MEME_TEXT_LENGTH);
-  const bottomText = String(bottom ?? '').trim().slice(0, MAX_MEME_TEXT_LENGTH);
+  let topText = String(top ?? '').trim().slice(0, MAX_MEME_TEXT_LENGTH);
+  let bottomText = String(bottom ?? '').trim().slice(0, MAX_MEME_TEXT_LENGTH);
 
   if (!TEMPLATE_IDS.has(selected)) {
     throw new Error('Choose one of the available meme templates.');
   }
   if (!topText) throw new Error('Write the top line of the meme.');
 
-  const base = `${MEMEGEN_BASE}/${selected}/${encodeURIComponent(escapeMemeText(topText))}`;
-
-  if (bottomText) {
-    return `${base}/${encodeURIComponent(escapeMemeText(bottomText))}.png?width=${MEME_WIDTH}`;
+  if (options.uppercase) {
+    topText = topText.toUpperCase();
+    bottomText = bottomText.toUpperCase();
   }
 
-  return `${base}.png?width=${MEME_WIDTH}`;
+  const base = `${MEMEGEN_BASE}/${selected}/${encodeURIComponent(escapeMemeText(topText))}`;
+  const suffix = bottomText
+    ? `/${encodeURIComponent(escapeMemeText(bottomText))}.png`
+    : '.png';
+
+  const query = new URLSearchParams({ width: String(MEME_WIDTH) });
+
+  if (options.font) {
+    if (!FONT_IDS.has(options.font)) throw new Error('Choose one of the available meme fonts.');
+    query.set('font', options.font);
+  }
+
+  if (options.color) {
+    if (!COLOR_VALUES.has(options.color)) {
+      throw new Error('Choose one of the available meme text colours.');
+    }
+    query.set('color', options.color);
+  }
+
+  if (options.layout) {
+    if (!LAYOUT_VALUES.has(options.layout)) {
+      throw new Error('Choose the default or top text layout.');
+    }
+    query.set('layout', options.layout);
+  }
+
+  if (options.background) {
+    const background = String(options.background).trim();
+    if (background.length > MAX_BACKGROUND_URL_LENGTH || !safeImageUrl(background)) {
+      throw new Error('The background must be a valid HTTPS image URL.');
+    }
+    query.set('background', background);
+  }
+
+  return `${base}${suffix}?${query.toString()}`;
 }
 
 module.exports = {
+  ANIMAL_MEME_BASE,
+  ANIMAL_SUBREDDITS,
   CAT_API,
   DOG_API,
+  MAX_BACKGROUND_URL_LENGTH,
   MAX_MEME_TEXT_LENGTH,
+  MEME_COLORS,
+  MEME_FONTS,
+  MEME_LAYOUTS,
   MEME_TEMPLATES,
   MEMEGEN_BASE,
   buildMemeUrl,
   escapeMemeText,
+  fetchAnimalMeme,
   fetchCatImage,
   fetchDogImage,
   safeImageUrl,

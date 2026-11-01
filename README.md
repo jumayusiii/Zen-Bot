@@ -2,21 +2,22 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.17.0** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.18.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, social actions, cat and dog photos, editable memes, button minigames, dice, decision picks, per-server levels with rendered rank cards, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with customizable rank cards, a beta coin economy with a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
 ## Highlights
 
 - **Real slash commands** loaded automatically from `src/commands/`.
-- **Tabbed help** with an overview plus Fun, Images, Moderation, Minigames, Levels, Social and Utilities tabs, generated from the command modules.
-- **Level system** with chat XP, a rendered rank card, a top-ten server leaderboard and automatic role rewards.
+- **Tabbed help** with an overview plus Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities tabs, generated from the command modules.
+- **Level system** with chat XP, six customizable rank card themes, a top-ten server leaderboard and automatic role rewards.
 - **Moderation** with timed mutes, persistent temporary bans, kicks, reversals, warnings, purge and slowmode, plus permission and role-hierarchy checks.
 - **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
 - **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
-- **Images** with random cat and dog photos, and `/memegen` for editable text memes across six templates.
+- **Images** with random cat, dog and animal memes, plus `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
+- **Economy** with per-server wallets, `/daily` streaks, a theme shop, an inventory and purchasable rank card wallpapers.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -39,7 +40,8 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/meme` | Fetches a random meme from [meme-api.com](https://meme-api.com) and posts it in an embed. Falls back to Imgflip. |
 | `/cat` | Fetches a random cat photo from The Cat API. |
 | `/dog` | Fetches a random dog photo from Dog CEO, with breed details when available. |
-| `/memegen <template> <top> [bottom]` | Creates an editable meme with your own top and bottom text. |
+| `/memegen <template> <top> [bottom]` | Creates an editable meme with your own text, optional font, colour, layout, uppercase text and a custom HTTPS background. |
+| `/animalmeme` | Fetches a random meme from public animal communities, with community and upvote details. |
 | `/tiktok <url>` | 🧪 Downloads a TikTok video and posts it so it plays inline, with creator, duration and engagement details. Oversized, private and photo posts fall back to a cover image and an **Open on TikTok** button. |
 | `/bluesky <handle>` | 🧪 Loads a live Bluesky profile, bio, follower counts and latest public post, with profile and post links. |
 | `/reddit [subreddit]` | 🧪 Reads Reddit’s public Atom feed and posts a random hot item from a curated SFW community. Defaults to `popular`. |
@@ -73,9 +75,15 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/memory` | 🧪 Shows a growing symbol sequence, hides it, then scores your repeat. |
 | `/typerace` | 🧪 Opens a typing box, times an exact phrase, reports words per minute and saves a personal best. |
 | `/typeraceleaderboard` | 🧪 Ranks the ten fastest Type Race times in the server and shows your best. |
-| `/rank [user]` | Renders a profile card with level, XP progress, server rank and total XP. |
+| `/rank [user]` | Renders a profile card with level, XP progress, server rank, total XP and the member's selected card theme. |
+| `/rankcard [theme]` | 🧪 Equips an owned wallpaper and colour theme for your rank card, or lists the themes you own. |
 | `/levels` | Shows the top ten members by chat XP, plus your rank if you are outside the top ten. |
 | `/levelreward [role] [level] [clear]` | Configures a role that members earn automatically when they reach a level. |
+| `/balance [user]` | 🧪 Shows a member's coin balance, daily streak and equipped card theme. |
+| `/daily` | 🧪 Claims the daily coin reward and advances the streak. |
+| `/shop` | 🧪 Lists the rank card themes, their prices and which ones you own. |
+| `/buy <theme>` | 🧪 Buys a card theme with coins and equips it immediately. |
+| `/inventory` | 🧪 Lists the card themes you own and the one currently equipped. |
 | `/mute <member> <duration> [reason]` | Times out a member for **5 minutes to 28 days**, with an audit-log reason. |
 | `/unmute <member> [reason]` | Removes a member's timeout. |
 | `/kick <member> [reason]` | Removes a member from the server with an audit-log reason. |
@@ -108,9 +116,9 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/ping` | Shows gateway latency, command round-trip, uptime and connection status. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
-| `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Social and Utilities — with every command, its usage and a beta marker. |
+| `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
 
-🧪 marks beta commands. The directory covers **73 commands** across eight tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
+🧪 marks beta commands. The directory covers **80 commands** across nine tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -122,7 +130,9 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Images
 
-`/cat` and `/dog` fetch a fresh photo from The Cat API and Dog CEO, with source and breed details where available. `/memegen` uses six templates — Drake, This is Fine, Doge, Success Kid, Feels Bad Man and Gru's Plan — and accepts editable top and bottom text. The image services need outbound HTTPS but no API keys. `/memegen` links the generated image directly; no image files are stored on the host.
+`/cat` and `/dog` fetch a fresh photo from The Cat API and Dog CEO, with source and breed details where available. `/animalmeme` pulls a random post from public animal communities through meme-api.com and shows the community and upvote count.
+
+`/memegen` uses fourteen templates, including Drake, This is Fine, Doge, Grumpy Cat, Bongo Cat, Socially Awesome Penguin and Seal of Approval-style classics, and accepts editable top and bottom text. Optional font, text colour, layout, uppercase and custom-background options feed memegen.link's renderer. The image services need outbound HTTPS but no API keys. `/memegen` links the generated image directly; no image files are stored on the host.
 
 ## Social & media
 
@@ -134,11 +144,17 @@ These commands need outbound HTTPS but no API keys. `/hug`, `/pat` and `/highfiv
 
 Every member earns XP by chatting. A message awards **25–35 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts.
 
-`/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten.
+`/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. The card uses the member's selected theme — Aurora by default — with matching wallpaper patterns, avatar ring, level pill and progress bar colours. `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten.
 
 The level curve starts at **50 XP** for level 1 and grows with each level (`5 × level² + 25 × level + 50` XP for the next level), so two awards at the 25 XP minimum unlock the first level. The next thresholds are **80, 120, 170 and 230 XP**. The bot uses the non-privileged **GuildMessages** intent for message events and never reads message content. Rank cards need `@napi-rs/canvas`, which installs prebuilt binaries through npm; if rendering fails, `/rank` falls back to a text embed.
 
 `/levelreward` lets a server manager choose one reward role and the level that unlocks it. The configuration is stored in `data/level-rewards.json`. When a member levels up, the bot checks its **Manage Roles** permission and role position before assigning the role; a failed assignment is logged without interrupting the level-up announcement. Existing members receive the role on their next level-up after the reward is configured. `/levelreward clear` removes the configuration but leaves already-assigned roles in place.
+
+## Economy
+
+Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. `/balance` shows a wallet, streak and equipped card.
+
+`/shop` lists six card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight and Candy** at 600–2,200 coins. `/buy theme:<name>` deducts the price atomically and equips the theme; `/inventory` lists everything owned and `/rankcard theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
 
 ## Moderation
 
@@ -377,13 +393,13 @@ src/
 │   ├── interactionCreate.js     # Routes slash commands and components
 │   └── messageCreate.js         # Chat XP, cooldowns and level-up announcements
 ├── lib/
-│   ├── blackjack.js             # Cards, hand values and dealer rules
-│   ├── botLists.js              # Optional top.gg / Discord Bot List stats
+│   ├── blackjack.js             # Cards, hand values and dealer rules│   ├── botLists.js             # Optional top.gg / Discord Bot List stats
+│   ├── cardThemes.js           # Rank card theme catalog, prices and palettes
 │   ├── changelog.js             # Versioned release notes
 │   ├── chatgpt.js               # OpenAI moderation, Responses API and error mapping
 │   ├── choices.js               # /choose parsing and random pick
-│   ├── config.js                # Environment-backed site and presence settings
-│   ├── dice.js                  # Dice notation parsing and rolling
+│   ├── config.js                # Environment-backed site and presence settings│   ├── dice.js                 # Dice notation parsing and rolling
+│   ├── economy.js              # Per-server wallets, daily rewards and theme purchases
 │   ├── embeds.js                # Shared palette, branding and embed builder
 │   ├── fortunes.js              # Fortune-cookie bank and lucky numbers
 │   ├── fun.js                   # Ship scores and the offline fact bank
@@ -396,7 +412,7 @@ src/
 │   ├── help.js                  # Tabbed command directory and category metadata
 │   ├── higherlower.js           # Higher-or-lower number rules
 │   ├── images.js                # Size selector / download button helpers
-│   ├── imageFeeds.js            # Cat, dog and editable meme helpers
+│   ├── imageFeeds.js            # Cat, dog, animal meme and styled meme helpers
 │   ├── levels.js                # Per-server XP, level maths and persistence
 │   ├── levelRewards.js          # Per-server reward roles and safe assignment
 │   ├── memory.js                # Symbol sequences and step rules
@@ -428,6 +444,12 @@ src/
 │   ├── wordScramble.js          # Word bank, scrambling and choice rounds
 │   └── wyr.js                   # In-memory would-you-rather rounds
 └── commands/
+    ├── economy/
+    │   ├── balance.js
+    │   ├── buy.js
+    │   ├── daily.js
+    │   ├── inventory.js
+    │   └── shop.js
     ├── fun/
     │   ├── 8ball.js
     │   ├── choose.js
@@ -442,13 +464,15 @@ src/
     │   ├── ship.js
     │   └── topic.js
     ├── images/
+    │   ├── animalmeme.js
     │   ├── cat.js
     │   ├── dog.js
     │   └── memegen.js
     ├── levels/
     │   ├── levelreward.js
     │   ├── levels.js
-    │   └── rank.js
+    │   ├── rank.js
+    │   └── rankcard.js
     ├── moderation/
     │   ├── ban.js
     │   ├── clearwarnings.js
@@ -520,6 +544,7 @@ The bot stores only what it needs to provide its features:
 - Reminders in `data/reminders.json` (user, source channel, reminder text, due time and delivery preference).
 - Level records in `data/levels.json` (server and user IDs, display name, XP and last award time).
 - Level reward roles in `data/level-rewards.json` (server ID, role ID and required level).
+- Economy wallets in `data/economy.json` (server and user IDs, coin balance, daily streak, owned theme IDs and equipped theme).
 - Scheduled temporary bans in `data/moderation.json` (server and user IDs, username, moderator ID, reason and unban time).
 - Audit-log channel IDs in `data/moderation-logs.json` (server and channel IDs, the admin who configured it and the update time).
 - Welcome and leave settings in `data/greetings.json` (server and channel IDs, templates and the admin who last changed them).

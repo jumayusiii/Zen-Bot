@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 73);
+  assert.equal(registry.size, 80);
 
   for (const name of [
     'uptime',
@@ -78,6 +78,13 @@ test('all commands load with valid names, descriptions and unique registrations'
     'cat',
     'dog',
     'memegen',
+    'animalmeme',
+    'rankcard',
+    'balance',
+    'daily',
+    'shop',
+    'buy',
+    'inventory',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -120,6 +127,13 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('typerace').beta, true);
   assert.equal(registry.get('typeraceleaderboard').beta, true);
   assert.equal(registry.get('chatgpt').beta, true);
+  assert.equal(registry.get('rankcard').beta, true);
+  assert.equal(registry.get('balance').beta, true);
+  assert.equal(registry.get('daily').beta, true);
+  assert.equal(registry.get('shop').beta, true);
+  assert.equal(registry.get('buy').beta, true);
+  assert.equal(registry.get('inventory').beta, true);
+  assert.equal(registry.get('animalmeme').beta, undefined);
   assert.equal(registry.get('ship').beta, undefined);
   assert.equal(registry.get('fact').beta, undefined);
   assert.equal(registry.get('rank').beta, undefined);
@@ -188,5 +202,12 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('slowmode').data.toJSON().options.length, 3);
   assert.equal(registry.get('cat').data.toJSON().options.length, 0);
   assert.equal(registry.get('dog').data.toJSON().options.length, 0);
-  assert.equal(registry.get('memegen').data.toJSON().options.length, 3);
+  assert.equal(registry.get('memegen').data.toJSON().options.length, 8);
+  assert.equal(registry.get('animalmeme').data.toJSON().options.length, 0);
+  assert.equal(registry.get('rankcard').data.toJSON().options.length, 1);
+  assert.equal(registry.get('balance').data.toJSON().options.length, 1);
+  assert.equal(registry.get('daily').data.toJSON().options.length, 0);
+  assert.equal(registry.get('shop').data.toJSON().options.length, 0);
+  assert.equal(registry.get('buy').data.toJSON().options.length, 1);
+  assert.equal(registry.get('inventory').data.toJSON().options.length, 0);
 });

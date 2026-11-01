@@ -1,0 +1,153 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const os = require('node:os');
+const path = require('node:path');
+const test = require('node:test');
+
+const economy = require('../src/lib/economy');
+
+async function withEconomyFile(run) {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'zen-economy-'));
+  process.env.ECONOMY_FILE = path.join(directory, 'economy.json');
+
+  try {
+    await run(process.env.ECONOMY_FILE);
+  } finally {
+    delete process.env.ECONOMY_FILE;
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+}
+
+test('new wallets start empty and own the free theme', async () => {
+  await withEconomyFile(async () => {
+    const account = await economy.getAccount('guild-1', 'user-1');
+    assert.equal(account.balance, 0);
+    assert.equal(account.dailyStreak, 0);
+    assert.equal(account.theme, 'aurora');
+    assert.deepEqual(account.owned, ['aurora']);
+  });
+});
+
+test('daily rewards enforce the cooldown and build a streak', async () => {
+  await withEconomyFile(async () => {
+    const now = Date.UTC(2026, 10, 1, 12, 0, 0);
+
+    const first = await economy.claimDaily({ guildId: 'guild-1', userId: 'user-1', now });
+    assert.equal(first.claimed, true);
+    assert.equal(first.amount, 100);
+    assert.equal(first.streak, 1);
+    assert.equal(first.balance, 100);
+
+    const early = await economy.claimDaily({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      now: now + economy.DAILY_COOLDOWN_MS - 1,
+    });
+    assert.equal(early.claimed, false);
+    assert.equal(early.reason, 'cooldown');
+    assert.equal(early.balance, 100);
+
+    const second = await economy.claimDaily({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      now: now + 25 * 60 * 60 * 1000,
+    });
+    assert.equal(second.claimed, true);
+    assert.equal(second.streak, 2);
+    assert.equal(second.amount, 125);
+    assert.equal(second.balance, 225);
+
+    const broken = await economy.claimDaily({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      now: now + 100 * 60 * 60 * 1000,
+    });
+    assert.equal(broken.claimed, true);
+    assert.equal(broken.streak, 1);
+    assert.equal(broken.amount, 100);
+  });
+});
+
+test('buying a theme deducts coins, equips it and prevents a second purchase', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          {
+            guildId: 'guild-1',
+            userId: 'user-1',
+            balance: 1000,
+            owned: ['aurora'],
+            theme: 'aurora',
+          },
+        ],
+      }),
+      'utf8',
+    );
+
+    const bought = await economy.buyTheme({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      themeId: 'ocean',
+    });
+    assert.equal(bought.balance, 100);
+    assert.equal(bought.theme.id, 'ocean');
+
+    const account = await economy.getAccount('guild-1', 'user-1');
+    assert.equal(account.theme, 'ocean');
+    assert.deepEqual(account.owned, ['aurora', 'ocean']);
+
+    await assert.rejects(
+      economy.buyTheme({ guildId: 'guild-1', userId: 'user-1', themeId: 'ocean' }),
+      (error) => error.code === 'already_owned',
+    );
+
+    await assert.rejects(
+      economy.buyTheme({ guildId: 'guild-1', userId: 'user-1', themeId: 'candy' }),
+      (error) => error.code === 'insufficient' && error.balance === 100,
+    );
+  });
+});
+
+test('equipping a theme requires ownership and stays per server', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          {
+            guildId: 'guild-1',
+            userId: 'user-1',
+            balance: 100,
+            owned: ['aurora', 'sunset'],
+            theme: 'sunset',
+          },
+        ],
+      }),
+      'utf8',
+    );
+
+    const equipped = await economy.setCardTheme({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      themeId: 'aurora',
+    });
+    assert.equal(equipped.theme.id, 'aurora');
+
+    await assert.rejects(
+      economy.setCardTheme({
+        guildId: 'guild-1',
+        userId: 'user-1',
+        themeId: 'ocean',
+      }),
+      (error) => error.code === 'not_owned',
+    );
+
+    const otherGuild = await economy.getAccount('guild-2', 'user-1');
+    assert.equal(otherGuild.balance, 0);
+    assert.equal(otherGuild.theme, 'aurora');
+  });
+});

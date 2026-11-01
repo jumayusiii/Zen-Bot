@@ -4,6 +4,7 @@ const {
   SlashCommandBuilder,
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
+const { getAccount } = require('../../lib/economy');
 const { getProfile } = require('../../lib/levels');
 const { renderRankCard } = require('../../lib/rankCard');
 
@@ -65,7 +66,10 @@ module.exports = {
       size: 256,
       forceStatic: true,
     });
-    const profile = await getProfile(interaction.guild.id, targetUser.id);
+    const [profile, account] = await Promise.all([
+      getProfile(interaction.guild.id, targetUser.id),
+      getAccount(interaction.guild.id, targetUser.id).catch(() => null),
+    ]);
     const fileName = `rank-${targetUser.id}.png`;
 
     let attachment = null;
@@ -82,6 +86,7 @@ module.exports = {
         xpIntoLevel: profile.progress.intoLevel,
         xpNeeded: profile.progress.needed,
         totalXp: profile.progress.totalXp,
+        theme: account?.theme,
       });
 
       attachment = new AttachmentBuilder(buffer, { name: fileName });

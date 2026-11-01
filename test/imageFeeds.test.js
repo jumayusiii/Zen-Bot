@@ -4,6 +4,7 @@ const test = require('node:test');
 const {
   buildMemeUrl,
   escapeMemeText,
+  fetchAnimalMeme,
   fetchCatImage,
   fetchDogImage,
   safeImageUrl,
@@ -21,6 +22,84 @@ test('meme text escapes memegen characters and builds optional bottom lines', ()
   );
   assert.throws(() => buildMemeUrl('not-a-template', 'Hello'), /available meme templates/);
   assert.throws(() => buildMemeUrl('doge', '   '), /top line/);
+});
+
+test('meme styling options add fonts, colours, layout, caps and a custom background', () => {
+  const styled = new URL(
+    buildMemeUrl('doge', 'hello world', 'goodbye world', {
+      font: 'impact',
+      color: 'white,black',
+      layout: 'top',
+      uppercase: true,
+      background: 'https://cdn.example/background.png',
+    }),
+  );
+
+  assert.equal(styled.pathname, '/images/doge/HELLO_WORLD/GOODBYE_WORLD.png');
+  assert.equal(styled.searchParams.get('width'), '800');
+  assert.equal(styled.searchParams.get('font'), 'impact');
+  assert.equal(styled.searchParams.get('color'), 'white,black');
+  assert.equal(styled.searchParams.get('layout'), 'top');
+  assert.equal(styled.searchParams.get('background'), 'https://cdn.example/background.png');
+
+  assert.throws(() => buildMemeUrl('doge', 'hi', '', { font: 'comic-sans' }), /meme fonts/);
+  assert.throws(() => buildMemeUrl('doge', 'hi', '', { color: 'red' }), /text colours/);
+  assert.throws(() => buildMemeUrl('doge', 'hi', '', { layout: 'middle' }), /text layout/);
+  assert.throws(
+    () => buildMemeUrl('doge', 'hi', '', { background: 'http://cdn.example/background.png' }),
+    /HTTPS image URL/,
+  );
+});
+
+test('animal meme feed rotates sources, rejects NSFW posts and parses metadata', async () => {
+  const calls = [];
+  const meme = await fetchAnimalMeme({
+    subreddits: ['AnimalMemes', 'catmemes'],
+    random: () => 0,
+    fetchImpl: async (url) => {
+      calls.push(url);
+      if (url.endsWith('/AnimalMemes')) {
+        return {
+          ok: true,
+          json: async () => ({
+            title: 'Not safe',
+            subreddit: 'AnimalMemes',
+            url: 'https://cdn.example/nsfw.png',
+            nsfw: true,
+          }),
+        };
+      }
+
+      return {
+        ok: true,
+        json: async () => ({
+          title: 'A very good cat',
+          subreddit: 'catmemes',
+          url: 'https://cdn.example/cat.png',
+          postLink: 'https://redd.it/example',
+          ups: 42,
+          nsfw: false,
+        }),
+      };
+    },
+  });
+
+  assert.equal(meme.title, 'A very good cat');
+  assert.equal(meme.url, 'https://cdn.example/cat.png');
+  assert.equal(meme.link, 'https://redd.it/example');
+  assert.equal(meme.source, 'r/catmemes');
+  assert.equal(meme.ups, 42);
+  assert.equal(calls.length, 2);
+});
+
+test('animal meme feed fails clearly when every community fails', async () => {
+  await assert.rejects(
+    fetchAnimalMeme({
+      subreddits: ['AnimalMemes'],
+      fetchImpl: async () => ({ ok: false, status: 503 }),
+    }),
+    /No animal meme was available/,
+  );
 });
 
 test('cat and dog image feeds accept only HTTPS images and parse metadata', async () => {
