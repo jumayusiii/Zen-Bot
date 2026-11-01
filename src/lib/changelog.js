@@ -2,6 +2,22 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.2',
+    date: '2026-11-01',
+    title: 'Deployments now sync commands',
+    summary: 'Local deployments now register slash commands after restarting, so a release cannot leave a server with a stale command set.',
+    added: [
+      '`npm run deploy:local` now runs the same slash-command registration as `npm run deploy` after restarting the bot.',
+      'The local deploy and Windows PM2 autostart helpers are now tracked in the repository, so they ship with a fresh clone.',
+    ],
+    improved: [
+      'With `GUILD_ID` set, the deploy helper registers commands in that server immediately instead of waiting for global propagation.',
+    ],
+    fixed: [
+      'Prevents new commands such as `/grantcoins` from staying missing in a server when a bot restart was not followed by command registration.',
+    ],
+  },
+  {
     version: '1.19.0-beta.1',
     date: '2026-11-01',
     title: 'Stronger moderation & four new card themes',

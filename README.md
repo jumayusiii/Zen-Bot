@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.2** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with admin grants and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -339,6 +339,7 @@ npm start
 - Without `GUILD_ID`, commands are registered globally. Discord can take up to an hour to show them.
 - Use `npm run deploy:global` to register globally even when `GUILD_ID` is set.
 - Re-run a deploy command whenever a command name, description or option changes.
+- `npm run deploy:local` syncs this checkout into `~/Zen-Bot` (or `ZEN_DEPLOY_DIR`), preserves `.env`, `data/` and logs, reinstalls dependencies when the lockfile changes, registers slash commands and restarts the PM2 process.
 
 The Windows development setup for this repository uses a portable Node.js in the gitignored `.tools/node` folder:
 
@@ -547,6 +548,12 @@ src/
         ├── welcome.js
         └── wikipedia.js
 ```
+
+Helper scripts:
+
+- `scripts/deploy-local.js` syncs the checkout, registers commands and restarts PM2.
+- `scripts/release-notes.js` renders a changelog entry for a GitHub release.
+- `scripts/autostart-pm2.vbs` restores the saved PM2 process list at Windows logon.
 
 ## Data and privacy
 
