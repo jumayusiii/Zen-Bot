@@ -13,6 +13,9 @@ const STREAK_WINDOW_MS = 48 * 60 * 60 * 1000;
 const DAILY_BASE = 100;
 const DAILY_STREAK_BONUS = 25;
 const DAILY_MAX_STREAK_BONUS = 150;
+const LEVEL_COIN_BASE = 25;
+const LEVEL_COIN_STEP = 5;
+const LEVEL_COIN_MAX = 250;
 const MAX_BALANCE = 1_000_000_000;
 const MAX_ENTRIES = 50_000;
 const MAX_STREAK = 3650;
@@ -33,6 +36,25 @@ function cleanText(value, maxLength) {
 function wholeNumber(value, fallback = 0) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : fallback;
+}
+
+/** Coins paid for reaching a single level. */
+function coinsForLevel(level) {
+  const normalized = Math.max(1, wholeNumber(level, 1));
+  return Math.min(LEVEL_COIN_MAX, LEVEL_COIN_BASE + (normalized - 1) * LEVEL_COIN_STEP);
+}
+
+/** Coins for every level gained, so a multi-level award is fully paid. */
+function coinsForLevelRange(fromLevel, toLevel) {
+  const from = wholeNumber(fromLevel);
+  const to = Math.max(from, wholeNumber(toLevel));
+  let total = 0;
+
+  for (let level = from + 1; level <= to; level += 1) {
+    total += coinsForLevel(level);
+  }
+
+  return total;
 }
 
 function normalizeOwned(value) {
@@ -255,6 +277,38 @@ async function claimDaily({ guildId, userId, now = Date.now() }) {
 }
 
 /**
+ * Credits the coins earned by reaching one or more new levels.
+ *
+ * @param {{guildId: string, userId: string, fromLevel: number, toLevel: number, now?: number}} input
+ * @returns {Promise<{awarded: boolean, amount: number, balance: number|null}>}
+ */
+async function awardLevelCoins({ guildId, userId, fromLevel, toLevel, now = Date.now() }) {
+  const amount = coinsForLevelRange(fromLevel, toLevel);
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to award level coins.');
+
+  if (amount <= 0) return { awarded: false, amount: 0, balance: null };
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+
+  return withQueuedState((state) => {
+    const entry = findOrCreate(state, guildKey, userKey);
+    const before = entry.balance;
+    entry.balance = Math.min(MAX_BALANCE, entry.balance + amount);
+    entry.updatedAt = timestamp;
+
+    return {
+      value: {
+        awarded: entry.balance > before,
+        amount: entry.balance - before,
+        balance: entry.balance,
+      },
+    };
+  });
+}
+
+/**
  * Buys a theme, deducts its price and equips it immediately.
  *
  * @param {{guildId: string, userId: string, themeId: string, now?: number}} input
@@ -331,10 +385,16 @@ module.exports = {
   DAILY_COOLDOWN_MS,
   DAILY_MAX_STREAK_BONUS,
   DAILY_STREAK_BONUS,
+  LEVEL_COIN_BASE,
+  LEVEL_COIN_MAX,
+  LEVEL_COIN_STEP,
   MAX_BALANCE,
   STREAK_WINDOW_MS,
+  awardLevelCoins,
   buyTheme,
   claimDaily,
+  coinsForLevel,
+  coinsForLevelRange,
   economyFile,
   getAccount,
   setCardTheme,

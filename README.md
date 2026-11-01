@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.18.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.18.0-beta.2** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with customizable rank cards, a beta coin economy with a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -10,14 +10,14 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 - **Real slash commands** loaded automatically from `src/commands/`.
 - **Tabbed help** with an overview plus Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities tabs, generated from the command modules.
-- **Level system** with chat XP, six customizable rank card themes, a top-ten server leaderboard and automatic role rewards.
+- **Level system** with chat XP, level-up coin payouts, six customizable rank card themes, a top-ten server leaderboard and automatic role rewards.
 - **Moderation** with timed mutes, persistent temporary bans, kicks, reversals, warnings, purge and slowmode, plus permission and role-hierarchy checks.
 - **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
 - **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
 - **Images** with random cat, dog and animal memes, plus `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
-- **Economy** with per-server wallets, `/daily` streaks, a theme shop, an inventory and purchasable rank card wallpapers.
+- **Economy** with per-server wallets, `/daily` streaks, level-up coin payouts, a theme shop, an inventory and purchasable rank card wallpapers.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -142,17 +142,17 @@ These commands need outbound HTTPS but no API keys. `/hug`, `/pat` and `/highfiv
 
 ## Levels
 
-Every member earns XP by chatting. A message awards **25–35 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts.
+Every member earns XP by chatting. A message awards **25–35 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts. Each level-up also pays coins into the member's server wallet: **25 coins** at level 1, **5 more** per level and a **250-coin** cap per level, so active chat feeds the economy described below.
 
 `/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. The card uses the member's selected theme — Aurora by default — with matching wallpaper patterns, avatar ring, level pill and progress bar colours. `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten.
 
 The level curve starts at **50 XP** for level 1 and grows with each level (`5 × level² + 25 × level + 50` XP for the next level), so two awards at the 25 XP minimum unlock the first level. The next thresholds are **80, 120, 170 and 230 XP**. The bot uses the non-privileged **GuildMessages** intent for message events and never reads message content. Rank cards need `@napi-rs/canvas`, which installs prebuilt binaries through npm; if rendering fails, `/rank` falls back to a text embed.
 
-`/levelreward` lets a server manager choose one reward role and the level that unlocks it. The configuration is stored in `data/level-rewards.json`. When a member levels up, the bot checks its **Manage Roles** permission and role position before assigning the role; a failed assignment is logged without interrupting the level-up announcement. Existing members receive the role on their next level-up after the reward is configured. `/levelreward clear` removes the configuration but leaves already-assigned roles in place.
+`/levelreward` lets a server manager choose one reward role and the level that unlocks it. The configuration is stored in `data/level-rewards.json`. When a member levels up, the bot checks its **Manage Roles** permission and role position before assigning the role; a failed role assignment or coin credit is logged without interrupting the level-up announcement. Existing members receive the role on their next level-up after the reward is configured. `/levelreward clear` removes the configuration but leaves already-assigned roles in place.
 
 ## Economy
 
-Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. `/balance` shows a wallet, streak and equipped card.
+Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. Level-ups are the second income source: reaching level 1 pays **25 coins**, every later level adds **5 coins** more, and a single level pays at most **250 coins**. `/balance` shows a wallet, streak and equipped card.
 
 `/shop` lists six card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight and Candy** at 600–2,200 coins. `/buy theme:<name>` deducts the price atomically and equips the theme; `/inventory` lists everything owned and `/rankcard theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
 
@@ -357,7 +357,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -391,7 +391,7 @@ src/
 │   ├── guildMemberAdd.js        # Sends the configured welcome message
 │   ├── guildMemberRemove.js     # Sends the configured leave message
 │   ├── interactionCreate.js     # Routes slash commands and components
-│   └── messageCreate.js         # Chat XP, cooldowns and level-up announcements
+│   └── messageCreate.js         # Chat XP, coins, cooldowns and level-up announcements
 ├── lib/
 │   ├── blackjack.js             # Cards, hand values and dealer rules│   ├── botLists.js             # Optional top.gg / Discord Bot List stats
 │   ├── cardThemes.js           # Rank card theme catalog, prices and palettes
@@ -399,7 +399,7 @@ src/
 │   ├── chatgpt.js               # OpenAI moderation, Responses API and error mapping
 │   ├── choices.js               # /choose parsing and random pick
 │   ├── config.js                # Environment-backed site and presence settings│   ├── dice.js                 # Dice notation parsing and rolling
-│   ├── economy.js              # Per-server wallets, daily rewards and theme purchases
+│   ├── economy.js              # Per-server wallets, daily and level-up rewards, shop
 │   ├── embeds.js                # Shared palette, branding and embed builder
 │   ├── fortunes.js              # Fortune-cookie bank and lucky numbers
 │   ├── fun.js                   # Ship scores and the offline fact bank

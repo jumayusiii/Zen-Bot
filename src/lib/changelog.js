@@ -2,6 +2,21 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.18.0-beta.2',
+    date: '2026-11-01',
+    title: 'Chat now pays coins',
+    summary: 'Level-ups now fund the beta economy, turning active chat into spendable coins for the card-theme shop.',
+    added: [
+      'Every level-up credits **25 coins** at level 1, rising by **5 coins** per level up to a **250-coin** cap for a single level.',
+      'Level-up announcements now show the coins added, the new wallet balance and any earned reward role.',
+    ],
+    improved: [
+      'Multi-level awards pay for every level crossed instead of only the final level.',
+      'Wallet credits share the queued write path with daily rewards and theme purchases, so balances stay consistent.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.18.0-beta.1',
     date: '2026-11-01',
     title: 'Animal memes, card themes & a coin economy',

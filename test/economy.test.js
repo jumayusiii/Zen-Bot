@@ -28,6 +28,49 @@ test('new wallets start empty and own the free theme', async () => {
   });
 });
 
+test('level-ups credit coins that scale with the level reached', async () => {
+  await withEconomyFile(async () => {
+    assert.equal(economy.coinsForLevel(1), 25);
+    assert.equal(economy.coinsForLevel(10), 70);
+    assert.equal(economy.coinsForLevel(100), 250);
+    assert.equal(economy.coinsForLevelRange(0, 3), 90);
+
+    const first = await economy.awardLevelCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      fromLevel: 0,
+      toLevel: 3,
+    });
+    assert.equal(first.awarded, true);
+    assert.equal(first.amount, 90);
+    assert.equal(first.balance, 90);
+
+    const second = await economy.awardLevelCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      fromLevel: 3,
+      toLevel: 5,
+    });
+    assert.equal(second.amount, 85);
+    assert.equal(second.balance, 175);
+
+    const unchanged = await economy.awardLevelCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      fromLevel: 5,
+      toLevel: 5,
+    });
+    assert.equal(unchanged.awarded, false);
+    assert.equal(unchanged.amount, 0);
+
+    const account = await economy.getAccount('guild-1', 'user-1');
+    assert.equal(account.balance, 175);
+
+    const otherGuild = await economy.getAccount('guild-2', 'user-1');
+    assert.equal(otherGuild.balance, 0);
+  });
+});
+
 test('daily rewards enforce the cooldown and build a streak', async () => {
   await withEconomyFile(async () => {
     const now = Date.UTC(2026, 10, 1, 12, 0, 0);

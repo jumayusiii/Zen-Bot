@@ -5,17 +5,20 @@ const path = require('node:path');
 const test = require('node:test');
 
 const messageCreate = require('../src/events/messageCreate');
+const economy = require('../src/lib/economy');
 
 async function withLevelsFile(run) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'legend-message-xp-'));
   process.env.LEVELS_FILE = path.join(directory, 'levels.json');
   process.env.LEVEL_REWARDS_FILE = path.join(directory, 'level-rewards.json');
+  process.env.ECONOMY_FILE = path.join(directory, 'economy.json');
 
   try {
-    await run(process.env.LEVELS_FILE);
+    await run(process.env.LEVELS_FILE, process.env.ECONOMY_FILE);
   } finally {
     delete process.env.LEVELS_FILE;
     delete process.env.LEVEL_REWARDS_FILE;
+    delete process.env.ECONOMY_FILE;
     await fs.rm(directory, { recursive: true, force: true });
   }
 }
@@ -49,8 +52,8 @@ function fakeMessage({ userId = 'user-xp-1', bot = false, guildId = 'guild-xp-1'
   };
 }
 
-test('a message awards XP once and a level up is announced', async () => {
-  await withLevelsFile(async (file) => {
+test('a message awards XP once and a level up is announced with coins', async () => {
+  await withLevelsFile(async (file, economyFile) => {
     await fs.writeFile(
       file,
       JSON.stringify({
@@ -81,6 +84,13 @@ test('a message awards XP once and a level up is announced', async () => {
     assert.equal(message.sent[0].content, '<@user-xp-2>');
     assert.equal(message.sent[0].embeds[0].data.title, 'Level up');
     assert.match(message.sent[0].embeds[0].data.description, /level 1/);
+    assert.match(message.sent[0].embeds[0].data.description, /\+25 coins/);
+    assert.match(message.sent[0].embeds[0].data.description, /wallet balance \*\*25\*\*/);
+
+    const walletState = JSON.parse(await fs.readFile(economyFile, 'utf8'));
+    const wallet = walletState.users.find((user) => user.userId === 'user-xp-2');
+    assert.equal(wallet.balance, economy.coinsForLevel(1));
+    assert.equal(wallet.theme, 'aurora');
   });
 });
 

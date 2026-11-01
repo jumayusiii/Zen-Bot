@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { awardLevelCoins } = require('../lib/economy');
 const { COLORS, createEmbed } = require('../lib/embeds');
 const { applyLevelReward } = require('../lib/levelRewards');
 const { COOLDOWN_MS, awardMessageXp } = require('../lib/levels');
@@ -55,6 +56,25 @@ module.exports = {
 
       if (!result.leveledUp) return;
 
+      let coinReward = null;
+      try {
+        coinReward = await awardLevelCoins({
+          guildId: message.guildId,
+          userId: message.author.id,
+          fromLevel: result.previousLevel ?? result.level - 1,
+          toLevel: result.level,
+          now,
+        });
+
+        if (coinReward.awarded) {
+          console.log(
+            `[economy] +${coinReward.amount} coins for ${displayName} (level ${result.level}, balance ${coinReward.balance})`,
+          );
+        }
+      } catch (error) {
+        console.warn(`[levels] Could not award level coins: ${error.message}`);
+      }
+
       let reward = null;
       try {
         reward = await applyLevelReward(message.member, result.level);
@@ -73,13 +93,16 @@ module.exports = {
       const rewardLine = reward?.assigned
         ? `\n\n🏅 You earned the **${reward.role.name}** role.`
         : '';
+      const coinLine = coinReward?.awarded
+        ? `\n\n🪙 **+${coinReward.amount} coins** — wallet balance **${coinReward.balance.toLocaleString('en-US')}**.`
+        : '';
 
       const embed = createEmbed(message.client, {
         section: 'Levels',
         title: 'Level up',
-        description: `🎉 **${displayName}** reached **level ${result.level}**!${rewardLine}`,
+        description: `🎉 **${displayName}** reached **level ${result.level}**!${rewardLine}${coinLine}`,
         color: COLORS.success,
-        footer: 'Chat XP',
+        footer: 'Chat XP  ·  Level rewards',
       });
 
       await message.channel
