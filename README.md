@@ -2,28 +2,29 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.18.0-beta.2** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.1** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with customizable rank cards, a beta coin economy with a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with admin grants and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
 ## Highlights
 
 - **Real slash commands** loaded automatically from `src/commands/`.
 - **Tabbed help** with an overview plus Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities tabs, generated from the command modules.
-- **Level system** with chat XP, level-up coin payouts, six customizable rank card themes, a top-ten server leaderboard and automatic role rewards.
-- **Moderation** with timed mutes, persistent temporary bans, kicks, reversals, warnings, purge and slowmode, plus permission and role-hierarchy checks.
-- **Audit logs** with `/modlog`: every moderation action and automatic unban is posted to a channel you choose.
+- **Level system** with chat XP, level-up coin payouts, ten customizable rank card themes, a top-ten server leaderboard and automatic role rewards.
+- **Moderation** with timed mutes, persistent temporary bans, kicks, reversals, soft bans, channel locks, warnings, purge and slowmode, plus permission and role-hierarchy checks.
+- **Audit logs** with `/modlog`: every moderation action — including locks, soft bans and admin coin grants — and automatic unbans are posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
 - **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
 - **Images** with random cat, dog and animal memes, plus `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
-- **Economy** with per-server wallets, `/daily` streaks, level-up coin payouts, a theme shop, an inventory and purchasable rank card wallpapers.
+- **Economy** with per-server wallets, `/daily` streaks, level-up coin payouts, admin coin grants, a ten-theme shop, an inventory and purchasable rank card wallpapers.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
 - **Live polls** with buttons, vote switching and a creator-only close control.
 - **Persistent reminders** delivered by DM or in the channel where they were created.
 - **Directory ready**: optional top.gg and Discord Bot List stat posting, with submission copy in `docs/`.
+- **Release automation**: pushing a `v*` tag tests the tree and publishes the matching changelog entry as a GitHub release, with beta versions marked as pre-releases.
 - **TikTok previews**: `/tiktok` attaches a TikTok video so it plays inline in Discord, with creator and engagement details plus an **Open on TikTok** fallback for oversized or private posts.
 - **Social feeds**: `/bluesky`, `/reddit` and `/youtube` connect to live public feeds with profile, post, community and video details.
 - **Weather**: `/weather` looks up any city and posts current conditions plus a four-day forecast from [Open-Meteo](https://open-meteo.com/), in Celsius or Fahrenheit. No API key needed.
@@ -94,6 +95,10 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/clearwarnings <member> [reason]` | Clears a member's recorded warnings and records the cleanup. |
 | `/purge <amount> [user] [channel] [reason]` | Deletes up to 100 recent messages, optionally from one member and channel. |
 | `/slowmode <seconds> [channel] [reason]` | Sets a channel cooldown from 0 seconds to 6 hours. |
+| `/lock [channel] [reason]` | Locks a text channel so @everyone cannot send messages and saves the previous setting. |
+| `/unlock [channel] [reason]` | Restores the @everyone SendMessages setting saved by `/lock`. |
+| `/softban <member> [delete_messages] [reason]` | Bans a member, cleans recent messages (24 hours by default), then immediately lifts the ban. |
+| `/grantcoins <member> <amount> [reason]` | 🧪 Grants up to **100,000 coins** to a member. Limited to **Administrator** or the server owner, with an audit-log entry. |
 | `/modlog [channel] [disable]` | 🧪 Chooses the channel that receives every moderation action and automatic unban. |
 | `/avatar [user]` | Shows a user avatar with a 64–4096 px size selector and a **Download** button. |
 | `/servericon` | Shows the current server icon with the same size selector and download button. |
@@ -118,7 +123,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/changelog` | Shows the current version, update date and release notes. |
 | `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
 
-🧪 marks beta commands. The directory covers **80 commands** across nine tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
+🧪 marks beta commands. The directory covers **84 commands** across nine tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -154,7 +159,9 @@ The level curve starts at **50 XP** for level 1 and grows with each level (`5 ×
 
 Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. Level-ups are the second income source: reaching level 1 pays **25 coins**, every later level adds **5 coins** more, and a single level pays at most **250 coins**. `/balance` shows a wallet, streak and equipped card.
 
-`/shop` lists six card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight and Candy** at 600–2,200 coins. `/buy theme:<name>` deducts the price atomically and equips the theme; `/inventory` lists everything owned and `/rankcard theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
+`/shop` lists ten card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight, Candy, Sakura, Cyber, Ember and Frost** at 600–4,400 coins. `/buy theme:<name>` deducts the price atomically and equips the theme; `/inventory` lists everything owned and `/rankcard theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
+
+Server owners and administrators can use `/grantcoins <member> <amount> [reason]` to add **1–100,000 coins** to a wallet. It is limited to the server owner and members with **Administrator**, capped at the **1,000,000,000 coin** wallet maximum, and recorded in the audit log.
 
 ## Moderation
 
@@ -165,10 +172,12 @@ Admin commands are grouped in the **Moderation** tab and are hidden from members
 - `/kick <member> [reason]` removes a member immediately; Discord does not support timed kicks.
 - `/warn <member> <reason>`, `/warnings <member>` and `/clearwarnings <member> [reason]` manage warnings stored per server in `data/warnings.json`. Warnings are DM'd when possible and recorded in the audit log.
 - `/purge <amount> [user] [channel] [reason]` removes up to **100 recent messages**, optionally from one member. Messages older than 14 days are skipped because Discord cannot bulk-delete them.
-- `/slowmode <seconds> [channel] [reason]` sets a **0 second to 6 hour** cooldown and records the change.
+- `/lock [channel] [reason]` denies **SendMessages** for **@everyone** and saves the previous setting in `data/channel-locks.json`. `/unlock` restores exactly that setting, so a channel that was already read-only stays read-only.
+- `/softban <member> [delete_messages] [reason]` bans a member, cleans up to seven days of messages, then immediately removes the ban. It refuses users who are already banned so an existing ban is never replaced.
+- `/grantcoins <member> <amount> [reason]` is limited to the server owner and members with **Administrator**. It grants 1–100,000 coins at a time, respects the wallet cap and writes to the audit log.
 - Temporary bans are written to `data/moderation.json`. The scheduler checks every 30 seconds and lifts overdue bans after a restart.
-- Every command checks the caller's permission, the bot's permission, the server owner, the bot's role position and the caller's role position. The bot needs **Moderate Members**, **Kick Members** and **Ban Members**, and its role must sit above the target's highest role.
-- `/modlog channel:#audit-log` stores a channel in `data/moderation-logs.json`. Mutes, unmutes, kicks, bans, unbans, warnings, cleared warnings, purges, slowmode changes and automatic temporary-ban expiry are posted there with the target, moderator, duration, reason and action time. `/modlog` shows the current setting, and `/modlog disable:true` turns it off.
+- Every command checks the caller's permission, the bot's permission, the server owner, the bot's role position and the caller's role position. Depending on the command, the bot needs **Moderate Members**, **Kick Members**, **Ban Members**, **Manage Messages**, **Manage Channels** and **Manage Roles**, and its role must sit above the target's highest role.
+- `/modlog channel:#audit-log` stores a channel in `data/moderation-logs.json`. Mutes, unmutes, kicks, bans, unbans, soft bans, channel locks and unlocks, coin grants, warnings, cleared warnings, purges, slowmode changes and automatic temporary-ban expiry are posted there with the target, moderator, duration, reason and action time. `/modlog` shows the current setting, and `/modlog disable:true` turns it off.
 
 ## Welcome & leave messages
 
@@ -357,7 +366,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, rank-card rendering, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, all rank-card themes, channel-lock restoration, soft-ban ordering, admin coin grants, changelog release notes, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -395,6 +404,7 @@ src/
 ├── lib/
 │   ├── blackjack.js             # Cards, hand values and dealer rules│   ├── botLists.js             # Optional top.gg / Discord Bot List stats
 │   ├── cardThemes.js           # Rank card theme catalog, prices and palettes
+│   ├── channelLocks.js         # Saved channel locks and previous permission state
 │   ├── changelog.js             # Versioned release notes
 │   ├── chatgpt.js               # OpenAI moderation, Responses API and error mapping
 │   ├── choices.js               # /choose parsing and random pick
@@ -476,12 +486,16 @@ src/
     ├── moderation/
     │   ├── ban.js
     │   ├── clearwarnings.js
+    │   ├── grantcoins.js
     │   ├── kick.js
+    │   ├── lock.js
     │   ├── modlog.js
     │   ├── mute.js
     │   ├── purge.js
     │   ├── slowmode.js
+    │   ├── softban.js
     │   ├── unban.js
+    │   ├── unlock.js
     │   ├── unmute.js
     │   ├── warn.js
     │   └── warnings.js
@@ -545,6 +559,7 @@ The bot stores only what it needs to provide its features:
 - Level records in `data/levels.json` (server and user IDs, display name, XP and last award time).
 - Level reward roles in `data/level-rewards.json` (server ID, role ID and required level).
 - Economy wallets in `data/economy.json` (server and user IDs, coin balance, daily streak, owned theme IDs and equipped theme).
+- Channel locks in `data/channel-locks.json` (server and channel IDs, the previous **@everyone** SendMessages state, moderator, reason and lock time).
 - Scheduled temporary bans in `data/moderation.json` (server and user IDs, username, moderator ID, reason and unban time).
 - Audit-log channel IDs in `data/moderation-logs.json` (server and channel IDs, the admin who configured it and the update time).
 - Welcome and leave settings in `data/greetings.json` (server and channel IDs, templates and the admin who last changed them).
@@ -561,6 +576,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.1`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

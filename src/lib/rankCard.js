@@ -99,6 +99,104 @@ function drawPattern(ctx, pattern, decor) {
       ctx.fill();
       ctx.restore();
     }
+  } else if (pattern === 'petals') {
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = decor[0];
+    ctx.beginPath();
+    ctx.arc(760, 30, 170, 0, Math.PI * 2);
+    ctx.fill();
+
+    for (let index = 0; index < 28; index += 1) {
+      const x = 20 + seeded(index, 13) * (WIDTH - 40);
+      const y = 12 + seeded(index, 14) * (HEIGHT - 24);
+      const radius = 5 + seeded(index, 15) * 7;
+
+      ctx.save();
+      ctx.globalAlpha = 0.14 + seeded(index, 16) * 0.22;
+      ctx.translate(x, y);
+      ctx.rotate(-0.7 + seeded(index, 17) * 1.4);
+      ctx.fillStyle = decor[index % decor.length];
+      ctx.beginPath();
+      ctx.ellipse(0, 0, radius, radius * 0.46, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  } else if (pattern === 'grid') {
+    ctx.globalAlpha = 0.12;
+    ctx.strokeStyle = decor[0];
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x <= WIDTH; x += 48) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, HEIGHT);
+      ctx.stroke();
+    }
+
+    for (let y = 0; y <= HEIGHT; y += 48) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(WIDTH, y);
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = 0.13;
+    ctx.fillStyle = decor[1];
+    ctx.beginPath();
+    ctx.arc(790, 20, 190, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = decor[0];
+    ctx.beginPath();
+    ctx.arc(70, 280, 150, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (pattern === 'embers') {
+    for (let index = 0; index < 46; index += 1) {
+      const x = 12 + seeded(index, 18) * (WIDTH - 24);
+      const y = HEIGHT - 6 - seeded(index, 19) * (HEIGHT - 18);
+      const radius = 0.8 + seeded(index, 20) * 2.7;
+
+      ctx.globalAlpha = 0.12 + seeded(index, 21) * 0.34;
+      ctx.fillStyle = decor[index % decor.length];
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = decor[0];
+    ctx.beginPath();
+    ctx.ellipse(450, HEIGHT + 30, 430, 100, 0, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (pattern === 'snow') {
+    for (let index = 0; index < 34; index += 1) {
+      const x = 18 + seeded(index, 22) * (WIDTH - 36);
+      const y = 12 + seeded(index, 23) * (HEIGHT - 24);
+      const radius = 2.4 + seeded(index, 24) * 4.4;
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(seeded(index, 25) * Math.PI);
+      ctx.globalAlpha = 0.16 + seeded(index, 26) * 0.34;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.1;
+
+      for (let arm = 0; arm < 3; arm += 1) {
+        ctx.beginPath();
+        ctx.moveTo(-radius, 0);
+        ctx.lineTo(radius, 0);
+        ctx.stroke();
+        ctx.rotate(Math.PI / 3);
+      }
+
+      ctx.restore();
+    }
+
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = decor[0];
+    ctx.beginPath();
+    ctx.arc(780, 20, 170, 0, Math.PI * 2);
+    ctx.fill();
   } else if (pattern === 'confetti') {
     for (let index = 0; index < 30; index += 1) {
       const x = 18 + seeded(index, 10) * (WIDTH - 36);

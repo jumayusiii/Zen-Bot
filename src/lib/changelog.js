@@ -2,6 +2,26 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.1',
+    date: '2026-11-01',
+    title: 'Stronger moderation & four new card themes',
+    summary: 'Zen adds channel locks, soft bans and admin coin grants, with four new rank-card themes and a tag-driven release pipeline.',
+    added: [
+      '`/lock` and `/unlock` make a channel read-only and restore the exact `@everyone` SendMessages setting that was there before.',
+      '`/softban` bans a member, cleans their recent messages and immediately lifts the ban.',
+      '`/grantcoins` lets server owners and administrators add up to **100,000 coins** to a member wallet with an audit-log entry.',
+      'Four new rank card themes — **Sakura**, **Cyber**, **Ember** and **Frost** — bring petal, grid, ember and snowflake wallpapers.',
+      'A tag-triggered release workflow publishes GitHub releases from the matching changelog entry and marks beta versions as pre-releases.',
+    ],
+    improved: [
+      'The moderation audit log now records channel locks, unlocks, soft bans and coin grants.',
+      'Channel locks are saved in `data/channel-locks.json`, so unlocking restores an intentional read-only channel instead of overwriting it.',
+      'The command directory now covers **84 commands** across nine tabs.',
+      'The shop now lists **ten rank card themes**, priced from free to 4,400 coins.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.18.0-beta.2',
     date: '2026-11-01',
     title: 'Chat now pays coins',
@@ -436,8 +456,54 @@ const RELEASES = [
   },
 ];
 
+function getRelease(version) {
+  return RELEASES.find((release) => release.version === version) ?? null;
+}
+
 function getLatestRelease() {
-  return RELEASES.find((release) => release.version === BOT_VERSION) ?? RELEASES[0];
+  return getRelease(BOT_VERSION) ?? RELEASES[0];
+}
+
+/** Renders one release as Markdown for a GitHub release body. */
+function releaseMarkdown(release) {
+  if (!release) return '';
+
+  const lines = [
+    `# Zen ${release.version}`,
+    '',
+    `**${release.title}**`,
+    '',
+    release.summary,
+    '',
+    `Released ${release.date}.`,
+  ];
+
+  const sections = [
+    ['Added', 'added'],
+    ['Improved', 'improved'],
+    ['Fixed', 'fixed'],
+  ];
+
+  for (const [heading, key] of sections) {
+    const items = Array.isArray(release[key]) ? release[key].filter(Boolean) : [];
+    if (items.length === 0) continue;
+
+    lines.push('', `## ${heading}`, ...items.map((item) => `- ${item}`));
+  }
+
+  lines.push(
+    '',
+    '## Install or upgrade',
+    '',
+    '1. `npm ci`',
+    '2. Copy `.env.example` to `.env` and set `DISCORD_TOKEN`.',
+    '3. `npm run deploy` to register slash commands.',
+    '4. `npm start` to run the bot.',
+    '',
+    '**Full changelog:** https://github.com/jumayusiii/Zen-Bot/blob/main/src/lib/changelog.js',
+  );
+
+  return `${lines.join('\n')}\n`;
 }
 
 function releaseTimestamp(release) {
@@ -449,4 +515,12 @@ function releaseDate(release) {
   return `<t:${Math.floor(releaseTimestamp(release) / 1000)}:D>`;
 }
 
-module.exports = { BOT_VERSION, RELEASES, getLatestRelease, releaseDate, releaseTimestamp };
+module.exports = {
+  BOT_VERSION,
+  RELEASES,
+  getLatestRelease,
+  getRelease,
+  releaseDate,
+  releaseMarkdown,
+  releaseTimestamp,
+};

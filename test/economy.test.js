@@ -111,6 +111,59 @@ test('daily rewards enforce the cooldown and build a streak', async () => {
   });
 });
 
+test('admin coin grants credit wallets and stop at the balance cap', async () => {
+  await withEconomyFile(async (file) => {
+    const first = await economy.grantCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      amount: 500,
+    });
+    assert.equal(first.requested, 500);
+    assert.equal(first.amount, 500);
+    assert.equal(first.balance, 500);
+    assert.equal(first.capped, false);
+
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          {
+            guildId: 'guild-1',
+            userId: 'user-1',
+            balance: economy.MAX_BALANCE - 10,
+            owned: ['aurora'],
+            theme: 'aurora',
+          },
+        ],
+      }),
+      'utf8',
+    );
+
+    const capped = await economy.grantCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      amount: 100,
+    });
+    assert.equal(capped.amount, 10);
+    assert.equal(capped.balance, economy.MAX_BALANCE);
+    assert.equal(capped.capped, true);
+
+    await assert.rejects(
+      economy.grantCoins({ guildId: 'guild-1', userId: 'user-1', amount: 0 }),
+      /at least 1 coin/,
+    );
+    await assert.rejects(
+      economy.grantCoins({
+        guildId: 'guild-1',
+        userId: 'user-1',
+        amount: economy.MAX_GRANT + 1,
+      }),
+      /at most/,
+    );
+  });
+});
+
 test('buying a theme deducts coins, equips it and prevents a second purchase', async () => {
   await withEconomyFile(async (file) => {
     await fs.writeFile(

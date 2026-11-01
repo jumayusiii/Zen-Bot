@@ -16,6 +16,7 @@ const DAILY_MAX_STREAK_BONUS = 150;
 const LEVEL_COIN_BASE = 25;
 const LEVEL_COIN_STEP = 5;
 const LEVEL_COIN_MAX = 250;
+const MAX_GRANT = 100_000;
 const MAX_BALANCE = 1_000_000_000;
 const MAX_ENTRIES = 50_000;
 const MAX_STREAK = 3650;
@@ -309,6 +310,45 @@ async function awardLevelCoins({ guildId, userId, fromLevel, toLevel, now = Date
 }
 
 /**
+ * Adds an admin grant to a wallet, capped by the maximum balance.
+ *
+ * @param {{guildId: string, userId: string, amount: number, now?: number}} input
+ * @returns {Promise<{requested: number, amount: number, balance: number, capped: boolean}>}
+ */
+async function grantCoins({ guildId, userId, amount, now = Date.now() }) {
+  const requested = Math.floor(Number(amount));
+  if (!Number.isFinite(requested) || requested <= 0) {
+    throw accountError('invalid_amount', 'Choose at least 1 coin to grant.');
+  }
+  if (requested > MAX_GRANT) {
+    throw accountError('amount_too_large', `A single grant can add at most ${MAX_GRANT} coins.`);
+  }
+
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to grant coins.');
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+
+  return withQueuedState((state) => {
+    const entry = findOrCreate(state, guildKey, userKey);
+    const before = entry.balance;
+    entry.balance = Math.min(MAX_BALANCE, entry.balance + requested);
+    entry.updatedAt = timestamp;
+
+    return {
+      write: entry.balance > before,
+      value: {
+        requested,
+        amount: entry.balance - before,
+        balance: entry.balance,
+        capped: entry.balance - before < requested,
+      },
+    };
+  });
+}
+
+/**
  * Buys a theme, deducts its price and equips it immediately.
  *
  * @param {{guildId: string, userId: string, themeId: string, now?: number}} input
@@ -389,6 +429,7 @@ module.exports = {
   LEVEL_COIN_MAX,
   LEVEL_COIN_STEP,
   MAX_BALANCE,
+  MAX_GRANT,
   STREAK_WINDOW_MS,
   awardLevelCoins,
   buyTheme,
@@ -397,5 +438,6 @@ module.exports = {
   coinsForLevelRange,
   economyFile,
   getAccount,
+  grantCoins,
   setCardTheme,
 };

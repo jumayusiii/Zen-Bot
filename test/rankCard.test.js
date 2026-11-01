@@ -1,6 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
+const { CARD_THEMES } = require('../src/lib/cardThemes');
 const { renderRankCard } = require('../src/lib/rankCard');
 
 const baseCard = {
@@ -22,15 +23,15 @@ test('renderRankCard produces a valid PNG without an avatar', async () => {
   assert.ok(buffer.length > 5000, 'card should contain more than a blank image');
 });
 
-test('renderRankCard renders each card theme with different output', async () => {
-  const ocean = await renderRankCard({ ...baseCard, theme: 'ocean' });
-  const midnight = await renderRankCard({ ...baseCard, theme: 'midnight' });
+test('renderRankCard renders every card theme with different output', async () => {
+  const buffers = [];
 
-  for (const buffer of [ocean, midnight]) {
+  for (const theme of CARD_THEMES) {
+    const buffer = await renderRankCard({ ...baseCard, theme: theme.id });
     assert.equal(buffer.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
     assert.ok(buffer.length > 5000);
+    buffers.push(buffer.toString('base64'));
   }
 
-  assert.notEqual(Buffer.compare(ocean, midnight), 0);
-  assert.notEqual(Buffer.compare(ocean, await renderRankCard(baseCard)), 0);
+  assert.equal(new Set(buffers).size, CARD_THEMES.length);
 });
