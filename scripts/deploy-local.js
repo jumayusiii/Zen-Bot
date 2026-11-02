@@ -180,7 +180,7 @@ try {
 
   if (appExists) {
     log(`restarting ${APP_NAME}`);
-    if (!pm2('restart', APP_NAME)) {
+    if (!pm2('restart', APP_NAME, '--update-env')) {
       throw new Error(`pm2 restart ${APP_NAME} failed`);
     }
   } else {
@@ -202,7 +202,7 @@ try {
   if (stopped || installNeeded) {
     log('attempting to bring the bot back up');
     if (appExists) {
-      pm2('restart', APP_NAME);
+      pm2('restart', APP_NAME, '--update-env');
     } else {
       pm2('start', 'src/index.js', '--name', APP_NAME, '--time');
     }
