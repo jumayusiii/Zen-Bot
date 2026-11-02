@@ -3,6 +3,28 @@ require('dotenv').config();
 const { Collection, REST, Routes } = require('discord.js');
 const { loadCommands, getCommandData } = require('./handlers/commandHandler');
 
+const API = 'https://discord.com/api/v10';
+
+async function listGuildIds(token) {
+  const signal =
+    typeof AbortSignal?.timeout === 'function' ? AbortSignal.timeout(15000) : undefined;
+  const response = await fetch(`${API}/users/@me/guilds`, {
+    headers: { Authorization: `Bot ${token}` },
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Could not list the bot's servers (HTTP ${response.status}).`);
+  }
+
+  const guilds = await response.json();
+  if (!Array.isArray(guilds)) {
+    throw new Error('Discord returned an unreadable server list.');
+  }
+
+  return guilds.map((guild) => guild.id).filter(Boolean);
+}
+
 async function main() {
   const token = process.env.DISCORD_TOKEN?.trim();
 
@@ -20,20 +42,50 @@ async function main() {
   const rest = new REST().setToken(token);
   const clientId =
     process.env.CLIENT_ID?.trim() || (await rest.get(Routes.currentApplication())).id;
+  const guildOnly = process.argv.includes('--guild');
   const globalOnly = process.argv.includes('--global');
-  const guildId = globalOnly ? null : process.env.GUILD_ID?.trim();
 
-  const route = !globalOnly && guildId
-    ? Routes.applicationGuildCommands(clientId, guildId)
-    : Routes.applicationCommands(clientId);
-
-  const registered = await rest.put(route, { body: getCommandData(commandRegistry) });
-
-  if (!globalOnly && guildId) {
-    console.log(`[deploy] Registered ${registered.length} slash command(s) in guild ${guildId}. They are available immediately.`);
-  } else {
-    console.log(`[deploy] Registered ${registered.length} slash command(s) globally for every server. Discord can take up to an hour to show them.`);
+  if (guildOnly && globalOnly) {
+    throw new Error('Choose either --guild or --global, not both.');
   }
+
+  if (guildOnly) {
+    const guildId = process.env.GUILD_ID?.trim();
+
+    if (!guildId) {
+      throw new Error('GUILD_ID is required for a guild-only deployment.');
+    }
+
+    // Discord shows guild and global commands together. Clear the global set
+    // first so this developer scope can never produce a duplicate command menu.
+    await rest.put(Routes.applicationCommands(clientId), { body: [] });
+
+    const registered = await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+      body: getCommandData(commandRegistry),
+    });
+
+    console.log(
+      `[deploy] Registered ${registered.length} slash command(s) in guild ${guildId}. Global copies were cleared.`,
+    );
+    return;
+  }
+
+  // Production uses one global command set. Remove the guild-scoped copies
+  // from every server first; otherwise each command is listed twice in the
+  // guild command picker.
+  const guildIds = await listGuildIds(token);
+  for (const guildId of guildIds) {
+    await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] });
+  }
+
+  const registered = await rest.put(Routes.applicationCommands(clientId), {
+    body: getCommandData(commandRegistry),
+  });
+
+  console.log(
+    `[deploy] Registered ${registered.length} slash command(s) globally. Cleared ${guildIds.length} guild command set(s) so each command appears once.`,
+  );
+  console.log('[deploy] Global commands can take up to an hour to appear in every server.');
 }
 
 main().catch((error) => {

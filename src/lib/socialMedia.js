@@ -13,6 +13,11 @@ const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
 // cannot be used to check the NSFW flag without credentials.
 const SAFE_SUBREDDITS = Object.freeze([
   'popular',
+  'askreddit',
+  'funny',
+  'tifu',
+  'mildlyinteresting',
+  'nottheonion',
   'aww',
   'cats',
   'dogs',

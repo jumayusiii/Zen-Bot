@@ -2,6 +2,28 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.3',
+    date: '2026-11-02',
+    title: 'Captioned images & coin games',
+    summary: 'Zen now turns photos and Reddit threads into shareable cards, adds three ways to earn or wager coins, and deploys every command exactly once.',
+    added: [
+      '`/caption` adds top and bottom text to an uploaded image with four styles, five colours, three sizes and optional uppercase.',
+      '`/redditcard` renders a public Reddit thread and up to four unique comments as a dark, light or sepia image card.',
+      '`/animalmeme` now accepts an optional community so members can pick a specific animal feed.',
+      '`/work` pays **40–110 coins** on a **45-minute** cooldown.',
+      '`/coinbet` wagers up to **5,000 coins** on a coin flip and returns **1.9×** on a win.',
+      '`/slotsbet` wagers coins on the slot machine, with **1.5×** pairs and **3×–30×** triples.',
+    ],
+    improved: [
+      'Wagers deduct the stake and credit the gross payout in one queued write, so a balance cannot be charged without recording the result.',
+      '`npm run deploy` now uses one global command scope and clears guild-scoped copies from every server; `npm run deploy:guild` remains for single-server testing.',
+      'The command directory now covers **89 commands** across nine tabs.',
+    ],
+    fixed: [
+      'Slash commands no longer appear twice in the picker when both global and guild registrations exist.',
+    ],
+  },
+  {
     version: '1.19.0-beta.2',
     date: '2026-11-01',
     title: 'Deployments now sync commands',

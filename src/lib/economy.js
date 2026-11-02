@@ -17,6 +17,10 @@ const LEVEL_COIN_BASE = 25;
 const LEVEL_COIN_STEP = 5;
 const LEVEL_COIN_MAX = 250;
 const MAX_GRANT = 100_000;
+const MAX_WAGER = 5_000;
+const WORK_COOLDOWN_MS = 45 * 60 * 1000;
+const WORK_MIN = 40;
+const WORK_MAX = 110;
 const MAX_BALANCE = 1_000_000_000;
 const MAX_ENTRIES = 50_000;
 const MAX_STREAK = 3650;
@@ -85,6 +89,7 @@ function normalizeAccount(value) {
     userId,
     balance: Math.min(MAX_BALANCE, wholeNumber(value.balance)),
     lastDailyAt: wholeNumber(value.lastDailyAt),
+    lastWorkAt: wholeNumber(value.lastWorkAt),
     dailyStreak: Math.min(MAX_STREAK, wholeNumber(value.dailyStreak)),
     owned,
     theme,
@@ -98,6 +103,7 @@ function emptyAccount(guildId, userId) {
     userId,
     balance: 0,
     lastDailyAt: 0,
+    lastWorkAt: 0,
     dailyStreak: 0,
     owned: [DEFAULT_THEME_ID],
     theme: DEFAULT_THEME_ID,
@@ -278,6 +284,54 @@ async function claimDaily({ guildId, userId, now = Date.now() }) {
 }
 
 /**
+ * Claims a short work shift with a 45-minute cooldown.
+ *
+ * @param {{guildId: string, userId: string, now?: number, random?: () => number}} input
+ * @returns {Promise<{worked: boolean, amount: number, balance: number, nextAt: number, reason?: string}>}
+ */
+async function claimWork({ guildId, userId, now = Date.now(), random = Math.random } = {}) {
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to work for coins.');
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+
+  return withQueuedState((state) => {
+    const entry = findOrCreate(state, guildKey, userKey);
+    const nextAt = entry.lastWorkAt > 0 ? entry.lastWorkAt + WORK_COOLDOWN_MS : 0;
+
+    if (entry.lastWorkAt > 0 && timestamp - entry.lastWorkAt < WORK_COOLDOWN_MS) {
+      return {
+        write: false,
+        value: {
+          worked: false,
+          reason: 'cooldown',
+          amount: 0,
+          balance: entry.balance,
+          nextAt,
+        },
+      };
+    }
+
+    const sample = Math.min(0.999999, Math.max(0, Number(random()) || 0));
+    const offered = WORK_MIN + Math.floor(sample * (WORK_MAX - WORK_MIN + 1));
+    const before = entry.balance;
+    entry.balance = Math.min(MAX_BALANCE, entry.balance + offered);
+    entry.lastWorkAt = timestamp;
+    entry.updatedAt = timestamp;
+
+    return {
+      value: {
+        worked: true,
+        amount: entry.balance - before,
+        balance: entry.balance,
+        nextAt: timestamp + WORK_COOLDOWN_MS,
+      },
+    };
+  });
+}
+
+/**
  * Credits the coins earned by reaching one or more new levels.
  *
  * @param {{guildId: string, userId: string, fromLevel: number, toLevel: number, now?: number}} input
@@ -343,6 +397,58 @@ async function grantCoins({ guildId, userId, amount, now = Date.now() }) {
         amount: entry.balance - before,
         balance: entry.balance,
         capped: entry.balance - before < requested,
+      },
+    };
+  });
+}
+
+/**
+ * Settles one wager atomically. The stake is deducted and the gross payout
+ * (including the returned stake) is credited in the same queued write, so a
+ * balance cannot be charged without recording the result.
+ *
+ * @param {{guildId: string, userId: string, wager: number, payout: number, now?: number}} input
+ * @returns {Promise<{wager: number, payout: number, net: number, balance: number, won: boolean}>}
+ */
+async function settleWager({ guildId, userId, wager, payout = 0, now = Date.now() }) {
+  const stake = Math.floor(Number(wager));
+  if (!Number.isFinite(stake) || stake <= 0) {
+    throw accountError('invalid_wager', 'Choose at least 1 coin to wager.');
+  }
+  if (stake > MAX_WAGER) {
+    throw accountError('wager_too_large', `A single wager can be at most ${MAX_WAGER} coins.`);
+  }
+
+  const gross = Math.floor(Number(payout));
+  if (!Number.isFinite(gross) || gross < 0) {
+    throw accountError('invalid_payout', 'The payout must be zero or more coins.');
+  }
+
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to settle a wager.');
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+
+  return withQueuedState((state) => {
+    const entry = findOrCreate(state, guildKey, userKey);
+    if (entry.balance < stake) {
+      const error = accountError('insufficient', `You need ${stake} coins to place that wager.`);
+      error.balance = entry.balance;
+      throw error;
+    }
+
+    const before = entry.balance;
+    entry.balance = Math.min(MAX_BALANCE, entry.balance - stake + gross);
+    entry.updatedAt = timestamp;
+
+    return {
+      value: {
+        wager: stake,
+        payout: gross,
+        net: entry.balance - before,
+        balance: entry.balance,
+        won: gross > stake,
       },
     };
   });
@@ -430,14 +536,20 @@ module.exports = {
   LEVEL_COIN_STEP,
   MAX_BALANCE,
   MAX_GRANT,
+  MAX_WAGER,
   STREAK_WINDOW_MS,
+  WORK_COOLDOWN_MS,
+  WORK_MAX,
+  WORK_MIN,
   awardLevelCoins,
   buyTheme,
   claimDaily,
+  claimWork,
   coinsForLevel,
   coinsForLevelRange,
   economyFile,
   getAccount,
   grantCoins,
   setCardTheme,
+  settleWager,
 };
