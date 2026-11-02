@@ -571,6 +571,7 @@ src/
 Helper scripts:
 
 - `scripts/deploy-local.js` syncs the checkout, registers commands and restarts PM2.
+- `scripts/health-check.js` waits for PM2 to report the bot online with a fresh Discord login, then verifies that `DISCORD_TOKEN` belongs to that bot. Run `npm run health` after logon or a restart; it exits `1` when the bot is unhealthy.
 - `scripts/release-notes.js` renders a changelog entry for a GitHub release.
 - `scripts/autostart-pm2.vbs` restores the saved PM2 process list at Windows logon.
 
