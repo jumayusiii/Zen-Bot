@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zen — Discord Bot List Release Guide</title>
+  <meta name="description" content="The complete launch guide for Zen: every active Discord bot list, ready-to-paste listing copy, stats APIs, vote webhooks, review rules and a launch checklist.">
+  <meta name="theme-color" content="#080b12">
+  <link rel="canonical" href="https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/">
+  <link rel="icon" type="image/png" href="./zen-avatar.png">
+  <link rel="apple-touch-icon" href="./zen-avatar.png">
+  <link rel="stylesheet" href="./styles.css">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Zen Bot List Guide">
+  <meta property="og:title" content="Zen — Discord Bot List Release Guide">
+  <meta property="og:description" content="Every active Discord bot list, the exact listing copy, stats and vote setup, review rules and an interactive launch checklist.">
+  <meta property="og:url" content="https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/">
+  <meta property="og:image" content="https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/zen-banner.png">
+  <meta property="og:image:width" content="1500">
+  <meta property="og:image:height" content="600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zen — Discord Bot List Release Guide">
+  <meta name="twitter:description" content="Every active Discord bot list, the exact listing copy, stats and vote setup, review rules and an interactive launch checklist.">
+  <meta name="twitter:image" content="https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/zen-banner.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Zen — Discord Bot List Release Guide",
+    "url": "https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/",
+    "description": "The complete launch guide for Zen: every active Discord bot list, ready-to-paste listing copy, stats APIs, vote webhooks, review rules and a launch checklist.",
+    "datePublished": "2026-11-01",
+    "dateModified": "2026-11-01",
+    "about": {
+      "@type": "SoftwareApplication",
+      "name": "Zen",
+      "applicationCategory": "Discord Bot",
+      "operatingSystem": "Discord",
+      "softwareVersion": "1.19.0-beta.3"
+    }
+  }
+  </script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="Zen Bot List Guide home">
+        <img src="./zen-avatar.png" width="32" height="32" alt="">
+        <span class="brand-name">Zen</span>
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-label">Bot List Guide</span>
+      </a>
+      <div class="topbar-actions">
+        <span class="public-chip"><span class="live-dot" aria-hidden="true"></span>Public guide</span>
+        <span class="version-chip">v1.19.0-beta.3</span>
+        <a class="btn btn-small btn-ghost" href="#checklist">Launch checklist</a>
+      </div>
+    </div>
+    <div class="reading-track" aria-hidden="true"><span id="reading-progress"></span></div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Guide contents">
+      <div class="sidebar-inner">
+        <p class="nav-label">On this page</p>
+        <nav class="page-nav">
+          <a href="#readiness"><span>01</span>Release readiness</a>
+          <a href="#directories"><span>02</span>Directory map</a>
+          <a href="#tier-1"><span>03</span>Tier 1 listings</a>
+          <a href="#tier-2"><span>04</span>Tier 2 listings</a>
+          <a href="#listing-kit"><span>05</span>Listing kit</a>
+          <a href="#topgg"><span>06</span>top.gg submission</a>
+          <a href="#discordbotlist"><span>07</span>Discord Bot List</a>
+          <a href="#stats"><span>08</span>Stats &amp; votes</a>
+          <a href="#review"><span>09</span>Review rules</a>
+          <a href="#checklist"><span>10</span>Launch checklist</a>
+          <a href="#privacy"><span>11</span>Privacy policy</a>
+          <a href="#sources"><span>12</span>Sources</a>
+        </nav>
+
+        <div class="sidebar-card">
+          <img src="./zen-avatar.png" width="44" height="44" alt="Zen bot avatar">
+          <div>
+            <strong>Zen</strong>
+            <span>Public beta · 89 commands</span>
+          </div>
+          <a class="sidebar-link" href="https://github.com/jumayusiii/Zen-Bot" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </aside>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Public launch playbook · verified 1 November 2026</p>
+          <h1>Put <span class="gradient-text">Zen</span> in front of every Discord community.</h1>
+          <p class="lead">A complete, no-guesswork release plan: the directories that are still active, the exact copy to paste, the stats and vote plumbing, the review rules that get bots declined — and the order to do it in.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#checklist">Start the checklist</a>
+            <a class="btn btn-secondary" href="#listing-kit">Get the listing copy</a>
+          </div>
+          <ul class="hero-stats" aria-label="Guide facts">
+            <li><strong>6</strong><span>Tier 1 targets</span></li>
+            <li><strong>89</strong><span>Slash commands</span></li>
+            <li><strong>1</strong><span>Blocker to clear</span></li>
+          </ul>
+        </div>
+
+        <div class="readiness-card" aria-label="Launch readiness summary">
+          <div class="readiness-head">
+            <div>
+              <p class="mini-label">Launch readiness</p>
+              <strong>Almost ready</strong>
+            </div>
+            <span class="status-pill status-warn">1 action</span>
+          </div>
+          <div class="meter" role="img" aria-label="90 percent ready">
+            <span class="meter-fill" data-width="90"></span>
+          </div>
+          <ul class="readiness-list">
+            <li><span class="dot dot-good" aria-hidden="true"></span>Public and invitable<strong>Ready</strong></li>
+            <li><span class="dot dot-bad" aria-hidden="true"></span>OAuth2 code grant<strong>Turn off</strong></li>
+            <li><span class="dot dot-good" aria-hidden="true"></span>89 commands registered<strong>Ready</strong></li>
+            <li><span class="dot dot-good" aria-hidden="true"></span>Listing copy<strong>Ready</strong></li>
+            <li><span class="dot dot-good" aria-hidden="true"></span>Privacy policy<strong>This page</strong></li>
+          </ul>
+          <p class="readiness-note">One setting stands between Zen and the submission forms. Clear it first, then work top to bottom.</p>
+        </div>
+      </section>
+
+      <section class="section" id="readiness">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">01 · Pre-flight</p>
+            <h2>Release readiness</h2>
+            <p>Directories review the live bot, not the repository. Confirm every row before you create a listing.</p>
+          </div>
+          <span class="time-chip">About 10 minutes</span>
+        </div>
+
+        <div class="callout callout-danger">
+          <div class="callout-mark" aria-hidden="true">!</div>
+          <div class="callout-body">
+            <h3>First: turn off OAuth2 code grant.</h3>
+            <p>Zen’s application currently reports <code>bot_require_code_grant: true</code>. Most lists require a public, invitable bot, and top.gg explicitly asks you to disable code grant when you are not using it. This is the only hard blocker.</p>
+            <ol class="compact-steps">
+              <li>Open the <a href="https://discord.com/developers/applications/1564936469305364480/bot" rel="noopener">Discord Developer Portal → Bot</a>.</li>
+              <li>Under <strong>Authorization Flow</strong>, switch <strong>Requires OAuth2 Code Grant</strong> to <strong>Off</strong>.</li>
+              <li>Wait about 30 minutes, then test a fresh invite in an incognito window.</li>
+            </ol>
+            <a class="btn btn-small btn-danger" href="https://discord.com/developers/applications/1564936469305364480/bot" rel="noopener">Open Bot settings <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+
+        <div class="status-table" role="table" aria-label="Release readiness checks">
+          <div class="status-row status-head" role="row">
+            <span role="columnheader">Check</span>
+            <span role="columnheader">Current state</span>
+            <span role="columnheader">Status</span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Bot is public</span>
+            <span role="cell"><code>bot_public: true</code></span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">OAuth2 code grant</span>
+            <span role="cell">Reported as enabled</span>
+            <span role="cell"><span class="tag tag-bad">Fix first</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Online during review</span>
+            <span role="cell">PM2 process <code>zen-bot</code></span>
+            <span role="cell"><span class="tag tag-good">Keep alive</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Slash commands</span>
+            <span role="cell">89 registered</span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Invite permissions</span>
+            <span role="cell">No Administrator · <code>1099780180998</code></span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Help entry point</span>
+            <span role="cell"><code>/helplist</code></span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">NSFW content</span>
+            <span role="cell">None in listing assets</span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Vote-locked commands</span>
+            <span role="cell">None</span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Icon and banner</span>
+            <span role="cell">1024×1024 and 1500×600</span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Public privacy URL</span>
+            <span role="cell">Use <a href="#privacy">this page’s privacy section</a></span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Support URL</span>
+            <span role="cell"><a href="https://github.com/jumayusiii/Zen-Bot/issues" rel="noopener">GitHub Issues</a></span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Directory stats tokens</span>
+            <span role="cell">Not configured</span>
+            <span role="cell"><span class="tag tag-neutral">After approval</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">top.gg listing</span>
+            <span role="cell">Not submitted yet</span>
+            <span role="cell"><span class="tag tag-neutral">Next</span></span>
+          </div>
+          <div class="status-row" role="row">
+            <span role="cell">Discord Bot List</span>
+            <span role="cell">Live at the old <code>juma-habbo</code> slug</span>
+            <span role="cell"><span class="tag tag-warn">Update copy</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="directories">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 · Landscape</p>
+            <h2>Where to list Zen</h2>
+            <p>Discord directories are not interchangeable. Spend effort where discovery and votes actually happen, then add credibility listings.</p>
+          </div>
+          <span class="time-chip">6 primary · 19 secondary</span>
+        </div>
+
+        <div class="category-grid">
+          <article class="category-card category-primary">
+            <span class="category-index">A</span>
+            <h3>Discovery &amp; votes</h3>
+            <p>Ranked lists that drive the most new users. These are the accounts worth creating first.</p>
+            <ul class="mini-list">
+              <li>top.gg</li>
+              <li>Discord Bot List</li>
+              <li>Discords.com</li>
+              <li>botlist.me</li>
+            </ul>
+          </article>
+          <article class="category-card">
+            <span class="category-index">B</span>
+            <h3>Credibility &amp; stats</h3>
+            <p>Profiles, server-count widgets and backlinks. Lower traffic, but useful social proof and SEO.</p>
+            <ul class="mini-list">
+              <li>Discord Bots (bots.gg)</li>
+              <li>Bots on Discord</li>
+              <li>BotBlock long tail</li>
+            </ul>
+          </article>
+          <article class="category-card category-muted">
+            <span class="category-index">C</span>
+            <h3>Communities, not bots</h3>
+            <p>DISBOARD and Discord Me are primarily server directories. Do not force a bot submission where none exists.</p>
+            <ul class="mini-list">
+              <li>DISBOARD — no bot path</li>
+              <li>Discord Me — low priority</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="notice notice-info">
+          <strong>Ignore old tutorials.</strong> Many lists in older blog posts are dead. Skip <code>discord.boats</code>, <code>bladelist.gg</code>, <code>discordbots.co</code>, <code>discordlist.space</code>, <code>discordbotindex.com</code>, <code>listcord.gg</code>, <code>fateslist.xyz</code>, <code>wonderbotlist.com</code>, <code>topcord.xyz</code>, <code>paradisebots.net</code>, <code>discord.services</code>, <code>discordapps.dev</code>, <code>divinediscordbots.com</code> and <code>botlist.co</code>. Check the <a href="https://botblock.org/lists" rel="noopener">BotBlock registry</a> before adding a new one.
+        </div>
+      </section>
+
+      <section class="section" id="tier-1">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 · Primary targets</p>
+            <h2>Tier 1 directories</h2>
+            <p>Submit these in order. top.gg and Discord Bot List deserve the most care because they have the largest audiences and the most active review standards.</p>
+          </div>
+          <span class="time-chip">Do these first</span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <caption class="sr-only">Tier 1 Discord bot directories and their submission details</caption>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Directory</th>
+                <th scope="col">Why it matters</th>
+                <th scope="col">Submit</th>
+                <th scope="col">Stats API</th>
+                <th scope="col">Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="rank">1</td>
+                <td><strong>top.gg</strong><span class="table-sub">Largest discovery and vote audience</span></td>
+                <td>Primary listing, search traffic and vote rankings</td>
+                <td><a class="inline-link" href="https://top.gg/bot/new" rel="noopener">top.gg/bot/new <span aria-hidden="true">↗</span></a></td>
+                <td><code>POST /api/bots/:id/stats</code><span class="table-sub">legacy v0 · Zen-ready</span></td>
+                <td><span class="tag tag-good">Webhook</span></td>
+              </tr>
+              <tr>
+                <td class="rank">2</td>
+                <td><strong>Discord Bot List</strong><span class="table-sub">Existing listing at <code>juma-habbo</code></span></td>
+                <td>Second-largest vote audience; Zen is already live</td>
+                <td><a class="inline-link" href="https://discordbotlist.com/bots/juma-habbo/edit" rel="noopener">Edit existing <span aria-hidden="true">↗</span></a></td>
+                <td><code>POST /api/v1/bots/:id/stats</code></td>
+                <td><span class="tag tag-good">12h + webhook</span></td>
+              </tr>
+              <tr>
+                <td class="rank">3</td>
+                <td><strong>Discord Bots</strong><span class="table-sub">discord.bots.gg</span></td>
+                <td>Credibility, profile page and count widget</td>
+                <td><a class="inline-link" href="https://discord.bots.gg/" rel="noopener">Add Bot <span aria-hidden="true">↗</span></a></td>
+                <td><code>POST /api/v1/bots/:id/stats</code></td>
+                <td><span class="tag tag-neutral">No voting</span></td>
+              </tr>
+              <tr>
+                <td class="rank">4</td>
+                <td><strong>Discords.com</strong><span class="table-sub">Bots for Discord</span></td>
+                <td>Discovery plus reviews and votes</td>
+                <td><a class="inline-link" href="https://discords.com/bots" rel="noopener">Add Bot <span aria-hidden="true">↗</span></a></td>
+                <td><code>POST botsfordiscord.com/api/bot/:id</code></td>
+                <td><span class="tag tag-good">Reviews + votes</span></td>
+              </tr>
+              <tr>
+                <td class="rank">5</td>
+                <td><strong>Bots on Discord</strong><span class="table-sub">bots.ondiscord.xyz</span></td>
+                <td>Curated directory with a real review queue</td>
+                <td><a class="inline-link" href="https://bots.ondiscord.xyz/" rel="noopener">Add Bot <span aria-hidden="true">↗</span></a></td>
+                <td><code>POST /bot-api/bots/:id/guilds</code></td>
+                <td><span class="tag tag-good">Reviews + webhook</span></td>
+              </tr>
+              <tr>
+                <td class="rank">6</td>
+                <td><strong>botlist.me</strong><span class="table-sub">Vote-driven listing</span></td>
+                <td>Another active vote audience and stats target</td>
+                <td><a class="inline-link" href="https://botlist.me/" rel="noopener">Add Bot <span aria-hidden="true">↗</span></a></td>
+                <td><code>POST api.botlist.me/api/v1/bots/:id/stats</code></td>
+                <td><span class="tag tag-good">12h + webhook</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Zen currently posts stats to top.gg and Discord Bot List. The other endpoints are documented here for when you add them to <code>src/lib/botLists.js</code>.</p>
+      </section>
+
+      <section class="section" id="tier-2">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">04 · Long tail</p>
+            <h2>Tier 2 directories</h2>
+            <p>Do these after the primary listings are approved. They are useful backlinks and count widgets, not launch-critical. Pick two to five, not all of them at once.</p>
+          </div>
+          <span class="time-chip">Optional depth</span>
+        </div>
+
+        <ul class="directory-grid">
+          <li><a href="https://discord.me/bots" rel="noopener"><strong>Discord Me</strong><span>Mostly servers · low priority</span></a></li>
+          <li><a href="https://discordlist.gg/" rel="noopener"><strong>discordlist.gg</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://voidbots.net/" rel="noopener"><strong>voidbots.net</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://discordextremelist.xyz/" rel="noopener"><strong>Discord Extreme List</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://yabl.xyz/" rel="noopener"><strong>YABL</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://topbot.gg/" rel="noopener"><strong>TopBot</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://thediscordlist.com/" rel="noopener"><strong>The Discord List</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://disforge.com/" rel="noopener"><strong>Disforge</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://dlist.space/" rel="noopener"><strong>DList</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://vcodes.xyz/" rel="noopener"><strong>VCodes</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://omniplex.gg/" rel="noopener"><strong>Omniplex</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://radarcord.net/" rel="noopener"><strong>Radarcord</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://justdiscord.org/" rel="noopener"><strong>JustDiscord</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://discover.fluxpoint.dev/" rel="noopener"><strong>Fluxpoint</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://stellarbotlist.com/" rel="noopener"><strong>Stellar Bot List</strong><span>No BotBlock API support</span></a></li>
+          <li><a href="https://disq.ink/" rel="noopener"><strong>Disq</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://discord.place/" rel="noopener"><strong>Discord Place</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://cybralist.com/" rel="noopener"><strong>Cybralist</strong><span>BotBlock-tracked</span></a></li>
+          <li><a href="https://carbonitex.net/" rel="noopener"><strong>Carbonitex</strong><span>BotBlock-tracked</span></a></li>
+        </ul>
+
+        <div class="notice notice-warn">
+          <strong>DISBOARD is not a bot list.</strong> Its public site and guidelines are for communities, and there is no bot-submission path. Use DISBOARD to promote a support server, not Zen itself. Discord Me has a small bot section but should stay low priority.
+        </div>
+      </section>
+
+      <section class="section" id="listing-kit">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">05 · Copy deck</p>
+            <h2>Zen’s listing kit</h2>
+            <p>Every field is written and ready. Copy it verbatim, then adapt only the fields a directory requires. Do not add keywords to the short description.</p>
+          </div>
+          <span class="time-chip">Copy &amp; paste</span>
+        </div>
+
+        <div class="fact-grid">
+          <div class="fact"><span>Name</span><strong>Zen</strong></div>
+          <div class="fact"><span>Application ID</span><code>1564936469305364480</code></div>
+          <div class="fact"><span>Version</span><strong>1.19.0-beta.3</strong></div>
+          <div class="fact"><span>Commands</span><strong>89 slash commands</strong></div>
+          <div class="fact"><span>Prefix</span><strong><code>/</code> only</strong></div>
+          <div class="fact"><span>Stack</span><strong>discord.js v14 · Node.js</strong></div>
+          <div class="fact"><span>Languages</span><strong>English</strong></div>
+          <div class="fact"><span>NSFW</span><strong>Off</strong></div>
+        </div>
+
+        <div class="copy-card">
+          <div class="copy-card-head">
+            <div>
+              <span class="mini-label">Short description</span>
+              <h3>Under 140 characters</h3>
+            </div>
+            <span class="char-count">119 characters</span>
+          </div>
+          <pre class="copyable"><code>Memes, minigames, levels, economy, moderation and live social feeds — 89 clean slash commands for your server.</code></pre>
+          <p class="copy-note">Alternative (115 characters): <em>A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 89 slash commands.</em></p>
+        </div>
+
+        <div class="copy-card">
+          <div class="copy-card-head">
+            <div>
+              <span class="mini-label">Long description</span>
+              <h3>Markdown for top.gg, DBL, bots.gg</h3>
+            </div>
+            <span class="tag tag-good">Ready</span>
+          </div>
+          <pre class="copyable long-copy"><code>**Zen** is a friendly, slash-command-only Discord bot that keeps a community fun,
+social and tidy without reading message content.
+
+### Fun and games
+- Memes, animal memes, editable memes, cat and dog photos.
+- Trivia, tic-tac-toe, blackjack, hangman, Higher or Lower, word scramble, memory,
+  slots, reaction tests, number guessing and typing races.
+- Live would-you-rather votes, polls, reminders, timestamps and quick decisions.
+
+### Levels and economy
+- Chat XP with rendered rank cards, server rank, progress and a top-ten
+  leaderboard.
+- Ten card themes: Aurora, Sunset, Ocean, Forest, Midnight, Candy, Sakura,
+  Cyber, Ember and Frost.
+- A beta per-server economy with `/daily` streaks, level-up payouts, a theme shop,
+  an inventory and admin-only `/grantcoins`.
+
+### Moderation and community
+- Timed mutes, temporary and permanent bans, kicks, soft bans, warnings, purge,
+  slowmode, channel locks and unlocks.
+- Configurable `/modlog` audit channel and a full permission/role-hierarchy
+  check before every action.
+- `/welcome` and `/leave` with custom templates and test previews.
+
+### Images, social and knowledge
+- Live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups.
+- `/weather` forecasts from Open-Meteo and `/wikipedia` summaries.
+- `/sitestatus` and `/uptime` for website monitoring, TLS, DNS, headers and
+  incident history.
+
+### Built for clean servers
+- 89 slash commands, no prefix and no message-content access.
+- Persistent polls, reminders, levels, warnings, greetings, channel locks and
+  uptime history.
+- Optional beta `/chatgpt`; works only when the owner configures an OpenAI key,
+  and Zen does not store prompts.
+
+**Try it:** add Zen, run `/helplist`, then try `/rank`, `/cat`, `/animalmeme`,
+`/weather Tokyo`, `/wikipedia Jupiter`, `/typerace` or `/sitestatus`.
+
+**Source and issues:** [GitHub](https://github.com/jumayusiii/Zen-Bot) ·
+[Report a bug](https://github.com/jumayusiii/Zen-Bot/issues)</code></pre>
+        </div>
+
+        <div class="kit-columns">
+          <div class="mini-panel">
+            <span class="mini-label">Categories &amp; tags</span>
+            <p>Use the closest available matches. Never add a tag Zen does not satisfy.</p>
+            <div class="tag-cloud">
+              <span>Fun</span><span>Games</span><span>Leveling</span><span>Moderation</span>
+              <span>Memes</span><span>Social</span><span>Utility</span><span>Economy</span>
+              <span>Community</span><span>Images</span><span>Website</span>
+            </div>
+          </div>
+          <div class="mini-panel">
+            <span class="mini-label">Listing defaults</span>
+            <dl class="meta-list">
+              <div><dt>Prefix</dt><dd><code>/</code></dd></div>
+              <div><dt>Help command</dt><dd><code>/helplist</code></dd></div>
+              <div><dt>Language</dt><dd>English</dd></div>
+              <div><dt>NSFW</dt><dd>Off</dd></div>
+              <div><dt>Vote locks</dt><dd>None</dd></div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="copy-card">
+          <div class="copy-card-head">
+            <div>
+              <span class="mini-label">Reviewer note</span>
+              <h3>Private field on top.gg</h3>
+            </div>
+            <span class="tag tag-neutral">Keep online</span>
+          </div>
+          <pre class="copyable"><code>Zen is slash-command only. Start with /helplist for the full 89-command directory.
+No Administrator permission is requested.
+
+Good quick tests:
+/rank (after a few messages), /cat, /animalmeme, /weather Tokyo,
+/wikipedia Jupiter, /typerace, /slots, /poll, /sitestatus.
+
+/chatgpt is optional and may reply with setup instructions if OPENAI_API_KEY is
+not configured; every other public command works without it.
+
+Moderation commands require Discord permissions and role hierarchy, so they may
+be unavailable in the review server. No message content is read. The Server
+Members intent is used only for welcome/leave events. The bot will stay online
+during review.</code></pre>
+        </div>
+
+        <div class="asset-grid">
+          <figure class="asset-card">
+            <div class="asset-preview avatar-preview"><img src="./zen-avatar.png" alt="Zen app icon"></div>
+            <figcaption>
+              <strong>App icon</strong>
+              <span>1024×1024 · <code>zen-avatar-1024.png</code></span>
+              <a href="https://github.com/jumayusiii/Zen-Bot/blob/main/assets/branding/zen-avatar-1024.png" rel="noopener">Open asset <span aria-hidden="true">↗</span></a>
+            </figcaption>
+          </figure>
+          <figure class="asset-card asset-wide">
+            <div class="asset-preview banner-preview"><img src="./zen-banner.png" alt="Zen banner"></div>
+            <figcaption>
+              <strong>Banner</strong>
+              <span>1500×600 · <code>zen-banner-1500x600.png</code></span>
+              <a href="https://github.com/jumayusiii/Zen-Bot/blob/main/assets/branding/zen-banner-1500x600.png" rel="noopener">Open asset <span aria-hidden="true">↗</span></a>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section" id="topgg">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">06 · Primary listing</p>
+            <h2>top.gg, step by step</h2>
+            <p>The highest-traffic listing and the strictest review. Prepare everything above, then submit once — not repeatedly.</p>
+          </div>
+          <a class="section-link" href="https://top.gg/bot/new" rel="noopener">Open form <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <div class="split">
+          <div class="step-list">
+            <div class="step"><span class="step-num">1</span><div><h3>Sign in and start</h3><p>Sign in to <a href="https://top.gg" rel="noopener">top.gg</a> with Discord, then open <a href="https://top.gg/bot/new" rel="noopener">top.gg/bot/new</a>.</p></div></div>
+            <div class="step"><span class="step-num">2</span><div><h3>Find the bot</h3><p>Paste application ID <code>1564936469305364480</code> and choose <strong>Find Bot</strong>.</p></div></div>
+            <div class="step"><span class="step-num">3</span><div><h3>Clear the blocker</h3><p>Confirm the bot is public and code grant is <strong>off</strong>. If you just changed it, wait about 30 minutes before inviting.</p></div></div>
+            <div class="step"><span class="step-num">4</span><div><h3>Paste the descriptions</h3><p>Use the short description (under 140 characters) and the Markdown long description from the <a href="#listing-kit">listing kit</a>.</p></div></div>
+            <div class="step"><span class="step-num">5</span><div><h3>Set the prefix</h3><p>Use <code>/</code>. A wrong prefix is a documented rejection reason because reviewers cannot invoke the bot.</p></div></div>
+            <div class="step"><span class="step-num">6</span><div><h3>Add tags</h3><p>top.gg allows up to 12 categories. Type each tag and press Enter. Do not include <code>#</code> or stuff unrelated keywords.</p></div></div>
+            <div class="step"><span class="step-num">7</span><div><h3>Set language and invite</h3><p>Language: English. Use the invite URL below. Do not request Administrator.</p></div></div>
+            <div class="step"><span class="step-num">8</span><div><h3>Add links</h3><p>Support: GitHub Issues. Source: GitHub repository. Privacy: this page’s <a href="#privacy">privacy section</a>.</p></div></div>
+            <div class="step"><span class="step-num">9</span><div><h3>Paste the reviewer note</h3><p>Use the private note from the listing kit. It explains the slash-only entry point, permissions and the optional ChatGPT key.</p></div></div>
+            <div class="step"><span class="step-num">10</span><div><h3>Submit and stay online</h3><p>Tick the confirmation, submit, and keep PM2 running for the entire review. Do not change the bot’s public behavior mid-review.</p></div></div>
+          </div>
+
+          <aside class="side-stack">
+            <div class="mini-panel">
+              <span class="mini-label">Invite URL</span>
+              <pre class="copyable"><code>https://discord.com/oauth2/authorize?client_id=1564936469305364480&amp;permissions=1099780180998&amp;scope=bot%20applications.commands</code></pre>
+              <p class="tiny">Permissions <code>1099780180998</code> do not include Administrator.</p>
+            </div>
+
+            <div class="mini-panel mini-panel-warn">
+              <span class="mini-label">What happens next</span>
+              <ul class="checks">
+                <li>Volunteer review queue, typically <strong>a week or more</strong>.</li>
+                <li>Reviewers invite Zen to the Verification Center with permissions 0.</li>
+                <li>Watch email, Discord DMs and the top.gg server for the result.</li>
+                <li>Disputes go through <code>#staff-tickets</code>.</li>
+                <li>Three declines for the same reason can block future submissions.</li>
+              </ul>
+            </div>
+
+            <div class="mini-panel">
+              <span class="mini-label">After approval</span>
+              <p>Create the token under <strong>Integrations &amp; API</strong>, add it to <code>.env</code>, then restart.</p>
+              <pre class="copyable"><code>TOPGG_TOKEN=</code></pre>
+            </div>
+          </aside>
+        </div>
+
+        <div class="notice notice-info">
+          <strong>Which top.gg API?</strong> Zen currently uses the legacy stats endpoint <code>POST https://top.gg/api/bots/:id/stats</code> with a raw token and <code>{"server_count": N}</code>. The newer v1 API uses <code>PATCH https://top.gg/api/v1/projects/@me/metrics</code> with <code>Authorization: Bearer …</code>. If the dashboard only issues a v1 token, update <code>src/lib/botLists.js</code> before adding it.
+        </div>
+      </section>
+
+      <section class="section" id="discordbotlist">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">07 · Existing listing</p>
+            <h2>Discord Bot List</h2>
+            <p>Zen already has a public page. You are not submitting from scratch — you are replacing old copy and keeping the existing slug.</p>
+          </div>
+          <a class="section-link" href="https://discordbotlist.com/bots/juma-habbo/edit" rel="noopener">Edit listing <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <div class="split">
+          <div>
+            <div class="notice notice-good">
+              <strong>Already live:</strong> <a href="https://discordbotlist.com/bots/juma-habbo" rel="noopener">discordbotlist.com/bots/juma-habbo</a>. The public slug stays <code>juma-habbo</code>; only the display name and copy change.
+            </div>
+            <div class="step-list">
+              <div class="step"><span class="step-num">1</span><div><h3>Sign in as the owner</h3><p>Use the Discord account that owns the bot, then open the <a href="https://discordbotlist.com/bots/juma-habbo/edit" rel="noopener">listing editor</a>.</p></div></div>
+              <div class="step"><span class="step-num">2</span><div><h3>Replace the identity</h3><p>Display name <strong>Zen</strong>, prefix <code>/</code>, help command <code>/helplist</code>, tags from the listing kit.</p></div></div>
+              <div class="step"><span class="step-num">3</span><div><h3>Paste both descriptions</h3><p>Short and long descriptions from the listing kit. Keep the page SFW.</p></div></div>
+              <div class="step"><span class="step-num">4</span><div><h3>Add links</h3><p>GitHub repository, GitHub Issues and the invite URL. Save, then open the public page on desktop and mobile.</p></div></div>
+              <div class="step"><span class="step-num">5</span><div><h3>Create a stats token</h3><p>On the bot’s admin page choose <strong>Generate Token</strong>, add <code>DISCORDBOTLIST_TOKEN</code> to <code>.env</code>, and restart.</p></div></div>
+            </div>
+          </div>
+
+          <aside class="side-stack">
+            <div class="mini-panel">
+              <span class="mini-label">Stats + votes</span>
+              <p>Zen posts <code>{"guilds": N, "users": M}</code> to <code>POST https://discordbotlist.com/api/v1/bots/:id/stats</code> with the raw token.</p>
+              <pre class="copyable"><code>DISCORDBOTLIST_TOKEN=</code></pre>
+              <p class="tiny">Votes reset every 12 hours. Vote webhooks carry the configured secret in the <code>Authorization</code> header.</p>
+            </div>
+            <div class="mini-panel">
+              <span class="mini-label">Expected log line</span>
+              <pre><code>[botLists] Discord Bot List: stats posted (HTTP 200).</code></pre>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="stats">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">08 · Plumbing</p>
+            <h2>Stats, votes &amp; BotBlock</h2>
+            <p>A listing that shows zero servers looks abandoned. Keep the counts fresh, and only add vote rewards if you can verify them safely.</p>
+          </div>
+          <span class="time-chip">Every 30 minutes</span>
+        </div>
+
+        <div class="split">
+          <div>
+            <div class="copy-card">
+              <div class="copy-card-head">
+                <div>
+                  <span class="mini-label">Current behavior</span>
+                  <h3>How Zen syncs now</h3>
+                </div>
+                <span class="tag tag-good">Automatic</span>
+              </div>
+              <pre><code>[botLists] No list tokens configured; stats sync is off.</code></pre>
+              <p class="copy-note">With a token present, Zen posts immediately at startup and then every 30 minutes. A failed post is logged and never stops the bot. Tokens are read server-side only and must stay in <code>.env</code>.</p>
+            </div>
+
+            <div class="api-grid">
+              <article class="api-card">
+                <span class="mini-label">top.gg</span>
+                <h3>Legacy v0</h3>
+                <pre><code>POST https://top.gg/api/bots/:id/stats
+Authorization: &lt;token&gt;
+
+{"server_count": 2}</code></pre>
+                <p>Implemented. v1 tokens may need the Bearer metrics endpoint instead.</p>
+              </article>
+              <article class="api-card">
+                <span class="mini-label">Discord Bot List</span>
+                <h3>v1</h3>
+                <pre><code>POST https://discordbotlist.com/api/v1/bots/:id/stats
+Authorization: &lt;token&gt;
+
+{"guilds": 2, "users": 42}</code></pre>
+                <p>Implemented. Includes optional member counts.</p>
+              </article>
+              <article class="api-card">
+                <span class="mini-label">Discord Bots</span>
+                <h3>bots.gg</h3>
+                <pre><code>POST https://discord.bots.gg/api/v1/bots/:id/stats
+
+{"guildCount": 2}</code></pre>
+                <p>Not implemented yet. Add it as a target in <code>botLists.js</code>.</p>
+              </article>
+              <article class="api-card">
+                <span class="mini-label">Bots on Discord</span>
+                <h3>Strict rate limit</h3>
+                <pre><code>POST https://bots.ondiscord.xyz/bot-api/bots/:id/guilds
+
+{"guildCount": 2}</code></pre>
+                <p>Two requests per four minutes. Unapproved bots return 404.</p>
+              </article>
+            </div>
+
+            <div class="callout callout-info">
+              <div class="callout-mark" aria-hidden="true">i</div>
+              <div class="callout-body">
+                <h3>Use BotBlock once you pass two lists.</h3>
+                <p>BotBlock forwards one count to many directories and reports success and failure per list. The rate limit is one successful request per 120 seconds.</p>
+                <pre class="copyable"><code>POST https://botblock.org/api/count
+
+{
+  "server_count": 2,
+  "bot_id": "1564936469305364480",
+  "top.gg": "TOPGG_TOKEN",
+  "discordbotlist.com": "DBL_TOKEN"
+}</code></pre>
+                <p><a href="https://botblock.org/lists" rel="noopener">Registry and feature matrix <span aria-hidden="true">↗</span></a></p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="side-stack">
+            <div class="mini-panel mini-panel-warn">
+              <span class="mini-label">Vote webhook rules</span>
+              <ul class="checks">
+                <li>Read the <strong>raw body</strong> before JSON parsing.</li>
+                <li>Return <code>2xx</code> within <strong>5 seconds</strong>; queue slow work.</li>
+                <li>Verify top.gg’s HMAC-SHA256 signature over <code>{timestamp}.{rawBody}</code>.</li>
+                <li>Use the configured secret for DBL and botlist.me.</li>
+                <li>Deduplicate by user and vote window.</li>
+                <li>Reward only a verified, first-time vote.</li>
+                <li>Provide an opt-out for vote reminders.</li>
+              </ul>
+            </div>
+            <div class="mini-panel">
+              <span class="mini-label">Reality check</span>
+              <p>Zen does not currently expose an HTTP webhook server. Adding vote rewards is a separate feature — do not expose the Discord token as a webhook secret.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="review">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">09 · Approval</p>
+            <h2>Rules that get bots declined</h2>
+            <p>These are the highest-value checks from published directory guidelines. Fixing them before submission is faster than appealing a decline.</p>
+          </div>
+          <span class="time-chip">Read before submitting</span>
+        </div>
+
+        <div class="rule-grid">
+          <article class="rule"><span class="rule-number">01</span><h3>Offline, private or code-granted</h3><p>Keep Zen online and invitable for the whole review. Turn code grant off before you submit.</p></article>
+          <article class="rule"><span class="rule-number">02</span><h3>Wrong prefix</h3><p>Zen is <code>/</code>, not a text prefix. Reviewers need to invoke it immediately.</p></article>
+          <article class="rule"><span class="rule-number">03</span><h3>Requests Administrator</h3><p>Not allowed. Zen’s invite uses permissions <code>1099780180998</code> and does not include it.</p></article>
+          <article class="rule"><span class="rule-number">04</span><h3>No clear entry point</h3><p><code>/helplist</code> is the directory. Put it in the listing and the reviewer note.</p></article>
+          <article class="rule"><span class="rule-number">05</span><h3>Vote-locking most commands</h3><p>Keep it to no more than 3–5 commands, or do not vote-lock at all. Zen locks none.</p></article>
+          <article class="rule"><span class="rule-number">06</span><h3>Owner commands exposed</h3><p>No public eval, shell or status command. Admin commands stay permission-gated.</p></article>
+          <article class="rule"><span class="rule-number">07</span><h3>Fork or duplicate clone</h3><p>Do not list the same codebase as multiple bots, or submit someone else’s bot.</p></article>
+          <article class="rule"><span class="rule-number">08</span><h3>Keyword-stuffed copy</h3><p>Use the short description as written. Padding it with tags is a rejection reason.</p></article>
+          <article class="rule"><span class="rule-number">09</span><h3>Advertising unrelated things</h3><p>Do not promote other bot lists, unrelated servers or paid services in the listing.</p></article>
+          <article class="rule"><span class="rule-number">10</span><h3>NSFW assets</h3><p>Keep the name, avatar, banner and description SFW, even if the bot has NSFW commands.</p></article>
+          <article class="rule"><span class="rule-number">11</span><h3>Undisclosed DMs</h3><p>Zen only DMs for warnings and reminder delivery. Disclose it in the privacy policy and offer deletion.</p></article>
+          <article class="rule"><span class="rule-number">12</span><h3>Broken links or buttons</h3><p>Test every invite, support link, privacy link and button after saving the listing.</p></article>
+        </div>
+
+        <div class="notice notice-danger">
+          <strong>Three declines for the same reason can block you.</strong> Fix the issue before resubmitting. If a listing is declined and the reason is unclear, use the directory’s staff ticket flow instead of opening a second submission.
+        </div>
+      </section>
+
+      <section class="section" id="checklist">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">10 · Ship it</p>
+            <h2>Launch checklist</h2>
+            <p>Work top to bottom. Progress is saved in this browser, so you can come back after clearing the code-grant setting.</p>
+          </div>
+          <span class="time-chip">24 checks</span>
+        </div>
+
+        <div class="checklist-shell">
+          <div class="checklist-top">
+            <div>
+              <span class="mini-label">Your progress</span>
+              <strong id="checklist-count">0 of 24 complete</strong>
+            </div>
+            <div class="checklist-actions">
+              <button class="btn btn-small btn-secondary" type="button" id="checklist-reset">Reset</button>
+            </div>
+          </div>
+          <div class="checklist-meter" role="progressbar" aria-labelledby="checklist-count" aria-valuemin="0" aria-valuemax="24" aria-valuenow="0" id="checklist-progress">
+            <span></span>
+          </div>
+
+          <div class="checklist-group">
+            <h3><span>Before submitting</span><span class="group-count">10</span></h3>
+            <label class="check"><input type="checkbox" data-check="code-grant"><span class="box" aria-hidden="true"></span><span><strong>Turn off Requires OAuth2 Code Grant</strong><small>Developer Portal → Bot → Authorization Flow. Wait 30 minutes, then test an invite.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="public"><span class="box" aria-hidden="true"></span><span><strong>Confirm the bot is public and invitable</strong><small>Use a fresh Discord account or incognito browser.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="commands"><span class="box" aria-hidden="true"></span><span><strong>Register all 89 slash commands</strong><small>Run <code>npm run deploy</code> after any command change.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="helplist"><span class="box" aria-hidden="true"></span><span><strong>Test <code>/helplist</code> from a clean account</strong><small>Confirm the directory opens and the main tabs work.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="privacy"><span class="box" aria-hidden="true"></span><span><strong>Use this page as the public privacy URL</strong><small>Link directly to <code>#privacy</code> in every listing.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="links"><span class="box" aria-hidden="true"></span><span><strong>Check the support and invite URLs</strong><small>GitHub Issues and the no-Administrator invite.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="assets"><span class="box" aria-hidden="true"></span><span><strong>Prepare the icon and banner</strong><small>1024×1024 avatar and 1500×600 banner.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="copy"><span class="box" aria-hidden="true"></span><span><strong>Copy the short description, long description, tags and reviewer note</strong><small>All four are in the listing kit.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="safe"><span class="box" aria-hidden="true"></span><span><strong>Confirm no NSFW, no Administrator request and no vote-locking</strong><small>Check the actual invite permissions, not the intended ones.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="online"><span class="box" aria-hidden="true"></span><span><strong>Keep the bot online for the entire review</strong><small>PM2 <code>zen-bot</code> should stay online; check the log before submitting.</small></span></label>
+          </div>
+
+          <div class="checklist-group">
+            <h3><span>Submit</span><span class="group-count">7</span></h3>
+            <label class="check"><input type="checkbox" data-check="topgg"><span class="box" aria-hidden="true"></span><span><strong>top.gg</strong><small><a href="https://top.gg/bot/new" rel="noopener">top.gg/bot/new</a> — highest priority.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="dbl"><span class="box" aria-hidden="true"></span><span><strong>Update Discord Bot List</strong><small><a href="https://discordbotlist.com/bots/juma-habbo/edit" rel="noopener">Edit the existing listing</a>; keep the slug.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="botsgg"><span class="box" aria-hidden="true"></span><span><strong>Submit to Discord Bots (bots.gg)</strong><small><a href="https://discord.bots.gg/" rel="noopener">discord.bots.gg</a></small></span></label>
+            <label class="check"><input type="checkbox" data-check="discords"><span class="box" aria-hidden="true"></span><span><strong>Submit to Discords.com</strong><small><a href="https://discords.com/bots" rel="noopener">discords.com/bots</a></small></span></label>
+            <label class="check"><input type="checkbox" data-check="bod"><span class="box" aria-hidden="true"></span><span><strong>Submit to Bots on Discord</strong><small><a href="https://bots.ondiscord.xyz/" rel="noopener">bots.ondiscord.xyz</a></small></span></label>
+            <label class="check"><input type="checkbox" data-check="botlistme"><span class="box" aria-hidden="true"></span><span><strong>Submit to botlist.me</strong><small><a href="https://botlist.me/" rel="noopener">botlist.me</a></small></span></label>
+            <label class="check"><input type="checkbox" data-check="tier2"><span class="box" aria-hidden="true"></span><span><strong>Pick two to five Tier 2 directories</strong><small>Do not submit to DISBOARD as a bot.</small></span></label>
+          </div>
+
+          <div class="checklist-group">
+            <h3><span>After approval</span><span class="group-count">7</span></h3>
+            <label class="check"><input type="checkbox" data-check="topgg-token"><span class="box" aria-hidden="true"></span><span><strong>Create the top.gg token and set <code>TOPGG_TOKEN</code></strong><small>Integrations &amp; API on the project dashboard.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="dbl-token"><span class="box" aria-hidden="true"></span><span><strong>Create the DBL token and set <code>DISCORDBOTLIST_TOKEN</code></strong><small>Generate Token on the bot’s admin page.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="sync"><span class="box" aria-hidden="true"></span><span><strong>Restart and confirm HTTP 200 in the log</strong><small><code>[botLists] … stats posted (HTTP 200).</code></small></span></label>
+            <label class="check"><input type="checkbox" data-check="homepage"><span class="box" aria-hidden="true"></span><span><strong>Point the GitHub homepage at the best listing</strong><small>Use the strongest approved directory URL or this guide.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="badge"><span class="box" aria-hidden="true"></span><span><strong>Add a listing badge to the README</strong><small>Only if the directory provides an official badge.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="review-pages"><span class="box" aria-hidden="true"></span><span><strong>Recheck every public page on desktop and mobile</strong><small>Copy, links, images and buttons.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="monitor"><span class="box" aria-hidden="true"></span><span><strong>Monitor reviews and votes, and respond politely</strong><small>Never incentivise reviews or buy votes.</small></span></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="privacy">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">11 · Public policy</p>
+            <h2>Privacy policy</h2>
+            <p>Use this page as Zen’s public privacy URL. It describes what the bot stores, what it never reads, and how to request deletion.</p>
+          </div>
+          <span class="time-chip">Effective 1 Nov 2026</span>
+        </div>
+
+        <div class="policy">
+          <p class="policy-intro">This policy explains how <strong>Zen</strong> (“the bot”, “we”) handles data when you add it to a Discord server or use its commands. Questions and deletion requests go to <a href="https://github.com/jumayusiii/Zen-Bot/issues" rel="noopener">GitHub Issues</a>.</p>
+
+          <h3>Data Zen stores</h3>
+          <p>Zen stores only what its features need. Depending on the features a server uses, this can include:</p>
+          <ul>
+            <li>Discord server, channel and user IDs, plus display names.</li>
+            <li>XP, levels, coin balances, owned card themes and inventory items.</li>
+            <li>Warnings, moderation settings, audit-log channel IDs and temporary-ban state.</li>
+            <li>Polls, reminders, greeting templates and channel-lock restore state.</li>
+            <li>Uptime samples, Type Race bests and role-reward settings.</li>
+          </ul>
+
+          <h3>What Zen does not read</h3>
+          <p>Zen does not read or store message content. It uses the <strong>Server Members</strong> intent only to support welcome and leave events. Moderation commands use Discord’s own permission and role-hierarchy checks.</p>
+
+          <h3>ChatGPT beta</h3>
+          <p><code>/chatgpt</code> sends the prompt you write to OpenAI only when you use that command. Zen does not store prompts or conversation history. The command is optional and only works when the bot owner configures an OpenAI API key.</p>
+
+          <h3>Storage and security</h3>
+          <p>Feature data is stored in local JSON files on the bot owner’s host. Discord and API tokens are kept in a server-side environment file, never in the repository or browser. Data is retained while the relevant feature remains configured.</p>
+
+          <h3>Third parties</h3>
+          <p>Zen connects to Discord’s API and, for specific commands, to public services such as Open-Meteo, Wikipedia, meme and image providers, and social media feeds. Those services receive only the request needed to answer the command. OpenAI is used only for <code>/chatgpt</code>, as described above.</p>
+
+          <h3>Deletion and your rights</h3>
+          <p>To delete a server’s data, the bot owner can remove the relevant JSON file in <code>data/</code>; removing the whole <code>data/</code> directory resets every feature. To request deletion or ask what is stored about you, open an issue at <a href="https://github.com/jumayusiii/Zen-Bot/issues" rel="noopener">github.com/jumayusiii/Zen-Bot/issues</a>. We will respond as quickly as possible.</p>
+
+          <h3>Children and changes</h3>
+          <p>Zen is not directed at children under 13. If this policy changes, the effective date at the top of this section will change. Continued use after an update means you accept the revised policy.</p>
+
+          <p class="policy-foot">Effective <strong>2 November 2026</strong> · Zen <strong>1.19.0-beta.3</strong></p>
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">12 · Receipts</p>
+            <h2>Sources &amp; further reading</h2>
+            <p>Directory forms and policies change. These were checked on 1 November 2026; if a page is login-gated or moved, use the directory’s current Add Bot flow.</p>
+          </div>
+          <span class="time-chip">Verified 1 Nov 2026</span>
+        </div>
+
+        <div class="source-grid">
+          <div class="source-card">
+            <span class="mini-label">top.gg</span>
+            <ul>
+              <li><a href="https://support.top.gg/hc/en-us/articles/23135162935708-How-to-Add-Your-Bot" rel="noopener">How to add your bot</a></li>
+              <li><a href="https://support.top.gg/hc/en-us/articles/23135298323996-How-the-Project-Reviewal-Process-Works" rel="noopener">Review process</a></li>
+              <li><a href="https://support.top.gg/hc/en-us/articles/23146912808988-Discord-Bot-Guidelines" rel="noopener">Discord bot guidelines</a></li>
+              <li><a href="https://support.top.gg/hc/en-us/articles/23146974461596-Voting-Guidelines" rel="noopener">Voting guidelines</a></li>
+              <li><a href="https://docs.top.gg/" rel="noopener">API documentation</a></li>
+              <li><a href="https://docs.top.gg/webhooks/overview" rel="noopener">Vote webhooks</a></li>
+            </ul>
+          </div>
+          <div class="source-card">
+            <span class="mini-label">Discord Bot List</span>
+            <ul>
+              <li><a href="https://docs.discordbotlist.com/" rel="noopener">API documentation</a></li>
+              <li><a href="https://docs.discordbotlist.com/bot-statistics.md" rel="noopener">Bot statistics</a></li>
+              <li><a href="https://docs.discordbotlist.com/implementing-voting.md" rel="noopener">Implementing voting</a></li>
+              <li><a href="https://docs.discordbotlist.com/vote-webhooks.md" rel="noopener">Vote webhooks</a></li>
+            </ul>
+          </div>
+          <div class="source-card">
+            <span class="mini-label">Other directories</span>
+            <ul>
+              <li><a href="https://botblock.org/lists" rel="noopener">BotBlock active lists</a></li>
+              <li><a href="https://botblock.org/docs" rel="noopener">BotBlock API docs</a></li>
+              <li><a href="https://bots.ondiscord.xyz/info/api" rel="noopener">Bots on Discord API</a></li>
+              <li><a href="https://docs.botlist.me/Webhooks/Vote_Webhooks" rel="noopener">botlist.me vote webhooks</a></li>
+              <li><a href="https://disboard.org/site/guidelines" rel="noopener">DISBOARD guidelines</a></li>
+            </ul>
+          </div>
+          <div class="source-card">
+            <span class="mini-label">Zen</span>
+            <ul>
+              <li><a href="https://github.com/jumayusiii/Zen-Bot" rel="noopener">GitHub repository</a></li>
+              <li><a href="https://github.com/jumayusiii/Zen-Bot/issues" rel="noopener">Issues &amp; support</a></li>
+              <li><a href="https://github.com/jumayusiii/Zen-Bot/blob/main/docs/bot-listing.md" rel="noopener">Repo version of this guide</a></li>
+              <li><a href="https://discordbotlist.com/bots/juma-habbo" rel="noopener">Discord Bot List page</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="disclaimer">Zen is an independent project. Directory names and logos belong to their owners. This guide is not endorsed by Discord, top.gg or any listed directory.</p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="./zen-avatar.png" width="36" height="36" alt="">
+        <div>
+          <strong>Zen Bot List Guide</strong>
+          <span>Public launch playbook · v1.19.0-beta.3</span>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/jumayusiii/Zen-Bot" rel="noopener">GitHub</a>
+        <a href="https://github.com/jumayusiii/Zen-Bot/issues" rel="noopener">Support</a>
+        <a href="https://top.gg/bot/new" rel="noopener">top.gg</a>
+        <a href="#checklist">Checklist</a>
+        <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+    <p class="footer-note">Verified 1 November 2026. Directory forms and policies can change; always confirm the current Add Bot flow.</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

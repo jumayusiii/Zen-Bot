@@ -7,3 +7,5 @@ npm-debug.log*
 data/*.json
 data/*.tmp
 coverage/
+guide/.wrangler/
+logs/
