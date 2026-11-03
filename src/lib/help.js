@@ -52,7 +52,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Economy',
     title: 'Economy & shop',
     emoji: '💰',
-    description: 'Daily, work and heist coins, coin wagers, blackjack bets, rank card themes and your inventory.',
+    description: 'Daily, work and heist coins, coin wagers, blackjack bets, the rich list, rank card themes and your inventory.',
     color: COLORS.game,
     order: 26,
   },

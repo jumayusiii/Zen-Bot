@@ -233,6 +233,45 @@ async function getAccount(guildId, userId) {
 }
 
 /**
+ * Ranks the richest wallets in one server. Only wallets with a positive
+ * balance are listed, so dormant accounts do not push real members down.
+ *
+ * @param {string} guildId
+ * @param {number} [limit]
+ * @param {string|null} [userId] Include this member's rank when they are outside the top slice
+ * @returns {Promise<{entries: object[], totalUsers: number, member: {rank: number, balance: number}|null}>}
+ */
+async function getEconomyLeaderboard(guildId, limit = 10, userId = null) {
+  const guildKey = cleanText(guildId, 32);
+  const userKey = userId ? cleanText(userId, 32) : null;
+  if (!guildKey) throw new Error('A guild is required to read the economy leaderboard.');
+
+  const state = await readState();
+  const ranked = state.users
+    .filter((entry) => entry.guildId === guildKey && entry.balance > 0)
+    .sort(
+      (a, b) =>
+        b.balance - a.balance ||
+        a.updatedAt - b.updatedAt ||
+        a.userId.localeCompare(b.userId),
+    );
+
+  const size = Math.max(1, Math.min(25, Math.floor(limit) || 10));
+  const memberIndex = userKey ? ranked.findIndex((entry) => entry.userId === userKey) : -1;
+
+  return {
+    totalUsers: ranked.length,
+    entries: ranked.slice(0, size).map((entry, index) => ({
+      ...cloneAccount(entry),
+      rank: index + 1,
+    })),
+    member: memberIndex >= 0
+      ? { rank: memberIndex + 1, balance: ranked[memberIndex].balance }
+      : null,
+  };
+}
+
+/**
  * Claims the once-per-day reward and advances the streak when the previous
  * claim was within 48 hours.
  *
@@ -651,6 +690,7 @@ module.exports = {
   creditCoins,
   economyFile,
   getAccount,
+  getEconomyLeaderboard,
   grantCoins,
   setCardTheme,
   settleWager,

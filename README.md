@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.4** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.5** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin grants and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -17,7 +17,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
 - **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
 - **Images** with random cat, dog and animal memes, `/xkcd` for random comics, `/caption` for styled image text, `/redditcard` for live comment cards, and `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
-- **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, `/steal` heists, coin-flip, slot and blackjack wagers, admin coin grants, a ten-theme shop, an inventory and purchasable rank card wallpapers.
+- **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, `/steal` heists, coin-flip, slot and blackjack wagers, an `/ecoleaderboard` rich list, admin coin grants, a ten-theme shop, an inventory and purchasable rank card wallpapers.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -92,6 +92,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/coinbet <amount> <side>` | 🧪 Wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win. |
 | `/slotsbet <amount>` | 🧪 Wagers coins on the slot machine: pairs pay **1.5×** and triples pay **3×–30×**. |
 | `/steal` | 🧪 Tries a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown. |
+| `/ecoleaderboard` | 🧪 Ranks the ten richest members in the server, with medals and your rank when you are outside the top ten. |
 | `/mute <member> <duration> [reason]` | Times out a member for **5 minutes to 28 days**, with an audit-log reason. |
 | `/unmute <member> [reason]` | Removes a member's timeout. |
 | `/kick <member> [reason]` | Removes a member from the server with an audit-log reason. |
@@ -131,7 +132,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/changelog` | Shows the current version, update date and release notes. |
 | `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
 
-🧪 marks beta commands. The directory covers **92 commands** across nine tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
+🧪 marks beta commands. The directory covers **93 commands** across nine tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -165,7 +166,7 @@ The level curve starts at **50 XP** for level 1 and grows with each level (`5 ×
 
 ## Economy
 
-Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. Level-ups are the second income source: reaching level 1 pays **25 coins**, every later level adds **5 coins** more, and a single level pays at most **250 coins**. `/work` adds a **40–110 coin** shift every 45 minutes. `/steal` attempts a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown that starts even when the heist fails. `/blackjack` accepts an optional bet of up to **5,000 coins**: the stake is taken when the hand is dealt, a win returns **2×**, a push returns the stake and a loss returns nothing. `/coinbet` wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win; `/slotsbet` pays **1.5×** for a pair and **3×–30×** for a triple. Coin wagers are settled in one queued write, so a stake is never charged without the result; blackjack holds the stake from the deal and credits its payout once at the end. `/balance` shows a wallet, streak and equipped card.
+Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. Level-ups are the second income source: reaching level 1 pays **25 coins**, every later level adds **5 coins** more, and a single level pays at most **250 coins**. `/work` adds a **40–110 coin** shift every 45 minutes. `/steal` attempts a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown that starts even when the heist fails. `/blackjack` accepts an optional bet of up to **5,000 coins**: the stake is taken when the hand is dealt, a win returns **2×**, a push returns the stake and a loss returns nothing. `/ecoleaderboard` ranks the ten richest wallets in the server, with medals and your own rank when you are outside the top ten; only wallets with coins are listed. `/coinbet` wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win; `/slotsbet` pays **1.5×** for a pair and **3×–30×** for a triple. Coin wagers are settled in one queued write, so a stake is never charged without the result; blackjack holds the stake from the deal and credits its payout once at the end. `/balance` shows a wallet, streak and equipped card.
 
 `/shop` lists ten card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight, Candy, Sakura, Cyber, Ember and Frost** at 600–4,400 coins. `/buy theme:<name>` deducts the price atomically and equips the theme; `/inventory` lists everything owned and `/rankcard theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
 
@@ -379,7 +380,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, all rank-card themes, channel-lock restoration, soft-ban ordering, admin coin grants, changelog release notes, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, caption rendering, Reddit card parsing, coin wagers, blackjack bets, vault heists, calculator parsing, xkcd selection, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, all rank-card themes, channel-lock restoration, soft-ban ordering, admin coin grants, changelog release notes, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, caption rendering, Reddit card parsing, coin wagers, blackjack bets, vault heists, economy leaderboards, calculator parsing, xkcd selection, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -480,6 +481,7 @@ src/
     │   ├── buy.js
     │   ├── coinbet.js
     │   ├── daily.js
+    │   ├── ecoleaderboard.js
     │   ├── inventory.js
     │   ├── shop.js
     │   ├── slotsbet.js
@@ -613,7 +615,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
-- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.4`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.5`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

@@ -2,6 +2,21 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.5',
+    date: '2026-11-03',
+    title: 'Rich list & a material refresh',
+    summary: 'Zen adds a per-server economy leaderboard and a modern monochrome identity built around a raised white disc.',
+    added: [
+      '`/ecoleaderboard` ranks the ten richest wallets in the server, with medals, balances and your rank when you are outside the top ten.',
+      'A new material avatar and banner: a rounded black Z on a raised white disc with a soft monochrome halo.',
+    ],
+    improved: [
+      'The economy leaderboard counts only funded wallets, so dormant accounts do not push real members down the list.',
+      'The command directory now covers **93 commands** across nine tabs.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.4',
     date: '2026-11-03',
     title: 'Heists, coin blackjack & a new look',

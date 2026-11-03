@@ -253,6 +253,41 @@ test('steal attempts can succeed or fail and always start a 25-minute cooldown',
 });
 
 
+test('the economy leaderboard ranks funded wallets per server', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          { guildId: 'guild-1', userId: 'a', balance: 500, updatedAt: 1 },
+          { guildId: 'guild-1', userId: 'b', balance: 900, updatedAt: 2 },
+          { guildId: 'guild-1', userId: 'c', balance: 0 },
+          { guildId: 'guild-1', userId: 'e', balance: 100, updatedAt: 5 },
+          { guildId: 'guild-2', userId: 'd', balance: 9999 },
+        ],
+      }),
+      'utf8',
+    );
+
+    const topTwo = await economy.getEconomyLeaderboard('guild-1', 2, 'e');
+    assert.equal(topTwo.totalUsers, 3);
+    assert.deepEqual(
+      topTwo.entries.map((entry) => [entry.userId, entry.rank, entry.balance]),
+      [['b', 1, 900], ['a', 2, 500]],
+    );
+    assert.deepEqual(topTwo.member, { rank: 3, balance: 100 });
+
+    const all = await economy.getEconomyLeaderboard('guild-1', 10, 'b');
+    assert.deepEqual(all.entries.map((entry) => entry.userId), ['b', 'a', 'e']);
+    assert.deepEqual(all.member, { rank: 1, balance: 900 });
+
+    const empty = await economy.getEconomyLeaderboard('guild-3');
+    assert.equal(empty.totalUsers, 0);
+    assert.deepEqual(empty.entries, []);
+  });
+});
+
 test('creditCoins adds payouts and ignores a zero payout', async () => {
   await withEconomyFile(async () => {
     const credited = await economy.creditCoins({

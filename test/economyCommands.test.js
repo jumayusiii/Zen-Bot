@@ -8,6 +8,7 @@ const dailyCommand = require('../src/commands/economy/daily');
 const buyCommand = require('../src/commands/economy/buy');
 const stealCommand = require('../src/commands/economy/steal');
 const blackjackCommand = require('../src/commands/economy/blackjack');
+const economyLeaderboardCommand = require('../src/commands/economy/ecoleaderboard');
 const rankCardCommand = require('../src/commands/levels/rankcard');
 
 async function withEconomyFile(run) {
@@ -26,7 +27,7 @@ function fakeInteraction(options = {}) {
   const captured = {};
   return {
     captured,
-    guild: { id: 'guild-1' },
+    guild: options.guild ?? { id: 'guild-1' },
     user: { id: 'user-1', username: 'tester' },
     client: {
       user: {
@@ -103,6 +104,46 @@ test('/blackjack starts a free hand and refuses a bet the wallet cannot cover', 
     await blackjackCommand.execute(tooMuch);
     assert.equal(tooMuch.captured.reply.flags, 64);
     assert.match(tooMuch.captured.reply.content, /only have \*\*500 coins\*\*/);
+  });
+});
+
+test('/ecoleaderboard ranks wallets and shows member names', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          { guildId: 'guild-1', userId: 'user-1', balance: 500, owned: ['aurora'] },
+          { guildId: 'guild-1', userId: 'user-2', balance: 300, owned: ['aurora'] },
+          { guildId: 'guild-2', userId: 'user-3', balance: 9000, owned: ['aurora'] },
+        ],
+      }),
+      'utf8',
+    );
+
+    const guild = {
+      id: 'guild-1',
+      name: 'Test Server',
+      iconURL: () => null,
+      members: {
+        cache: new Map([
+          ['user-1', { displayName: 'Tester' }],
+          ['user-2', { displayName: 'Second' }],
+        ]),
+      },
+    };
+
+    const interaction = fakeInteraction({ guild });
+    await economyLeaderboardCommand.execute(interaction);
+
+    const embed = interaction.captured.reply.embeds[0].data;
+    assert.equal(embed.title, 'Test Server leaderboard');
+    assert.match(embed.description, /Top \*\*2\*\* of \*\*2\*\*/);
+    assert.match(embed.fields[0].name, /Tester/);
+    assert.match(embed.fields[0].value, /500\*\* coins/);
+    assert.match(embed.fields[1].name, /Second/);
+    assert.match(embed.fields[1].value, /300\*\* coins/);
   });
 });
 

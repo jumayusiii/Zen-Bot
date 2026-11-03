@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **3 November 2026** · Zen **1.19.0-beta.4** · **92 slash commands**
+Last verified: **3 November 2026** · Zen **1.19.0-beta.5** · **93 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -23,7 +23,7 @@ vote webhooks, and the mistakes that get bots declined.
 | Bot is public | ✅ `bot_public: true` | None |
 | OAuth2 code grant | ❌ enabled | Turn it off in the Developer Portal |
 | Bot is online during review | ✅ PM2 process `zen-bot` | Keep the host running |
-| Slash commands are registered | ✅ 92 | `npm run deploy` after command changes |
+| Slash commands are registered | ✅ 93 | `npm run deploy` after command changes |
 | Invite requests Administrator | ✅ no | Keep permissions at `1099780180998` |
 | Help entry point | ✅ `/helplist` | Mention it in reviewer notes |
 | NSFW content on listing | ✅ none | Keep the listing SFW |
@@ -109,11 +109,11 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.4` |
+| Version | `1.19.0-beta.5` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
-| Commands | 92 |
+| Commands | 93 |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
 | Source | <https://github.com/jumayusiii/Zen-Bot> |
 | Support | <https://github.com/jumayusiii/Zen-Bot/issues> |
@@ -125,13 +125,13 @@ server, not the bot.
 **Under 140 characters** — use this on top.gg and as the default short field:
 
 ```text
-Memes, minigames, levels, economy, moderation and live social feeds — 92 clean slash commands for your server.
+Memes, minigames, levels, economy, moderation and live social feeds — 93 clean slash commands for your server.
 ```
 
 Alternative, 115 characters:
 
 ```text
-A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 92 slash commands.
+A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 93 slash commands.
 ```
 
 Do not pad this field with keywords. top.gg lists keyword stuffing as a
@@ -158,8 +158,8 @@ social and tidy without reading message content.
 - Ten card themes: Aurora, Sunset, Ocean, Forest, Midnight, Candy, Sakura,
   Cyber, Ember and Frost.
 - A beta per-server economy with `/daily` streaks, `/work` shifts, level-up payouts,
-  `/steal` heists, coin wagers and blackjack bets, a theme shop, an inventory and
-  admin-only `/grantcoins`.
+  `/steal` heists, coin wagers and blackjack bets, an `/ecoleaderboard` rich list,
+  a theme shop, an inventory and admin-only `/grantcoins`.
 
 ### Moderation and community
 - Timed mutes, temporary and permanent bans, kicks, soft bans, warnings, purge,
@@ -176,7 +176,7 @@ social and tidy without reading message content.
   incident history.
 
 ### Built for clean servers
-- 92 slash commands, no prefix and no message-content access.
+- 93 slash commands, no prefix and no message-content access.
 - Persistent polls, reminders, levels, warnings, greetings, channel locks and
   uptime history.
 - Optional beta `/chatgpt`; works only when the owner configures an OpenAI key,
@@ -207,7 +207,7 @@ Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Im
 Paste this into the private reviewer-notes field:
 
 ```text
-Zen is slash-command only. Start with /helplist for the full 92-command directory.
+Zen is slash-command only. Start with /helplist for the full 93-command directory.
 No Administrator permission is requested.
 
 Good quick tests:
@@ -492,7 +492,7 @@ resubmit second.
 
 - [ ] Turn **Requires OAuth2 Code Grant** off.
 - [ ] Confirm the bot is public and invitable.
-- [ ] Deploy all 92 slash commands: `npm run deploy`.
+- [ ] Deploy all 93 slash commands: `npm run deploy`.
 - [ ] Confirm `/helplist` works from a clean account.
 - [ ] Publish a public privacy-policy URL.
 - [ ] Check the support URL and invite URL.

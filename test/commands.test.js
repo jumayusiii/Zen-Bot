@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 92);
+  assert.equal(registry.size, 93);
 
   for (const name of [
     'uptime',
@@ -95,6 +95,7 @@ test('all commands load with valid names, descriptions and unique registrations'
     'coinbet',
     'slotsbet',
     'steal',
+    'ecoleaderboard',
     'calculate',
     'xkcd',
   ]) {
@@ -151,6 +152,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('coinbet').beta, true);
   assert.equal(registry.get('slotsbet').beta, true);
   assert.equal(registry.get('steal').beta, true);
+  assert.equal(registry.get('ecoleaderboard').beta, true);
   assert.equal(registry.get('calculate').beta, undefined);
   assert.equal(registry.get('xkcd').beta, undefined);
   assert.equal(registry.get('blackjack').category, 'economy');
@@ -242,6 +244,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('coinbet').data.toJSON().options.length, 2);
   assert.equal(registry.get('slotsbet').data.toJSON().options.length, 1);
   assert.equal(registry.get('steal').data.toJSON().options.length, 0);
+  assert.equal(registry.get('ecoleaderboard').data.toJSON().options.length, 0);
   assert.equal(registry.get('calculate').data.toJSON().options.length, 1);
   assert.equal(registry.get('xkcd').data.toJSON().options.length, 0);
 });
