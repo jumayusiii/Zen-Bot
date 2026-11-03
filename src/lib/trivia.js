@@ -142,17 +142,164 @@ const QUESTIONS = Object.freeze([
   },
 ]);
 
+const QUESTIONS_DE = Object.freeze([
+  {
+    category: 'Wissenschaft',
+    question: 'Welcher Planet ist als Roter Planet bekannt?',
+    options: ['Mars', 'Venus', 'Jupiter', 'Merkur'],
+    answer: 0,
+  },
+  {
+    category: 'Technologie',
+    question: 'Wofür steht HTTP?',
+    options: [
+      'HyperText Transfer Protocol',
+      'High Transfer Text Process',
+      'Hyperlink Transfer Protocol',
+      'Host Transfer Protocol',
+    ],
+    answer: 0,
+  },
+  {
+    category: 'Geografie',
+    question: 'Wie viele Kontinente werden üblicherweise anerkannt?',
+    options: ['5', '6', '7', '8'],
+    answer: 2,
+  },
+  {
+    category: 'Technologie',
+    question: 'Welche Sprache läuft nativ in einem Webbrowser?',
+    options: ['JavaScript', 'Python', 'C#', 'Java'],
+    answer: 0,
+  },
+  {
+    category: 'Geografie',
+    question: 'Welcher ist der größte Ozean der Erde?',
+    options: ['Pazifik', 'Atlantik', 'Indischer Ozean', 'Arktischer Ozean'],
+    answer: 0,
+  },
+  {
+    category: 'Geschichte',
+    question: 'In welchem Jahr landeten Menschen erstmals auf dem Mond?',
+    options: ['1959', '1969', '1979', '1989'],
+    answer: 1,
+  },
+  {
+    category: 'Technologie',
+    question: 'Wofür steht CPU?',
+    options: [
+      'Central Processing Unit',
+      'Computer Personal Unit',
+      'Central Program Utility',
+      'Control Processing User',
+    ],
+    answer: 0,
+  },
+  {
+    category: 'Geografie',
+    question: 'Was ist die Hauptstadt von Japan?',
+    options: ['Kyoto', 'Tokio', 'Osaka', 'Sapporo'],
+    answer: 1,
+  },
+  {
+    category: 'Wissenschaft',
+    question: 'Welches Element hat das chemische Symbol O?',
+    options: ['Wasserstoff', 'Kohlenstoff', 'Sauerstoff', 'Stickstoff'],
+    answer: 2,
+  },
+  {
+    category: 'Mathematik',
+    question: 'Wie viele Seiten hat ein Sechseck?',
+    options: ['5', '6', '7', '8'],
+    answer: 1,
+  },
+  {
+    category: 'Mathematik',
+    question: 'Welche dieser Zahlen ist eine Primzahl?',
+    options: ['17', '21', '27', '33'],
+    answer: 0,
+  },
+  {
+    category: 'Gaming',
+    question: 'In welchem Jahr wurde Discord öffentlich veröffentlicht?',
+    options: ['2013', '2014', '2015', '2016'],
+    answer: 2,
+  },
+  {
+    category: 'Technologie',
+    question: 'Welcher Befehl listet Dateien in einer Unix-Shell?',
+    options: ['ls', 'cd', 'rm', 'pwd'],
+    answer: 0,
+  },
+  {
+    category: 'Technologie',
+    question: 'Wofür steht CSS?',
+    options: [
+      'Cascading Style Sheets',
+      'Computer Style Syntax',
+      'Creative Style System',
+      'Colorful Style Sheets',
+    ],
+    answer: 0,
+  },
+  {
+    category: 'Geografie',
+    question: 'Die antike Stadt Petra liegt in welchem Land?',
+    options: ['Ägypten', 'Jordanien', 'Griechenland', 'Türkei'],
+    answer: 1,
+  },
+  {
+    category: 'Wissenschaft',
+    question: 'Was ist das größte Säugetier der Erde?',
+    options: ['Blauwal', 'Afrikanischer Elefant', 'Giraffe', 'Orca'],
+    answer: 0,
+  },
+  {
+    category: 'Technologie',
+    question: 'Wie lautet die Binärdarstellung von dezimal 5?',
+    options: ['101', '110', '111', '100'],
+    answer: 0,
+  },
+  {
+    category: 'Gaming',
+    question: 'Welche Figur zieht im Schach in L-Form?',
+    options: ['Springer', 'Läufer', 'Turm', 'Dame'],
+    answer: 0,
+  },
+  {
+    category: 'Wissenschaft',
+    question: 'Welches Gas nehmen Pflanzen aus der Atmosphäre auf?',
+    options: ['Kohlendioxid', 'Sauerstoff', 'Stickstoff', 'Wasserstoff'],
+    answer: 0,
+  },
+  {
+    category: 'Wissenschaft',
+    question: 'Wie lautet die chemische Formel für Wasser?',
+    options: ['H2O', 'CO2', 'O2', 'NaCl'],
+    answer: 0,
+  },
+  {
+    category: 'Wissenschaft',
+    question: 'Welcher ist der größte Planet unseres Sonnensystems?',
+    options: ['Saturn', 'Jupiter', 'Neptun', 'Erde'],
+    answer: 1,
+  },
+]);
+
 /**
  * @param {() => number} [random]
  * @param {string[]} [exclude] Questions that should not be picked, e.g. the previous round
  * @returns {{category: string, question: string, options: string[], answer: number}}
  */
-function randomQuestion(random = Math.random, exclude = []) {
+function randomQuestion(random = Math.random, exclude = [], language = 'en') {
+  const questions = String(language ?? '').toLowerCase().startsWith('de')
+    ? QUESTIONS_DE
+    : QUESTIONS;
   const skipped = new Set(exclude);
-  const pool = QUESTIONS.filter((question) => !skipped.has(question.question));
-  const source = pool.length > 0 ? pool : QUESTIONS;
+  const pool = questions.filter((question) => !skipped.has(question.question));
+  const source = pool.length > 0 ? pool : questions;
   const index = Math.min(source.length - 1, Math.floor(random() * source.length));
   return { ...source[index], options: [...source[index].options] };
 }
 
-module.exports = { QUESTIONS, randomQuestion };
+module.exports = { QUESTIONS, QUESTIONS_DE, randomQuestion };

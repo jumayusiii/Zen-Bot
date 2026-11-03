@@ -18,17 +18,14 @@ const {
 } = require('../../lib/blackjack');
 const { blackjackPayout } = require('../../lib/economyGames');
 const { MAX_WAGER, creditCoins, settleWager } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 15 * 60 * 1000;
 const games = new Map();
-const RESULT_LABELS = {
-  win: '🏆 You win!',
-  lose: '💥 You lose.',
-  push: '🤝 Push.',
-};
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 function pruneExpired(now = Date.now()) {
@@ -57,13 +54,14 @@ function settle(game, { playDealer = true } = {}) {
   };
 }
 
-function createGame({ ownerId, guildId, bet = 0, balance = null }) {
+function createGame({ ownerId, guildId, bet = 0, balance = null, language = 'en' }) {
   let game = {
     id: crypto.randomUUID(),
     ownerId,
     guildId,
     bet,
     balance,
+    language,
     paid: false,
     ...startRound(),
     status: 'playing',
@@ -105,70 +103,83 @@ async function settleBet(game) {
 }
 
 function statusText(game) {
-  if (game.status !== 'ended') return 'Hit or stand? Closest to 21 without going over wins.';
+  const language = game.language;
+
+  if (game.status !== 'ended') return t(language, 'economy.blackjack.status.hitOrStand');
 
   const player = handValue(game.player).total;
   const dealer = handValue(game.dealer).total;
 
-  if (game.result === 'push') return '🤝 **Push.** Both hands finish on the same total.';
+  if (game.result === 'push') return t(language, 'economy.blackjack.status.push');
   if (game.result === 'win') {
     return dealer > 21
-      ? '🏆 **You win!** The dealer went over 21.'
-      : `🏆 **You win!** **${player}** beats **${dealer}**.`;
+      ? t(language, 'economy.blackjack.status.winDealerBust')
+      : t(language, 'economy.blackjack.status.win', { player, dealer });
   }
 
   return player > 21
-    ? '💥 **Bust.** You went over 21.'
-    : `💥 **You lose.** The dealer's **${dealer}** beats **${player}**.`;
+    ? t(language, 'economy.blackjack.status.bust')
+    : t(language, 'economy.blackjack.status.lose', { player, dealer });
 }
 
 function buildPayload(client, game) {
+  const language = game.language;
   const finished = game.status === 'ended';
   const player = handValue(game.player);
   const dealer = handValue(game.dealer);
 
   const fields = [
     {
-      name: 'Your hand',
+      name: t(language, 'economy.blackjack.fields.hand'),
       value: `${formatHand(game.player)}  ·  **${player.total}**`,
       inline: false,
     },
     {
-      name: 'Dealer',
+      name: t(language, 'economy.blackjack.fields.dealer'),
       value: finished
         ? `${formatHand(game.dealer)}  ·  **${dealer.total}**`
         : `${formatDealer(game.dealer)}  ·  **?**`,
       inline: false,
     },
     {
-      name: 'Result',
-      value: finished ? RESULT_LABELS[game.result] : 'In progress',
+      name: t(language, 'economy.blackjack.fields.result'),
+      value: finished
+        ? t(language, `economy.blackjack.results.${game.result}`)
+        : t(language, 'economy.inProgress'),
       inline: true,
     },
   ];
 
   if (game.bet > 0) {
     fields.push(
-      { name: '💰 Wager', value: `${coins(game.bet)} coins`, inline: true },
       {
-        name: '🏆 Return',
-        value: finished ? `${coins(game.payout)} coins` : 'Pending',
+        name: `💰 ${t(language, 'economy.wager')}`,
+        value: `${coins(game.bet, language)} ${t(language, 'common.coins')}`,
+        inline: true,
+      },
+      {
+        name: `🏆 ${t(language, 'economy.return')}`,
+        value: finished
+          ? `${coins(game.payout, language)} ${t(language, 'common.coins')}`
+          : t(language, 'economy.pending'),
         inline: true,
       },
     );
 
     if (finished && game.balance != null) {
       fields.push({
-        name: '👛 Balance',
-        value: `${coins(game.balance)} coins`,
+        name: `👛 ${t(language, 'economy.balance')}`,
+        value: `${coins(game.balance, language)} ${t(language, 'common.coins')}`,
         inline: true,
       });
     }
   }
 
   const embed = createEmbed(client, {
-    section: 'Economy',
-    title: game.bet > 0 ? `Blackjack · ${coins(game.bet)} coin bet` : 'Blackjack',
+    section: t(language, 'help.tabs.economy'),
+    title: game.bet > 0
+      ? t(language, 'economy.blackjack.betTitle', { coins: coins(game.bet, language) })
+      : t(language, 'economy.blackjack.title'),
     description: statusText(game),
     color: finished
       ? game.result === 'win'
@@ -179,21 +190,21 @@ function buildPayload(client, game) {
       : COLORS.game,
     fields,
     footer: game.bet > 0
-      ? 'Win pays 2× · push returns the stake · the bet is taken when the hand is dealt'
-      : 'Play for fun  ·  add a bet to play for coins',
+      ? t(language, 'economy.blackjack.footer.bet')
+      : t(language, 'economy.blackjack.footer.fun'),
   });
 
   const components = [
     new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId(`blackjack:hit:${game.id}`)
-        .setLabel('Hit')
+        .setLabel(t(language, 'economy.blackjack.buttons.hit'))
         .setEmoji('🃏')
         .setStyle(ButtonStyle.Primary)
         .setDisabled(finished),
       new ButtonBuilder()
         .setCustomId(`blackjack:stand:${game.id}`)
-        .setLabel('Stand')
+        .setLabel(t(language, 'economy.blackjack.buttons.stand'))
         .setEmoji('✋')
         .setStyle(ButtonStyle.Secondary)
         .setDisabled(finished),
@@ -205,7 +216,13 @@ function buildPayload(client, game) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`blackjack:again:${game.id}`)
-          .setLabel(game.bet > 0 ? `Play again · ${coins(game.bet)} coins` : 'Play again')
+          .setLabel(
+            game.bet > 0
+              ? t(language, 'economy.blackjack.buttons.againBet', {
+                coins: coins(game.bet, language),
+              })
+              : t(language, 'economy.blackjack.buttons.again'),
+          )
           .setEmoji('🔁')
           .setStyle(ButtonStyle.Success),
       ),
@@ -224,20 +241,26 @@ async function present(interaction, game, { update = false } = {}) {
   else await interaction.reply(payload);
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This blackjack round has expired. Run `/blackjack` to start a new one.',
+    content: t(language, 'economy.blackjack.errors.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
 
-function stakeErrorReply(error) {
+function stakeErrorReply(error, language) {
   if (error.code === 'insufficient') {
-    return `You only have **${coins(error.balance)} coins**. Choose a smaller bet or play without one.`;
+    return t(language, 'economy.blackjack.errors.insufficient', {
+      balance: coins(error.balance, language),
+    });
   }
 
-  if (error.code === 'invalid_wager' || error.code === 'wager_too_large') {
-    return error.message;
+  if (error.code === 'invalid_wager') {
+    return t(language, 'economy.coinbet.invalidWager');
+  }
+
+  if (error.code === 'wager_too_large') {
+    return t(language, 'economy.coinbet.tooLarge', { max: coins(MAX_WAGER, language) });
   }
 
   return null;
@@ -263,10 +286,11 @@ module.exports = {
 
     const bet = interaction.options.getInteger('bet') ?? 0;
     const guildId = interaction.guild?.id ?? null;
+    const language = await getInteractionLanguage(interaction);
 
     if (bet > 0 && !guildId) {
       await interaction.reply({
-        content: 'Coins are tracked per server. Run `/blackjack` with a bet in a server channel.',
+        content: t(language, 'economy.blackjack.errors.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -284,7 +308,7 @@ module.exports = {
         });
         balance = charge.balance;
       } catch (error) {
-        const message = stakeErrorReply(error);
+        const message = stakeErrorReply(error, language);
         if (!message) throw error;
 
         await interaction.reply({ content: message, flags: MessageFlags.Ephemeral });
@@ -297,6 +321,7 @@ module.exports = {
       guildId,
       bet,
       balance,
+      language,
     });
 
     await present(interaction, game);
@@ -308,15 +333,18 @@ module.exports = {
 
     pruneExpired();
 
+    const language = await getInteractionLanguage(interaction);
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, language);
       return;
     }
 
+    game.language = language;
+
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This blackjack hand belongs to someone else. Run `/blackjack` to start your own.',
+        content: t(language, 'economy.blackjack.errors.wrongOwner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -335,7 +363,7 @@ module.exports = {
           });
           balance = charge.balance;
         } catch (error) {
-          const message = stakeErrorReply(error);
+          const message = stakeErrorReply(error, language);
           if (!message) throw error;
 
           await interaction.reply({ content: message, flags: MessageFlags.Ephemeral });
@@ -348,6 +376,7 @@ module.exports = {
         guildId: game.guildId,
         bet: game.bet,
         balance,
+        language,
       });
       fresh.id = game.id;
       await present(interaction, fresh, { update: true });
@@ -356,7 +385,7 @@ module.exports = {
 
     if (game.status === 'ended') {
       await interaction.reply({
-        content: 'This hand is already over. Press **Play again** for a new one.',
+        content: t(language, 'economy.blackjack.errors.ended'),
         flags: MessageFlags.Ephemeral,
       });
       return;

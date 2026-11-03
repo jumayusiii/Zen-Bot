@@ -1,9 +1,11 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { claimWork } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -16,11 +18,13 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Coins are tracked per server. Run `/work` in a server channel.',
+        content: t('en', 'economy.work.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
+
+    const language = await getInteractionLanguage(interaction);
 
     try {
       const result = await claimWork({
@@ -32,14 +36,20 @@ module.exports = {
         await interaction.reply({
           embeds: [
             createEmbed(interaction.client, {
-              section: 'Economy',
-              title: 'You are already clocked in',
-              description: `Your next shift is available <t:${Math.floor(result.nextAt / 1000)}:R>.`,
+              section: t(language, 'help.tabs.economy'),
+              title: t(language, 'economy.work.alreadyTitle'),
+              description: t(language, 'economy.work.alreadyDescription', {
+                time: `<t:${Math.floor(result.nextAt / 1000)}:R>`,
+              }),
               color: COLORS.warning,
               fields: [
-                { name: '💰 Balance', value: `**${coins(result.balance)}** coins`, inline: true },
+                {
+                  name: `💰 ${t(language, 'economy.balance')}`,
+                  value: `**${coins(result.balance, language)}** ${t(language, 'common.coins')}`,
+                  inline: true,
+                },
               ],
-              footer: 'Work  ·  /daily  ·  /coinbet  ·  /slotsbet',
+              footer: t(language, 'economy.work.footerIdle'),
             }),
           ],
           flags: MessageFlags.Ephemeral,
@@ -50,26 +60,32 @@ module.exports = {
       await interaction.reply({
         embeds: [
           createEmbed(interaction.client, {
-            section: 'Economy',
-            title: 'Shift complete',
-            description: `You earned **${coins(result.amount)} coins** for a short shift.`,
+            section: t(language, 'help.tabs.economy'),
+            title: t(language, 'economy.work.completeTitle'),
+            description: t(language, 'economy.work.completeDescription', {
+              amount: coins(result.amount, language),
+            }),
             color: COLORS.success,
             fields: [
-              { name: '💰 Balance', value: `**${coins(result.balance)}** coins`, inline: true },
               {
-                name: '⏰ Next shift',
+                name: `💰 ${t(language, 'economy.balance')}`,
+                value: `**${coins(result.balance, language)}** ${t(language, 'common.coins')}`,
+                inline: true,
+              },
+              {
+                name: `⏰ ${t(language, 'economy.nextShift')}`,
                 value: `<t:${Math.floor(result.nextAt / 1000)}:R>`,
                 inline: true,
               },
             ],
-            footer: `Worked by ${interaction.user.username}  ·  spend it in /shop`,
+            footer: t(language, 'economy.work.footer', { user: interaction.user.username }),
           }),
         ],
       });
     } catch (error) {
       console.error('[economy] /work failed:', error);
       await interaction.reply({
-        content: 'Could not clock you in right now. Please try again.',
+        content: t(language, 'economy.work.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

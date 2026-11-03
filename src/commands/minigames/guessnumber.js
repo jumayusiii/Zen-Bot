@@ -7,6 +7,7 @@ const {
   createGame,
   judgeGuess,
 } = require('../../lib/guessNumber');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 15 * 60 * 1000;
 const games = new Map();
@@ -21,74 +22,83 @@ function pruneExpired(now = Date.now()) {
   }
 }
 
-function gameFields(game, attempts) {
+function gameFields(language, game, attempts) {
   return [
-    { name: 'Range', value: `${MIN}–${MAX}`, inline: true },
-    { name: 'Attempts', value: `**${attempts}** / ${MAX_ATTEMPTS}`, inline: true },
-    { name: 'Remaining', value: `**${Math.max(0, MAX_ATTEMPTS - attempts)}**`, inline: true },
+    { name: t(language, 'minigames.guessnumber.range'), value: `${MIN}–${MAX}`, inline: true },
+    { name: t(language, 'minigames.guessnumber.attempts'), value: `**${attempts}** / ${MAX_ATTEMPTS}`, inline: true },
+    { name: t(language, 'minigames.guessnumber.remaining'), value: `**${Math.max(0, MAX_ATTEMPTS - attempts)}**`, inline: true },
   ];
 }
 
-function startEmbed(client) {
+function startEmbed(client, language) {
   return createEmbed(client, {
-    section: 'Minigames',
-    title: 'Guess the number',
-    description: [
-      `I picked a number between **${MIN}** and **${MAX}**.`,
-      `Make your first guess with \`/guessnumber guess:50\`.`,
-      `-# You have **${MAX_ATTEMPTS}** attempts.`,
-    ].join('\n'),
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.guessnumber.title'),
+    description: t(language, 'minigames.guessnumber.start', {
+      min: MIN,
+      max: MAX,
+      attempts: MAX_ATTEMPTS,
+    }),
     color: COLORS.game,
-    fields: gameFields({}, 0),
-    footer: `${MIN}–${MAX}  ·  ${MAX_ATTEMPTS} attempts`,
+    fields: gameFields(language, {}, 0),
+    footer: t(language, 'minigames.guessnumber.footer', { min: MIN, max: MAX, attempts: MAX_ATTEMPTS }),
   });
 }
 
-function statusEmbed(client, game) {
+function statusEmbed(client, language, game) {
   return createEmbed(client, {
-    section: 'Minigames',
-    title: 'Round in progress',
-    description: `You have **${MAX_ATTEMPTS - game.attempts}** attempts left. Guess with \`/guessnumber guess:...\`.`,
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.guessnumber.progressTitle'),
+    description: t(language, 'minigames.guessnumber.progress', {
+      remaining: MAX_ATTEMPTS - game.attempts,
+    }),
     color: COLORS.game,
-    fields: gameFields(game, game.attempts),
-    footer: `${MIN}–${MAX}  ·  ${MAX_ATTEMPTS} attempts`,
+    fields: gameFields(language, game, game.attempts),
+    footer: t(language, 'minigames.guessnumber.footer', { min: MIN, max: MAX, attempts: MAX_ATTEMPTS }),
   });
 }
 
-function resultEmbed(client, game, outcome, guess) {
+function resultEmbed(client, language, game, outcome, guess) {
   const attempts = outcome.attempts;
 
   if (outcome.result === 'correct') {
     return createEmbed(client, {
-      section: 'Minigames',
-      title: 'You got it!',
-      description: `The number was **${game.target}**. You found it in **${attempts}** attempt${attempts === 1 ? '' : 's'}.`,
+      section: t(language, 'help.tabs.minigames'),
+      title: t(language, 'minigames.guessnumber.winTitle'),
+      description: t(
+        language,
+        attempts === 1 ? 'minigames.guessnumber.winOne' : 'minigames.guessnumber.win',
+        { target: game.target, attempts },
+      ),
       color: COLORS.success,
-      fields: gameFields(game, attempts),
-      footer: 'Run /guessnumber to play again',
+      fields: gameFields(language, game, attempts),
+      footer: t(language, 'minigames.guessnumber.footerDone'),
     });
   }
 
   if (outcome.result === 'lost') {
     return createEmbed(client, {
-      section: 'Minigames',
-      title: 'Out of attempts',
-      description: `The number was **${game.target}**. Better luck next round.`,
+      section: t(language, 'help.tabs.minigames'),
+      title: t(language, 'minigames.guessnumber.lostTitle'),
+      description: t(language, 'minigames.guessnumber.lost', { target: game.target }),
       color: COLORS.danger,
-      fields: gameFields(game, attempts),
-      footer: 'Run /guessnumber to play again',
+      fields: gameFields(language, game, attempts),
+      footer: t(language, 'minigames.guessnumber.footerDone'),
     });
   }
 
-  const direction = outcome.result === 'higher' ? 'Too low — aim higher.' : 'Too high — aim lower.';
+  const direction = t(
+    language,
+    outcome.result === 'higher' ? 'minigames.guessnumber.higher' : 'minigames.guessnumber.lower',
+  );
 
   return createEmbed(client, {
-    section: 'Minigames',
-    title: 'Not quite',
-    description: `Your guess **${guess}** was not the number. ${direction}`,
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.guessnumber.wrongTitle'),
+    description: t(language, 'minigames.guessnumber.wrong', { guess, direction }),
     color: COLORS.warning,
-    fields: gameFields(game, attempts),
-    footer: `${MIN}–${MAX}  ·  ${MAX_ATTEMPTS} attempts`,
+    fields: gameFields(language, game, attempts),
+    footer: t(language, 'minigames.guessnumber.footer', { min: MIN, max: MAX, attempts: MAX_ATTEMPTS }),
   });
 }
 
@@ -106,6 +116,7 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const key = gameKey(interaction);
     const guess = interaction.options.getInteger('guess');
@@ -121,13 +132,13 @@ module.exports = {
       games.set(key, game);
 
       if (guess === null) {
-        await interaction.reply({ embeds: [startEmbed(interaction.client)] });
+        await interaction.reply({ embeds: [startEmbed(interaction.client, language)] });
         return;
       }
     }
 
     if (guess === null) {
-      await interaction.reply({ embeds: [statusEmbed(interaction.client, game)] });
+      await interaction.reply({ embeds: [statusEmbed(interaction.client, language, game)] });
       return;
     }
 
@@ -135,7 +146,7 @@ module.exports = {
 
     if (!outcome.valid) {
       await interaction.reply({
-        content: `Choose a whole number between **${MIN}** and **${MAX}**.`,
+        content: t(language, 'minigames.guessnumber.invalid', { min: MIN, max: MAX }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -149,7 +160,7 @@ module.exports = {
     }
 
     await interaction.reply({
-      embeds: [resultEmbed(interaction.client, game, outcome, guess)],
+      embeds: [resultEmbed(interaction.client, language, game, outcome, guess)],
       allowedMentions: { parse: [] },
     });
   },

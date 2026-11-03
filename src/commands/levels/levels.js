@@ -1,11 +1,13 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getLeaderboard, getProfile } = require('../../lib/levels');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 
-function formatNumber(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function formatNumber(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 function rankLabel(rank) {
@@ -20,12 +22,13 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Levels are tracked per server. Run `/levels` in a server channel.',
+        content: t('en', 'levels.leaderboard.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
     const [board, profile] = await Promise.all([
       getLeaderboard(interaction.guild.id, 10),
       getProfile(interaction.guild.id, interaction.user.id),
@@ -33,28 +36,36 @@ module.exports = {
 
     const fields = board.entries.map((entry) => ({
       name: `${rankLabel(entry.rank)}  ·  ${entry.username}`,
-      value: `Level **${entry.progress.level}**  ·  **${formatNumber(entry.xp)}** XP`,
+      value: `${t(language, 'levels.rank.level')} **${entry.progress.level}**  ·  **${formatNumber(entry.xp, language)}** XP`,
       inline: false,
     }));
 
     if (profile.rank && profile.rank > 10) {
       fields.push({
-        name: 'Your rank',
-        value: `**#${profile.rank}** of **${formatNumber(profile.totalUsers)}**  ·  Level **${profile.progress.level}**  ·  **${formatNumber(profile.progress.totalXp)}** XP`,
+        name: t(language, 'levels.leaderboard.yourRank'),
+        value: t(language, 'levels.leaderboard.yourRankValue', {
+          rank: profile.rank,
+          total: formatNumber(profile.totalUsers, language),
+          level: profile.progress.level,
+          xp: formatNumber(profile.progress.totalXp, language),
+        }),
         inline: false,
       });
     }
 
     const embed = createEmbed(interaction.client, {
-      section: 'Levels',
-      title: `${interaction.guild.name} leaderboard`,
+      section: t(language, 'help.tabs.levels'),
+      title: t(language, 'levels.leaderboard.title', { server: interaction.guild.name }),
       description: board.totalUsers === 0
-        ? 'No one has earned XP yet. Send a message in this server to start.'
-        : `Top **${board.entries.length}** of **${formatNumber(board.totalUsers)}** ranked members.`,
+        ? t(language, 'levels.leaderboard.empty')
+        : t(language, 'levels.leaderboard.summary', {
+          shown: board.entries.length,
+          total: formatNumber(board.totalUsers, language),
+        }),
       color: COLORS.brand,
       thumbnail: interaction.guild.iconURL({ extension: 'png', size: 128, forceStatic: true }),
       fields,
-      footer: 'Chat XP  ·  +25–35 XP per message, once a minute  ·  top 10',
+      footer: t(language, 'levels.leaderboard.footer'),
     });
 
     await interaction.reply({ embeds: [embed] });

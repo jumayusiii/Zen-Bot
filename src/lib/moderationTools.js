@@ -1,9 +1,11 @@
+const { t } = require('./i18n');
+
 const MAX_PURGE = 100;
 const MAX_PURGE_AGE_MS = 14 * 24 * 60 * 60 * 1000;
 
-function formatSlowmode(seconds) {
+function formatSlowmode(seconds, language = 'en') {
   const value = Math.max(0, Math.floor(Number(seconds) || 0));
-  if (value === 0) return 'Off';
+  if (value === 0) return t(language, 'moderation.slowmode.off', {}, 'Off');
 
   const hours = Math.floor(value / 3600);
   const minutes = Math.floor((value % 3600) / 60);

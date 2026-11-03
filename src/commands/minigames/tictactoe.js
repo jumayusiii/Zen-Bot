@@ -15,6 +15,7 @@ const {
   createBoard,
   winnerOf,
 } = require('../../lib/tictactoe');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 20 * 60 * 1000;
 const games = new Map();
@@ -25,11 +26,11 @@ function pruneExpired(now = Date.now()) {
   }
 }
 
-function statusText(game) {
-  if (game.status === PLAYER) return '🏆 **You win!** Well played.';
-  if (game.status === BOT) return '🤖 **The bot wins.** Try again!';
-  if (game.status === 'draw') return '🤝 **It is a draw.**';
-  return 'Your move. You are **X**, the bot is **O**.';
+function statusText(game, language) {
+  if (game.status === PLAYER) return t(language, 'minigames.tictactoe.win');
+  if (game.status === BOT) return t(language, 'minigames.tictactoe.lose');
+  if (game.status === 'draw') return t(language, 'minigames.tictactoe.draw');
+  return t(language, 'minigames.tictactoe.yourMove');
 }
 
 function buildButtons(game) {
@@ -57,7 +58,7 @@ function buildButtons(game) {
   );
 }
 
-function buildPayload(client, game) {
+function buildPayload(client, game, language) {
   const color =
     game.status === PLAYER
       ? COLORS.success
@@ -68,30 +69,38 @@ function buildPayload(client, game) {
           : COLORS.game;
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
-    title: 'Tic-Tac-Toe',
-    description: statusText(game),
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.tictactoe.title'),
+    description: statusText(game, language),
     color,
     fields: [
-      { name: '❌ You', value: 'X', inline: true },
-      { name: '⭕ Bot', value: 'O', inline: true },
+      { name: t(language, 'minigames.tictactoe.you'), value: 'X', inline: true },
+      { name: t(language, 'minigames.tictactoe.bot'), value: 'O', inline: true },
       {
-        name: '📌 Status',
-        value: game.status === 'playing' ? 'In progress' : 'Game over',
+        name: t(language, 'minigames.tictactoe.status'),
+        value: t(
+          language,
+          game.status === 'playing'
+            ? 'minigames.tictactoe.inProgress'
+            : 'minigames.tictactoe.gameOver',
+        ),
         inline: true,
       },
     ],
-    footer: game.status === 'playing'
-      ? 'Only the player who started this game can move'
-      : 'Run /tictactoe for another round',
+    footer: t(
+      language,
+      game.status === 'playing'
+        ? 'minigames.tictactoe.footerActive'
+        : 'minigames.tictactoe.footerDone',
+    ),
   });
 
   return { embeds: [embed], components: buildButtons(game) };
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This game has expired. Run `/tictactoe` to start a new one.',
+    content: t(language, 'minigames.tictactoe.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
@@ -105,6 +114,7 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = {
       id: crypto.randomUUID(),
@@ -116,7 +126,7 @@ module.exports = {
     };
 
     games.set(game.id, game);
-    await interaction.reply(buildPayload(interaction.client, game));
+    await interaction.reply(buildPayload(interaction.client, game, language));
   },
 
   async handleComponent(interaction) {
@@ -124,16 +134,17 @@ module.exports = {
     if (action !== 'move' || !gameId) return;
 
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
     const game = games.get(gameId);
 
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, language);
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This board belongs to someone else. Run `/tictactoe` to start your own game.',
+        content: t(language, 'minigames.tictactoe.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -141,7 +152,7 @@ module.exports = {
 
     if (game.status !== 'playing') {
       await interaction.reply({
-        content: 'This game is already over. Run `/tictactoe` for a new one.',
+        content: t(language, 'minigames.tictactoe.alreadyOver'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -152,7 +163,7 @@ module.exports = {
 
     if (!board) {
       await interaction.reply({
-        content: 'That square is already taken. Choose an empty one.',
+        content: t(language, 'minigames.tictactoe.taken'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -171,7 +182,7 @@ module.exports = {
     game.status = status ?? 'playing';
     game.updatedAt = Date.now();
 
-    const payload = buildPayload(interaction.client, game);
+    const payload = buildPayload(interaction.client, game, language);
     if (game.status !== 'playing') games.delete(gameId);
 
     await interaction.update(payload);

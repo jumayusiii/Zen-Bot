@@ -82,6 +82,25 @@ test('moderation log embeds use compact inline details', () => {
   assert.match(embed.data.fields[1].value, /910000000000000004/);
 });
 
+test('German audit log embeds translate action titles and field labels', () => {
+  const embed = logs.buildModerationLogEmbed(fakeClient(() => {}), {
+    action: 'ban',
+    targetId: USER_ID,
+    targetName: 'Tester',
+    moderatorId: '910000000000000004',
+    reason: 'Spam',
+    duration: '1 Tag',
+    extra: 'Gelöschte Nachrichten: Letzte Stunde',
+  }, 'de');
+
+  assert.equal(embed.data.title, '🔨 Benutzer gebannt');
+  assert.match(embed.data.footer.text, /^Moderations-Audit-Log/);
+  assert.deepEqual(
+    embed.data.fields.map((field) => field.name),
+    ['🎯 Ziel', '🛡️ Moderator', '⏳ Dauer', '📝 Grund', '📌 Details'],
+  );
+});
+
 test('warn, purge and slowmode entries have dedicated titles', () => {
   const warn = logs.buildModerationLogEmbed(fakeClient(() => {}), {
     action: 'warn',

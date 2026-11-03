@@ -2,6 +2,7 @@ const { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } = require('disc
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { sendModerationLog } = require('../../lib/moderationLogs');
 const { MAX_REASON_LENGTH, clearWarnings } = require('../../lib/warnings');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -26,28 +27,34 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.manageGuild');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild)) {
       await interaction.reply({
-        content: 'You need the **Manage Server** permission to use `/clearwarnings`.',
+        content: t(language, 'moderation.permission', {
+          permission,
+          command: 'clearwarnings',
+        }),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
     const user = interaction.options.getUser('member', true);
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
     const targetName = user.globalName ?? user.username;
     const { removed } = await clearWarnings(guild.id, user.id);
 
     if (removed.length === 0) {
       await interaction.reply({
-        content: `**${targetName}** has no recorded warnings to clear.`,
+        content: t(language, 'moderation.clearwarnings.none', { target: targetName }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -59,21 +66,41 @@ module.exports = {
       targetName: user.username,
       moderatorId: interaction.user.id,
       reason,
-      extra: `${removed.length} warning${removed.length === 1 ? '' : 's'} cleared.`,
+      extra: t(
+        language,
+        removed.length === 1
+          ? 'moderation.clearwarnings.extraOne'
+          : 'moderation.clearwarnings.extraMany',
+        { count: removed.length },
+      ),
     });
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Warnings cleared',
-      description: `Removed **${removed.length}** warning${removed.length === 1 ? '' : 's'} from **${targetName}**.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.clearwarnings.title'),
+      description: t(
+        language,
+        removed.length === 1
+          ? 'moderation.clearwarnings.descriptionOne'
+          : 'moderation.clearwarnings.descriptionMany',
+        { count: removed.length, target: targetName },
+      ),
       color: COLORS.success,
       thumbnail: user.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
       fields: [
-        { name: '🎯 Member', value: `${targetName}\n\`${user.id}\``, inline: true },
-        { name: '🧹 Cleared', value: `**${removed.length}**`, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        {
+          name: `🎯 ${t(language, 'moderation.fields.member')}`,
+          value: `${targetName}\n\`${user.id}\``,
+          inline: true,
+        },
+        {
+          name: `🧹 ${t(language, 'moderation.fields.cleared')}`,
+          value: `**${removed.length}**`,
+          inline: true,
+        },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });

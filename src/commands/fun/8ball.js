@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const ANSWERS = {
   positive: [
@@ -28,6 +29,33 @@ const ANSWERS = {
   ],
 };
 
+const ANSWERS_DE = {
+  positive: [
+    'Ganz sicher.',
+    'Ohne Zweifel.',
+    'Ja — definitiv.',
+    'Darauf kannst du zählen.',
+    'Die Zeichen stehen auf Ja.',
+    'Absolut.',
+  ],
+  neutral: [
+    'Die Antwort ist verschwommen, frag nochmal.',
+    'Frag später noch einmal.',
+    'Das kann ich gerade nicht vorhersagen.',
+    'Konzentriere dich und frag erneut.',
+    'Die Antwort ist unklar.',
+    'Vielleicht — versuch es nochmal.',
+  ],
+  negative: [
+    'Verlass dich nicht darauf.',
+    'Meine Antwort ist nein.',
+    'Die Chancen stehen dagegen.',
+    'Ich würde nicht darauf wetten.',
+    'Sehr zweifelhaft.',
+    'Nein — diesmal nicht.',
+  ],
+};
+
 const ANSWER_COLORS = {
   positive: COLORS.success,
   neutral: COLORS.warning,
@@ -53,16 +81,18 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
+    const answers = language === 'de' ? ANSWERS_DE : ANSWERS;
     const question = interaction.options.getString('question', true).replace(/\s+/g, ' ').trim();
-    const type = pick(Object.keys(ANSWERS));
-    const answer = pick(ANSWERS[type]);
+    const type = pick(Object.keys(answers));
+    const answer = pick(answers[type]);
 
     const embed = createEmbed(interaction.client, {
-      section: 'Magic 8-Ball',
-      title: 'The 8-Ball has spoken',
+      section: t(language, 'fun.eightball.section'),
+      title: t(language, 'fun.eightball.title'),
       description: `> ${question}\n\n**${answer}**`,
       color: ANSWER_COLORS[type],
-      footer: `Asked by ${interaction.user.username}`,
+      footer: t(language, 'fun.eightball.footer', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed] });

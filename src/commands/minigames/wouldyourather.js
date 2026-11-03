@@ -7,41 +7,50 @@ const {
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { castVote, createSession } = require('../../lib/wyr');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 function percentage(count, total) {
   return total > 0 ? `${Math.round((count / total) * 100)}%` : '0%';
 }
 
-function chooseLabel(count, total) {
-  return total > 0 ? `${count} ${count === 1 ? 'vote' : 'votes'}  ·  ${percentage(count, total)}` : 'No votes yet';
+function chooseLabel(count, total, language) {
+  if (total <= 0) return t(language, 'minigames.wyr.noVotes');
+  return t(
+    language,
+    count === 1 ? 'minigames.wyr.choiceOne' : 'minigames.wyr.choice',
+    { count, percent: percentage(count, total) },
+  );
 }
 
 function buildPayload(client, session) {
+  const language = session.language ?? 'en';
   const { a, b, total } = session.counts ?? { a: 0, b: 0, total: 0 };
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
-    title: 'Would you rather…',
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.wyr.title'),
     description: session.question,
     color: COLORS.game,
     fields: [
       {
-        name: '🅰️ Option A',
-        value: `**${session.aText}**\n${chooseLabel(a, total)}`,
+        name: t(language, 'minigames.wyr.optionA'),
+        value: `**${session.aText}**\n${chooseLabel(a, total, language)}`,
         inline: true,
       },
       {
-        name: '🅱️ Option B',
-        value: `**${session.bText}**\n${chooseLabel(b, total)}`,
+        name: t(language, 'minigames.wyr.optionB'),
+        value: `**${session.bText}**\n${chooseLabel(b, total, language)}`,
         inline: true,
       },
       {
-        name: '🗳️ Total',
-        value: total > 0 ? `**${total}** ${total === 1 ? 'vote' : 'votes'}` : 'Be the first',
+        name: t(language, 'minigames.wyr.total'),
+        value: total > 0
+          ? t(language, total === 1 ? 'minigames.wyr.totalOne' : 'minigames.wyr.totalVotes', { count: total })
+          : t(language, 'minigames.wyr.first'),
         inline: true,
       },
     ],
-    footer: 'Tap a button to vote  ·  you can change your choice',
+    footer: t(language, 'minigames.wyr.footer'),
   });
 
   return {
@@ -50,12 +59,12 @@ function buildPayload(client, session) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`wyr:vote:a:${session.id}`)
-          .setLabel('Option A')
+          .setLabel(t(language, 'minigames.wyr.buttonA'))
           .setEmoji('🅰️')
           .setStyle(ButtonStyle.Primary),
         new ButtonBuilder()
           .setCustomId(`wyr:vote:b:${session.id}`)
-          .setLabel('Option B')
+          .setLabel(t(language, 'minigames.wyr.buttonB'))
           .setEmoji('🅱️')
           .setStyle(ButtonStyle.Secondary),
       ),
@@ -71,8 +80,9 @@ module.exports = {
     .setDescription('Start a quick would-you-rather vote with live results'),
 
   async execute(interaction) {
-    const session = createSession();
-    session.question = `**Would you rather…**\n🅰️ ${session.a}\n🅱️ ${session.b}`;
+    const language = await getInteractionLanguage(interaction);
+    const session = createSession(Math.random, Date.now(), language);
+    session.question = t(language, 'minigames.wyr.question', { a: session.a, b: session.b });
     session.aText = session.a;
     session.bText = session.b;
 
@@ -86,7 +96,7 @@ module.exports = {
     const result = castVote(sessionId, interaction.user.id, choice);
     if (!result) {
       await interaction.reply({
-        content: 'This vote has expired. Start a new one with `/wouldyourather`.',
+        content: t(await getInteractionLanguage(interaction), 'minigames.wyr.expired'),
         flags: MessageFlags.Ephemeral,
       });
       return;

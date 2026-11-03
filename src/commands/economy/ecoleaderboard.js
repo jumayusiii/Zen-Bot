@@ -28,17 +28,20 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Coins are tracked per server. Run `/ecoleaderboard` in a server channel.',
+        content: t('en', 'leaderboard.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getGuildLanguage(interaction.guild.id);
+
     try {
-      const [board, language] = await Promise.all([
-        getEconomyLeaderboard(interaction.guild.id, 10, interaction.user.id),
-        getGuildLanguage(interaction.guild.id),
-      ]);
+      const board = await getEconomyLeaderboard(
+        interaction.guild.id,
+        10,
+        interaction.user.id,
+      );
 
       const fields = board.entries.map((entry) => ({
         name: `${rankLabel(entry.rank)}  ·  ${displayName(interaction.guild, entry.userId)}`,
@@ -80,7 +83,7 @@ module.exports = {
     } catch (error) {
       console.error('[economy] /ecoleaderboard failed:', error);
       await interaction.reply({
-        content: 'Could not read the economy leaderboard right now. Please try again.',
+        content: t(language, 'leaderboard.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

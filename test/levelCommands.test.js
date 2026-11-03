@@ -7,15 +7,18 @@ const test = require('node:test');
 
 const rank = require('../src/commands/levels/rank');
 const levelsCommand = require('../src/commands/levels/levels');
+const { setGuildLanguage } = require('../src/lib/i18n');
 
 async function withLevelsFile(run) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'legend-level-commands-'));
   process.env.LEVELS_FILE = path.join(directory, 'levels.json');
+  process.env.LANGUAGES_FILE = path.join(directory, 'languages.json');
 
   try {
     await run();
   } finally {
     delete process.env.LEVELS_FILE;
+    delete process.env.LANGUAGES_FILE;
     await fs.rm(directory, { recursive: true, force: true });
   }
 }
@@ -122,6 +125,43 @@ test('/rank renders an image attachment and level details', async () => {
     );
 
     await fs.rm(directory, { recursive: true, force: true });
+  });
+});
+
+test('/rank and /levels follow the saved German language', async () => {
+  await withLevelsFile(async () => {
+    await fs.writeFile(
+      process.env.LEVELS_FILE,
+      JSON.stringify({
+        version: 1,
+        users: [
+          { guildId: GUILD_ID, userId: 'user-a', username: 'Alpha', xp: 900, lastXpAt: 1 },
+          { guildId: GUILD_ID, userId: USER_ID, username: 'Tester', xp: 500, lastXpAt: 2 },
+        ],
+      }),
+      'utf8',
+    );
+    await setGuildLanguage(GUILD_ID, 'de');
+
+    const guild = fakeGuild();
+    const user = fakeUser();
+    const rankInteraction = fakeInteraction(guild, user, guild.member);
+    await rank.execute(rankInteraction);
+
+    const rankEmbed = rankInteraction.captured.editReply.embeds[0].data;
+    assert.equal(rankEmbed.title, 'Rang von Tester');
+    assert.deepEqual(
+      rankEmbed.fields.map((field) => field.name),
+      ['⭐ Level', '🏆 Rang', '✨ Gesamt-XP'],
+    );
+
+    const levelsInteraction = fakeInteraction(guild, user, guild.member);
+    await levelsCommand.execute(levelsInteraction);
+
+    const boardEmbed = levelsInteraction.captured.reply.embeds[0].data;
+    assert.equal(boardEmbed.title, 'Rangliste von Cloud Cord');
+    assert.match(boardEmbed.fields[1].value, /Level \*\*\d+\*\*/);
+    assert.match(boardEmbed.footer.text, /Chat-XP/);
   });
 });
 

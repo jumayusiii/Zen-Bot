@@ -7,28 +7,29 @@ const {
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { randomFortune } = require('../../lib/fortunes');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function buildPayload(client, fortune, ownerId, requestedBy) {
+function buildPayload(client, fortune, ownerId, requestedBy, language) {
   const numbers = fortune.luckyNumbers
     .map((number) => `\`${String(number).padStart(2, '0')}\``)
     .join(' ');
 
   const embed = createEmbed(client, {
-    section: 'Fun',
-    title: 'Fortune cookie',
+    section: t(language, 'help.tabs.fun'),
+    title: t(language, 'fun.fortune.title'),
     description: `**${fortune.text}**`,
     color: COLORS.fun,
     fields: [
-      { name: '🧭 Theme', value: fortune.category, inline: true },
-      { name: '🎟️ Lucky numbers', value: numbers, inline: true },
-      { name: '🙋 Requested by', value: requestedBy, inline: true },
+      { name: t(language, 'fun.fortune.theme'), value: fortune.category, inline: true },
+      { name: t(language, 'fun.fortune.lucky'), value: numbers, inline: true },
+      { name: t(language, 'fun.fortune.requested'), value: requestedBy, inline: true },
     ],
-    footer: 'A little luck for your day',
+    footer: t(language, 'fun.fortune.footer'),
   });
 
   const button = new ButtonBuilder()
     .setCustomId(`fortunecookie:again:${ownerId}:${fortune.index}`)
-    .setLabel('Another fortune')
+    .setLabel(t(language, 'fun.fortune.button'))
     .setEmoji('🥠')
     .setStyle(ButtonStyle.Primary);
 
@@ -46,9 +47,10 @@ module.exports = {
     .setDescription('Open a fortune cookie with a lucky number line'),
 
   async execute(interaction) {
-    const fortune = randomFortune();
+    const language = await getInteractionLanguage(interaction);
+    const fortune = randomFortune(Math.random, null, language);
     await interaction.reply(
-      buildPayload(interaction.client, fortune, interaction.user.id, interaction.user.username),
+      buildPayload(interaction.client, fortune, interaction.user.id, interaction.user.username, language),
     );
   },
 
@@ -56,9 +58,11 @@ module.exports = {
     const [, action, ownerId, rawIndex] = interaction.customId.split(':');
     if (action !== 'again') return;
 
+    const language = await getInteractionLanguage(interaction);
+
     if (ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'Only the person who opened this cookie can ask for another fortune.',
+        content: t(language, 'fun.fortune.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -68,10 +72,11 @@ module.exports = {
     const fortune = randomFortune(
       Math.random,
       Number.isInteger(previous) ? previous : null,
+      language,
     );
 
     await interaction.update(
-      buildPayload(interaction.client, fortune, ownerId, interaction.user.username),
+      buildPayload(interaction.client, fortune, ownerId, interaction.user.username, language),
     );
   },
 };

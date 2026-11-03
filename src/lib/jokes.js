@@ -49,22 +49,78 @@ const JOKES = Object.freeze([
   },
 ]);
 
+const JOKES_DE = Object.freeze([
+  {
+    setup: 'Warum mögen Programmierer den Dark Mode?',
+    punchline: 'Weil Licht Bugs anzieht.',
+  },
+  {
+    setup: 'Warum war der Entwickler pleite?',
+    punchline: 'Er hatte seinen ganzen Cache aufgebraucht.',
+  },
+  {
+    setup: 'Wie viele Programmierer braucht man, um eine Glühbirne zu wechseln?',
+    punchline: 'Keinen. Das ist ein Hardwareproblem.',
+  },
+  {
+    setup: 'Warum war der JavaScript-Entwickler traurig?',
+    punchline: 'Er wusste nicht, wie er seine Gefühle nullen sollte.',
+  },
+  {
+    setup: 'Wo hängen Programmierer am liebsten ab?',
+    punchline: 'In der Foo-Bar.',
+  },
+  {
+    setup: 'Warum tragen Java-Entwickler Brillen?',
+    punchline: 'Weil sie kein C sharp sehen.',
+  },
+  {
+    setup: 'Was sagte das Meer zum Strand?',
+    punchline: 'Nichts. Es winkte nur.',
+  },
+  {
+    setup: 'Warum gewann die Vogelscheuche einen Preis?',
+    punchline: 'Weil sie in ihrem Feld herausragend war.',
+  },
+  {
+    setup: 'Wie nennt man eine falsche Nudel?',
+    punchline: 'Eine Impasta.',
+  },
+  {
+    setup: 'Warum erstattete der Kaffee eine Anzeige?',
+    punchline: 'Er wurde ausgeraubt — mugged.',
+  },
+  {
+    setup: 'Was sagte die Null zur Acht?',
+    punchline: 'Schicker Gürtel.',
+  },
+  {
+    setup: 'Warum fiel das Fahrrad um?',
+    punchline: 'Weil es zu müde war.',
+  },
+]);
+
+function isGerman(language) {
+  return String(language ?? '').toLowerCase().startsWith('de');
+}
+
 /**
  * Picks a joke, optionally avoiding the one that was just shown.
  *
  * @param {() => number} [random]
  * @param {number|null} [excludeIndex]
  */
-function randomJoke(random = Math.random, excludeIndex = null) {
-  const available = JOKES.map((joke, index) => ({ joke, index }))
+function randomJoke(random = Math.random, excludeIndex = null, language = 'en') {
+  const jokes = isGerman(language) ? JOKES_DE : JOKES;
+  const available = jokes.map((joke, index) => ({ joke, index }))
     .filter((entry) => entry.index !== excludeIndex);
 
   const pool = available.length > 0
     ? available
-    : JOKES.map((joke, index) => ({ joke, index }));
+    : jokes.map((joke, index) => ({ joke, index }));
   const picked = pool[Math.min(pool.length - 1, Math.floor(random() * pool.length))];
 
   return { ...picked.joke, index: picked.index };
 }
 
-module.exports = { JOKES, randomJoke };
+module.exports = { JOKES, JOKES_DE, randomJoke };

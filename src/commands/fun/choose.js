@@ -1,6 +1,7 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { parseChoices, pickChoice } = require('../../lib/choices');
 const { COLORS, createEmbed } = require('../../lib/embeds');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -21,12 +22,13 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
     const question = interaction.options.getString('question')?.trim();
     const choices = parseChoices(interaction.options.getString('options', true));
 
     if (choices.length < 2) {
       await interaction.reply({
-        content: 'Give me at least two different choices, separated by `|` or commas.',
+        content: t(language, 'fun.choose.error'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -35,21 +37,21 @@ module.exports = {
     const choice = pickChoice(choices);
 
     const embed = createEmbed(interaction.client, {
-      section: 'Decisions',
-      title: question || 'Decision made',
+      section: t(language, 'help.tabs.fun'),
+      title: question || t(language, 'fun.choose.title'),
       description: [
-        `🎯 **${choice}**`,
-        `-# Picked from ${choices.length} option${choices.length === 1 ? '' : 's'}.`,
+        t(language, 'fun.choose.picked', { choice }),
+        t(language, 'fun.choose.pickedFrom', { count: choices.length }),
       ].join('\n'),
       color: COLORS.fun,
       fields: [
         {
-          name: 'Options',
+          name: t(language, 'fun.choose.options'),
           value: choices.map((entry, index) => `**${index + 1}.** ${entry}`).join('\n'),
           inline: false,
         },
       ],
-      footer: `Requested by ${interaction.user.username}`,
+      footer: t(language, 'fun.choose.footer', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed] });

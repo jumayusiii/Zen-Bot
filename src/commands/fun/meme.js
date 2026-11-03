@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const PRIMARY_API = 'https://meme-api.com/gimme';
 const FALLBACK_API = 'https://api.imgflip.com/get_memes';
@@ -81,6 +82,7 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.deferReply();
+    const language = await getInteractionLanguage(interaction);
 
     try {
       const meme = await fetchMeme(Boolean(interaction.channel?.nsfw));
@@ -92,20 +94,20 @@ module.exports = {
         .join(' · ');
 
       const embed = createEmbed(interaction.client, {
-        section: 'Meme Machine',
+        section: t(language, 'fun.meme.section'),
         title: truncate(meme.title, 256),
         url: meme.link,
         image: meme.image,
         color: COLORS.fun,
-        description: `Fresh from **${details}**`,
-        footer: `Requested by ${interaction.user.username}`,
+        description: t(language, 'fun.meme.description', { source: details }),
+        footer: t(language, 'fun.meme.footer', { user: interaction.user.username }),
       });
 
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error('[meme] Could not fetch a meme:', error);
       await interaction.editReply({
-        content: 'Could not fetch a meme right now. Please try again in a moment.',
+        content: t(language, 'fun.meme.error'),
       });
     }
   },

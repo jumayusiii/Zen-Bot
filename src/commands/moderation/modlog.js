@@ -11,6 +11,7 @@ const {
   sendModerationLog,
   setModLogChannel,
 } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const REQUIRED_CHANNEL_PERMISSIONS = [
   PermissionFlagsBits.ViewChannel,
@@ -18,35 +19,41 @@ const REQUIRED_CHANNEL_PERMISSIONS = [
   PermissionFlagsBits.EmbedLinks,
 ];
 
-async function statusEmbed(client, guild, requestedBy) {
+async function statusEmbed(client, guild, requestedBy, language) {
   const channelId = await getModLogChannelId(guild.id);
   const channel = channelId ? guild.channels.cache.get(channelId) : null;
 
   return createEmbed(client, {
-    section: 'Moderation',
-    title: 'Audit log settings',
+    section: t(language, 'moderation.section'),
+    title: t(language, 'moderation.modlog.statusTitle'),
     description: channelId
-      ? 'Every moderation action is posted to the configured channel.'
-      : 'No audit log channel is configured yet. Choose one with `/modlog channel:#channel`.',
+      ? t(language, 'moderation.modlog.statusDescriptionEnabled')
+      : t(language, 'moderation.modlog.statusDescriptionEmpty'),
     color: channelId ? COLORS.success : COLORS.neutral,
     fields: [
       {
-        name: '📁 Channel',
-        value: channelId ? `<#${channelId}>` : 'Not configured',
+        name: `📁 ${t(language, 'moderation.fields.channel')}`,
+        value: channelId ? `<#${channelId}>` : t(language, 'moderation.modlog.notConfigured'),
         inline: true,
       },
       {
-        name: '🛡️ Status',
-        value: channelId ? (channel ? 'Enabled' : '⚠️ Channel missing') : 'Disabled',
+        name: `🛡️ ${t(language, 'moderation.fields.status')}`,
+        value: channelId
+          ? channel
+            ? t(language, 'moderation.modlog.enabled')
+            : t(language, 'moderation.modlog.channelMissing')
+          : t(language, 'moderation.modlog.disabled'),
         inline: true,
       },
       {
-        name: '🧭 Configure',
-        value: channelId ? '`/modlog channel:#channel` to change\n`/modlog disable:true` to turn off' : '`/modlog channel:#channel`',
+        name: `🧭 ${t(language, 'moderation.fields.configure')}`,
+        value: channelId
+          ? t(language, 'moderation.modlog.configureValue')
+          : t(language, 'moderation.modlog.configureValueEmpty'),
         inline: true,
       },
     ],
-    footer: `Requested by ${requestedBy}`,
+    footer: t(language, 'common.requestedBy', { user: requestedBy }),
   });
 }
 
@@ -74,15 +81,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.manageGuild');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild)) {
       await interaction.reply({
-        content: 'You need the **Manage Server** permission to use `/modlog`.',
+        content: t(language, 'moderation.permission', { permission, command: 'modlog' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -93,7 +103,7 @@ module.exports = {
 
     if (channel && disable) {
       await interaction.reply({
-        content: 'Choose either a channel or `disable:true`, not both.',
+        content: t(language, 'moderation.modlog.chooseBoth'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -101,7 +111,9 @@ module.exports = {
 
     if (!channel && !disable) {
       await interaction.reply({
-        embeds: [await statusEmbed(interaction.client, guild, interaction.user.username)],
+        embeds: [
+          await statusEmbed(interaction.client, guild, interaction.user.username, language),
+        ],
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -112,11 +124,13 @@ module.exports = {
       await interaction.reply({
         embeds: [
           createEmbed(interaction.client, {
-            section: 'Moderation',
-            title: 'Audit log disabled',
-            description: 'New moderation actions will not be posted to a log channel.',
+            section: t(language, 'moderation.section'),
+            title: t(language, 'moderation.modlog.disabledTitle'),
+            description: t(language, 'moderation.modlog.disabledDescription'),
             color: COLORS.neutral,
-            footer: `Changed by ${interaction.user.username}`,
+            footer: t(language, 'moderation.modlog.changedBy', {
+              user: interaction.user.username,
+            }),
           }),
         ],
         flags: MessageFlags.Ephemeral,
@@ -126,7 +140,7 @@ module.exports = {
 
     if (!channel.isTextBased?.() || channel.guildId !== guild.id) {
       await interaction.reply({
-        content: 'Choose a text channel from this server.',
+        content: t(language, 'moderation.channelOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -135,7 +149,7 @@ module.exports = {
     const permissions = channel.permissionsFor(guild.members.me);
     if (!permissions?.has(REQUIRED_CHANNEL_PERMISSIONS)) {
       await interaction.reply({
-        content: `I need **View Channel**, **Send Messages** and **Embed Links** in ${channel} to post audit logs.`,
+        content: t(language, 'moderation.modlog.channelPermission', { channel }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -151,7 +165,7 @@ module.exports = {
     if (!test.sent) {
       await clearModLogChannel(guild.id);
       await interaction.reply({
-        content: `I could not post in ${channel}. Check my permissions and try again.`,
+        content: t(language, 'moderation.modlog.postFailed', { channel }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -160,16 +174,30 @@ module.exports = {
     await interaction.reply({
       embeds: [
         createEmbed(interaction.client, {
-          section: 'Moderation',
-          title: 'Audit log connected',
-          description: `Moderation actions will be posted in ${channel}.`,
+          section: t(language, 'moderation.section'),
+          title: t(language, 'moderation.modlog.connectedTitle'),
+          description: t(language, 'moderation.modlog.connectedDescription', { channel }),
           color: COLORS.success,
           fields: [
-            { name: '📁 Channel', value: `${channel}`, inline: true },
-            { name: '🛡️ Status', value: 'Enabled', inline: true },
-            { name: '🔔 Coverage', value: 'Mutes · Unmutes · Kicks · Bans · Unbans', inline: false },
+            {
+              name: `📁 ${t(language, 'moderation.fields.channel')}`,
+              value: `${channel}`,
+              inline: true,
+            },
+            {
+              name: `🛡️ ${t(language, 'moderation.fields.status')}`,
+              value: t(language, 'moderation.modlog.enabled'),
+              inline: true,
+            },
+            {
+              name: `🔔 ${t(language, 'moderation.fields.coverage')}`,
+              value: t(language, 'moderation.modlog.coverage'),
+              inline: false,
+            },
           ],
-          footer: `Configured by ${interaction.user.username}`,
+          footer: t(language, 'moderation.modlog.configuredBy', {
+            user: interaction.user.username,
+          }),
         }),
       ],
       flags: MessageFlags.Ephemeral,

@@ -2,9 +2,11 @@ const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { CARD_THEMES, getCardTheme } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getAccount, setCardTheme } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -23,30 +25,44 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Rank cards are per server. Run `/rankcard` in a server channel.',
+        content: t('en', 'levels.card.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const themeId = interaction.options.getString('theme');
+
     try {
       const account = await getAccount(interaction.guild.id, interaction.user.id);
-      const themeId = interaction.options.getString('theme');
 
       if (!themeId) {
         const current = getCardTheme(account.theme);
         const owned = account.owned.map((id) => getCardTheme(id).name).join('  ·  ');
         const embed = createEmbed(interaction.client, {
-          section: 'Levels',
-          title: 'Rank card style',
-          description: `Your card currently uses **${current.name}**.\nChoose another owned theme with \`/rankcard theme:<name>\`.`,
+          section: t(language, 'help.tabs.levels'),
+          title: t(language, 'levels.card.styleTitle'),
+          description: t(language, 'levels.card.styleDescription', { theme: current.name }),
           color: COLORS.brand,
           fields: [
-            { name: '🎨 Equipped', value: current.name, inline: true },
-            { name: '💰 Balance', value: `${coins(account.balance)} coins`, inline: true },
-            { name: '🖼️ Owned themes', value: owned, inline: false },
+            {
+              name: `🎨 ${t(language, 'common.equipped')}`,
+              value: current.name,
+              inline: true,
+            },
+            {
+              name: `💰 ${t(language, 'economy.balance')}`,
+              value: `${coins(account.balance, language)} ${t(language, 'common.coins')}`,
+              inline: true,
+            },
+            {
+              name: `🖼️ ${t(language, 'levels.card.ownedThemes')}`,
+              value: owned,
+              inline: false,
+            },
           ],
-          footer: 'Buy more themes in /shop  ·  Preview with /rank',
+          footer: t(language, 'levels.card.styleFooter'),
         });
 
         await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
@@ -56,7 +72,10 @@ module.exports = {
       if (!account.owned.includes(themeId)) {
         const theme = getCardTheme(themeId);
         await interaction.reply({
-          content: `You do not own **${theme.name}** yet. Buy it in \`/shop\` for **${coins(theme.price)} coins**.`,
+          content: t(language, 'levels.card.notOwned', {
+            theme: theme.name,
+            price: coins(theme.price, language),
+          }),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -69,22 +88,30 @@ module.exports = {
       });
 
       const embed = createEmbed(interaction.client, {
-        section: 'Levels',
-        title: 'Card theme equipped',
-        description: `Your rank card now uses **${result.theme.name}**.\nOpen \`/rank\` to see it.`,
+        section: t(language, 'help.tabs.levels'),
+        title: t(language, 'levels.card.equippedTitle'),
+        description: t(language, 'levels.card.equippedDescription', { theme: result.theme.name }),
         color: COLORS.success,
         fields: [
-          { name: '🎨 Theme', value: result.theme.name, inline: true },
-          { name: '💰 Balance', value: `${coins(result.balance)} coins`, inline: true },
+          { name: `🎨 ${t(language, 'economy.buy.theme')}`, value: result.theme.name, inline: true },
+          {
+            name: `💰 ${t(language, 'economy.balance')}`,
+            value: `${coins(result.balance, language)} ${t(language, 'common.coins')}`,
+            inline: true,
+          },
         ],
-        footer: 'Change it again with /rankcard  ·  More in /shop',
+        footer: t(language, 'levels.card.equippedFooter'),
       });
 
       await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
     } catch (error) {
       if (error.code === 'not_owned') {
+        const theme = getCardTheme(themeId);
         await interaction.reply({
-          content: error.message,
+          content: t(language, 'levels.card.notOwned', {
+            theme: theme.name,
+            price: coins(theme.price, language),
+          }),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -92,7 +119,7 @@ module.exports = {
 
       console.error('[levels] /rankcard failed:', error);
       await interaction.reply({
-        content: 'Could not update your rank card right now. Please try again.',
+        content: t(language, 'levels.card.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

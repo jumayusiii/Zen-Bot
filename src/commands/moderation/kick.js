@@ -7,6 +7,7 @@ const {
   targetModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -31,15 +32,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.kickMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.KickMembers)) {
       await interaction.reply({
-        content: 'You need the **Kick Members** permission to use `/kick`.',
+        content: t(language, 'moderation.permission', { permission, command: 'kick' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -47,7 +51,7 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(PermissionFlagsBits.KickMembers)) {
       await interaction.reply({
-        content: 'I need the **Kick Members** permission to kick members.',
+        content: t(language, 'moderation.botPermission', { permission }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -59,6 +63,7 @@ module.exports = {
       guild,
       member,
       moderator: interaction.member,
+      language,
     });
 
     if (targetError) {
@@ -66,14 +71,14 @@ module.exports = {
       return;
     }
 
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
     await interaction.deferReply();
 
     try {
       await member.kick(auditReason(interaction.member, reason));
     } catch (error) {
       console.error(`[moderation] /kick failed for ${user.id}:`, error);
-      await sendModerationError(interaction, moderationErrorMessage(error));
+      await sendModerationError(interaction, moderationErrorMessage(error, language));
       return;
     }
 
@@ -86,15 +91,18 @@ module.exports = {
     });
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Member kicked',
-      description: `**${member.displayName}** was removed from **${guild.name}**.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.kick.title'),
+      description: t(language, 'moderation.kick.description', {
+        member: member.displayName,
+        server: guild.name,
+      }),
       color: COLORS.danger,
       fields: [
-        { name: '🆔 User', value: `\`${user.id}\``, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        { name: `🆔 ${t(language, 'moderation.fields.user')}`, value: `\`${user.id}\``, inline: true },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.editReply({ embeds: [embed] });

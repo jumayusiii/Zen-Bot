@@ -16,7 +16,7 @@ The editor requires the owner's Discord sign-in.
 | Field | Value |
 | --- | --- |
 | Bot name | Zen |
-| Version | `1.19.0-beta.7` |
+| Version | `1.19.0-beta.8` |
 | Commands | 94 |
 | Prefix | `/` (slash commands only) |
 | Help command | `/helplist` |

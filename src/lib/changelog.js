@@ -2,6 +2,24 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.8',
+    date: '2026-11-03',
+    title: 'German across every command',
+    summary: 'Zen now answers in German across fun, minigames, economy, levels and moderation, with translated content packs and rank cards.',
+    added: [
+      'German responses for every **Fun** command, including translated facts, compliments, roasts, jokes, fortunes and conversation topics.',
+      'German responses for every **Minigame**, including trivia questions, typing phrases, hangman categories, scramble hints and would-you-rather pairs.',
+      'German responses for the **Economy** commands, from `/daily` and `/work` through heists, wagers, blackjack, the shop and the inventory.',
+      'German responses for the **Level** commands and rank cards, plus the **Moderation** commands and their audit-log entries.',
+    ],
+    improved: [
+      'German output formats numbers with German separators and uses translated slot names, result bands and error messages.',
+      'The language catalog now holds **816 keys per language** with full English and German parity, covered by a dedicated test.',
+      '`/language` reports the expanded coverage, and the README lists what still uses English (images, social and utility).',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.7',
     date: '2026-11-03',
     title: 'Self-healing watchdog & a language menu',

@@ -5,6 +5,8 @@ const path = require('node:path');
 const test = require('node:test');
 
 const dailyCommand = require('../src/commands/economy/daily');
+const workCommand = require('../src/commands/economy/work');
+const shopCommand = require('../src/commands/economy/shop');
 const buyCommand = require('../src/commands/economy/buy');
 const stealCommand = require('../src/commands/economy/steal');
 const blackjackCommand = require('../src/commands/economy/blackjack');
@@ -236,6 +238,78 @@ test('/balance and /ecoleaderboard follow the saved German language', async () =
     const boardEmbed = board.captured.reply.embeds[0].data;
     assert.equal(boardEmbed.title, 'Rangliste von Test Server');
     assert.match(boardEmbed.description, /Die \*\*2\*\* reichsten von \*\*2\*\* Geldbörsen/);
+  });
+});
+
+test('German economy responses localize copy, labels and numbers', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          {
+            guildId: 'guild-1',
+            userId: 'user-1',
+            balance: 1500,
+            owned: ['aurora'],
+            theme: 'aurora',
+          },
+        ],
+      }),
+      'utf8',
+    );
+    await setGuildLanguage('guild-1', 'de');
+
+    const daily = fakeInteraction();
+    await dailyCommand.execute(daily);
+    const dailyEmbed = daily.captured.reply.embeds[0].data;
+    assert.equal(dailyEmbed.title, 'Tägliche Belohnung abgeholt');
+    assert.match(dailyEmbed.description, /Münzen/);
+    assert.ok(dailyEmbed.fields.some(
+      (field) => field.name === '💰 Guthaben' && field.value === '**1.600** Münzen',
+    ));
+
+    const work = fakeInteraction();
+    await workCommand.execute(work);
+    const workEmbed = work.captured.reply.embeds[0].data;
+    assert.equal(workEmbed.title, 'Schicht abgeschlossen');
+    assert.match(workEmbed.description, /Münzen/);
+    assert.ok(workEmbed.fields.some((field) => field.name === '⏰ Nächste Schicht'));
+
+    const shop = fakeInteraction();
+    await shopCommand.execute(shop);
+    const shopEmbed = shop.captured.reply.embeds[0].data;
+    assert.equal(shopEmbed.title, 'Rank-Card-Shop');
+    assert.ok(shopEmbed.fields.some(
+      (field) => field.name.startsWith('Aurora')
+        && field.name.includes('Kostenlos')
+        && field.value.includes('klassische Zen-Verlauf'),
+    ));
+
+    const style = fakeInteraction();
+    await rankCardCommand.execute(style);
+    const styleEmbed = style.captured.reply.embeds[0].data;
+    assert.equal(styleEmbed.title, 'Rank-Card-Stil');
+    assert.ok(styleEmbed.fields.some((field) => field.name === '🖼️ Eigene Themes'));
+
+    const unowned = fakeInteraction({ theme: 'candy' });
+    await rankCardCommand.execute(unowned);
+    assert.match(unowned.captured.reply.content, /Du besitzt \*\*Candy\*\* noch nicht/);
+
+    const blackjack = fakeInteraction();
+    await blackjackCommand.execute(blackjack);
+    const blackjackEmbed = blackjack.captured.reply.embeds[0].data;
+    assert.equal(blackjackEmbed.title, 'Blackjack');
+    assert.ok(blackjackEmbed.fields.some((field) => field.name === 'Deine Hand'));
+    assert.deepEqual(
+      blackjack.captured.reply.components[0].components.map((button) => button.data.label),
+      ['Ziehen', 'Halten'],
+    );
+
+    const tooMuch = fakeInteraction({ bet: 5000 });
+    await blackjackCommand.execute(tooMuch);
+    assert.match(tooMuch.captured.reply.content, /Du hast nur \*\*[\d.]+ Münzen\*\*/);
   });
 });
 

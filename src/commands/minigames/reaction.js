@@ -8,6 +8,7 @@ const {
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { rateReaction } = require('../../lib/reaction');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 10 * 60 * 1000;
 const games = new Map();
@@ -21,50 +22,58 @@ function pruneExpired(now = Date.now()) {
   }
 }
 
-function controlRow(game, enabled) {
+function controlRow(game, enabled, language) {
   return new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`reaction:press:${game.id}`)
-      .setLabel(enabled ? 'Click!' : 'Wait…')
+      .setLabel(
+        enabled
+          ? t(language, 'minigames.reaction.goTitle')
+          : t(language, 'minigames.reaction.waitButton'),
+      )
       .setEmoji(enabled ? '⚡' : '⏳')
       .setStyle(enabled ? ButtonStyle.Success : ButtonStyle.Secondary)
       .setDisabled(!enabled),
   );
 }
 
-function waitEmbed(client) {
+function waitEmbed(client, language) {
   return createEmbed(client, {
-    section: 'Minigames',
-    title: 'Reaction test',
-    description: 'Wait for the button to turn green, then click it as fast as you can.',
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.reaction.title'),
+    description: t(language, 'minigames.reaction.wait'),
     color: COLORS.game,
-    footer: 'The button unlocks in a moment',
+    footer: t(language, 'minigames.reaction.waitFooter'),
   });
 }
 
-function readyEmbed(client) {
+function readyEmbed(client, language) {
   return createEmbed(client, {
-    section: 'Minigames',
-    title: 'GO!',
-    description: 'Click the button now!',
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.reaction.goTitle'),
+    description: t(language, 'minigames.reaction.go'),
     color: COLORS.success,
-    footer: 'Fastest click wins',
+    footer: t(language, 'minigames.reaction.goFooter'),
   });
 }
 
-function resultEmbed(client, milliseconds) {
-  const rating = rateReaction(milliseconds);
+function resultEmbed(client, milliseconds, language) {
+  const rating = rateReaction(milliseconds, language);
 
   return createEmbed(client, {
-    section: 'Minigames',
-    title: 'Reaction result',
-    description: `You clicked in **${milliseconds} ms**.\n-# ${rating.emoji} ${rating.label}`,
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.reaction.resultTitle'),
+    description: t(language, 'minigames.reaction.result', {
+      ms: milliseconds,
+      emoji: rating.emoji,
+      label: rating.label,
+    }),
     color: milliseconds < 400 ? COLORS.success : COLORS.warning,
-    footer: 'Run /reaction to try again',
+    footer: t(language, 'minigames.reaction.footer'),
   });
 }
 
-async function beginRound(interaction) {
+async function beginRound(interaction, language) {
   const game = {
     id: crypto.randomUUID(),
     ownerId: interaction.user.id,
@@ -76,8 +85,8 @@ async function beginRound(interaction) {
   games.set(game.id, game);
 
   const message = await interaction.reply({
-    embeds: [waitEmbed(interaction.client)],
-    components: [controlRow(game, false)],
+    embeds: [waitEmbed(interaction.client, language)],
+    components: [controlRow(game, false, language)],
     fetchReply: true,
   });
 
@@ -91,8 +100,8 @@ async function beginRound(interaction) {
 
     try {
       await message.edit({
-        embeds: [readyEmbed(interaction.client)],
-        components: [controlRow(game, true)],
+        embeds: [readyEmbed(interaction.client, language)],
+        components: [controlRow(game, true, language)],
       });
     } catch (error) {
       games.delete(game.id);
@@ -110,7 +119,8 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
-    await beginRound(interaction);
+    const language = await getInteractionLanguage(interaction);
+    await beginRound(interaction, language);
   },
 
   async handleComponent(interaction) {
@@ -118,12 +128,13 @@ module.exports = {
     if (action !== 'press' || !gameId) return;
 
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = games.get(gameId);
 
     if (!game) {
       await interaction.reply({
-        content: 'This reaction test expired. Run `/reaction` to start a new one.',
+        content: t(language, 'minigames.reaction.expired'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -131,7 +142,7 @@ module.exports = {
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This reaction test belongs to someone else. Run `/reaction` to start your own.',
+        content: t(language, 'minigames.reaction.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -139,7 +150,7 @@ module.exports = {
 
     if (!game.readyAt) {
       await interaction.reply({
-        content: 'The button is not ready yet. Wait for it to turn green.',
+        content: t(language, 'minigames.reaction.notReady'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -151,7 +162,7 @@ module.exports = {
     const elapsed = Math.max(0, Date.now() - game.readyAt);
 
     await interaction.update({
-      embeds: [resultEmbed(interaction.client, elapsed)],
+      embeds: [resultEmbed(interaction.client, elapsed, language)],
       components: [],
     });
   },

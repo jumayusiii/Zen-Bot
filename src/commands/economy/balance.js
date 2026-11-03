@@ -24,19 +24,19 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Coins are tracked per server. Run `/balance` in a server channel.',
+        content: t('en', 'balance.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
     const target = interaction.options.getUser('user') ?? interaction.user;
+    const language = await getGuildLanguage(interaction.guild.id);
 
     try {
-      const [account, board, language] = await Promise.all([
+      const [account, board] = await Promise.all([
         getAccount(interaction.guild.id, target.id),
         getEconomyLeaderboard(interaction.guild.id, 10, target.id),
-        getGuildLanguage(interaction.guild.id),
       ]);
       const theme = getCardTheme(account.theme);
       const rank = board.member && board.member.balance > 0
@@ -47,7 +47,7 @@ module.exports = {
         : t(language, 'balance.unranked');
       const streakKey = account.dailyStreak === 1 ? 'balance.day' : 'balance.days';
       const embed = createEmbed(interaction.client, {
-        section: 'Economy',
+        section: t(language, 'help.tabs.economy'),
         title: t(language, 'balance.title', { user: target.username }),
         description: account.balance > 0
           ? t(language, 'balance.description', {
@@ -78,7 +78,7 @@ module.exports = {
     } catch (error) {
       console.error('[economy] /balance failed:', error);
       await interaction.reply({
-        content: 'Could not read that wallet right now. Please try again.',
+        content: t(language, 'balance.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

@@ -18,6 +18,7 @@ const {
   typingSpeed,
 } = require('../../lib/typerace');
 const { recordRace } = require('../../lib/typeraceLeaderboard');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 15 * 60 * 1000;
 const games = new Map();
@@ -29,20 +30,18 @@ function pruneExpired(now = Date.now()) {
 }
 
 function buildReadyPayload(client, game, username) {
+  const language = game.language;
   const embed = createEmbed(client, {
-    section: 'Minigames',
-    title: 'Type Race',
-    description: [
-      'Press **Start typing** when you are ready.',
-      'A short phrase will appear in the typing box. Type it exactly, then submit.',
-    ].join('\n'),
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.typerace.title'),
+    description: t(language, 'minigames.typerace.ready'),
     color: COLORS.game,
     fields: [
-      { name: '🎯 Goal', value: 'Match the phrase', inline: true },
-      { name: '⏱️ Timer', value: 'Starts with the box', inline: true },
-      { name: '🙋 Player', value: username, inline: true },
+      { name: t(language, 'minigames.typerace.goal'), value: t(language, 'minigames.typerace.goalValue'), inline: true },
+      { name: t(language, 'minigames.typerace.timer'), value: t(language, 'minigames.typerace.timerValue'), inline: true },
+      { name: t(language, 'minigames.typerace.player'), value: username, inline: true },
     ],
-    footer: 'Speed is measured from opening the box to submitting  ·  /typeraceleaderboard',
+    footer: t(language, 'minigames.typerace.footer'),
   });
 
   return {
@@ -51,7 +50,7 @@ function buildReadyPayload(client, game, username) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`typerace:start:${game.id}`)
-          .setLabel('Start typing')
+          .setLabel(t(language, 'minigames.typerace.start'))
           .setEmoji('⌨️')
           .setStyle(ButtonStyle.Primary),
       ),
@@ -60,32 +59,49 @@ function buildReadyPayload(client, game, username) {
 }
 
 function buildResultPayload(client, game, username) {
+  const language = game.language;
   const { correct, wpm, elapsedMs } = game.result;
-  const rating = rateTyping(wpm);
+  const rating = rateTyping(wpm, language);
   const lines = correct
-    ? [`⚡ **${wpm} WPM**`, `-# ${rating.emoji} ${rating.label}`]
-    : [`The phrase was **${game.phrase.text}**.`, '-# Type it exactly to score next time.'];
+    ? [t(language, 'minigames.typerace.wpm', { wpm }), `-# ${rating.emoji} ${rating.label}`]
+    : [
+        t(language, 'minigames.typerace.phraseWas', { phrase: game.phrase.text }),
+        t(language, 'minigames.typerace.tryExact'),
+      ];
 
   if (correct && game.record) {
     lines.push(
       '',
-      game.record.improved
-        ? `🏅 **New personal best: ${formatDuration(game.record.entry.bestMs)}**`
-        : `🏅 Personal best: **${formatDuration(game.record.entry.bestMs)}**`,
+      t(
+        language,
+        game.record.improved ? 'minigames.typerace.newBest' : 'minigames.typerace.best',
+        { time: formatDuration(game.record.entry.bestMs) },
+      ),
     );
   }
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
-    title: correct ? 'Type Race · finished' : 'Type Race · not quite',
+    section: t(language, 'help.tabs.minigames'),
+    title: t(
+      language,
+      correct ? 'minigames.typerace.finishedTitle' : 'minigames.typerace.missedTitle',
+    ),
     description: lines.join('\n'),
     color: correct ? COLORS.success : COLORS.warning,
     fields: [
-      { name: '⚡ Speed', value: correct ? `**${wpm} WPM**` : 'Unranked', inline: true },
-      { name: '⏱️ Time', value: formatDuration(elapsedMs), inline: true },
-      { name: '🎯 Match', value: correct ? 'Exact' : 'Missed', inline: true },
+      {
+        name: t(language, 'minigames.typerace.speed'),
+        value: correct ? `**${wpm} WPM**` : t(language, 'minigames.typerace.unranked'),
+        inline: true,
+      },
+      { name: t(language, 'minigames.typerace.time'), value: formatDuration(elapsedMs), inline: true },
+      {
+        name: t(language, 'minigames.typerace.match'),
+        value: t(language, correct ? 'minigames.typerace.exact' : 'minigames.typerace.missed'),
+        inline: true,
+      },
     ],
-    footer: `Attempt by ${username}  ·  /typeraceleaderboard`,
+    footer: t(language, 'minigames.typerace.footerAttempt', { user: username }),
   });
 
   return {
@@ -94,7 +110,7 @@ function buildResultPayload(client, game, username) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`typerace:again:${game.id}`)
-          .setLabel('Race again')
+          .setLabel(t(language, 'minigames.typerace.again'))
           .setEmoji('🔁')
           .setStyle(ButtonStyle.Primary),
       ),
@@ -103,16 +119,17 @@ function buildResultPayload(client, game, username) {
 }
 
 async function openTypingModal(interaction, game) {
+  const language = game.language;
   const modal = new ModalBuilder()
     .setCustomId(`typerace:submit:${game.id}`)
-    .setTitle('Type Race');
+    .setTitle(t(language, 'minigames.typerace.modalTitle'));
 
   modal.addComponents(
     new ActionRowBuilder().addComponents(
       new TextInputBuilder()
         .setCustomId('phrase')
-        .setLabel(`Type: ${game.phrase.text}`)
-        .setPlaceholder('Type the phrase exactly as shown')
+        .setLabel(t(language, 'minigames.typerace.modalLabel', { phrase: game.phrase.text }))
+        .setPlaceholder(t(language, 'minigames.typerace.placeholder'))
         .setStyle(TextInputStyle.Short)
         .setMinLength(1)
         .setMaxLength(100)
@@ -123,9 +140,9 @@ async function openTypingModal(interaction, game) {
   await interaction.showModal(modal);
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This typing race has expired. Run `/typerace` to start a new one.',
+    content: t(language, 'minigames.typerace.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
@@ -139,11 +156,13 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = {
       id: crypto.randomUUID(),
       ownerId: interaction.user.id,
-      phrase: randomPhrase(),
+      language,
+      phrase: randomPhrase(Math.random, null, language),
       startedAt: null,
       result: null,
       record: null,
@@ -164,13 +183,13 @@ module.exports = {
 
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, await getInteractionLanguage(interaction));
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This typing race belongs to someone else. Run `/typerace` to start your own.',
+        content: t(game.language, 'minigames.typerace.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -179,7 +198,7 @@ module.exports = {
     if (action !== 'start' && action !== 'again') return;
 
     if (action === 'again') {
-      game.phrase = randomPhrase(Math.random, game.phrase.index);
+      game.phrase = randomPhrase(Math.random, game.phrase.index, game.language);
       game.result = null;
       game.record = null;
     }
@@ -198,13 +217,13 @@ module.exports = {
 
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, await getInteractionLanguage(interaction));
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This typing race belongs to someone else. Run `/typerace` to start your own.',
+        content: t(game.language, 'minigames.typerace.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -212,7 +231,7 @@ module.exports = {
 
     if (!game.startedAt) {
       await interaction.reply({
-        content: 'The timer is not running. Press **Start typing** on the race message.',
+        content: t(game.language, 'minigames.typerace.noTimer'),
         flags: MessageFlags.Ephemeral,
       });
       return;

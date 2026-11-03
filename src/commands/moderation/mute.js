@@ -4,11 +4,13 @@ const {
   MUTE_DURATIONS,
   auditReason,
   durationByValue,
+  durationLabel,
   moderationErrorMessage,
   sendModerationError,
   targetModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 function durationChoices() {
   return MUTE_DURATIONS.map(({ label, value }) => ({ name: label, value }));
@@ -44,15 +46,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.moderateMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ModerateMembers)) {
       await interaction.reply({
-        content: 'You need the **Moderate Members** permission to use `/mute`.',
+        content: t(language, 'moderation.permission', { permission, command: 'mute' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -60,7 +65,7 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(PermissionFlagsBits.ModerateMembers)) {
       await interaction.reply({
-        content: 'I need the **Moderate Members** permission to mute members.',
+        content: t(language, 'moderation.botPermission', { permission }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -73,7 +78,7 @@ module.exports = {
     );
 
     if (!duration) {
-      await sendModerationError(interaction, 'Choose one of the available mute durations.');
+      await sendModerationError(interaction, t(language, 'moderation.chooseDuration'));
       return;
     }
 
@@ -82,6 +87,7 @@ module.exports = {
       guild,
       member,
       moderator: interaction.member,
+      language,
     });
 
     if (targetError) {
@@ -92,16 +98,16 @@ module.exports = {
     if (member.isCommunicationDisabled?.()) {
       const until = member.communicationDisabledUntilTimestamp;
       const suffix = Number.isFinite(until)
-        ? ` until <t:${Math.floor(until / 1000)}:R>`
+        ? ` ${t(language, 'moderation.until')} <t:${Math.floor(until / 1000)}:R>`
         : '';
       await sendModerationError(
         interaction,
-        `**${member.displayName}** is already muted${suffix}. Use \`/unmute\` first.`,
+        t(language, 'moderation.alreadyMuted', { target: member.displayName, until: suffix }),
       );
       return;
     }
 
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
     const expiresAt = Date.now() + duration.ms;
 
     await interaction.deferReply();
@@ -110,7 +116,7 @@ module.exports = {
       await member.timeout(duration.ms, auditReason(interaction.member, reason));
     } catch (error) {
       console.error(`[moderation] /mute failed for ${user.id}:`, error);
-      await sendModerationError(interaction, moderationErrorMessage(error));
+      await sendModerationError(interaction, moderationErrorMessage(error, language));
       return;
     }
 
@@ -120,23 +126,31 @@ module.exports = {
       targetName: member.displayName,
       moderatorId: interaction.user.id,
       reason,
-      duration: duration.label,
+      duration: durationLabel(duration, language),
       expiresAt,
     });
 
     const unix = Math.floor(expiresAt / 1000);
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Member muted',
-      description: `**${member.displayName}** cannot send messages, react or join voice channels until the timeout ends.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.mute.title'),
+      description: t(language, 'moderation.mute.description', { member: member.displayName }),
       color: COLORS.warning,
       fields: [
-        { name: '⏳ Duration', value: duration.label, inline: true },
-        { name: '🔇 Expires', value: `<t:${unix}:F> (<t:${unix}:R>)`, inline: true },
-        { name: '🆔 Member', value: `\`${user.id}\``, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        {
+          name: `⏳ ${t(language, 'moderation.fields.duration')}`,
+          value: durationLabel(duration, language),
+          inline: true,
+        },
+        {
+          name: `🔇 ${t(language, 'moderation.fields.expires')}`,
+          value: `<t:${unix}:F> (<t:${unix}:R>)`,
+          inline: true,
+        },
+        { name: `🆔 ${t(language, 'moderation.fields.member')}`, value: `\`${user.id}\``, inline: true },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.editReply({ embeds: [embed] });

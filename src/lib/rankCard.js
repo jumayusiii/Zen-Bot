@@ -1,4 +1,5 @@
 const { DEFAULT_THEME_ID, getCardTheme } = require('./cardThemes');
+const { t } = require('./i18n');
 
 const WIDTH = 900;
 const HEIGHT = 280;
@@ -18,8 +19,9 @@ function number(value, fallback = 0) {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
-function formatNumber(value) {
-  return Math.max(0, Math.floor(number(value))).toLocaleString('en-US');
+function formatNumber(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(number(value))).toLocaleString(locale);
 }
 
 function seeded(index, salt = 1) {
@@ -324,6 +326,7 @@ async function renderRankCard({
   xpNeeded = 100,
   totalXp = 0,
   theme = DEFAULT_THEME_ID,
+  language = 'en',
 } = {}) {
   const { createCanvas, loadImage } = canvasApi();
   const palette = getCardTheme(theme).colors;
@@ -391,7 +394,7 @@ async function renderRankCard({
   ctx.textAlign = 'right';
   ctx.fillStyle = palette.muted;
   ctx.font = 'bold 14px "Segoe UI", Arial, sans-serif';
-  ctx.fillText('RANK', 842, 58);
+  ctx.fillText(t(language, 'levels.card.canvas.rank'), 842, 58);
 
   ctx.fillStyle = '#ffffff';
   ctx.font = 'bold 44px "Segoe UI", Arial, sans-serif';
@@ -399,7 +402,13 @@ async function renderRankCard({
 
   ctx.fillStyle = palette.muted;
   ctx.font = '16px "Segoe UI", Arial, sans-serif';
-  ctx.fillText(members > 0 ? `of ${formatNumber(members)}` : 'unranked', 842, 130);
+  ctx.fillText(
+    members > 0
+      ? t(language, 'levels.card.canvas.of', { count: formatNumber(members, language) })
+      : t(language, 'levels.card.canvas.unranked'),
+    842,
+    130,
+  );
 
   const pillWidth = 154;
   const pillHeight = 38;
@@ -417,18 +426,27 @@ async function renderRankCard({
   ctx.font = 'bold 17px "Segoe UI", Arial, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(`LEVEL ${safeLevel}`, pillX + pillWidth / 2, pillY + pillHeight / 2 + 1);
+  ctx.fillText(
+    t(language, 'levels.card.canvas.level', { level: safeLevel }),
+    pillX + pillWidth / 2,
+    pillY + pillHeight / 2 + 1,
+  );
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = palette.dim;
   ctx.font = 'bold 12px "Segoe UI", Arial, sans-serif';
-  ctx.fillText('PROGRESS', 226, 198);
+  ctx.fillText(t(language, 'levels.card.canvas.progress'), 226, 198);
 
   ctx.textAlign = 'right';
   ctx.font = '13px "Segoe UI", Arial, sans-serif';
   ctx.fillText(
-    needed === 0 ? 'MAX LEVEL' : `${formatNumber(into)} / ${formatNumber(needed)} XP`,
+    needed === 0
+      ? t(language, 'levels.card.canvas.maxLevel')
+      : t(language, 'levels.card.canvas.xp', {
+        into: formatNumber(into, language),
+        needed: formatNumber(needed, language),
+      }),
     842,
     198,
   );
@@ -458,11 +476,19 @@ async function renderRankCard({
   ctx.textAlign = 'left';
   ctx.fillStyle = palette.dim;
   ctx.font = '14px "Segoe UI", Arial, sans-serif';
-  ctx.fillText(`TOTAL ${formatNumber(total)} XP`, 226, 252);
+  ctx.fillText(
+    t(language, 'levels.card.canvas.total', { total: formatNumber(total, language) }),
+    226,
+    252,
+  );
 
   ctx.textAlign = 'right';
   ctx.fillText(
-    needed === 0 ? 'MAXIMUM LEVEL' : `NEXT LEVEL ${formatNumber(remaining)} XP`,
+    needed === 0
+      ? t(language, 'levels.card.canvas.maximum')
+      : t(language, 'levels.card.canvas.next', {
+        remaining: formatNumber(remaining, language),
+      }),
     842,
     252,
   );

@@ -15,6 +15,13 @@ const {
   sequenceEmojis,
   symbolById,
 } = require('../../lib/memory');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
+
+function symbolLabel(language, symbol) {
+  return symbol
+    ? t(language, `minigames.memory.symbolLabels.${symbol.id}`, {}, symbol.label)
+    : null;
+}
 
 const GAME_TTL_MS = 15 * 60 * 1000;
 const games = new Map();
@@ -51,7 +58,7 @@ function resetGame(game) {
   });
 }
 
-function buildPayload(client, game) {
+function buildPayload(client, game, language) {
   const watching = game.phase === 'watch';
   const over = game.phase === 'over';
   const sequence = sequenceEmojis(game.sequence).join('  ');
@@ -59,7 +66,7 @@ function buildPayload(client, game) {
 
   if (watching) {
     description = [
-      'Watch the sequence, then press **I’m ready**.',
+      t(language, 'minigames.memory.watch'),
       '',
       `## ${sequence}`,
     ].join('\n');
@@ -67,37 +74,54 @@ function buildPayload(client, game) {
     const chosen = symbolById(game.result?.chosen);
     const expected = symbolById(game.result?.expected);
     description = [
-      `❌ **Not quite.** ${chosen ? `**${chosen.label}**` : 'That press'} came when ${expected ? `**${expected.label}**` : 'another symbol'} was next.`,
-      `The sequence was ${sequence}.`,
+      t(language, 'minigames.memory.notQuite', {
+        chosen: chosen
+          ? `**${symbolLabel(language, chosen)}**`
+          : t(language, 'minigames.memory.chosenFallback'),
+        expected: expected
+          ? symbolLabel(language, expected)
+          : t(language, 'minigames.memory.expectedFallback'),
+      }),
+      t(language, 'minigames.memory.sequenceWas', { sequence }),
     ].join('\n');
   } else {
     description = [
-      'Repeat the sequence from memory. Press the symbols in order.',
-      `-# Step ${game.position + 1} of ${game.sequence.length}. The sequence is hidden.`,
+      t(language, 'minigames.memory.repeat'),
+      t(language, 'minigames.memory.repeatHint', {
+        step: game.position + 1,
+        total: game.sequence.length,
+      }),
     ].join('\n');
   }
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
-    title: over ? 'Memory · game over' : `Memory · Round ${game.round}`,
+    section: t(language, 'help.tabs.minigames'),
+    title: over
+      ? t(language, 'minigames.memory.overTitle')
+      : t(language, 'minigames.memory.title', { round: game.round }),
     description,
     color: over ? COLORS.danger : watching ? COLORS.game : COLORS.info,
     fields: [
-      { name: '🎯 Round', value: `**${game.round}**`, inline: true },
-      { name: '⭐ Score', value: `**${game.score}**`, inline: true },
+      { name: t(language, 'minigames.memory.round'), value: `**${game.round}**`, inline: true },
+      { name: t(language, 'minigames.memory.score'), value: `**${game.score}**`, inline: true },
       {
-        name: game.phase === 'input' ? '📶 Progress' : '🔗 Sequence',
+        name: game.phase === 'input'
+          ? t(language, 'minigames.memory.progress')
+          : t(language, 'minigames.memory.sequence'),
         value: game.phase === 'input'
           ? `**${game.position}** / ${game.sequence.length}`
-          : `**${game.sequence.length}** symbols`,
+          : t(language, 'minigames.memory.symbols', { count: game.sequence.length }),
         inline: true,
       },
     ],
-    footer: watching
-      ? 'The sequence hides when you start'
-      : over
-        ? 'Press Play again for a fresh sequence'
-        : 'Only the player who started this round can play',
+    footer: t(
+      language,
+      watching
+        ? 'minigames.memory.footerWatch'
+        : over
+          ? 'minigames.memory.footerOver'
+          : 'minigames.memory.footerPlay',
+    ),
   });
 
   const components = [];
@@ -107,7 +131,7 @@ function buildPayload(client, game) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`memory:ready:${game.id}`)
-          .setLabel('I’m ready')
+          .setLabel(t(language, 'minigames.memory.ready'))
           .setEmoji('👀')
           .setStyle(ButtonStyle.Primary),
       ),
@@ -117,7 +141,7 @@ function buildPayload(client, game) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`memory:again:${game.id}`)
-          .setLabel('Play again')
+          .setLabel(t(language, 'minigames.memory.again'))
           .setEmoji('🔁')
           .setStyle(ButtonStyle.Primary),
       ),
@@ -128,7 +152,7 @@ function buildPayload(client, game) {
         SYMBOLS.map((symbol) =>
           new ButtonBuilder()
             .setCustomId(`memory:press:${game.id}:${symbol.id}`)
-            .setLabel(symbol.label)
+            .setLabel(symbolLabel(language, symbol))
             .setEmoji(symbol.emoji)
             .setStyle(ButtonStyle.Primary),
         ),
@@ -139,9 +163,9 @@ function buildPayload(client, game) {
   return { embeds: [embed], components };
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This memory round has expired. Run `/memory` to start a new one.',
+    content: t(language, 'minigames.memory.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
@@ -155,11 +179,12 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = createGame(interaction.user.id);
     games.set(game.id, game);
 
-    await interaction.reply(buildPayload(interaction.client, game));
+    await interaction.reply(buildPayload(interaction.client, game, language));
   },
 
   async handleComponent(interaction) {
@@ -167,16 +192,17 @@ module.exports = {
     if (!gameId) return;
 
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, language);
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This memory round belongs to someone else. Run `/memory` to start your own.',
+        content: t(language, 'minigames.memory.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -184,14 +210,14 @@ module.exports = {
 
     if (action === 'again') {
       resetGame(game);
-      await interaction.update(buildPayload(interaction.client, game));
+      await interaction.update(buildPayload(interaction.client, game, language));
       return;
     }
 
     if (action === 'ready') {
       if (game.phase !== 'watch') {
         await interaction.reply({
-          content: 'This round has already started. Finish the sequence first.',
+          content: t(language, 'minigames.memory.started'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -201,7 +227,7 @@ module.exports = {
       game.position = 0;
       game.updatedAt = Date.now();
 
-      await interaction.update(buildPayload(interaction.client, game));
+      await interaction.update(buildPayload(interaction.client, game, language));
       return;
     }
 
@@ -209,7 +235,7 @@ module.exports = {
 
     if (game.phase !== 'input') {
       await interaction.reply({
-        content: 'Watch the sequence first, then press **I’m ready**.',
+        content: t(language, 'minigames.memory.watchFirst'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -223,7 +249,7 @@ module.exports = {
       };
       game.updatedAt = Date.now();
 
-      await interaction.update(buildPayload(interaction.client, game));
+      await interaction.update(buildPayload(interaction.client, game, language));
       return;
     }
 
@@ -238,6 +264,6 @@ module.exports = {
     }
 
     game.updatedAt = Date.now();
-    await interaction.update(buildPayload(interaction.client, game));
+    await interaction.update(buildPayload(interaction.client, game, language));
   },
 };

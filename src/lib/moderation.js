@@ -4,6 +4,7 @@ const path = require('node:path');
 const { setTimeout: delay } = require('node:timers/promises');
 const { MessageFlags } = require('discord.js');
 const { sendModerationLog } = require('./moderationLogs');
+const { getGuildLanguage, t } = require('./i18n');
 
 const DEFAULT_FILE = path.join(__dirname, '..', '..', 'data', 'moderation.json');
 const MAX_SCHEDULED_BANS = 5000;
@@ -64,6 +65,15 @@ function durationByValue(list, value) {
   return list.find((duration) => duration.value === value) ?? null;
 }
 
+function durationLabel(duration, language = 'en') {
+  if (!duration) return duration;
+  return t(language, `moderation.durations.${duration.value}`, {}, duration.label);
+}
+
+function deleteMessagesLabel(value, language = 'en') {
+  return t(language, `moderation.deleteMessages.${value}`, {}, 'Do not delete any');
+}
+
 function auditReason(moderator, reason) {
   const name = moderator?.user?.username ?? moderator?.username ?? 'Moderator';
   const id = moderator?.id ?? 'unknown';
@@ -91,42 +101,42 @@ function compareRoles(first, second) {
  * @param {{guild: object, member: object, moderator?: object}} input
  * @returns {string|null}
  */
-function targetModerationError({ guild, member, moderator }) {
-  if (!member) return 'That member is not in this server.';
-  if (member.id === moderator?.id) return 'You cannot moderate yourself.';
-  if (member.id === guild?.members?.me?.id) return 'I cannot moderate myself.';
-  if (member.id === guild?.ownerId) return 'The server owner cannot be moderated.';
+function targetModerationError({ guild, member, moderator, language = 'en' }) {
+  if (!member) return t(language, 'moderation.errors.targetMissing');
+  if (member.id === moderator?.id) return t(language, 'moderation.self');
+  if (member.id === guild?.members?.me?.id) return t(language, 'moderation.botSelf');
+  if (member.id === guild?.ownerId) return t(language, 'moderation.owner');
 
   const botComparison = compareRoles(member, guild?.members?.me);
   if (botComparison !== null && botComparison >= 0) {
-    return 'I cannot moderate a member whose highest role is at or above mine.';
+    return t(language, 'moderation.errors.botRole');
   }
 
   if (moderator && moderator.id !== guild?.ownerId) {
     const moderatorComparison = compareRoles(member, moderator);
     if (moderatorComparison !== null && moderatorComparison >= 0) {
-      return 'You cannot moderate a member whose highest role is at or above yours.';
+      return t(language, 'moderation.errors.moderatorRole');
     }
   }
 
   return null;
 }
 
-function moderationErrorMessage(error) {
+function moderationErrorMessage(error, language = 'en') {
   switch (Number(error?.code)) {
     case 50001:
     case 50013:
-      return 'I am missing the permission for that action. Check my **Moderate Members**, **Kick Members** or **Ban Members** permission and my role position.';
+      return t(language, 'moderation.errors.discordPermission');
     case 50035:
-      return 'Discord rejected that action. Check the selected duration and try again.';
+      return t(language, 'moderation.errors.discordRejected');
     case 10007:
-      return 'That member is no longer in the server.';
+      return t(language, 'moderation.errors.memberGone');
     case 10013:
-      return 'That user no longer exists.';
+      return t(language, 'moderation.errors.userGone');
     case 10026:
-      return 'That user is not currently banned.';
+      return t(language, 'moderation.errors.notBanned');
     default:
-      return 'Discord could not complete that action. Check my permissions and role position.';
+      return t(language, 'moderation.errors.discordGeneric');
   }
 }
 
@@ -346,10 +356,15 @@ async function processDueUnbans(client, { now = Date.now(), logger = console } =
       }
     }
 
+    const language = await getGuildLanguage(entry.guildId).catch(() => 'en');
+
     try {
       await guild.bans.remove(
         entry.userId,
-        cleanText(`Temporary ban expired: ${entry.reason}`, 512),
+        cleanText(
+          t(language, 'moderation.audit.expiredReason', { reason: entry.reason }),
+          512,
+        ),
       );
       await removeScheduledUnban(entry.id);
       lifted += 1;
@@ -358,9 +373,9 @@ async function processDueUnbans(client, { now = Date.now(), logger = console } =
         action: 'auto-unban',
         targetId: entry.userId,
         targetName: entry.username,
-        moderatorName: 'Automatic — temporary ban expired',
+        moderatorName: t(language, 'moderation.audit.autoUnbanModerator'),
         reason: entry.reason,
-        extra: 'The temporary ban reached its scheduled end.',
+        extra: t(language, 'moderation.audit.autoUnbanExtra'),
       });
     } catch (error) {
       if (Number(error?.code) === 10026 || Number(error?.code) === 10013) {
@@ -433,7 +448,9 @@ module.exports = {
   MUTE_DURATIONS,
   auditReason,
   cancelScheduledUnban,
+  deleteMessagesLabel,
   durationByValue,
+  durationLabel,
   getDueUnbans,
   isSnowflake,
   moderationErrorMessage,

@@ -20,6 +20,7 @@ const {
   unusedLetters,
   wrongLetters,
 } = require('../../lib/hangman');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 15 * 60 * 1000;
 const games = new Map();
@@ -30,7 +31,7 @@ function pruneExpired(now = Date.now()) {
   }
 }
 
-function buildPayload(client, game) {
+function buildPayload(client, game, language) {
   const status = statusOf(game);
   const wrong = wrongLetters(game);
   const won = status === 'won';
@@ -40,45 +41,41 @@ function buildPayload(client, game) {
   const description = finished
     ? [
         `\`\`\`\n${hangmanArt(wrong.length)}\n\`\`\``,
-        won
-          ? `🎉 **Solved!** The word was **${game.word}**.`
-          : `💀 **Out of guesses.** The word was **${game.word}**.`,
+        t(language, won ? 'minigames.hangman.solved' : 'minigames.hangman.lost', { word: game.word }),
       ].join('\n')
     : [
         `\`\`\`\n${hangmanArt(wrong.length)}\n\`\`\``,
         `\`${maskWord(game)}\``,
-        'Pick a letter below to guess the word.',
+        t(language, 'minigames.hangman.prompt'),
       ].join('\n');
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
-    title: 'Hangman',
+    section: t(language, 'help.tabs.minigames'),
+    title: t(language, 'minigames.hangman.title'),
     description,
     color: won ? COLORS.success : lost ? COLORS.danger : COLORS.game,
     fields: [
-      { name: 'Category', value: game.category, inline: true },
+      { name: t(language, 'minigames.hangman.category'), value: game.category, inline: true },
       {
-        name: 'Wrong letters',
-        value: wrong.length > 0 ? wrong.join(' ') : 'None yet',
+        name: t(language, 'minigames.hangman.wrong'),
+        value: wrong.length > 0 ? wrong.join(' ') : t(language, 'minigames.hangman.noneYet'),
         inline: true,
       },
       {
-        name: 'Guesses left',
+        name: t(language, 'minigames.hangman.guesses'),
         value: `${guessesLeft(game)} / ${MAX_WRONG}`,
         inline: true,
       },
     ],
-    footer: finished
-      ? 'Round finished  ·  press Play again for a new word'
-      : 'Only the player who started this round can guess',
+    footer: t(language, finished ? 'minigames.hangman.footerDone' : 'minigames.hangman.footerActive'),
   });
 
   const components = [];
 
   if (!finished) {
     const groups = [
-      { id: 'first', start: 0, end: 13, label: 'Letters A–M' },
-      { id: 'second', start: 13, end: 26, label: 'Letters N–Z' },
+      { id: 'first', start: 0, end: 13, label: t(language, 'minigames.hangman.lettersAM') },
+      { id: 'second', start: 13, end: 26, label: t(language, 'minigames.hangman.lettersNZ') },
     ];
 
     for (const group of groups) {
@@ -95,7 +92,7 @@ function buildPayload(client, game) {
                 new StringSelectMenuOptionBuilder()
                   .setLabel(letter)
                   .setValue(letter)
-                  .setDescription(`Guess ${letter}`),
+                  .setDescription(t(language, 'minigames.hangman.guessLetter', { letter })),
               ),
             ),
         ),
@@ -108,7 +105,7 @@ function buildPayload(client, game) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`hangman:again:${game.id}`)
-          .setLabel('Play again')
+          .setLabel(t(language, 'minigames.hangman.playAgain'))
           .setEmoji('🔁')
           .setStyle(ButtonStyle.Primary),
       ),
@@ -118,9 +115,9 @@ function buildPayload(client, game) {
   return { embeds: [embed], components };
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This hangman round has expired. Run `/hangman` to start a new one.',
+    content: t(language, 'minigames.hangman.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
@@ -134,17 +131,18 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = {
       id: crypto.randomUUID(),
       ownerId: interaction.user.id,
-      ...createHangman(),
+      ...createHangman(Math.random, null, language),
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
 
     games.set(game.id, game);
-    await interaction.reply(buildPayload(interaction.client, game));
+    await interaction.reply(buildPayload(interaction.client, game, language));
   },
 
   async handleComponent(interaction) {
@@ -152,16 +150,17 @@ module.exports = {
     if (!gameId) return;
 
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, language);
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This hangman round belongs to someone else. Run `/hangman` to start your own.',
+        content: t(language, 'minigames.hangman.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -171,13 +170,13 @@ module.exports = {
       const fresh = {
         id: game.id,
         ownerId: game.ownerId,
-        ...createHangman(Math.random, game.word),
+        ...createHangman(Math.random, game.word, language),
         createdAt: Date.now(),
         updatedAt: Date.now(),
       };
 
       games.set(game.id, fresh);
-      await interaction.update(buildPayload(interaction.client, fresh));
+      await interaction.update(buildPayload(interaction.client, fresh, language));
       return;
     }
 
@@ -185,7 +184,7 @@ module.exports = {
 
     if (statusOf(game) !== 'playing') {
       await interaction.reply({
-        content: 'This round is already over. Press **Play again** for a new word.',
+        content: t(language, 'minigames.hangman.alreadyOver'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -194,7 +193,7 @@ module.exports = {
     const next = applyGuess(game, interaction.values?.[0]);
     if (!next) {
       await interaction.reply({
-        content: 'That letter was already guessed. Pick another one.',
+        content: t(language, 'minigames.hangman.alreadyGuessed'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -203,6 +202,6 @@ module.exports = {
     const updated = { ...next, id: game.id, ownerId: game.ownerId, updatedAt: Date.now() };
     games.set(game.id, updated);
 
-    await interaction.update(buildPayload(interaction.client, updated));
+    await interaction.update(buildPayload(interaction.client, updated, language));
   },
 };

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { randomCompliment } = require('../../lib/fun');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,14 +14,15 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
     const targetMember = interaction.options.getMember('user') ?? interaction.member;
     const targetUser = interaction.options.getUser('user') ?? interaction.user;
     const displayName = targetMember?.displayName ?? targetUser.displayName ?? targetUser.username;
-    const compliment = randomCompliment();
+    const compliment = randomCompliment(Math.random, null, language);
 
     const embed = createEmbed(interaction.client, {
-      section: 'Fun',
-      title: `A compliment for ${displayName}`,
+      section: t(language, 'help.tabs.fun'),
+      title: t(language, 'fun.compliment.title', { user: displayName }),
       description: compliment.text,
       color: COLORS.fun,
       thumbnail: (targetMember ?? targetUser).displayAvatarURL({
@@ -28,7 +30,7 @@ module.exports = {
         size: 256,
         forceStatic: true,
       }),
-      footer: `Requested by ${interaction.user.username}`,
+      footer: t(language, 'fun.compliment.footer', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed], allowedMentions: { parse: [] } });

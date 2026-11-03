@@ -2,6 +2,7 @@ const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { formatDuration } = require('../../lib/typerace');
 const { getLeaderboard, getStanding } = require('../../lib/typeraceLeaderboard');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 
@@ -18,9 +19,11 @@ module.exports = {
     .setDescription('Show the fastest Type Race time for each member'),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
+
     if (!interaction.guildId) {
       await interaction.reply({
-        content: 'The Type Race leaderboard is per server. Run this command in a server.',
+        content: t(language, 'minigames.typeraceleaderboard.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -33,26 +36,30 @@ module.exports = {
 
     const list = board.entries.length > 0
       ? board.entries.map((entry, index) => rankingLine(entry, index)).join('\n')
-      : 'No completed races yet. Run `/typerace` and set the first time.';
+      : t(language, 'minigames.typeraceleaderboard.empty');
 
     const personalBest = standing.entry
-      ? `**${formatDuration(standing.entry.bestMs)}**\n-# Rank #${standing.rank} of ${standing.totalUsers}`
-      : 'No time yet\n-# Run `/typerace` to enter';
+      ? t(language, 'minigames.typeraceleaderboard.personal', {
+          time: formatDuration(standing.entry.bestMs),
+          rank: standing.rank,
+          total: standing.totalUsers,
+        })
+      : t(language, 'minigames.typeraceleaderboard.noTime');
 
     const embed = createEmbed(interaction.client, {
-      section: 'Minigames',
-      title: 'Type Race · fastest times',
+      section: t(language, 'help.tabs.minigames'),
+      title: t(language, 'minigames.typeraceleaderboard.title'),
       description: [
-        `The shortest exact run per member in **${interaction.guild.name}**.`,
-        '-# Only correct submissions count.',
+        t(language, 'minigames.typeraceleaderboard.description', { server: interaction.guild.name }),
+        t(language, 'minigames.typeraceleaderboard.onlyCorrect'),
       ].join('\n'),
       color: COLORS.game,
       fields: [
-        { name: '🏁 Leaderboard', value: list, inline: false },
-        { name: '🏅 Your best', value: personalBest, inline: true },
-        { name: '👥 Racers', value: `**${board.totalUsers}**`, inline: true },
+        { name: t(language, 'minigames.typeraceleaderboard.leaderboard'), value: list, inline: false },
+        { name: t(language, 'minigames.typeraceleaderboard.yourBest'), value: personalBest, inline: true },
+        { name: t(language, 'minigames.typeraceleaderboard.racers'), value: `**${board.totalUsers}**`, inline: true },
       ],
-      footer: 'Shorter is better  ·  /typerace to set a time',
+      footer: t(language, 'minigames.typeraceleaderboard.footer'),
     });
 
     await interaction.reply({ embeds: [embed] });

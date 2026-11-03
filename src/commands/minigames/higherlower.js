@@ -15,6 +15,7 @@ const {
   drawStartingNumber,
   judgeGuess,
 } = require('../../lib/higherlower');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 15 * 60 * 1000;
 const games = new Map();
@@ -38,60 +39,61 @@ function createGame(ownerId) {
   };
 }
 
-function plural(count, word) {
-  return `${count} ${word}${count === 1 ? '' : 's'}`;
-}
-
-function buildPayload(client, game) {
+function buildPayload(client, game, language) {
   const shownRound = Math.min(game.round, MAX_ROUNDS);
-  let title = 'Higher or Lower';
+  let title = t(language, 'minigames.higherlower.title');
   let description;
   let color = COLORS.game;
 
   if (!game.over) {
     description = [
-      `Is the next number **higher** or **lower** than **${game.current}**?`,
-      '-# Guess right to keep the streak alive.',
+      t(language, 'minigames.higherlower.question', { number: game.current }),
+      t(language, 'minigames.higherlower.hint'),
     ].join('\n');
   } else if (game.result?.correct) {
-    title = 'Higher or Lower · perfect run';
+    title = t(language, 'minigames.higherlower.perfectTitle');
     color = COLORS.success;
-    description = [
-      `🏆 **Perfect run** — ${MAX_ROUNDS} correct guesses in a row!`,
-      `-# Final streak: **${game.streak}**.`,
-    ].join('\n');
+    description = t(language, 'minigames.higherlower.perfect', {
+      rounds: MAX_ROUNDS,
+      streak: game.streak,
+    });
   } else {
-    title = 'Higher or Lower · game over';
+    title = t(language, 'minigames.higherlower.overTitle');
     color = COLORS.danger;
-    description = [
-      `💥 **Game over** — the next number was **${game.result?.next ?? '—'}**.`,
-      `Final streak: **${game.streak}** over ${plural(shownRound, 'round')}.`,
-    ].join('\n');
+    description = t(language, 'minigames.higherlower.over', {
+      number: game.result?.next ?? '—',
+      streak: game.streak,
+      round: shownRound,
+    });
   }
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
+    section: t(language, 'help.tabs.minigames'),
     title,
     description,
     color,
     fields: [
-      { name: 'Streak', value: `**${game.streak}**`, inline: true },
-      { name: 'Round', value: `**${shownRound}** / ${MAX_ROUNDS}`, inline: true },
-      { name: 'Range', value: `${MIN}–${MAX}`, inline: true },
+      { name: t(language, 'minigames.higherlower.streak'), value: `**${game.streak}**`, inline: true },
+      { name: t(language, 'minigames.higherlower.round'), value: `**${shownRound}** / ${MAX_ROUNDS}`, inline: true },
+      { name: t(language, 'minigames.higherlower.range'), value: `${MIN}–${MAX}`, inline: true },
     ],
-    footer: game.over ? 'Round finished' : `Up to ${MAX_ROUNDS} rounds`,
+    footer: t(
+      language,
+      game.over ? 'minigames.higherlower.footerDone' : 'minigames.higherlower.footer',
+      { rounds: MAX_ROUNDS },
+    ),
   });
 
   const guessButtons = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`higherlower:guess:${game.id}:higher`)
-      .setLabel('Higher')
+      .setLabel(t(language, 'minigames.higherlower.higher'))
       .setEmoji('⬆️')
       .setStyle(ButtonStyle.Success)
       .setDisabled(game.over),
     new ButtonBuilder()
       .setCustomId(`higherlower:guess:${game.id}:lower`)
-      .setLabel('Lower')
+      .setLabel(t(language, 'minigames.higherlower.lower'))
       .setEmoji('⬇️')
       .setStyle(ButtonStyle.Danger)
       .setDisabled(game.over),
@@ -104,7 +106,7 @@ function buildPayload(client, game) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`higherlower:again:${game.id}`)
-          .setLabel('Play again')
+          .setLabel(t(language, 'minigames.higherlower.playAgain'))
           .setEmoji('🔁')
           .setStyle(ButtonStyle.Primary),
       ),
@@ -114,9 +116,9 @@ function buildPayload(client, game) {
   return { embeds: [embed], components };
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This round has expired. Run `/higherlower` to start a new one.',
+    content: t(language, 'minigames.higherlower.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
@@ -131,11 +133,12 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = createGame(interaction.user.id);
     games.set(game.id, game);
 
-    await interaction.reply(buildPayload(interaction.client, game));
+    await interaction.reply(buildPayload(interaction.client, game, language));
   },
 
   async handleComponent(interaction) {
@@ -143,16 +146,17 @@ module.exports = {
     if (!gameId) return;
 
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, language);
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This round belongs to someone else. Run `/higherlower` to start your own.',
+        content: t(language, 'minigames.higherlower.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -161,7 +165,7 @@ module.exports = {
     if (action === 'again') {
       if (!game.over) {
         await interaction.reply({
-          content: 'Finish this round before starting a new one.',
+          content: t(language, 'minigames.higherlower.finishFirst'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -176,7 +180,7 @@ module.exports = {
         updatedAt: Date.now(),
       });
 
-      await interaction.update(buildPayload(interaction.client, game));
+      await interaction.update(buildPayload(interaction.client, game, language));
       return;
     }
 
@@ -184,7 +188,7 @@ module.exports = {
 
     if (game.over) {
       await interaction.reply({
-        content: 'This round is over. Press **Play again** for a new round.',
+        content: t(language, 'minigames.higherlower.overPress'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -193,7 +197,7 @@ module.exports = {
     const guess = rawGuess === 'higher' || rawGuess === 'lower' ? rawGuess : null;
     if (!guess) {
       await interaction.reply({
-        content: 'That guess is not valid. Run `/higherlower` again.',
+        content: t(language, 'minigames.higherlower.invalid'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -215,6 +219,6 @@ module.exports = {
 
     game.updatedAt = Date.now();
 
-    await interaction.update(buildPayload(interaction.client, game));
+    await interaction.update(buildPayload(interaction.client, game, language));
   },
 };

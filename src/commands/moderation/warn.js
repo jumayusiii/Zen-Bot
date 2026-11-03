@@ -2,6 +2,7 @@ const { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } = require('disc
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { sendModerationError, targetModerationError } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 const {
   MAX_REASON_LENGTH,
   addWarning,
@@ -32,15 +33,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.moderateMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ModerateMembers)) {
       await interaction.reply({
-        content: 'You need the **Moderate Members** permission to use `/warn`.',
+        content: t(language, 'moderation.permission', { permission, command: 'warn' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -52,6 +56,7 @@ module.exports = {
       guild,
       member,
       moderator: interaction.member,
+      language,
     });
 
     if (targetError) {
@@ -73,7 +78,7 @@ module.exports = {
       });
     } catch (error) {
       console.error(`[moderation] /warn failed for ${user.id}:`, error);
-      await sendModerationError(interaction, 'Could not save that warning. Please try again.');
+      await sendModerationError(interaction, t(language, 'moderation.saveWarningError'));
       return;
     }
 
@@ -86,23 +91,27 @@ module.exports = {
       targetName: user.username,
       moderatorId: interaction.user.id,
       reason,
-      extra: `Warning #${total} for this member.`,
+      extra: t(language, 'moderation.warn.extra', { count: total }),
     });
 
     if (typeof user.send === 'function') {
       await user.send({
         embeds: [
           createEmbed(interaction.client, {
-            section: 'Moderation',
-            title: 'You received a warning',
-            description: `A moderator warned you in **${guild.name}**.`,
+            section: t(language, 'moderation.section'),
+            title: t(language, 'moderation.warn.dmTitle'),
+            description: t(language, 'moderation.warn.dmDescription', { server: guild.name }),
             color: COLORS.warning,
             fields: [
-              { name: '📝 Reason', value: reason, inline: false },
-              { name: '🔢 Total warnings', value: `**${total}**`, inline: true },
-              { name: '🛡️ Server', value: guild.name, inline: true },
+              { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
+              {
+                name: `🔢 ${t(language, 'moderation.fields.warningCount')}`,
+                value: `**${total}**`,
+                inline: true,
+              },
+              { name: `🛡️ ${t(language, 'moderation.fields.server')}`, value: guild.name, inline: true },
             ],
-            footer: 'Please review the server rules',
+            footer: t(language, 'moderation.warn.dmFooter'),
           }),
         ],
         allowedMentions: { parse: [] },
@@ -110,17 +119,25 @@ module.exports = {
     }
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Warning recorded',
-      description: `**${targetName}** now has **${total}** warning${total === 1 ? '' : 's'} in this server.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.warn.title'),
+      description: t(
+        language,
+        total === 1 ? 'moderation.warn.descriptionOne' : 'moderation.warn.descriptionMany',
+        { target: targetName, count: total },
+      ),
       color: COLORS.warning,
       thumbnail: user.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
       fields: [
-        { name: '🎯 Member', value: `${targetName}\n\`${user.id}\``, inline: true },
-        { name: '🔢 Total', value: `**${total}**`, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        {
+          name: `🎯 ${t(language, 'moderation.fields.member')}`,
+          value: `${targetName}\n\`${user.id}\``,
+          inline: true,
+        },
+        { name: `🔢 ${t(language, 'moderation.fields.total')}`, value: `**${total}**`, inline: true },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });

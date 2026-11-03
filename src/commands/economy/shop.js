@@ -2,9 +2,11 @@ const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { CARD_THEMES } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getAccount } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -17,39 +19,45 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'The shop uses per-server coins. Run `/shop` in a server channel.',
+        content: t('en', 'economy.shop.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+
     try {
       const account = await getAccount(interaction.guild.id, interaction.user.id);
       const fields = CARD_THEMES.map((theme) => {
         const owned = account.owned.includes(theme.id);
-        const price = theme.price === 0 ? 'Free' : `${coins(theme.price)} coins`;
-        const current = account.theme === theme.id ? '  ·  ⭐ Equipped' : '';
+        const price = theme.price === 0
+          ? t(language, 'common.free')
+          : t(language, 'economy.shop.price', { coins: coins(theme.price, language) });
+        const current = account.theme === theme.id ? `  ·  ${t(language, 'economy.shop.equipped')}` : '';
         return {
-          name: `${theme.name}  ·  ${price}${owned ? '  ·  ✅ Owned' : ''}${current}`,
-          value: theme.description,
+          name: `${theme.name}  ·  ${price}${owned ? `  ·  ${t(language, 'economy.shop.owned')}` : ''}${current}`,
+          value: t(language, `economy.themes.${theme.id}`, {}, theme.description),
           inline: false,
         };
       });
 
       const embed = createEmbed(interaction.client, {
-        section: 'Economy',
-        title: 'Rank card shop',
-        description: `Your balance: **${coins(account.balance)} coins**\nBuy a theme with \`/buy theme:<name>\`, then equip it with \`/rankcard theme:<name>\`.`,
+        section: t(language, 'help.tabs.economy'),
+        title: t(language, 'economy.shop.title'),
+        description: t(language, 'economy.shop.description', {
+          coins: coins(account.balance, language),
+        }),
         color: COLORS.game,
         fields,
-        footer: 'One wallet per server  ·  /daily to earn more',
+        footer: t(language, 'economy.shop.footer'),
       });
 
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
       console.error('[economy] /shop failed:', error);
       await interaction.reply({
-        content: 'Could not open the shop right now. Please try again.',
+        content: t(language, 'economy.shop.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

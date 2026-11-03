@@ -2,6 +2,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { setTimeout: delay } = require('node:timers/promises');
 const { COLORS, createEmbed } = require('./embeds');
+const { getGuildLanguage, t } = require('./i18n');
 
 const DEFAULT_FILE = path.join(__dirname, '..', '..', 'data', 'moderation-logs.json');
 const SNOWFLAKE = /^\d{15,20}$/;
@@ -156,77 +157,97 @@ async function clearModLogChannel(guildId) {
   });
 }
 
-function buildModerationLogEmbed(client, entry = {}) {
+function buildModerationLogEmbed(client, entry = {}, language = 'en') {
   const action = ACTIONS[entry.action] ?? {
     title: '🛡️ Moderation action',
     color: COLORS.info,
   };
+  const title = t(
+    language,
+    `moderation.audit.actions.${entry.action}`,
+    {},
+    t(language, 'moderation.audit.defaultTitle'),
+  );
 
   if (entry.action === 'config') {
     return createEmbed(client, {
-      section: 'Audit Log',
-      title: action.title,
-      description: 'Moderation actions in this server will be recorded here.',
+      section: t(language, 'moderation.audit.section'),
+      title,
+      description: t(language, 'moderation.audit.configDescription'),
       color: action.color,
       fields: [
-        { name: '📁 Channel', value: `<#${entry.channelId}>`, inline: true },
-        { name: '🛡️ Status', value: 'Enabled', inline: true },
-        { name: '👤 Configured by', value: entry.moderatorId ? `<@${entry.moderatorId}>` : 'Server admin', inline: true },
+        { name: `📁 ${t(language, 'moderation.fields.channel')}`, value: `<#${entry.channelId}>`, inline: true },
+        { name: `🛡️ ${t(language, 'moderation.audit.status')}`, value: t(language, 'moderation.audit.enabled'), inline: true },
+        {
+          name: `👤 ${t(language, 'moderation.audit.configuredBy')}`,
+          value: entry.moderatorId
+            ? `<@${entry.moderatorId}>`
+            : t(language, 'moderation.audit.serverAdmin'),
+          inline: true,
+        },
       ],
-      footer: 'Moderation audit log',
+      footer: t(language, 'moderation.audit.footer'),
     });
   }
 
   const fields = [
     {
-      name: '🎯 Target',
+      name: `🎯 ${t(language, 'moderation.audit.target')}`,
       value: entry.targetId
         ? `${entry.targetName ? `**${cleanText(entry.targetName, 80)}**\n` : ''}\`${entry.targetId}\``
         : entry.targetName
           ? `**${cleanText(entry.targetName, 80)}**`
-          : 'Not applicable',
+          : t(language, 'moderation.audit.notApplicable'),
       inline: true,
     },
     {
-      name: '🛡️ Moderator',
+      name: `🛡️ ${t(language, 'moderation.audit.moderator')}`,
       value: entry.moderatorId
         ? `<@${entry.moderatorId}>`
-        : cleanText(entry.moderatorName, 80) || 'Automatic',
+        : cleanText(entry.moderatorName, 80) || t(language, 'moderation.audit.automatic'),
       inline: true,
     },
   ];
 
   if (entry.duration) {
-    fields.push({ name: '⏳ Duration', value: cleanText(entry.duration, 80), inline: true });
+    fields.push({
+      name: `⏳ ${t(language, 'moderation.audit.duration')}`,
+      value: cleanText(entry.duration, 80),
+      inline: true,
+    });
   }
 
   if (Number.isFinite(entry.expiresAt)) {
     fields.push({
-      name: '📅 Expires',
+      name: `📅 ${t(language, 'moderation.audit.expires')}`,
       value: `<t:${Math.floor(entry.expiresAt / 1000)}:F> (<t:${Math.floor(entry.expiresAt / 1000)}:R>)`,
       inline: true,
     });
   }
 
   fields.push({
-    name: '📝 Reason',
-    value: cleanText(entry.reason, 400) || 'No reason provided',
+    name: `📝 ${t(language, 'moderation.audit.reason')}`,
+    value: cleanText(entry.reason, 400) || t(language, 'moderation.audit.noReason'),
     inline: false,
   });
 
   if (entry.extra) {
-    fields.push({ name: '📌 Details', value: cleanText(entry.extra, 400), inline: false });
+    fields.push({
+      name: `📌 ${t(language, 'moderation.audit.details')}`,
+      value: cleanText(entry.extra, 400),
+      inline: false,
+    });
   }
 
   return createEmbed(client, {
-    section: 'Audit Log',
-    title: action.title,
+    section: t(language, 'moderation.audit.section'),
+    title,
     description: entry.targetId
-      ? `A moderation action was recorded for <@${entry.targetId}>.`
-      : 'A moderation action was recorded.',
+      ? t(language, 'moderation.audit.descriptionTarget', { target: `<@${entry.targetId}>` })
+      : t(language, 'moderation.audit.descriptionGeneric'),
     color: action.color,
     fields,
-    footer: 'Moderation audit log',
+    footer: t(language, 'moderation.audit.footer'),
   });
 }
 
@@ -261,9 +282,11 @@ async function sendModerationLog(client, guildId, entry = {}) {
     return { sent: false, reason: 'channel-missing' };
   }
 
+  const language = await getGuildLanguage(guildId).catch(() => 'en');
+
   try {
     await channel.send({
-      embeds: [buildModerationLogEmbed(client, { ...entry, channelId })],
+      embeds: [buildModerationLogEmbed(client, { ...entry, channelId }, language)],
       allowedMentions: { parse: [] },
     });
     return { sent: true };

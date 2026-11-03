@@ -21,6 +21,31 @@ const WORDS = Object.freeze([
   { word: 'EMBED', hint: 'The clean card this game uses' },
 ]);
 
+const HINTS_DE = Object.freeze({
+  DISCORD: 'Wo dieser Bot lebt',
+  JAVASCRIPT: 'Die Sprache, in der dieser Bot geschrieben ist',
+  HABBO: 'Die Community, die dieser Bot beobachtet',
+  MINIGAME: 'Ein kleines Spiel wie dieses',
+  LEVEL: 'Chat-XP schaltet das hier frei',
+  MODERATION: 'Den Server freundlich halten',
+  REMINDER: 'Ein Anstoß zur richtigen Zeit',
+  BANNER: 'Das breite Bild oben auf einem Server',
+  PUZZLE: 'Eine Kopfnuss',
+  ACHIEVEMENT: 'Ein Meilenstein, den man feiern kann',
+  COMMUNITY: 'Die Menschen auf einem Server',
+  COMPUTER: 'Er lässt den Bot laufen',
+  KEYBOARD: 'Darauf tippst du',
+  LIGHTNING: 'Schnell und hell',
+  GALAXY: 'Eine riesige Ansammlung von Sternen',
+  PENGUIN: 'Ein Vogel, der nicht fliegen kann',
+  AVATAR: 'Dein Profilbild',
+  EMBED: 'Die saubere Karte, die dieses Spiel nutzt',
+});
+
+function isGerman(language) {
+  return String(language ?? '').toLowerCase().startsWith('de');
+}
+
 function randomIndex(length, random) {
   return Math.min(length - 1, Math.floor(Math.min(0.999999, Math.max(0, random())) * length));
 }
@@ -32,11 +57,15 @@ function randomIndex(length, random) {
  * @param {string|null} [excludeWord]
  * @returns {{word: string, hint: string}}
  */
-function randomWord(random = Math.random, excludeWord = null) {
+function randomWord(random = Math.random, excludeWord = null, language = 'en') {
   const excluded = String(excludeWord ?? '').toUpperCase();
   const pool = WORDS.filter((entry) => entry.word !== excluded);
   const source = pool.length > 0 ? pool : WORDS;
-  return { ...source[randomIndex(source.length, random)] };
+  const entry = source[randomIndex(source.length, random)];
+  return {
+    ...entry,
+    hint: isGerman(language) ? (HINTS_DE[entry.word] ?? entry.hint) : entry.hint,
+  };
 }
 
 /**
@@ -98,8 +127,8 @@ function buildChoices(word, random = Math.random) {
  * @param {() => number} [random]
  * @param {string|null} [excludeWord]
  */
-function createRound(random = Math.random, excludeWord = null) {
-  const entry = randomWord(random, excludeWord);
+function createRound(random = Math.random, excludeWord = null, language = 'en') {
+  const entry = randomWord(random, excludeWord, language);
   const choices = buildChoices(entry.word, random);
 
   return {
@@ -112,6 +141,7 @@ function createRound(random = Math.random, excludeWord = null) {
 }
 
 module.exports = {
+  HINTS_DE,
   MAX_ROUNDS,
   WORDS,
   buildChoices,

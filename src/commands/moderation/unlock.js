@@ -14,6 +14,7 @@ const {
   sendModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const LOCKABLE_TYPES = new Set([ChannelType.GuildText, ChannelType.GuildAnnouncement]);
 const BOT_PERMISSIONS = [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles];
@@ -24,10 +25,8 @@ function restoreValue(state) {
   return null;
 }
 
-function restoredLabel(state) {
-  if (state === 'allow') return 'Members can send messages again.';
-  if (state === 'deny') return 'The channel keeps its previous read-only @everyone setting.';
-  return 'The channel now inherits @everyone permissions again.';
+function restoredLabel(state, language = 'en') {
+  return t(language, `moderation.restored.${state}`, {}, 'The channel now inherits @everyone permissions again.');
 }
 
 module.exports = {
@@ -53,15 +52,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.manageChannels');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageChannels)) {
       await interaction.reply({
-        content: 'You need the **Manage Channels** permission to use `/unlock`.',
+        content: t(language, 'moderation.permission', { permission, command: 'unlock' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -69,7 +71,12 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(BOT_PERMISSIONS)) {
       await interaction.reply({
-        content: 'I need **Manage Channels** and **Manage Roles** to unlock channels.',
+        content: t(language, 'moderation.botPermissions', {
+          permissions: [
+            t(language, 'moderation.permissions.manageChannels'),
+            t(language, 'moderation.permissions.manageRoles'),
+          ].join(' + '),
+        }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -78,7 +85,7 @@ module.exports = {
     const channel = interaction.options.getChannel('channel') ?? interaction.channel;
     if (!channel || !LOCKABLE_TYPES.has(channel.type) || channel.guildId !== guild.id) {
       await interaction.reply({
-        content: 'Choose a text or announcement channel from this server.',
+        content: t(language, 'moderation.channelOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -87,13 +94,13 @@ module.exports = {
     const lock = await getChannelLock(guild.id, channel.id);
     if (!lock) {
       await interaction.reply({
-        content: `No Zen lock is recorded for ${channel}. If it is read-only, change its permissions in the channel settings so an intentional setup is not overwritten.`,
+        content: t(language, 'moderation.unlock.noLock', { channel }),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
 
     try {
       await channel.permissionOverwrites.edit(
@@ -104,10 +111,7 @@ module.exports = {
       await clearChannelLock(guild.id, channel.id);
     } catch (error) {
       console.error(`[moderation] /unlock failed for ${channel.id}:`, error);
-      await sendModerationError(
-        interaction,
-        'Could not restore that channel. Check my **Manage Channels** and **Manage Roles** permissions and try again.',
-      );
+      await sendModerationError(interaction, t(language, 'moderation.unlock.failed'));
       return;
     }
 
@@ -117,20 +121,27 @@ module.exports = {
       targetName: `#${channel.name}`,
       moderatorId: interaction.user.id,
       reason,
-      extra: `Restored previous @everyone SendMessages setting: ${lock.previous}.`,
+      extra: t(language, 'moderation.unlock.extra', { state: lock.previous }),
     });
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Channel unlocked',
-      description: `${channel} has been restored.\n${restoredLabel(lock.previous)}`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.unlock.title'),
+      description: t(language, 'moderation.unlock.description', {
+        channel,
+        state: restoredLabel(lock.previous, language),
+      }),
       color: COLORS.success,
       fields: [
-        { name: '📁 Channel', value: `${channel}`, inline: true },
-        { name: '🔓 Restored', value: lock.previous, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        { name: `📁 ${t(language, 'moderation.fields.channel')}`, value: `${channel}`, inline: true },
+        {
+          name: `🔓 ${t(language, 'moderation.fields.restored')}`,
+          value: t(language, `moderation.states.${lock.previous}`, {}, lock.previous),
+          inline: true,
+        },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed] });

@@ -7,12 +7,14 @@ const {
   STEAL_SUCCESS_CHANCE,
   attemptSteal,
 } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const COOLDOWN_MINUTES = Math.round(STEAL_COOLDOWN_MS / 60000);
 const CHANCE_PERCENT = Math.round(STEAL_SUCCESS_CHANCE * 100);
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -25,11 +27,13 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Coins are tracked per server. Run `/steal` in a server channel.',
+        content: t('en', 'economy.steal.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
+
+    const language = await getInteractionLanguage(interaction);
 
     try {
       const result = await attemptSteal({
@@ -41,15 +45,25 @@ module.exports = {
         await interaction.reply({
           embeds: [
             createEmbed(interaction.client, {
-              section: 'Economy',
-              title: 'Lay low for a while',
-              description: `The vault is watching. You can try another heist <t:${Math.floor(result.nextAt / 1000)}:R>.`,
+              section: t(language, 'help.tabs.economy'),
+              title: t(language, 'economy.steal.cooldownTitle'),
+              description: t(language, 'economy.steal.cooldownDescription', {
+                time: `<t:${Math.floor(result.nextAt / 1000)}:R>`,
+              }),
               color: COLORS.warning,
               fields: [
-                { name: '👛 Balance', value: `**${coins(result.balance)}** coins`, inline: true },
-                { name: '⏰ Cooldown', value: `${COOLDOWN_MINUTES} minutes`, inline: true },
+                {
+                  name: `👛 ${t(language, 'economy.wallet')}`,
+                  value: `**${coins(result.balance, language)}** ${t(language, 'common.coins')}`,
+                  inline: true,
+                },
+                {
+                  name: `⏰ ${t(language, 'economy.cooldown')}`,
+                  value: t(language, 'economy.minutes', { count: COOLDOWN_MINUTES }),
+                  inline: true,
+                },
               ],
-              footer: 'Steal  ·  /work  ·  /daily',
+              footer: t(language, 'economy.steal.footerIdle'),
             }),
           ],
           flags: MessageFlags.Ephemeral,
@@ -60,33 +74,47 @@ module.exports = {
       await interaction.reply({
         embeds: [
           createEmbed(interaction.client, {
-            section: 'Economy',
-            title: result.stole ? 'Heist successful' : 'Heist failed',
+            section: t(language, 'help.tabs.economy'),
+            title: t(language, result.stole ? 'economy.steal.successTitle' : 'economy.steal.failTitle'),
             description: result.stole
-              ? `You slipped **${coins(result.amount)} coins** out of the vault and into your wallet.`
-              : 'The vault guard spotted you. You got away empty-handed.',
+              ? t(language, 'economy.steal.successDescription', {
+                amount: coins(result.amount, language),
+              })
+              : t(language, 'economy.steal.failDescription'),
             color: result.stole ? COLORS.success : COLORS.danger,
             fields: [
               {
-                name: result.stole ? '💰 Stolen' : '💨 Getaway',
-                value: result.stole ? `${coins(result.amount)} coins` : 'Nothing',
+                name: result.stole
+                  ? `💰 ${t(language, 'economy.steal.stolen')}`
+                  : `💨 ${t(language, 'economy.steal.getaway')}`,
+                value: result.stole
+                  ? `${coins(result.amount, language)} ${t(language, 'common.coins')}`
+                  : t(language, 'common.none'),
                 inline: true,
               },
-              { name: '👛 Balance', value: `**${coins(result.balance)}** coins`, inline: true },
               {
-                name: '⏰ Next attempt',
+                name: `👛 ${t(language, 'economy.wallet')}`,
+                value: `**${coins(result.balance, language)}** ${t(language, 'common.coins')}`,
+                inline: true,
+              },
+              {
+                name: `⏰ ${t(language, 'economy.nextAttempt')}`,
                 value: `<t:${Math.floor(result.nextAt / 1000)}:R>`,
                 inline: true,
               },
             ],
-            footer: `Heist by ${interaction.user.username}  ·  ${CHANCE_PERCENT}% success  ·  ${COOLDOWN_MINUTES}-minute cooldown`,
+            footer: t(language, 'economy.steal.footer', {
+              user: interaction.user.username,
+              chance: CHANCE_PERCENT,
+              minutes: COOLDOWN_MINUTES,
+            }),
           }),
         ],
       });
     } catch (error) {
       console.error('[economy] /steal failed:', error);
       await interaction.reply({
-        content: 'Could not rob the vault right now. Please try again.',
+        content: t(language, 'economy.steal.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

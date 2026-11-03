@@ -31,6 +31,39 @@ const FACTS = Object.freeze([
   'The average person walks the equivalent of several times around the world in a lifetime.',
 ]);
 
+const FACTS_DE = Object.freeze([
+  'Honig kann Tausende Jahre halten, ohne zu verderben.',
+  'Oktopusse haben drei Herzen und blaues Blut.',
+  'Ein Tag auf der Venus ist länger als ein Jahr auf der Venus.',
+  'Haie gab es schon vor den ersten Bäumen.',
+  'Der Eiffelturm kann bei Hitze etwa 15 cm höher werden.',
+  'Bananen sind Beeren, Erdbeeren nicht.',
+  'Wombat-Kot ist würfelförmig.',
+  'Eine Gruppe Flamingos heißt Flamboyance.',
+  'Seeotter halten beim Schlafen Händchen, damit sie nicht auseinandertreiben.',
+  'Blitze sind rund fünfmal heißer als die Oberfläche der Sonne.',
+  'Der kürzeste aufgezeichnete Krieg dauerte etwa 38 Minuten.',
+  'Der Mond entfernt sich jedes Jahr etwa 3,8 cm weiter von der Erde.',
+  'Auf dem Mars steht Olympus Mons, der höchste Vulkan des Sonnensystems.',
+  'Der erste Computer-Bug war eine echte Motte in einem Relais im Jahr 1947.',
+  'Der Punkt über den Buchstaben i und j heißt Tittle.',
+  'Kühe schließen enge Freundschaften und können unter Trennung leiden.',
+  'Die Antarktis ist die größte Wüste der Erde; die Sahara ist die größte heiße Wüste.',
+  'Ein Jiffy ist eine echte Zeiteinheit aus Physik und Informatik.',
+  'Das Einhorn ist das Nationaltier von Schottland.',
+  'Eine Gruppe Krähen heißt Mord.',
+  'Schätzungen zufolge gibt es auf der Erde mehr Bäume als Sterne in der Milchstraße.',
+  'Ein menschliches Herz schlägt etwa 100.000 Mal am Tag.',
+  'Das Herz eines Blauwals kann rund 180 kg wiegen.',
+  'Die erste Webcam beobachtete eine Kaffeekanne an der Universität Cambridge.',
+  'Nintendo wurde 1889 als Spielkartenfirma gegründet.',
+  'Das Wort "Roboter" kommt aus dem Tschechischen robota und bedeutet Frondienst.',
+  'Der Eiffelturm war ursprünglich nur als temporäre Konstruktion geplant.',
+  'Manche Schildkröten können Sauerstoff über ihre Kloake aufnehmen.',
+  'Ein "Moment" war im Mittelalter eine Zeiteinheit von etwa 90 Sekunden.',
+  'Ein Mensch läuft im Laufe seines Lebens rechnerisch mehrfach um die Erde.',
+]);
+
 const VERDICTS = Object.freeze([
   { min: 90, label: 'Soulmates', emoji: '💞' },
   { min: 75, label: 'Perfect match', emoji: '💘' },
@@ -38,6 +71,15 @@ const VERDICTS = Object.freeze([
   { min: 40, label: 'Worth a shot', emoji: '✨' },
   { min: 25, label: 'Just friends', emoji: '🤝' },
   { min: 0, label: 'Not meant to be', emoji: '💔' },
+]);
+
+const VERDICTS_DE = Object.freeze([
+  { min: 90, label: 'Seelenverwandte', emoji: '💞' },
+  { min: 75, label: 'Perfektes Match', emoji: '💘' },
+  { min: 60, label: 'Starke Verbindung', emoji: '💖' },
+  { min: 40, label: 'Einen Versuch wert', emoji: '✨' },
+  { min: 25, label: 'Nur Freunde', emoji: '🤝' },
+  { min: 0, label: 'Nicht füreinander bestimmt', emoji: '💔' },
 ]);
 
 const COMPLIMENTS = Object.freeze([
@@ -63,6 +105,29 @@ const COMPLIMENTS = Object.freeze([
   'You bring good vibes wherever you go.',
 ]);
 
+const COMPLIMENTS_DE = Object.freeze([
+  'Du machst jeden Raum ein bisschen heller.',
+  'Deine Energie ist wirklich ansteckend.',
+  'Du hast einen großartigen Geschmack.',
+  'Du bist die Art Mensch, mit der Teamarbeit leichtfällt.',
+  'Deine Neugier ist eine deiner besten Eigenschaften.',
+  'Du weißt immer, wie man jemanden zum Lachen bringt.',
+  'Du meisterst Herausforderungen mit echter Gelassenheit.',
+  'Deine Ideen sind es wert, angehört zu werden.',
+  'Du holst das Beste aus den Menschen um dich herum heraus.',
+  'Du bist fähiger, als du dir selbst zutraust.',
+  'Deine Freundlichkeit bleibt nicht unbemerkt.',
+  'Du hast ein Talent dafür, Dinge möglich wirken zu lassen.',
+  'Du bist ein großartiger Mensch für einen Server.',
+  'Deine Kreativität wird stark unterschätzt.',
+  'Du machst gewöhnliche Momente unterhaltsam.',
+  'Du machst das besser, als du denkst.',
+  'Deine Geduld ist beeindruckend.',
+  'Du hast ein wirklich gutes Herz.',
+  'Du bist der Grund, warum heute jemand gelächelt hat.',
+  'Du verbreitest gute Laune, wo du auch bist.',
+]);
+
 const ROASTS = Object.freeze([
   'You have the confidence of a browser with 47 tabs open.',
   'Your Wi-Fi has stronger connections than your plans do.',
@@ -86,6 +151,29 @@ const ROASTS = Object.freeze([
   'You are proof that a draft folder can have a personality.',
 ]);
 
+const ROASTS_DE = Object.freeze([
+  'Du hast das Selbstvertrauen eines Browsers mit 47 offenen Tabs.',
+  'Dein WLAN hat stärkere Verbindungen als deine Pläne.',
+  'Du bringst viel auf den Tisch — vor allem Snacks.',
+  'Du bist das menschliche Äquivalent zu einem Update zur falschen Zeit.',
+  'Deine Konter laden langsamer als ein Modem.',
+  'Du bist nicht faul; du bist im Energiesparmodus.',
+  'Deine Ideen sind wie Feuerwerk: kurz hell, dann weg.',
+  'Du hast die Aufmerksamkeitsspanne eines Goldfischs mit Premium-Abo.',
+  'Du bist die Wendung, nach der niemand gefragt hat.',
+  'Du hast eine tolle Persönlichkeit — irgendwo im Backlog.',
+  'Deine Witze wären mit Lachspur lustiger.',
+  'Du bist kein Morgenmensch; vor Mittag bist du kaum ein Mensch.',
+  'Deine Playlist hat mehr Drama als eine Realityshow.',
+  'Du bist der Bug, der irgendwie zum Feature wurde.',
+  'Deine Energie ist unschlagbar, besonders um 3 Uhr nachts.',
+  'Du bist einen Browser-Refresh von einem Neuanfang entfernt.',
+  'Deine beste Eigenschaft: Dir gehen nie die Tabs aus — oder das Selbstvertrauen.',
+  'Du bist der Grund, warum der Gruppenchat einen Admin braucht.',
+  'Deine Ideen haben super Uptime und schreckliche Latenz.',
+  'Du bist der Beweis, dass ein Entwurfsordner Persönlichkeit haben kann.',
+]);
+
 const RATE_VERDICTS = Object.freeze([
   { min: 90, label: 'Certified elite', emoji: '🏆' },
   { min: 75, label: 'Very good', emoji: '🔥' },
@@ -94,6 +182,25 @@ const RATE_VERDICTS = Object.freeze([
   { min: 25, label: 'Needs work', emoji: '📉' },
   { min: 0, label: 'Not it', emoji: '💀' },
 ]);
+
+const RATE_VERDICTS_DE = Object.freeze([
+  { min: 90, label: 'Zertifizierte Elite', emoji: '🏆' },
+  { min: 75, label: 'Sehr gut', emoji: '🔥' },
+  { min: 60, label: 'Solide', emoji: '👍' },
+  { min: 40, label: 'Mittelmäßig', emoji: '😐' },
+  { min: 25, label: 'Ausbaufähig', emoji: '📉' },
+  { min: 0, label: 'Nicht gut', emoji: '💀' },
+]);
+
+function isGerman(language) {
+  return String(language ?? '').toLowerCase().startsWith('de');
+}
+
+function contentFor(language) {
+  return isGerman(language)
+    ? { facts: FACTS_DE, compliments: COMPLIMENTS_DE, roasts: ROASTS_DE }
+    : { facts: FACTS, compliments: COMPLIMENTS, roasts: ROASTS };
+}
 
 function hashString(value) {
   let hash = 2_166_136_261;
@@ -119,9 +226,10 @@ function shipScore(firstId, secondId) {
   return hashString(key) % 101;
 }
 
-function shipVerdict(score) {
+function shipVerdict(score, language = 'en') {
   const value = Math.max(0, Math.min(100, Number(score) || 0));
-  return VERDICTS.find((verdict) => value >= verdict.min) ?? VERDICTS[VERDICTS.length - 1];
+  const verdicts = isGerman(language) ? VERDICTS_DE : VERDICTS;
+  return verdicts.find((verdict) => value >= verdict.min) ?? verdicts[verdicts.length - 1];
 }
 
 /**
@@ -129,8 +237,9 @@ function shipVerdict(score) {
  * @param {number|null} [excludeIndex]
  * @returns {{text: string, index: number}}
  */
-function randomFact(random = Math.random, excludeIndex = null) {
-  const pool = FACTS
+function randomFact(random = Math.random, excludeIndex = null, language = 'en') {
+  const facts = contentFor(language).facts;
+  const pool = facts
     .map((text, index) => ({ text, index }))
     .filter((fact) => fact.index !== excludeIndex);
 
@@ -153,9 +262,10 @@ function rateThing(value) {
   return hashString(String(value ?? '').trim().toLowerCase()) % 101;
 }
 
-function rateVerdict(score) {
+function rateVerdict(score, language = 'en') {
   const value = Math.max(0, Math.min(100, Number(score) || 0));
-  return RATE_VERDICTS.find((verdict) => value >= verdict.min) ?? RATE_VERDICTS[RATE_VERDICTS.length - 1];
+  const verdicts = isGerman(language) ? RATE_VERDICTS_DE : RATE_VERDICTS;
+  return verdicts.find((verdict) => value >= verdict.min) ?? verdicts[verdicts.length - 1];
 }
 
 /**
@@ -163,8 +273,9 @@ function rateVerdict(score) {
  * @param {number|null} [excludeIndex]
  * @returns {{text: string, index: number}}
  */
-function randomCompliment(random = Math.random, excludeIndex = null) {
-  const pool = COMPLIMENTS
+function randomCompliment(random = Math.random, excludeIndex = null, language = 'en') {
+  const compliments = contentFor(language).compliments;
+  const pool = compliments
     .map((text, index) => ({ text, index }))
     .filter((compliment) => compliment.index !== excludeIndex);
 
@@ -181,8 +292,9 @@ function randomCompliment(random = Math.random, excludeIndex = null) {
  * @param {number|null} [excludeIndex]
  * @returns {{text: string, index: number}}
  */
-function randomRoast(random = Math.random, excludeIndex = null) {
-  const pool = ROASTS
+function randomRoast(random = Math.random, excludeIndex = null, language = 'en') {
+  const roasts = contentFor(language).roasts;
+  const pool = roasts
     .map((text, index) => ({ text, index }))
     .filter((roast) => roast.index !== excludeIndex);
 
@@ -196,10 +308,15 @@ function randomRoast(random = Math.random, excludeIndex = null) {
 
 module.exports = {
   COMPLIMENTS,
+  COMPLIMENTS_DE,
   FACTS,
+  FACTS_DE,
   RATE_VERDICTS,
+  RATE_VERDICTS_DE,
   ROASTS,
+  ROASTS_DE,
   VERDICTS,
+  VERDICTS_DE,
   randomCompliment,
   randomFact,
   randomRoast,

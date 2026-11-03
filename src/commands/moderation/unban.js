@@ -8,6 +8,7 @@ const {
   sendModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -34,15 +35,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.banMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: 'You need the **Ban Members** permission to use `/unban`.',
+        content: t(language, 'moderation.permission', { permission, command: 'unban' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -50,7 +54,7 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: 'I need the **Ban Members** permission to lift bans.',
+        content: t(language, 'moderation.botPermission', { permission }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -59,10 +63,7 @@ module.exports = {
     const userId = interaction.options.getString('user_id', true).trim();
 
     if (!isSnowflake(userId)) {
-      await sendModerationError(
-        interaction,
-        'That does not look like a Discord user ID. Enable **Developer Mode**, right-click the user and choose **Copy User ID**.',
-      );
+      await sendModerationError(interaction, t(language, 'moderation.invalidUserId'));
       return;
     }
 
@@ -73,7 +74,7 @@ module.exports = {
     } catch (error) {
       if (Number(error?.code) !== 10026) {
         console.error(`[moderation] /unban lookup failed for ${userId}:`, error);
-        await sendModerationError(interaction, moderationErrorMessage(error));
+        await sendModerationError(interaction, moderationErrorMessage(error, language));
         return;
       }
       existing = null;
@@ -82,19 +83,19 @@ module.exports = {
     if (!existing) {
       await sendModerationError(
         interaction,
-        `\`${userId}\` is not currently banned from this server.`,
+        t(language, 'moderation.notBanned', { id: userId }),
       );
       return;
     }
 
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
     await interaction.deferReply();
 
     try {
       await guild.bans.remove(userId, auditReason(interaction.member, reason));
     } catch (error) {
       console.error(`[moderation] /unban failed for ${userId}:`, error);
-      await sendModerationError(interaction, moderationErrorMessage(error));
+      await sendModerationError(interaction, moderationErrorMessage(error, language));
       return;
     }
 
@@ -113,15 +114,18 @@ module.exports = {
     });
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'User unbanned',
-      description: `**${username}** can join **${guild.name}** again.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.unban.title'),
+      description: t(language, 'moderation.unban.description', {
+        user: username,
+        server: guild.name,
+      }),
       color: COLORS.success,
       fields: [
-        { name: '🆔 User', value: `\`${userId}\``, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        { name: `🆔 ${t(language, 'moderation.fields.user')}`, value: `\`${userId}\``, inline: true },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.editReply({ embeds: [embed] });

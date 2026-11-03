@@ -7,29 +7,39 @@ const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getAccount } = require('../../lib/economy');
 const { getProfile } = require('../../lib/levels');
 const { renderRankCard } = require('../../lib/rankCard');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function formatNumber(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function formatNumber(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
-function textEmbed(client, profile, displayName, requestedBy, image = null) {
+function textEmbed(client, profile, displayName, requestedBy, language, image = null) {
   const { progress } = profile;
-  const rank = profile.rank ? `#${profile.rank}` : 'Unranked';
+  const rank = profile.rank ? `#${profile.rank}` : t(language, 'levels.rank.unranked');
 
   return createEmbed(client, {
-    section: 'Levels',
-    title: `${displayName}'s rank`,
+    section: t(language, 'help.tabs.levels'),
+    title: t(language, 'levels.rank.title', { name: displayName }),
     description: profile.entry
-      ? `**Level ${progress.level}**  ·  Rank **${rank}** of **${formatNumber(profile.totalUsers)}**`
-      : 'No XP yet — send a message in this server to start earning.',
+      ? t(language, 'levels.rank.description', {
+        level: progress.level,
+        rank,
+        total: formatNumber(profile.totalUsers, language),
+      })
+      : t(language, 'levels.rank.empty'),
     color: COLORS.brand,
     image,
     fields: [
-      { name: '⭐ Level', value: `**${progress.level}**`, inline: true },
-      { name: '🏆 Rank', value: `**${rank}**`, inline: true },
-      { name: '✨ Total XP', value: `**${formatNumber(progress.totalXp)}**`, inline: true },
+      { name: `⭐ ${t(language, 'levels.rank.level')}`, value: `**${progress.level}**`, inline: true },
+      { name: `🏆 ${t(language, 'levels.rank.rankLabel')}`, value: `**${rank}**`, inline: true },
+      {
+        name: `✨ ${t(language, 'levels.rank.totalXp')}`,
+        value: `**${formatNumber(progress.totalXp, language)}**`,
+        inline: true,
+      },
     ],
-    footer: `Requested by ${requestedBy}  ·  +25–35 XP per message, once a minute`,
+    footer: t(language, 'levels.rank.footer', { user: requestedBy }),
   });
 }
 
@@ -46,12 +56,13 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Levels are tracked per server. Run `/rank` in a server channel.',
+        content: t('en', 'levels.rank.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
     const targetUser = interaction.options.getUser('user') ?? interaction.user;
     await interaction.deferReply();
 
@@ -87,6 +98,7 @@ module.exports = {
         xpNeeded: profile.progress.needed,
         totalXp: profile.progress.totalXp,
         theme: account?.theme,
+        language,
       });
 
       attachment = new AttachmentBuilder(buffer, { name: fileName });
@@ -96,7 +108,16 @@ module.exports = {
     }
 
     await interaction.editReply({
-      embeds: [textEmbed(interaction.client, profile, displayName, interaction.user.username, image)],
+      embeds: [
+        textEmbed(
+          interaction.client,
+          profile,
+          displayName,
+          interaction.user.username,
+          language,
+          image,
+        ),
+      ],
       files: attachment ? [attachment] : [],
     });
   },

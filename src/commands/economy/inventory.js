@@ -2,9 +2,11 @@ const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { getCardTheme } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getAccount } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -17,11 +19,13 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Your inventory is per server. Run `/inventory` in a server channel.',
+        content: t('en', 'economy.inventory.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
+
+    const language = await getInteractionLanguage(interaction);
 
     try {
       const account = await getAccount(interaction.guild.id, interaction.user.id);
@@ -31,23 +35,37 @@ module.exports = {
         .join('  ·  ');
 
       const embed = createEmbed(interaction.client, {
-        section: 'Economy',
-        title: 'Your inventory',
-        description: `You own **${account.owned.length}** rank card theme${account.owned.length === 1 ? '' : 's'}.`,
+        section: t(language, 'help.tabs.economy'),
+        title: t(language, 'economy.inventory.title'),
+        description: t(
+          language,
+          account.owned.length === 1
+            ? 'economy.inventory.descriptionOne'
+            : 'economy.inventory.descriptionMany',
+          { count: account.owned.length },
+        ),
         color: COLORS.game,
         fields: [
-          { name: '🎨 Equipped', value: current.name, inline: true },
-          { name: '💰 Balance', value: `${coins(account.balance)} coins`, inline: true },
-          { name: '🖼️ Owned themes', value: owned, inline: false },
+          { name: `🎨 ${t(language, 'economy.inventory.equipped')}`, value: current.name, inline: true },
+          {
+            name: `💰 ${t(language, 'economy.balance')}`,
+            value: `${coins(account.balance, language)} ${t(language, 'common.coins')}`,
+            inline: true,
+          },
+          {
+            name: `🖼️ ${t(language, 'economy.inventory.ownedThemes')}`,
+            value: owned,
+            inline: false,
+          },
         ],
-        footer: 'Change your card with /rankcard  ·  Find more in /shop',
+        footer: t(language, 'economy.inventory.footer'),
       });
 
       await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
     } catch (error) {
       console.error('[economy] /inventory failed:', error);
       await interaction.reply({
-        content: 'Could not read your inventory right now. Please try again.',
+        content: t(language, 'economy.inventory.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

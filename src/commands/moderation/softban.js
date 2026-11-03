@@ -3,11 +3,13 @@ const { COLORS, createEmbed } = require('../../lib/embeds');
 const {
   DELETE_MESSAGE_CHOICES,
   auditReason,
+  deleteMessagesLabel,
   moderationErrorMessage,
   sendModerationError,
   targetModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const DEFAULT_DELETE_SECONDS = 24 * 60 * 60;
 
@@ -44,15 +46,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.banMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: 'You need the **Ban Members** permission to use `/softban`.',
+        content: t(language, 'moderation.permission', { permission, command: 'softban' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -60,7 +65,7 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: 'I need the **Ban Members** permission to softban members.',
+        content: t(language, 'moderation.botPermission', { permission }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -69,17 +74,17 @@ module.exports = {
     const user = interaction.options.getUser('member', true);
 
     if (user.id === interaction.user.id) {
-      await sendModerationError(interaction, 'You cannot softban yourself.');
+      await sendModerationError(interaction, t(language, 'moderation.self'));
       return;
     }
 
     if (user.id === interaction.client.user.id) {
-      await sendModerationError(interaction, 'I cannot softban myself.');
+      await sendModerationError(interaction, t(language, 'moderation.botSelf'));
       return;
     }
 
     if (user.id === guild.ownerId) {
-      await sendModerationError(interaction, 'The server owner cannot be softbanned.');
+      await sendModerationError(interaction, t(language, 'moderation.owner'));
       return;
     }
 
@@ -88,6 +93,7 @@ module.exports = {
       guild,
       member,
       moderator: interaction.member,
+      language,
     });
 
     if (targetError) {
@@ -99,16 +105,14 @@ module.exports = {
     if (existing) {
       await sendModerationError(
         interaction,
-        `**${user.username}** is already banned. Use \`/unban\` first if you want to change the ban.`,
+        t(language, 'moderation.alreadyBanned', { user: user.username }),
       );
       return;
     }
 
     const deletedSeconds = interaction.options.getInteger('delete_messages') ?? DEFAULT_DELETE_SECONDS;
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
-    const deletedLabel = DELETE_MESSAGE_CHOICES.find(
-      (choice) => choice.value === deletedSeconds,
-    )?.label ?? 'Do not delete any';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
+    const deletedLabel = deleteMessagesLabel(deletedSeconds, language);
 
     await interaction.deferReply();
 
@@ -119,7 +123,7 @@ module.exports = {
       });
     } catch (error) {
       console.error(`[moderation] /softban failed to ban ${user.id}:`, error);
-      await sendModerationError(interaction, moderationErrorMessage(error));
+      await sendModerationError(interaction, moderationErrorMessage(error, language));
       return;
     }
 
@@ -138,30 +142,39 @@ module.exports = {
       targetName: user.username,
       moderatorId: interaction.user.id,
       reason,
-      duration: 'Immediate cleanup',
-      extra: `Messages: ${deletedLabel}. Ban lifted: ${lifted ? 'yes' : 'no — use /unban'}.`,
+      duration: t(language, 'moderation.softban.duration'),
+      extra: t(language, 'moderation.softban.extra', {
+        label: deletedLabel,
+        lifted: lifted ? t(language, 'moderation.yes') : t(language, 'moderation.no'),
+      }),
     });
 
     if (!lifted) {
       await sendModerationError(
         interaction,
-        `**${user.username}** was banned and their messages were cleaned, but I could not lift the ban. Use \`/unban\` to finish the softban.`,
+        t(language, 'moderation.softban.liftFailed', { user: user.username }),
       );
       return;
     }
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Member softbanned',
-      description: `**${member.displayName}** was removed and their recent messages were cleaned up. They can rejoin with a new invite.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.softban.title'),
+      description: t(language, 'moderation.softban.description', {
+        member: member.displayName,
+      }),
       color: COLORS.danger,
       thumbnail: user.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
       fields: [
-        { name: '🎯 Member', value: `${member.displayName}\n\`${user.id}\``, inline: true },
-        { name: '🧹 Messages', value: deletedLabel, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        {
+          name: `🎯 ${t(language, 'moderation.fields.member')}`,
+          value: `${member.displayName}\n\`${user.id}\``,
+          inline: true,
+        },
+        { name: `🧹 ${t(language, 'moderation.fields.messages')}`, value: deletedLabel, inline: true },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.editReply({ embeds: [embed] });

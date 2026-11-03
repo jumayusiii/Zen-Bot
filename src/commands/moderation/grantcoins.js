@@ -2,9 +2,11 @@ const { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } = require('disc
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { MAX_GRANT, grantCoins } = require('../../lib/economy');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -40,17 +42,21 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'Coins are tracked per server. Run `/grantcoins` in a server channel.',
+        content: t('en', 'moderation.grantcoins.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
     const isOwner = interaction.user.id === guild.ownerId;
     const isAdmin = interaction.memberPermissions?.has(PermissionFlagsBits.Administrator);
     if (!isOwner && !isAdmin) {
       await interaction.reply({
-        content: 'You need the **Administrator** permission or server ownership to use `/grantcoins`.',
+        content: t(language, 'moderation.permission', {
+          permission: t(language, 'moderation.permissions.administrator'),
+          command: 'grantcoins',
+        }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -59,14 +65,14 @@ module.exports = {
     const user = interaction.options.getUser('member', true);
     if (user.bot) {
       await interaction.reply({
-        content: 'Bots do not have wallets. Choose a member instead.',
+        content: t(language, 'moderation.grantcoins.bot'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
     const amount = interaction.options.getInteger('amount', true);
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
 
     try {
       const result = await grantCoins({
@@ -78,7 +84,10 @@ module.exports = {
 
       if (result.amount === 0) {
         await interaction.reply({
-          content: `**${targetName}** already has the maximum wallet balance of **${coins(result.balance)} coins**.`,
+          content: t(language, 'moderation.grantcoins.max', {
+            target: targetName,
+            coins: coins(result.balance, language),
+          }),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -90,31 +99,54 @@ module.exports = {
         targetName: user.username,
         moderatorId: interaction.user.id,
         reason,
-        extra: `Granted ${coins(result.amount)} coins. New balance: ${coins(result.balance)}.`,
+        extra: t(language, 'moderation.grantcoins.extra', {
+          amount: coins(result.amount, language),
+          balance: coins(result.balance, language),
+        }),
       });
 
       const embed = createEmbed(interaction.client, {
-        section: 'Economy',
-        title: 'Coins granted',
+        section: t(language, 'help.tabs.economy'),
+        title: t(language, 'moderation.grantcoins.title'),
         description: result.capped
-          ? `Added **${coins(result.amount)}** of the requested **${coins(result.requested)}** coins. The wallet is now at the maximum balance.`
-          : `**${targetName}** received **${coins(result.amount)} coins**.`,
+          ? t(language, 'moderation.grantcoins.capped', {
+            added: coins(result.amount, language),
+            requested: coins(result.requested, language),
+          })
+          : t(language, 'moderation.grantcoins.description', {
+            target: targetName,
+            coins: coins(result.amount, language),
+          }),
         color: COLORS.game,
         thumbnail: user.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
         fields: [
-          { name: '🎯 Member', value: `${targetName}\n\`${user.id}\``, inline: true },
-          { name: '🪙 Granted', value: `**${coins(result.amount)}** coins`, inline: true },
-          { name: '💰 Balance', value: `**${coins(result.balance)}** coins`, inline: true },
-          { name: '📝 Reason', value: reason, inline: false },
+          {
+            name: `🎯 ${t(language, 'moderation.fields.member')}`,
+            value: `${targetName}\n\`${user.id}\``,
+            inline: true,
+          },
+          {
+            name: `🪙 ${t(language, 'moderation.fields.granted')}`,
+            value: `**${coins(result.amount, language)}** ${t(language, 'common.coins')}`,
+            inline: true,
+          },
+          {
+            name: `💰 ${t(language, 'moderation.fields.balance')}`,
+            value: `**${coins(result.balance, language)}** ${t(language, 'common.coins')}`,
+            inline: true,
+          },
+          { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
         ],
-        footer: `Granted by ${interaction.user.username}`,
+        footer: t(language, 'moderation.grantcoins.footer', {
+          user: interaction.user.username,
+        }),
       });
 
       await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
     } catch (error) {
       console.error('[economy] /grantcoins failed:', error);
       await interaction.reply({
-        content: error.message || 'Could not grant those coins right now. Please try again.',
+        content: t(language, 'moderation.grantcoins.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

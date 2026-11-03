@@ -1,6 +1,7 @@
 const { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { listWarnings } = require('../../lib/warnings');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -19,15 +20,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.moderateMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ModerateMembers)) {
       await interaction.reply({
-        content: 'You need the **Moderate Members** permission to use `/warnings`.',
+        content: t(language, 'moderation.permission', { permission, command: 'warnings' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -46,23 +50,37 @@ module.exports = {
     }));
 
     if (warnings.length > 10) {
+      const extra = warnings.length - 10;
       fields.push({
-        name: '…and more',
-        value: `**${warnings.length - 10}** more warning${warnings.length - 10 === 1 ? '' : 's'} are recorded.`,
+        name: t(language, 'moderation.warnings.more'),
+        value: t(
+          language,
+          extra === 1 ? 'moderation.warnings.moreValueOne' : 'moderation.warnings.moreValueMany',
+          { count: extra },
+        ),
         inline: false,
       });
     }
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: warnings.length > 0 ? 'Recorded warnings' : 'No warnings recorded',
+      section: t(language, 'moderation.section'),
+      title: t(
+        language,
+        warnings.length > 0 ? 'moderation.warnings.title' : 'moderation.warnings.emptyTitle',
+      ),
       description: warnings.length > 0
-        ? `**${targetName}** has **${warnings.length}** warning${warnings.length === 1 ? '' : 's'} in this server.`
-        : `**${targetName}** has no warnings in this server.`,
+        ? t(
+          language,
+          warnings.length === 1
+            ? 'moderation.warnings.descriptionOne'
+            : 'moderation.warnings.descriptionMany',
+          { target: targetName, count: warnings.length },
+        )
+        : t(language, 'moderation.warnings.emptyDescription', { target: targetName }),
       color: warnings.length > 0 ? COLORS.warning : COLORS.success,
       thumbnail: user.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
       fields,
-      footer: `Requested by ${interaction.user.username}`,
+      footer: t(language, 'common.requestedBy', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });

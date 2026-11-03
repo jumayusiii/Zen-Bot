@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const CHOICES = {
   rock: { label: 'Rock', emoji: '🪨', beats: 'scissors' },
@@ -28,42 +29,45 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
     const player = interaction.options.getString('choice', true);
     const bot = CHOICE_KEYS[Math.floor(Math.random() * CHOICE_KEYS.length)];
 
-    let result;
     let color;
-
+    let resultKey;
     if (player === bot) {
-      result = 'It’s a draw!';
+      resultKey = 'minigames.rps.draw';
       color = COLORS.warning;
     } else if (CHOICES[player].beats === bot) {
-      result = 'You win!';
+      resultKey = 'minigames.rps.win';
       color = COLORS.success;
     } else {
-      result = 'You lose!';
+      resultKey = 'minigames.rps.lose';
       color = COLORS.danger;
     }
 
+    const result = t(language, resultKey);
+    const label = (key) => t(language, `minigames.rps.${key}`);
+
     const embed = createEmbed(interaction.client, {
-      section: 'Minigames',
-      title: 'Rock Paper Scissors',
+      section: t(language, 'help.tabs.minigames'),
+      title: t(language, 'minigames.rps.title'),
       description: `**${result}**`,
       color,
       fields: [
         {
-          name: '🙋 You',
-          value: `${CHOICES[player].emoji} ${CHOICES[player].label}`,
+          name: t(language, 'minigames.rps.you'),
+          value: `${CHOICES[player].emoji} ${label(player)}`,
           inline: true,
         },
         {
-          name: '🤖 Bot',
-          value: `${CHOICES[bot].emoji} ${CHOICES[bot].label}`,
+          name: t(language, 'minigames.rps.bot'),
+          value: `${CHOICES[bot].emoji} ${label(bot)}`,
           inline: true,
         },
-        { name: '🏆 Result', value: result, inline: true },
+        { name: t(language, 'minigames.rps.result'), value: result, inline: true },
       ],
-      footer: `Played by ${interaction.user.username}`,
+      footer: t(language, 'minigames.rps.footer', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed] });

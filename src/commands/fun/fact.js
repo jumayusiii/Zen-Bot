@@ -7,19 +7,20 @@ const {
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { randomFact } = require('../../lib/fun');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function buildPayload(client, fact, ownerId, requestedBy) {
+function buildPayload(client, fact, ownerId, requestedBy, language) {
   const embed = createEmbed(client, {
-    section: 'Fun',
-    title: 'Did you know?',
+    section: t(language, 'help.tabs.fun'),
+    title: t(language, 'fun.fact.title'),
     description: fact.text,
     color: COLORS.fun,
-    footer: `Random fact  ·  requested by ${requestedBy}`,
+    footer: t(language, 'fun.fact.footer', { user: requestedBy }),
   });
 
   const button = new ButtonBuilder()
     .setCustomId(`fact:again:${ownerId}:${fact.index}`)
-    .setLabel('Another fact')
+    .setLabel(t(language, 'fun.fact.button'))
     .setEmoji('🎲')
     .setStyle(ButtonStyle.Primary);
 
@@ -35,10 +36,11 @@ module.exports = {
     .setDescription('Share a random fun fact'),
 
   async execute(interaction) {
-    const fact = randomFact();
+    const language = await getInteractionLanguage(interaction);
+    const fact = randomFact(Math.random, null, language);
 
     await interaction.reply(
-      buildPayload(interaction.client, fact, interaction.user.id, interaction.user.username),
+      buildPayload(interaction.client, fact, interaction.user.id, interaction.user.username, language),
     );
   },
 
@@ -46,19 +48,25 @@ module.exports = {
     const [, action, ownerId, rawIndex] = interaction.customId.split(':');
     if (action !== 'again') return;
 
+    const language = await getInteractionLanguage(interaction);
+
     if (ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'Only the person who shared this fact can roll another one.',
+        content: t(language, 'fun.fact.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
     const previous = Number.parseInt(rawIndex, 10);
-    const fact = randomFact(Math.random, Number.isInteger(previous) ? previous : null);
+    const fact = randomFact(
+      Math.random,
+      Number.isInteger(previous) ? previous : null,
+      language,
+    );
 
     await interaction.update(
-      buildPayload(interaction.client, fact, ownerId, interaction.user.username),
+      buildPayload(interaction.client, fact, ownerId, interaction.user.username, language),
     );
   },
 };

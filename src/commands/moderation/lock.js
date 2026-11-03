@@ -15,6 +15,7 @@ const {
   sendModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const LOCKABLE_TYPES = new Set([ChannelType.GuildText, ChannelType.GuildAnnouncement]);
 const BOT_PERMISSIONS = [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles];
@@ -26,10 +27,8 @@ function sendMessagesState(overwrite) {
   return 'inherit';
 }
 
-function stateLabel(state) {
-  if (state === 'allow') return 'allowed';
-  if (state === 'deny') return 'denied';
-  return 'inherited';
+function stateLabel(state, language = 'en') {
+  return t(language, `moderation.states.${state}`, {}, 'inherited');
 }
 
 module.exports = {
@@ -55,15 +54,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.manageChannels');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageChannels)) {
       await interaction.reply({
-        content: 'You need the **Manage Channels** permission to use `/lock`.',
+        content: t(language, 'moderation.permission', { permission, command: 'lock' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -71,7 +73,12 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(BOT_PERMISSIONS)) {
       await interaction.reply({
-        content: 'I need **Manage Channels** and **Manage Roles** to lock channels.',
+        content: t(language, 'moderation.botPermissions', {
+          permissions: [
+            t(language, 'moderation.permissions.manageChannels'),
+            t(language, 'moderation.permissions.manageRoles'),
+          ].join(' + '),
+        }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -80,7 +87,7 @@ module.exports = {
     const channel = interaction.options.getChannel('channel') ?? interaction.channel;
     if (!channel || !LOCKABLE_TYPES.has(channel.type) || channel.guildId !== guild.id) {
       await interaction.reply({
-        content: 'Choose a text or announcement channel from this server.',
+        content: t(language, 'moderation.channelOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -89,7 +96,7 @@ module.exports = {
     const existing = await getChannelLock(guild.id, channel.id);
     if (existing) {
       await interaction.reply({
-        content: `${channel} is already locked by Zen. Use \`/unlock\` to restore it.`,
+        content: t(language, 'moderation.lock.exists', { channel }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -100,13 +107,13 @@ module.exports = {
 
     if (previous === 'deny') {
       await interaction.reply({
-        content: `${channel} already blocks **@everyone** from sending messages. No change was made.`,
+        content: t(language, 'moderation.lock.alreadyDenied', { channel }),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
 
     try {
       await saveChannelLock({
@@ -125,10 +132,7 @@ module.exports = {
     } catch (error) {
       await clearChannelLock(guild.id, channel.id).catch(() => {});
       console.error(`[moderation] /lock failed for ${channel.id}:`, error);
-      await sendModerationError(
-        interaction,
-        'Could not lock that channel. Check my **Manage Channels** and **Manage Roles** permissions and try again.',
-      );
+      await sendModerationError(interaction, t(language, 'moderation.lock.failed'));
       return;
     }
 
@@ -138,20 +142,26 @@ module.exports = {
       targetName: `#${channel.name}`,
       moderatorId: interaction.user.id,
       reason,
-      extra: `Previous @everyone SendMessages setting: ${stateLabel(previous)}.`,
+      extra: t(language, 'moderation.lock.extra', {
+        state: stateLabel(previous, language),
+      }),
     });
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Channel locked',
-      description: `**${channel}** is now read-only for members.\nUse \`/unlock\` to restore the previous permission.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.lock.title'),
+      description: t(language, 'moderation.lock.description', { channel }),
       color: COLORS.warning,
       fields: [
-        { name: '📁 Channel', value: `${channel}`, inline: true },
-        { name: '🔒 Previous', value: stateLabel(previous), inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        { name: `📁 ${t(language, 'moderation.fields.channel')}`, value: `${channel}`, inline: true },
+        {
+          name: `🔒 ${t(language, 'moderation.fields.previous')}`,
+          value: stateLabel(previous, language),
+          inline: true,
+        },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed] });

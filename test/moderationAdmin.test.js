@@ -10,7 +10,9 @@ const { getAccount } = require('../src/lib/economy');
 const lockCommand = require('../src/commands/moderation/lock');
 const unlockCommand = require('../src/commands/moderation/unlock');
 const softbanCommand = require('../src/commands/moderation/softban');
+const banCommand = require('../src/commands/moderation/ban');
 const grantCoinsCommand = require('../src/commands/moderation/grantcoins');
+const { setGuildLanguage } = require('../src/lib/i18n');
 
 const GUILD_ID = '910000000000000001';
 const CHANNEL_ID = '910000000000000002';
@@ -24,6 +26,9 @@ async function withDataFiles(run) {
   process.env.CHANNEL_LOCKS_FILE = path.join(directory, 'channel-locks.json');
   process.env.ECONOMY_FILE = path.join(directory, 'economy.json');
   process.env.MODERATION_LOG_FILE = path.join(directory, 'moderation-logs.json');
+  process.env.MODERATION_FILE = path.join(directory, 'moderation.json');
+  process.env.WARNINGS_FILE = path.join(directory, 'warnings.json');
+  process.env.LANGUAGES_FILE = path.join(directory, 'languages.json');
 
   try {
     await run();
@@ -31,6 +36,9 @@ async function withDataFiles(run) {
     delete process.env.CHANNEL_LOCKS_FILE;
     delete process.env.ECONOMY_FILE;
     delete process.env.MODERATION_LOG_FILE;
+    delete process.env.MODERATION_FILE;
+    delete process.env.WARNINGS_FILE;
+    delete process.env.LANGUAGES_FILE;
     await fs.rm(directory, { recursive: true, force: true });
   }
 }
@@ -219,6 +227,59 @@ test('/softban bans, cleans messages, then immediately lifts the ban', async () 
     assert.match(guild.bans.created[0].options.reason, /admin/);
     assert.equal(guild.bans.removed.length, 1);
     assert.equal(interaction.captured.editReply.embeds[0].data.title, 'Member softbanned');
+  });
+});
+
+test('German moderation responses localize actions, states and audit fields', async () => {
+  await withDataFiles(async () => {
+    await setGuildLanguage(GUILD_ID, 'de');
+    const channel = fakeChannel();
+    const guild = fakeGuild();
+
+    const lock = fakeInteraction({ guild, channel, options: { reason: 'Raid' } });
+    await lockCommand.execute(lock);
+    const lockEmbed = lock.captured.reply.embeds[0].data;
+    assert.equal(lockEmbed.title, 'Channel gesperrt');
+    assert.ok(lockEmbed.fields.some(
+      (field) => field.name === '🔒 Vorher' && field.value === 'erlaubt',
+    ));
+
+    const unlocked = fakeInteraction({ guild, channel, options: { reason: 'Vorbei' } });
+    await unlockCommand.execute(unlocked);
+    const unlockEmbed = unlocked.captured.reply.embeds[0].data;
+    assert.equal(unlockEmbed.title, 'Channel entsperrt');
+    assert.match(unlockEmbed.description, /Mitglieder können wieder Nachrichten senden/);
+
+    const softban = fakeInteraction({
+      guild,
+      options: { user: targetUser(), delete_messages: 3600, reason: 'Spam' },
+    });
+    await softbanCommand.execute(softban);
+    assert.equal(softban.captured.editReply.embeds[0].data.title, 'Mitglied softgebannt');
+
+    const ban = fakeInteraction({
+      guild,
+      options: { user: targetUser(), duration: '1d', reason: 'Spam' },
+    });
+    await banCommand.execute(ban);
+    const banEmbed = ban.captured.editReply.embeds[0].data;
+    assert.equal(banEmbed.title, 'Benutzer temporär gebannt');
+    assert.ok(banEmbed.fields.some(
+      (field) => field.name === '⏳ Dauer' && field.value === '1 Tag',
+    ));
+    assert.ok(banEmbed.fields.some(
+      (field) => field.name === '🧹 Nachrichten' && field.value === 'Nichts löschen',
+    ));
+
+    const granted = fakeInteraction({
+      guild,
+      options: { user: targetUser(), amount: 500, reason: 'Eventpreis' },
+    });
+    await grantCoinsCommand.execute(granted);
+    const grantedEmbed = granted.captured.reply.embeds[0].data;
+    assert.equal(grantedEmbed.title, 'Münzen vergeben');
+    assert.match(grantedEmbed.description, /hat \*\*500 Münzen\*\* erhalten/);
+    assert.ok(grantedEmbed.fields.some((field) => field.name === '🪙 Vergeben'));
   });
 });
 

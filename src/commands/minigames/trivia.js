@@ -8,6 +8,7 @@ const {
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { randomQuestion } = require('../../lib/trivia');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 const MAX_REFRESHES = 5;
@@ -24,7 +25,7 @@ function truncate(text, maxLength) {
   return text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
 }
 
-function buildPayload(client, game) {
+function buildPayload(client, game, language) {
   const { question } = game;
   const answered = game.result !== null;
   const answer = `${LETTERS[question.answer]}. ${question.options[question.answer]}`;
@@ -32,43 +33,61 @@ function buildPayload(client, game) {
   let description;
   if (!answered) {
     description = [
-      'Pick the answer you think is correct.',
-      `-# ${question.category}  ·  ${MAX_REFRESHES - game.refreshes} refresh${MAX_REFRESHES - game.refreshes === 1 ? '' : 'es'} left`,
+      t(language, 'minigames.trivia.choose'),
+      t(
+        language,
+        MAX_REFRESHES - game.refreshes === 1
+          ? 'minigames.trivia.refreshLeftOne'
+          : 'minigames.trivia.refreshLeft',
+        {
+          category: question.category,
+          count: MAX_REFRESHES - game.refreshes,
+        },
+      ),
     ].join('\n');
   } else if (game.result.correct) {
-    description = ['✅ **Correct** — that is the answer.', `-# ${question.category}`].join('\n');
+    description = [t(language, 'minigames.trivia.correct'), `-# ${question.category}`].join('\n');
   } else {
     const chosen = `${LETTERS[game.result.choice]}. ${question.options[game.result.choice]}`;
     description = [
-      `❌ **Not quite** — you chose **${chosen}**.`,
-      `The answer is **${answer}**.`,
+      t(language, 'minigames.trivia.wrong', { chosen }),
+      t(language, 'minigames.trivia.answerIs', { answer }),
       `-# ${question.category}`,
     ].join('\n');
   }
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
+    section: t(language, 'help.tabs.minigames'),
     title: truncate(question.question, 240),
     description,
     color: answered ? (game.result.correct ? COLORS.success : COLORS.danger) : COLORS.game,
     fields: [
       {
-        name: 'Choices',
+        name: t(language, 'minigames.trivia.choices'),
         value: question.options.map((option, index) => `**${LETTERS[index]}.** ${option}`).join('\n'),
         inline: false,
       },
       {
-        name: '📊 Score',
-        value: `**${game.correct}** of **${game.answered}** correct`,
+        name: t(language, 'minigames.trivia.score'),
+        value: t(language, 'minigames.trivia.scoreValue', {
+          correct: game.correct,
+          answered: game.answered,
+        }),
         inline: true,
       },
       {
-        name: '🔁 Refreshes',
-        value: `**${MAX_REFRESHES - game.refreshes}** of **${MAX_REFRESHES}** left`,
+        name: t(language, 'minigames.trivia.refreshes'),
+        value: t(language, 'minigames.trivia.refreshesValue', {
+          remaining: MAX_REFRESHES - game.refreshes,
+          max: MAX_REFRESHES,
+        }),
         inline: true,
       },
     ],
-    footer: answered ? 'Trivia · answer revealed' : 'Trivia · choose an answer',
+    footer: t(
+      language,
+      answered ? 'minigames.trivia.footerAnswer' : 'minigames.trivia.footerChoose',
+    ),
   });
 
   const answerButtons = question.options.map((option, index) => {
@@ -95,7 +114,11 @@ function buildPayload(client, game) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(`trivia:next:${game.id}`)
-          .setLabel(remaining > 0 ? `Next question · ${remaining} left` : 'Refresh limit reached')
+          .setLabel(
+            remaining > 0
+              ? t(language, 'minigames.trivia.nextLeft', { count: remaining })
+              : t(language, 'minigames.trivia.limit'),
+          )
           .setEmoji('🔁')
           .setStyle(remaining > 0 ? ButtonStyle.Success : ButtonStyle.Secondary)
           .setDisabled(remaining === 0),
@@ -106,9 +129,9 @@ function buildPayload(client, game) {
   return { embeds: [embed], components };
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This trivia round has expired. Run `/trivia` for a new question.',
+    content: t(language, 'minigames.trivia.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
@@ -123,11 +146,12 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = {
       id: crypto.randomUUID(),
       ownerId: interaction.user.id,
-      question: randomQuestion(),
+      question: randomQuestion(Math.random, [], language),
       result: null,
       answered: 0,
       correct: 0,
@@ -137,7 +161,7 @@ module.exports = {
     };
 
     games.set(game.id, game);
-    await interaction.reply(buildPayload(interaction.client, game));
+    await interaction.reply(buildPayload(interaction.client, game, language));
   },
 
   async handleComponent(interaction) {
@@ -145,16 +169,17 @@ module.exports = {
     if (!gameId) return;
 
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, language);
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This trivia round belongs to someone else. Run `/trivia` to start your own.',
+        content: t(language, 'minigames.trivia.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -163,7 +188,7 @@ module.exports = {
     if (action === 'answer') {
       if (game.result) {
         await interaction.reply({
-          content: 'You already answered this question. Use the refresh button for a new one.',
+          content: t(language, 'minigames.trivia.already'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -172,7 +197,7 @@ module.exports = {
       const choice = Number.parseInt(rawIndex, 10);
       if (!Number.isInteger(choice) || choice < 0 || choice >= game.question.options.length) {
         await interaction.reply({
-          content: 'That answer is not valid. Run `/trivia` for a new question.',
+          content: t(language, 'minigames.trivia.invalid'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -184,7 +209,7 @@ module.exports = {
       if (correct) game.correct += 1;
       game.updatedAt = Date.now();
 
-      await interaction.update(buildPayload(interaction.client, game));
+      await interaction.update(buildPayload(interaction.client, game, language));
       return;
     }
 
@@ -192,7 +217,7 @@ module.exports = {
 
     if (!game.result) {
       await interaction.reply({
-        content: 'Answer this question before refreshing it. The answer buttons are still active.',
+        content: t(language, 'minigames.trivia.answerFirst'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -200,17 +225,21 @@ module.exports = {
 
     if (game.refreshes >= MAX_REFRESHES) {
       await interaction.reply({
-        content: `This round has used all **${MAX_REFRESHES}** refreshes. Run \`/trivia\` to start a new round.`,
+        content: t(language, 'minigames.trivia.allRefreshes', { count: MAX_REFRESHES }),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
-    game.question = randomQuestion(Math.random, [game.question.question]);
+    game.question = randomQuestion(
+      Math.random,
+      [game.question.question],
+      language,
+    );
     game.result = null;
     game.refreshes += 1;
     game.updatedAt = Date.now();
 
-    await interaction.update(buildPayload(interaction.client, game));
+    await interaction.update(buildPayload(interaction.client, game, language));
   },
 };

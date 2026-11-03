@@ -2,11 +2,13 @@ const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { CARD_THEMES } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { buyTheme } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const PAID_THEMES = CARD_THEMES.filter((theme) => theme.price > 0);
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -26,13 +28,14 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'The shop uses per-server coins. Run `/buy` in a server channel.',
+        content: t('en', 'economy.buy.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
     const themeId = interaction.options.getString('theme', true);
+    const language = await getInteractionLanguage(interaction);
 
     try {
       const result = await buyTheme({
@@ -42,23 +45,31 @@ module.exports = {
       });
 
       const embed = createEmbed(interaction.client, {
-        section: 'Economy',
-        title: 'Theme unlocked',
-        description: `You bought **${result.theme.name}** and equipped it to your rank card.`,
+        section: t(language, 'help.tabs.economy'),
+        title: t(language, 'economy.buy.title'),
+        description: t(language, 'economy.buy.description', { theme: result.theme.name }),
         color: COLORS.success,
         fields: [
-          { name: '💸 Price', value: `${coins(result.theme.price)} coins`, inline: true },
-          { name: '💰 Balance', value: `${coins(result.balance)} coins`, inline: true },
-          { name: '🎨 Theme', value: result.theme.name, inline: true },
+          {
+            name: `💸 ${t(language, 'economy.buy.price')}`,
+            value: `${coins(result.theme.price, language)} ${t(language, 'common.coins')}`,
+            inline: true,
+          },
+          {
+            name: `💰 ${t(language, 'economy.balance')}`,
+            value: `${coins(result.balance, language)} ${t(language, 'common.coins')}`,
+            inline: true,
+          },
+          { name: `🎨 ${t(language, 'economy.buy.theme')}`, value: result.theme.name, inline: true },
         ],
-        footer: 'See it with /rank  ·  change it with /rankcard',
+        footer: t(language, 'economy.buy.footer'),
       });
 
       await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
     } catch (error) {
       if (error.code === 'already_owned') {
         await interaction.reply({
-          content: 'You already own that theme. Equip it with `/rankcard`.',
+          content: t(language, 'economy.buy.alreadyOwned'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -66,7 +77,10 @@ module.exports = {
 
       if (error.code === 'insufficient') {
         await interaction.reply({
-          content: `You have **${coins(error.balance)} coins**, but that theme costs **${coins(CARD_THEMES.find((theme) => theme.id === themeId)?.price)} coins**. Try \`/daily\` first.`,
+          content: t(language, 'economy.buy.insufficient', {
+            balance: coins(error.balance, language),
+            price: coins(CARD_THEMES.find((theme) => theme.id === themeId)?.price, language),
+          }),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -74,7 +88,7 @@ module.exports = {
 
       if (error.code === 'free_theme') {
         await interaction.reply({
-          content: 'That theme is free and already available to everyone.',
+          content: t(language, 'economy.buy.freeTheme'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -82,7 +96,7 @@ module.exports = {
 
       console.error('[economy] /buy failed:', error);
       await interaction.reply({
-        content: 'Could not complete that purchase right now. Please try again.',
+        content: t(language, 'economy.buy.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

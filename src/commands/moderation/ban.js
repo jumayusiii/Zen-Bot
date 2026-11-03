@@ -5,13 +5,16 @@ const {
   DELETE_MESSAGE_CHOICES,
   auditReason,
   cancelScheduledUnban,
+  deleteMessagesLabel,
   durationByValue,
+  durationLabel,
   moderationErrorMessage,
   scheduleUnban,
   sendModerationError,
   targetModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 function durationChoices() {
   return BAN_DURATIONS.map(({ label, value }) => ({ name: label, value }));
@@ -55,15 +58,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.banMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: 'You need the **Ban Members** permission to use `/ban`.',
+        content: t(language, 'moderation.permission', { permission, command: 'ban' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -71,7 +77,7 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: 'I need the **Ban Members** permission to ban users.',
+        content: t(language, 'moderation.botPermission', { permission }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -85,22 +91,22 @@ module.exports = {
     const deleteSeconds = interaction.options.getInteger('delete_messages') ?? 0;
 
     if (!duration) {
-      await sendModerationError(interaction, 'Choose one of the available ban durations.');
+      await sendModerationError(interaction, t(language, 'moderation.chooseDuration'));
       return;
     }
 
     if (user.id === interaction.user.id) {
-      await sendModerationError(interaction, 'You cannot ban yourself.');
+      await sendModerationError(interaction, t(language, 'moderation.self'));
       return;
     }
 
     if (user.id === interaction.client.user.id) {
-      await sendModerationError(interaction, 'I cannot ban myself.');
+      await sendModerationError(interaction, t(language, 'moderation.botSelf'));
       return;
     }
 
     if (user.id === guild.ownerId) {
-      await sendModerationError(interaction, 'The server owner cannot be banned.');
+      await sendModerationError(interaction, t(language, 'moderation.owner'));
       return;
     }
 
@@ -111,6 +117,7 @@ module.exports = {
         guild,
         member,
         moderator: interaction.member,
+        language,
       });
 
       if (targetError) {
@@ -124,12 +131,12 @@ module.exports = {
     if (existing) {
       await sendModerationError(
         interaction,
-        `**${user.username}** is already banned. Use \`/unban\` first if you want to change the ban.`,
+        t(language, 'moderation.alreadyBanned', { user: user.username }),
       );
       return;
     }
 
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
     const expiresAt = duration.ms > 0 ? Date.now() + duration.ms : null;
 
     await interaction.deferReply();
@@ -141,7 +148,7 @@ module.exports = {
       });
     } catch (error) {
       console.error(`[moderation] /ban failed for ${user.id}:`, error);
-      await sendModerationError(interaction, moderationErrorMessage(error));
+      await sendModerationError(interaction, moderationErrorMessage(error, language));
       return;
     }
 
@@ -167,14 +174,13 @@ module.exports = {
       });
     }
 
-    const deleteLabel =
-      DELETE_MESSAGE_CHOICES.find((choice) => choice.value === deleteSeconds)?.label ??
-      'Do not delete any';
+    const deleteLabel = deleteMessagesLabel(deleteSeconds, language);
+    const durationText = durationLabel(duration, language);
     const unbanLabel = !expiresAt
-      ? 'Never — permanent ban'
+      ? t(language, 'moderation.ban.never')
       : scheduled
         ? `<t:${Math.floor(expiresAt / 1000)}:F> (<t:${Math.floor(expiresAt / 1000)}:R>)`
-        : '⚠️ Could not schedule the auto-unban — use `/unban` manually.';
+        : t(language, 'moderation.ban.scheduleFailed');
 
     await sendModerationLog(interaction.client, guild.id, {
       action: 'ban',
@@ -182,24 +188,27 @@ module.exports = {
       targetName: user.username,
       moderatorId: interaction.user.id,
       reason,
-      duration: duration.label,
+      duration: durationText,
       expiresAt,
-      extra: `Messages deleted: ${deleteLabel}`,
+      extra: t(language, 'moderation.ban.messagesDeleted', { label: deleteLabel }),
     });
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: expiresAt ? 'User banned temporarily' : 'User banned',
-      description: `**${user.username}** was banned from **${guild.name}**.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, expiresAt ? 'moderation.ban.tempTitle' : 'moderation.ban.title'),
+      description: t(language, 'moderation.ban.description', {
+        user: user.username,
+        server: guild.name,
+      }),
       color: COLORS.danger,
       fields: [
-        { name: '⏳ Duration', value: duration.label, inline: true },
-        { name: '🔓 Auto-unban', value: unbanLabel, inline: true },
-        { name: '🧹 Messages', value: deleteLabel, inline: true },
-        { name: '🆔 User', value: `\`${user.id}\``, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        { name: `⏳ ${t(language, 'moderation.fields.duration')}`, value: durationText, inline: true },
+        { name: `🔓 ${t(language, 'moderation.fields.autoUnban')}`, value: unbanLabel, inline: true },
+        { name: `🧹 ${t(language, 'moderation.fields.messages')}`, value: deleteLabel, inline: true },
+        { name: `🆔 ${t(language, 'moderation.fields.user')}`, value: `\`${user.id}\``, inline: true },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.editReply({ embeds: [embed] });

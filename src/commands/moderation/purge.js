@@ -6,6 +6,7 @@ const {
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 const {
   MAX_PURGE,
   deletePurgeable,
@@ -48,15 +49,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.manageMessages');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
       await interaction.reply({
-        content: 'You need the **Manage Messages** permission to use `/purge`.',
+        content: t(language, 'moderation.permission', { permission, command: 'purge' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -65,7 +69,7 @@ module.exports = {
     const channel = interaction.options.getChannel('channel') ?? interaction.channel;
     if (!channel?.isTextBased?.() || channel.guildId !== guild.id) {
       await interaction.reply({
-        content: 'Choose a text channel from this server.',
+        content: t(language, 'moderation.channelOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -74,7 +78,7 @@ module.exports = {
     const memberPermissions = channel.permissionsFor?.(interaction.member);
     if (!memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
       await interaction.reply({
-        content: `You need **Manage Messages** in ${channel} to purge messages there.`,
+        content: t(language, 'moderation.purge.memberPermission', { channel }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -88,7 +92,14 @@ module.exports = {
     ];
     if (!botPermissions?.has(requiredBotPermissions)) {
       await interaction.reply({
-        content: `I need **View Channel**, **Manage Messages** and **Read Message History** in ${channel}.`,
+        content: t(language, 'moderation.purge.botPermission', {
+          channel,
+          permissions: [
+            t(language, 'moderation.permissions.viewChannel'),
+            t(language, 'moderation.permissions.manageMessages'),
+            t(language, 'moderation.permissions.readMessageHistory'),
+          ].join(', '),
+        }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -96,7 +107,7 @@ module.exports = {
 
     const amount = interaction.options.getInteger('amount', true);
     const user = interaction.options.getUser('user');
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
 
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
@@ -106,7 +117,7 @@ module.exports = {
 
       if (messages.length === 0) {
         await interaction.editReply({
-          content: 'No messages from the last 14 days matched those filters.',
+          content: t(language, 'moderation.purge.noMatches'),
         });
         return;
       }
@@ -119,32 +130,46 @@ module.exports = {
         targetName: user?.username ?? `#${channel.name}`,
         moderatorId: interaction.user.id,
         reason,
-        extra: `Deleted ${deleted} message${deleted === 1 ? '' : 's'} in ${channel}.`,
+        extra: t(
+          language,
+          deleted === 1 ? 'moderation.purge.extraOne' : 'moderation.purge.extraMany',
+          { count: deleted, channel },
+        ),
       });
 
       const embed = createEmbed(interaction.client, {
-        section: 'Moderation',
-        title: 'Messages purged',
-        description: `Deleted **${deleted}** message${deleted === 1 ? '' : 's'} from ${channel}.`,
+        section: t(language, 'moderation.section'),
+        title: t(language, 'moderation.purge.title'),
+        description: t(
+          language,
+          deleted === 1 ? 'moderation.purge.descriptionOne' : 'moderation.purge.descriptionMany',
+          { count: deleted, channel },
+        ),
         color: COLORS.neutral,
         fields: [
-          { name: '📁 Channel', value: `${channel}`, inline: true },
-          { name: '🔎 Scanned', value: `**${amount}** recent messages`, inline: true },
+          { name: `📁 ${t(language, 'moderation.fields.channel')}`, value: `${channel}`, inline: true },
           {
-            name: '👤 Filter',
-            value: user ? `${user.username}\n\`${user.id}\`` : 'All members',
+            name: `🔎 ${t(language, 'moderation.fields.scanned')}`,
+            value: t(language, 'moderation.purge.scanned', { count: amount }),
             inline: true,
           },
-          { name: '📝 Reason', value: reason, inline: false },
+          {
+            name: `👤 ${t(language, 'moderation.fields.filter')}`,
+            value: user
+              ? `${user.username}\n\`${user.id}\``
+              : t(language, 'moderation.purge.allMembers'),
+            inline: true,
+          },
+          { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
         ],
-        footer: `Action by ${interaction.user.username}`,
+        footer: t(language, 'common.actionBy', { user: interaction.user.username }),
       });
 
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error('[moderation] /purge failed:', error);
       await interaction.editReply({
-        content: 'Could not delete those messages. Check my permissions and try again.',
+        content: t(language, 'moderation.purge.failed'),
       });
     }
   },

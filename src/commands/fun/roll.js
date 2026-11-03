@@ -1,6 +1,7 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { MAX_DICE, MAX_SIDES, MIN_SIDES, parseDice, rollDice } = require('../../lib/dice');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 function rollsText(dice, rolls) {
   const modifier = dice.modifier === 0
@@ -24,14 +25,19 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
     const input = interaction.options.getString('dice')?.trim() || '1d6';
     const dice = parseDice(input);
 
     if (!dice) {
       await interaction.reply({
         content: [
-          `Use dice notation such as \`1d6\`, \`2d20\` or \`4d6+2\`.`,
-          `-# ${MIN_SIDES}–${MAX_SIDES} sides, up to ${MAX_DICE} dice, modifier up to ±100`,
+          t(language, 'fun.roll.invalid'),
+          t(language, 'fun.roll.invalidHint', {
+            min: MIN_SIDES,
+            max: MAX_SIDES,
+            dice: MAX_DICE,
+          }),
         ].join('\n'),
         flags: MessageFlags.Ephemeral,
       });
@@ -41,16 +47,16 @@ module.exports = {
     const { rolls, total } = rollDice(dice);
 
     const embed = createEmbed(interaction.client, {
-      section: 'Dice',
-      title: 'Dice Roll',
-      description: `Result for **\`${dice.notation}\`**.`,
+      section: t(language, 'fun.roll.section'),
+      title: t(language, 'fun.roll.title'),
+      description: t(language, 'fun.roll.description', { notation: dice.notation }),
       color: COLORS.game,
       fields: [
-        { name: '🎲 Dice', value: `\`${dice.notation}\``, inline: true },
-        { name: '📊 Total', value: `**${total}**`, inline: true },
-        { name: '🎯 Rolls', value: rollsText(dice, rolls), inline: false },
+        { name: t(language, 'fun.roll.dice'), value: `\`${dice.notation}\``, inline: true },
+        { name: t(language, 'fun.roll.total'), value: `**${total}**`, inline: true },
+        { name: t(language, 'fun.roll.rolls'), value: rollsText(dice, rolls), inline: false },
       ],
-      footer: `Rolled by ${interaction.user.username}`,
+      footer: t(language, 'fun.roll.footer', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed] });

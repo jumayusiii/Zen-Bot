@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.7** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.8** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin grants and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -18,7 +18,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
 - **Images** with random cat, dog and animal memes, `/xkcd` for random comics, `/caption` for styled image text, `/redditcard` for live comment cards, and `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
 - **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, `/steal` heists, coin-flip, slot and blackjack wagers, an `/ecoleaderboard` rich list, admin coin grants, a ten-theme shop, an inventory and purchasable rank card wallpapers.
-- **Languages** with a per-server `/language` switch between **English** and **German** for the help tabs, wallet, rich list and language menu.
+- **Languages** with a per-server `/language` switch between **English** and **German** for help, fun, minigames, wallets, the economy, levels and rank cards, moderation and the audit log, and the language menu.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -176,7 +176,7 @@ Server owners and administrators can use `/grantcoins <member> <amount> [reason]
 
 ## Languages
 
-`/language` opens a two-button menu for members with **Manage Server**. Pick **English** or **Deutsch** and the choice is saved per server in `data/languages.json`; switching is immediate and the active button is highlighted and disabled. German currently covers the help tabs and category copy, `/balance`, `/ecoleaderboard` and the language menu itself. Command responses outside those surfaces still use English, and more command text can be added to the catalog in [i18n.js](src/lib/i18n.js).
+`/language` opens a two-button menu for members with **Manage Server**. Pick **English** or **Deutsch** and the choice is saved per server in `data/languages.json`; switching is immediate and the active button is highlighted and disabled. German currently covers the help tabs and category copy, every fun command including its facts, jokes, fortunes, topics, compliments and roasts, every minigame including trivia questions, typing phrases, hangman categories and scramble hints, wallets and the rich list, every economy command (daily, work, heists, coin and slot wagers, blackjack, shop, inventory), the level commands including the rank card image, and the moderation commands with their audit-log entries. Images, social and utility responses still use English, and more command text can be added to the catalog in [i18n.js](src/lib/i18n.js).
 
 ## Moderation
 
@@ -625,7 +625,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
-- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.7`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.8`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

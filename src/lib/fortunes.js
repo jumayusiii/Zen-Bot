@@ -19,6 +19,31 @@ const FORTUNES = Object.freeze([
   { text: 'You will soon laugh at a problem that feels heavy today.', category: 'Luck' },
 ]);
 
+const FORTUNES_DE = Object.freeze([
+  { text: 'Ein ruhiger Kopf schafft Platz für klare Antworten.', category: 'Weisheit' },
+  { text: 'Kleine, stetige Schritte beenden lange Wege.', category: 'Wachstum' },
+  { text: 'Die richtige Frage ist oft nützlicher als eine schnelle Antwort.', category: 'Weisheit' },
+  { text: 'Du findest Glück in dem, was du als Nächstes beendest.', category: 'Glück' },
+  { text: 'Ein freundliches Wort von heute kommt zurück, wenn du es brauchst.', category: 'Freundlichkeit' },
+  { text: 'Die Tür, die du ständig umgehst, ist vielleicht längst offen.', category: 'Abenteuer' },
+  { text: 'Gute Arbeit spricht leise und reist weit.', category: 'Fokus' },
+  { text: 'Was wie eine Pause wirkt, kann eine Richtungsänderung sein.', category: 'Wachstum' },
+  { text: 'Deine Geduld zahlt sich bald aus.', category: 'Glück' },
+  { text: 'Besser unvollkommen beginnen als perfekt warten.', category: 'Wachstum' },
+  { text: 'Eine frische Idee kommt, während du etwas Alltägliches tust.', category: 'Abenteuer' },
+  { text: 'Jemand in deiner Nähe glaubt mehr an dich, als du ahnst.', category: 'Freundlichkeit' },
+  { text: 'Der einfachste Plan übersteht die vollste Woche.', category: 'Fokus' },
+  { text: 'Du bist einem Durchbruch näher, als der letzte Versuch vermuten lässt.', category: 'Wachstum' },
+  { text: 'Lass in deinem Tag etwas Platz für Unerwartetes.', category: 'Abenteuer' },
+  { text: 'Der beste Zeitpunkt, eine kleine Sache aufzuräumen, ist jetzt.', category: 'Fokus' },
+  { text: 'Ein gutes Gespräch wird deinen Nachmittag verändern.', category: 'Freundlichkeit' },
+  { text: 'Bald lachst du über ein Problem, das dir heute schwer vorkommt.', category: 'Glück' },
+]);
+
+function isGerman(language) {
+  return String(language ?? '').toLowerCase().startsWith('de');
+}
+
 function rollIndex(random, length) {
   const value = Math.min(0.999999, Math.max(0, Number(random()) || 0));
   return Math.floor(value * length);
@@ -52,13 +77,14 @@ function drawLuckyNumbers(random = Math.random, count = 6) {
  * @param {number|null} [excludeIndex]
  * @returns {{text: string, category: string, index: number, luckyNumbers: number[]}}
  */
-function randomFortune(random = Math.random, excludeIndex = null) {
-  const available = FORTUNES
+function randomFortune(random = Math.random, excludeIndex = null, language = 'en') {
+  const fortunes = isGerman(language) ? FORTUNES_DE : FORTUNES;
+  const available = fortunes
     .map((fortune, index) => ({ fortune, index }))
     .filter((entry) => entry.index !== excludeIndex);
   const pool = available.length > 0
     ? available
-    : FORTUNES.map((fortune, index) => ({ fortune, index }));
+    : fortunes.map((fortune, index) => ({ fortune, index }));
   const picked = pool[rollIndex(random, pool.length)];
 
   return {
@@ -68,4 +94,4 @@ function randomFortune(random = Math.random, excludeIndex = null) {
   };
 }
 
-module.exports = { FORTUNES, drawLuckyNumbers, randomFortune };
+module.exports = { FORTUNES, FORTUNES_DE, drawLuckyNumbers, randomFortune };

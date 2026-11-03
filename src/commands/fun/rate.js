@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { rateThing, rateVerdict } = require('../../lib/fun');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const BAR_WIDTH = 16;
 
@@ -28,20 +29,21 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
     const thing = interaction.options.getString('thing', true).replace(/\s+/g, ' ').trim();
     const score = rateThing(thing);
-    const verdict = rateVerdict(score);
+    const verdict = rateVerdict(score, language);
 
     const embed = createEmbed(interaction.client, {
-      section: 'Fun',
-      title: `Rating: ${thing}`,
+      section: t(language, 'help.tabs.fun'),
+      title: t(language, 'fun.rate.title', { thing }),
       description: [
         `**${score}/100**`,
         `\`${ratingBar(score)}\``,
         `-# ${verdict.emoji} ${verdict.label}`,
       ].join('\n'),
       color: colorFor(score),
-      footer: 'Playful rating  ·  same input, same score',
+      footer: t(language, 'fun.rate.footer'),
     });
 
     await interaction.reply({ embeds: [embed], allowedMentions: { parse: [] } });

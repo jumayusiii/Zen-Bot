@@ -49,19 +49,35 @@ const WORDS = Object.freeze([
   { word: 'STRAWBERRY', category: 'Food' },
 ]);
 
+const CATEGORIES_DE = Object.freeze({
+  Technology: 'Technologie',
+  Science: 'Wissenschaft',
+  Geography: 'Geografie',
+  Gaming: 'Gaming',
+  Animals: 'Tiere',
+  Food: 'Essen',
+});
+
+function isGerman(language) {
+  return String(language ?? '').toLowerCase().startsWith('de');
+}
+
 function rollIndex(random, length) {
   const value = Math.min(0.999999, Math.max(0, random()));
   return Math.floor(value * length);
 }
 
-function randomWord(random = Math.random, exclude = null) {
+function randomWord(random = Math.random, exclude = null, language = 'en') {
   const pool = WORDS.filter((entry) => entry.word !== exclude);
   const choice = pool[rollIndex(random, pool.length)];
-  return { ...choice };
+  return {
+    ...choice,
+    category: isGerman(language) ? (CATEGORIES_DE[choice.category] ?? choice.category) : choice.category,
+  };
 }
 
-function createHangman(random = Math.random, exclude = null) {
-  const choice = randomWord(random, exclude);
+function createHangman(random = Math.random, exclude = null, language = 'en') {
+  const choice = randomWord(random, exclude, language);
   return {
     word: choice.word,
     category: choice.category,
@@ -129,6 +145,7 @@ function hangmanArt(wrongCount) {
 
 module.exports = {
   ALPHABET,
+  CATEGORIES_DE,
   HANGMAN_STAGES: MAX_WRONG,
   MAX_WRONG,
   WORDS,

@@ -8,6 +8,7 @@ const {
 } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { MAX_ROUNDS, createRound } = require('../../lib/wordScramble');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 const GAME_TTL_MS = 15 * 60 * 1000;
 const games = new Map();
@@ -18,54 +19,71 @@ function pruneExpired(now = Date.now()) {
   }
 }
 
-function freshRound(game, round, score) {
+function freshRound(game, round, score, language) {
   return {
     ...game,
     round,
     score,
     result: null,
-    ...createRound(Math.random, game.word),
+    ...createRound(Math.random, game.word, language),
     updatedAt: Date.now(),
   };
 }
 
-function buildPayload(client, game) {
+function buildPayload(client, game, language) {
   const answered = Boolean(game.result);
   const finished = answered && game.round >= MAX_ROUNDS;
-  let title = 'Word Scramble';
+  let title = t(language, 'minigames.wordscramble.title');
   let description;
 
   if (!answered) {
-    description = ['**Unscramble the word.**', `-# Hint: ${game.hint}`].join('\n');
+    description = [
+      t(language, 'minigames.wordscramble.unscramble'),
+      t(language, 'minigames.wordscramble.hint', { hint: game.hint }),
+    ].join('\n');
   } else if (game.result.correct) {
-    description = ['✅ **Correct!**', `The word was **${game.word}**.`].join('\n');
+    description = [
+      t(language, 'minigames.wordscramble.correct'),
+      t(language, 'minigames.wordscramble.wordWas', { word: game.word }),
+    ].join('\n');
   } else {
-    description = ['❌ **Not quite.**', `The word was **${game.word}**.`].join('\n');
+    description = [
+      t(language, 'minigames.wordscramble.wrong'),
+      t(language, 'minigames.wordscramble.wordWas', { word: game.word }),
+    ].join('\n');
   }
 
   if (finished) {
-    title = 'Word Scramble · complete';
+    title = t(language, 'minigames.wordscramble.completeTitle');
     description = [
       description,
-      `-# Final score: **${game.score} / ${MAX_ROUNDS}**`,
+      t(language, 'minigames.wordscramble.finalScore', {
+        score: game.score,
+        rounds: MAX_ROUNDS,
+      }),
     ].join('\n');
   }
 
   const embed = createEmbed(client, {
-    section: 'Minigames',
+    section: t(language, 'help.tabs.minigames'),
     title,
     description,
     color: answered
       ? (game.result.correct ? COLORS.success : COLORS.danger)
       : COLORS.game,
     fields: [
-      { name: '🔀 Scrambled', value: `\`${game.scrambled}\``, inline: true },
-      { name: '🎯 Round', value: `**${game.round}** / ${MAX_ROUNDS}`, inline: true },
-      { name: '⭐ Score', value: `**${game.score}** / ${game.round}`, inline: true },
+      { name: t(language, 'minigames.wordscramble.scrambled'), value: `\`${game.scrambled}\``, inline: true },
+      { name: t(language, 'minigames.wordscramble.round'), value: `**${game.round}** / ${MAX_ROUNDS}`, inline: true },
+      { name: t(language, 'minigames.wordscramble.score'), value: `**${game.score}** / ${game.round}`, inline: true },
     ],
-    footer: answered
-      ? (finished ? 'Round complete  ·  play again for a fresh set' : 'Pick the correct word to score')
-      : 'Only the player who started this round can answer',
+    footer: t(
+      language,
+      answered
+        ? (finished
+            ? 'minigames.wordscramble.footerComplete'
+            : 'minigames.wordscramble.footerPick')
+        : 'minigames.wordscramble.footerOwner',
+    ),
   });
 
   const answerButtons = game.choices.map((choice, index) => {
@@ -93,7 +111,13 @@ function buildPayload(client, game) {
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId(finished ? `wordscramble:again:${game.id}` : `wordscramble:next:${game.id}`)
-          .setLabel(finished ? 'Play again' : `Next word${remaining > 0 ? ` · ${remaining} left` : ''}`)
+          .setLabel(
+            finished
+              ? t(language, 'minigames.wordscramble.playAgain')
+              : remaining > 0
+                ? t(language, 'minigames.wordscramble.nextLeft', { count: remaining })
+                : t(language, 'minigames.wordscramble.next'),
+          )
           .setEmoji(finished ? '🔁' : '➡️')
           .setStyle(finished ? ButtonStyle.Primary : ButtonStyle.Success),
       ),
@@ -103,9 +127,9 @@ function buildPayload(client, game) {
   return { embeds: [embed], components };
 }
 
-async function replyExpired(interaction) {
+async function replyExpired(interaction, language) {
   await interaction.reply({
-    content: 'This word scramble round has expired. Run `/wordscramble` to start a new one.',
+    content: t(language, 'minigames.wordscramble.expired'),
     flags: MessageFlags.Ephemeral,
   });
 }
@@ -120,6 +144,7 @@ module.exports = {
 
   async execute(interaction) {
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = {
       id: crypto.randomUUID(),
@@ -127,12 +152,12 @@ module.exports = {
       round: 1,
       score: 0,
       result: null,
-      ...createRound(),
+      ...createRound(Math.random, null, language),
       updatedAt: Date.now(),
     };
 
     games.set(game.id, game);
-    await interaction.reply(buildPayload(interaction.client, game));
+    await interaction.reply(buildPayload(interaction.client, game, language));
   },
 
   async handleComponent(interaction) {
@@ -140,16 +165,17 @@ module.exports = {
     if (!gameId) return;
 
     pruneExpired();
+    const language = await getInteractionLanguage(interaction);
 
     const game = games.get(gameId);
     if (!game) {
-      await replyExpired(interaction);
+      await replyExpired(interaction, language);
       return;
     }
 
     if (game.ownerId !== interaction.user.id) {
       await interaction.reply({
-        content: 'This word scramble belongs to someone else. Run `/wordscramble` to start your own.',
+        content: t(language, 'minigames.wordscramble.owner'),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -158,7 +184,7 @@ module.exports = {
     if (action === 'answer') {
       if (game.result) {
         await interaction.reply({
-          content: 'You already answered this word. Use the next button for another one.',
+          content: t(language, 'minigames.wordscramble.already'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -167,7 +193,7 @@ module.exports = {
       const choice = Number.parseInt(rawIndex, 10);
       if (!Number.isInteger(choice) || choice < 0 || choice >= game.choices.length) {
         await interaction.reply({
-          content: 'That answer is not valid. Run `/wordscramble` for a new round.',
+          content: t(language, 'minigames.wordscramble.invalid'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -177,14 +203,14 @@ module.exports = {
       if (game.result.correct) game.score += 1;
       game.updatedAt = Date.now();
 
-      await interaction.update(buildPayload(interaction.client, game));
+      await interaction.update(buildPayload(interaction.client, game, language));
       return;
     }
 
     if (action === 'next' || action === 'again') {
       if (!game.result) {
         await interaction.reply({
-          content: 'Answer this word before moving on. The buttons are still active.',
+          content: t(language, 'minigames.wordscramble.answerFirst'),
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -194,11 +220,11 @@ module.exports = {
       Object.assign(
         game,
         reset
-          ? freshRound(game, 1, 0)
-          : freshRound(game, game.round + 1, game.score),
+          ? freshRound(game, 1, 0, language)
+          : freshRound(game, game.round + 1, game.score, language),
       );
 
-      await interaction.update(buildPayload(interaction.client, game));
+      await interaction.update(buildPayload(interaction.client, game, language));
     }
   },
 };

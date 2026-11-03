@@ -13,6 +13,19 @@ const QUESTIONS = Object.freeze([
   { a: 'Be able to fly', b: 'Be able to turn invisible' },
 ]);
 
+const QUESTIONS_DE = Object.freeze([
+  { a: 'Ein Jahr lang unbegrenzt Pizza', b: 'Ein Jahr lang unbegrenzt Tacos' },
+  { a: 'Immer 10 Minuten zu früh sein', b: 'Immer 10 Minuten zu spät sein' },
+  { a: 'Ohne Musik leben', b: 'Ohne Filme leben' },
+  { a: 'Einen persönlichen Koch haben', b: 'Einen persönlichen Fahrer haben' },
+  { a: 'Den Weltraum erkunden', b: 'Die tiefste Stelle des Ozeans erkunden' },
+  { a: 'Jede Sprache sprechen', b: 'Jedes Instrument spielen' },
+  { a: 'Einen Drachen als Haustier haben', b: 'Ein Einhorn als Haustier haben' },
+  { a: 'Nie wieder den Schlüssel verlieren', b: 'Nie wieder das Handy verlieren' },
+  { a: 'Nur noch Süßes essen', b: 'Nur noch Salziges essen' },
+  { a: 'Fliegen können', b: 'Unsichtbar werden können' },
+]);
+
 const SESSION_TTL_MS = 60 * 60 * 1000;
 const MAX_SESSIONS = 300;
 const sessions = new Map();
@@ -27,23 +40,27 @@ function cleanSessions(now = Date.now()) {
   }
 }
 
-function randomQuestion(random = Math.random, excludeIndex = null) {
-  const available = QUESTIONS.map((question, index) => ({ question, index }))
+function randomQuestion(random = Math.random, excludeIndex = null, language = 'en') {
+  const questions = String(language ?? '').toLowerCase().startsWith('de')
+    ? QUESTIONS_DE
+    : QUESTIONS;
+  const available = questions.map((question, index) => ({ question, index }))
     .filter((entry) => entry.index !== excludeIndex);
   const pool = available.length > 0
     ? available
-    : QUESTIONS.map((question, index) => ({ question, index }));
+    : questions.map((question, index) => ({ question, index }));
   const picked = pool[Math.min(pool.length - 1, Math.floor(random() * pool.length))];
 
   return { ...picked.question, index: picked.index };
 }
 
 /** Creates a short-lived in-memory vote. */
-function createSession(random = Math.random, now = Date.now()) {
+function createSession(random = Math.random, now = Date.now(), language = 'en') {
   cleanSessions(now);
-  const question = randomQuestion(random);
+  const question = randomQuestion(random, null, language);
   const session = {
     id: crypto.randomUUID(),
+    language: String(language ?? '').toLowerCase().startsWith('de') ? 'de' : 'en',
     ...question,
     votes: new Map(),
     createdAt: now,
@@ -100,6 +117,7 @@ function resetSessions() {
 
 module.exports = {
   QUESTIONS,
+  QUESTIONS_DE,
   SESSION_TTL_MS,
   castVote,
   createSession,

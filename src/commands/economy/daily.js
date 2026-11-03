@@ -1,9 +1,11 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { claimDaily } = require('../../lib/economy');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -16,11 +18,13 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.guild) {
       await interaction.reply({
-        content: 'Coins are tracked per server. Run `/daily` in a server channel.',
+        content: t('en', 'economy.daily.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
+
+    const language = await getInteractionLanguage(interaction);
 
     try {
       const result = await claimDaily({
@@ -30,15 +34,27 @@ module.exports = {
 
       if (!result.claimed) {
         const embed = createEmbed(interaction.client, {
-          section: 'Economy',
-          title: 'Daily reward',
-          description: `You already collected today. The next reward is available <t:${Math.floor(result.nextAt / 1000)}:R>.`,
+          section: t(language, 'help.tabs.economy'),
+          title: t(language, 'economy.daily.title'),
+          description: t(language, 'economy.daily.alreadyDescription', {
+            time: `<t:${Math.floor(result.nextAt / 1000)}:R>`,
+          }),
           color: COLORS.warning,
           fields: [
-            { name: '🔥 Streak', value: `**${result.streak}** day${result.streak === 1 ? '' : 's'}`, inline: true },
-            { name: '💰 Balance', value: `**${coins(result.balance)}** coins`, inline: true },
+            {
+              name: `🔥 ${t(language, 'economy.streak')}`,
+              value: t(language, result.streak === 1 ? 'economy.day' : 'economy.days', {
+                count: result.streak,
+              }),
+              inline: true,
+            },
+            {
+              name: `💰 ${t(language, 'economy.balance')}`,
+              value: `**${coins(result.balance, language)}** ${t(language, 'common.coins')}`,
+              inline: true,
+            },
           ],
-          footer: `Requested by ${interaction.user.username}`,
+          footer: t(language, 'common.requestedBy', { user: interaction.user.username }),
         });
 
         await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
@@ -46,23 +62,39 @@ module.exports = {
       }
 
       const embed = createEmbed(interaction.client, {
-        section: 'Economy',
-        title: 'Daily reward claimed',
-        description: `You collected **${coins(result.amount)} coins**. Come back tomorrow to keep the streak alive.`,
+        section: t(language, 'help.tabs.economy'),
+        title: t(language, 'economy.daily.claimedTitle'),
+        description: t(language, 'economy.daily.description', {
+          amount: coins(result.amount, language),
+        }),
         color: COLORS.success,
         fields: [
-          { name: '💰 Balance', value: `**${coins(result.balance)}** coins`, inline: true },
-          { name: '🔥 Streak', value: `**${result.streak}** day${result.streak === 1 ? '' : 's'}`, inline: true },
-          { name: '⏰ Next reward', value: `<t:${Math.floor(result.nextAt / 1000)}:R>`, inline: true },
+          {
+            name: `💰 ${t(language, 'economy.balance')}`,
+            value: `**${coins(result.balance, language)}** ${t(language, 'common.coins')}`,
+            inline: true,
+          },
+          {
+            name: `🔥 ${t(language, 'economy.streak')}`,
+            value: t(language, result.streak === 1 ? 'economy.day' : 'economy.days', {
+              count: result.streak,
+            }),
+            inline: true,
+          },
+          {
+            name: `⏰ ${t(language, 'economy.nextReward')}`,
+            value: `<t:${Math.floor(result.nextAt / 1000)}:R>`,
+            inline: true,
+          },
         ],
-        footer: 'Daily coins  ·  /shop to spend them',
+        footer: t(language, 'economy.daily.footer'),
       });
 
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
       console.error('[economy] /daily failed:', error);
       await interaction.reply({
-        content: 'Could not claim the daily reward right now. Please try again.',
+        content: t(language, 'economy.daily.error'),
         flags: MessageFlags.Ephemeral,
       });
     }

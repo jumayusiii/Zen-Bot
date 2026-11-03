@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   beta: true,
@@ -18,6 +19,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const language = await getInteractionLanguage(interaction);
     const choice = interaction.options.getString('side');
     const result = Math.random() < 0.5 ? 'heads' : 'tails';
     const won = choice ? choice === result : null;
@@ -25,18 +27,28 @@ module.exports = {
     const fields = [];
     if (choice) {
       fields.push(
-        { name: '🎯 Your Call', value: choice === 'heads' ? 'Heads' : 'Tails', inline: true },
-        { name: '🏆 Outcome', value: won ? 'You won!' : 'You lost.', inline: true },
+        {
+          name: t(language, 'minigames.coinflip.call'),
+          value: t(language, choice === 'heads' ? 'minigames.coinflip.heads' : 'minigames.coinflip.tails'),
+          inline: true,
+        },
+        {
+          name: t(language, 'minigames.coinflip.outcome'),
+          value: t(language, won ? 'minigames.coinflip.won' : 'minigames.coinflip.lost'),
+          inline: true,
+        },
       );
     }
 
     const embed = createEmbed(interaction.client, {
-      section: 'Minigames',
-      title: 'Coin Flip',
-      description: `The coin landed on **${result === 'heads' ? 'Heads' : 'Tails'}**.`,
+      section: t(language, 'help.tabs.minigames'),
+      title: t(language, 'minigames.coinflip.title'),
+      description: t(language, 'minigames.coinflip.landed', {
+        side: t(language, result === 'heads' ? 'minigames.coinflip.heads' : 'minigames.coinflip.tails'),
+      }),
       color: choice ? (won ? COLORS.success : COLORS.danger) : COLORS.game,
       fields,
-      footer: `Flipped by ${interaction.user.username}`,
+      footer: t(language, 'minigames.coinflip.footer', { user: interaction.user.username }),
     });
 
     await interaction.reply({ embeds: [embed] });

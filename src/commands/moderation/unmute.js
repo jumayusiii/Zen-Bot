@@ -7,6 +7,7 @@ const {
   targetModerationError,
 } = require('../../lib/moderation');
 const { sendModerationLog } = require('../../lib/moderationLogs');
+const { getInteractionLanguage, t } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -31,15 +32,18 @@ module.exports = {
 
     if (!guild) {
       await interaction.reply({
-        content: 'This command only works in a server.',
+        content: t('en', 'moderation.guildOnly'),
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
+    const language = await getInteractionLanguage(interaction);
+    const permission = t(language, 'moderation.permissions.moderateMembers');
+
     if (!interaction.memberPermissions?.has(PermissionFlagsBits.ModerateMembers)) {
       await interaction.reply({
-        content: 'You need the **Moderate Members** permission to use `/unmute`.',
+        content: t(language, 'moderation.permission', { permission, command: 'unmute' }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -47,7 +51,7 @@ module.exports = {
 
     if (!guild.members.me?.permissions.has(PermissionFlagsBits.ModerateMembers)) {
       await interaction.reply({
-        content: 'I need the **Moderate Members** permission to unmute members.',
+        content: t(language, 'moderation.botPermission', { permission }),
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -59,6 +63,7 @@ module.exports = {
       guild,
       member,
       moderator: interaction.member,
+      language,
     });
 
     if (targetError) {
@@ -69,19 +74,19 @@ module.exports = {
     if (!member.isCommunicationDisabled?.()) {
       await sendModerationError(
         interaction,
-        `**${member.displayName}** is not currently muted.`,
+        t(language, 'moderation.notMuted', { target: member.displayName }),
       );
       return;
     }
 
-    const reason = interaction.options.getString('reason')?.trim() || 'No reason provided';
+    const reason = interaction.options.getString('reason')?.trim() || t(language, 'moderation.noReason');
     await interaction.deferReply();
 
     try {
       await member.timeout(null, auditReason(interaction.member, reason));
     } catch (error) {
       console.error(`[moderation] /unmute failed for ${user.id}:`, error);
-      await sendModerationError(interaction, moderationErrorMessage(error));
+      await sendModerationError(interaction, moderationErrorMessage(error, language));
       return;
     }
 
@@ -94,16 +99,20 @@ module.exports = {
     });
 
     const embed = createEmbed(interaction.client, {
-      section: 'Moderation',
-      title: 'Member unmuted',
-      description: `**${member.displayName}** can send messages and join voice channels again.`,
+      section: t(language, 'moderation.section'),
+      title: t(language, 'moderation.unmute.title'),
+      description: t(language, 'moderation.unmute.description', { member: member.displayName }),
       color: COLORS.success,
       fields: [
-        { name: '🔊 Timeout', value: 'Removed', inline: true },
-        { name: '🆔 Member', value: `\`${user.id}\``, inline: true },
-        { name: '📝 Reason', value: reason, inline: false },
+        {
+          name: `🔊 ${t(language, 'moderation.fields.timeout')}`,
+          value: t(language, 'moderation.unmute.timeoutRemoved'),
+          inline: true,
+        },
+        { name: `🆔 ${t(language, 'moderation.fields.member')}`, value: `\`${user.id}\``, inline: true },
+        { name: `📝 ${t(language, 'moderation.fields.reason')}`, value: reason, inline: false },
       ],
-      footer: `Action by ${interaction.user.username}`,
+      footer: t(language, 'common.actionBy', { user: interaction.user.username }),
     });
 
     await interaction.editReply({ embeds: [embed] });
