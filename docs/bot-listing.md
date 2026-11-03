@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **2 November 2026** · Zen **1.19.0-beta.3** · **89 slash commands**
+Last verified: **3 November 2026** · Zen **1.19.0-beta.4** · **92 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -23,7 +23,7 @@ vote webhooks, and the mistakes that get bots declined.
 | Bot is public | ✅ `bot_public: true` | None |
 | OAuth2 code grant | ❌ enabled | Turn it off in the Developer Portal |
 | Bot is online during review | ✅ PM2 process `zen-bot` | Keep the host running |
-| Slash commands are registered | ✅ 89 | `npm run deploy` after command changes |
+| Slash commands are registered | ✅ 92 | `npm run deploy` after command changes |
 | Invite requests Administrator | ✅ no | Keep permissions at `1099780180998` |
 | Help entry point | ✅ `/helplist` | Mention it in reviewer notes |
 | NSFW content on listing | ✅ none | Keep the listing SFW |
@@ -109,11 +109,11 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.3` |
+| Version | `1.19.0-beta.4` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
-| Commands | 89 |
+| Commands | 92 |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
 | Source | <https://github.com/jumayusiii/Zen-Bot> |
 | Support | <https://github.com/jumayusiii/Zen-Bot/issues> |
@@ -125,13 +125,13 @@ server, not the bot.
 **Under 140 characters** — use this on top.gg and as the default short field:
 
 ```text
-Memes, minigames, levels, economy, moderation and live social feeds — 89 clean slash commands for your server.
+Memes, minigames, levels, economy, moderation and live social feeds — 92 clean slash commands for your server.
 ```
 
 Alternative, 115 characters:
 
 ```text
-A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 89 slash commands.
+A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 92 slash commands.
 ```
 
 Do not pad this field with keywords. top.gg lists keyword stuffing as a
@@ -147,7 +147,7 @@ Markdown:
 social and tidy without reading message content.
 
 ### Fun and games
-- Memes, animal memes, editable memes, cat and dog photos.
+- Memes, animal memes, xkcd comics, editable memes, cat and dog photos.
 - Trivia, tic-tac-toe, blackjack, hangman, Higher or Lower, word scramble, memory,
   slots, reaction tests, number guessing and typing races.
 - Live would-you-rather votes, polls, reminders, timestamps and quick decisions.
@@ -157,8 +157,9 @@ social and tidy without reading message content.
   leaderboard.
 - Ten card themes: Aurora, Sunset, Ocean, Forest, Midnight, Candy, Sakura,
   Cyber, Ember and Frost.
-- A beta per-server economy with `/daily` streaks, level-up payouts, a theme shop,
-  an inventory and admin-only `/grantcoins`.
+- A beta per-server economy with `/daily` streaks, `/work` shifts, level-up payouts,
+  `/steal` heists, coin wagers and blackjack bets, a theme shop, an inventory and
+  admin-only `/grantcoins`.
 
 ### Moderation and community
 - Timed mutes, temporary and permanent bans, kicks, soft bans, warnings, purge,
@@ -169,12 +170,13 @@ social and tidy without reading message content.
 
 ### Images, social and knowledge
 - Live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups.
-- `/weather` forecasts from Open-Meteo and `/wikipedia` summaries.
+- `/weather` forecasts from Open-Meteo, `/wikipedia` summaries, `/xkcd` comics and
+  a `/calculate` maths parser.
 - `/sitestatus` and `/uptime` for website monitoring, TLS, DNS, headers and
   incident history.
 
 ### Built for clean servers
-- 89 slash commands, no prefix and no message-content access.
+- 92 slash commands, no prefix and no message-content access.
 - Persistent polls, reminders, levels, warnings, greetings, channel locks and
   uptime history.
 - Optional beta `/chatgpt`; works only when the owner configures an OpenAI key,
@@ -205,7 +207,7 @@ Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Im
 Paste this into the private reviewer-notes field:
 
 ```text
-Zen is slash-command only. Start with /helplist for the full 89-command directory.
+Zen is slash-command only. Start with /helplist for the full 92-command directory.
 No Administrator permission is requested.
 
 Good quick tests:
@@ -490,7 +492,7 @@ resubmit second.
 
 - [ ] Turn **Requires OAuth2 Code Grant** off.
 - [ ] Confirm the bot is public and invitable.
-- [ ] Deploy all 89 slash commands: `npm run deploy`.
+- [ ] Deploy all 92 slash commands: `npm run deploy`.
 - [ ] Confirm `/helplist` works from a clean account.
 - [ ] Publish a public privacy-policy URL.
 - [ ] Check the support URL and invite URL.

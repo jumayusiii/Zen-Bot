@@ -6,6 +6,8 @@ const test = require('node:test');
 
 const dailyCommand = require('../src/commands/economy/daily');
 const buyCommand = require('../src/commands/economy/buy');
+const stealCommand = require('../src/commands/economy/steal');
+const blackjackCommand = require('../src/commands/economy/blackjack');
 const rankCardCommand = require('../src/commands/levels/rankcard');
 
 async function withEconomyFile(run) {
@@ -34,6 +36,7 @@ function fakeInteraction(options = {}) {
     },
     options: {
       getString: (name) => options[name] ?? null,
+      getInteger: (name) => options[name] ?? null,
       getUser: () => null,
     },
     async reply(payload) {
@@ -54,6 +57,52 @@ test('/daily claims a reward and updates the wallet', async () => {
     await dailyCommand.execute(second);
     assert.equal(second.captured.reply.embeds[0].data.title, 'Daily reward');
     assert.match(second.captured.reply.embeds[0].data.description, /already collected/);
+  });
+});
+
+test('/steal pays out once and then enforces its cooldown', async () => {
+  await withEconomyFile(async () => {
+    const originalRandom = Math.random;
+    Math.random = () => 0.1;
+
+    try {
+      const first = fakeInteraction();
+      await stealCommand.execute(first);
+
+      assert.equal(first.captured.reply.embeds[0].data.title, 'Heist successful');
+      assert.match(first.captured.reply.embeds[0].data.description, /30 coins/);
+
+      const second = fakeInteraction();
+      await stealCommand.execute(second);
+
+      assert.equal(second.captured.reply.embeds[0].data.title, 'Lay low for a while');
+      assert.equal(second.captured.reply.flags, 64);
+    } finally {
+      Math.random = originalRandom;
+    }
+  });
+});
+
+test('/blackjack starts a free hand and refuses a bet the wallet cannot cover', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [{ guildId: 'guild-1', userId: 'user-1', balance: 500, owned: ['aurora'] }],
+      }),
+      'utf8',
+    );
+
+    const free = fakeInteraction();
+    await blackjackCommand.execute(free);
+    assert.equal(free.captured.reply.embeds[0].data.title, 'Blackjack');
+    assert.equal(free.captured.reply.components.length, 1);
+
+    const tooMuch = fakeInteraction({ bet: 5000 });
+    await blackjackCommand.execute(tooMuch);
+    assert.equal(tooMuch.captured.reply.flags, 64);
+    assert.match(tooMuch.captured.reply.content, /only have \*\*500 coins\*\*/);
   });
 });
 

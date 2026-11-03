@@ -2,6 +2,27 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.4',
+    date: '2026-11-03',
+    title: 'Heists, coin blackjack & a new look',
+    summary: 'Zen adds a vault heist, coin bets on blackjack, a calculator, random xkcd comics and a black-and-white identity.',
+    added: [
+      '`/steal` attempts a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown.',
+      '`/blackjack` now accepts an optional bet of up to **5,000 coins**; a win returns **2×**, a push returns the stake and a loss returns nothing.',
+      '`/calculate` evaluates arithmetic with `+ - * / % ^`, parentheses and negative values, without `eval`.',
+      '`/xkcd` posts a random xkcd comic with its alt text, publication date and a link to the original page.',
+      'A new black-and-white avatar and banner: a bold geometric Z on a flat black field, with `npm run branding` to rebuild the PNGs from the SVG masters.',
+    ],
+    improved: [
+      '`/blackjack` now lives in the Economy tab and still plays for fun when no bet is given.',
+      'Blackjack takes the stake once when the hand is dealt and pays it once, so two quick button presses cannot pay twice.',
+      'The command directory now covers **92 commands** across nine tabs.',
+    ],
+    fixed: [
+      '`/xkcd` skips comic 404 and retries a different number when a comic is missing.',
+    ],
+  },
+  {
     version: '1.19.0-beta.3',
     date: '2026-11-02',
     title: 'Captioned images & coin games',

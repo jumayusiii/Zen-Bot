@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 89);
+  assert.equal(registry.size, 92);
 
   for (const name of [
     'uptime',
@@ -94,6 +94,9 @@ test('all commands load with valid names, descriptions and unique registrations'
     'work',
     'coinbet',
     'slotsbet',
+    'steal',
+    'calculate',
+    'xkcd',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -147,6 +150,10 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('work').beta, true);
   assert.equal(registry.get('coinbet').beta, true);
   assert.equal(registry.get('slotsbet').beta, true);
+  assert.equal(registry.get('steal').beta, true);
+  assert.equal(registry.get('calculate').beta, undefined);
+  assert.equal(registry.get('xkcd').beta, undefined);
+  assert.equal(registry.get('blackjack').category, 'economy');
   assert.equal(registry.get('caption').beta, undefined);
   assert.equal(registry.get('animalmeme').beta, undefined);
   assert.equal(registry.get('ship').beta, undefined);
@@ -173,7 +180,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('ship').data.toJSON().options.length, 2);
   assert.equal(registry.get('fact').data.toJSON().options.length, 0);
   assert.equal(registry.get('hangman').data.toJSON().options.length, 0);
-  assert.equal(registry.get('blackjack').data.toJSON().options.length, 0);
+  assert.equal(registry.get('blackjack').data.toJSON().options.length, 1);
   assert.equal(registry.get('rank').data.toJSON().options.length, 1);
   assert.equal(registry.get('levels').data.toJSON().options.length, 0);
   assert.equal(registry.get('mute').data.toJSON().options.length, 3);
@@ -234,4 +241,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('work').data.toJSON().options.length, 0);
   assert.equal(registry.get('coinbet').data.toJSON().options.length, 2);
   assert.equal(registry.get('slotsbet').data.toJSON().options.length, 1);
+  assert.equal(registry.get('steal').data.toJSON().options.length, 0);
+  assert.equal(registry.get('calculate').data.toJSON().options.length, 1);
+  assert.equal(registry.get('xkcd').data.toJSON().options.length, 0);
 });

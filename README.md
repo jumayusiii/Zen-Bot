@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.3** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.4** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin grants and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -16,8 +16,8 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
 - **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
-- **Images** with random cat, dog and animal memes, `/caption` for styled image text, `/redditcard` for live comment cards, and `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
-- **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, coin-flip and slot wagers, admin coin grants, a ten-theme shop, an inventory and purchasable rank card wallpapers.
+- **Images** with random cat, dog and animal memes, `/xkcd` for random comics, `/caption` for styled image text, `/redditcard` for live comment cards, and `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
+- **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, `/steal` heists, coin-flip, slot and blackjack wagers, admin coin grants, a ten-theme shop, an inventory and purchasable rank card wallpapers.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
 - **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
@@ -45,6 +45,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/animalmeme [community]` | Fetches a random meme from public animal communities, with an optional community picker and upvote details. |
 | `/caption <image> [top] [bottom]` | Adds styled top and bottom text to an uploaded image, with four styles, five colours, three sizes and optional uppercase. |
 | `/redditcard <url> [comments] [theme]` | 🧪 Renders a public Reddit thread and up to four comments as a dark, light or sepia image card. |
+| `/xkcd` | Posts a random comic from xkcd.com with its alt text, publication date and a link to the original page. |
 | `/tiktok <url>` | 🧪 Downloads a TikTok video and posts it so it plays inline, with creator, duration and engagement details. Oversized, private and photo posts fall back to a cover image and an **Open on TikTok** button. |
 | `/bluesky <handle>` | 🧪 Loads a live Bluesky profile, bio, follower counts and latest public post, with profile and post links. |
 | `/reddit [subreddit]` | 🧪 Reads Reddit’s public Atom feed and posts a random hot item from a curated SFW community. Defaults to `popular`. |
@@ -69,7 +70,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/tictactoe` | 🧪 Starts a button tic-tac-toe board against the bot. |
 | `/higherlower` | 🧪 Guess whether the next number is higher or lower, up to 10 rounds. |
 | `/hangman` | 🧪 Guess a hidden word one letter at a time, with six wrong guesses. |
-| `/blackjack` | 🧪 Plays a hand against the dealer with Hit, Stand and Play again controls. |
+| `/blackjack [bet]` | 🧪 Plays a hand against the dealer with Hit, Stand and Play again. Add a bet of up to **5,000 coins** to win **2×**, or get the stake back on a push. |
 | `/guessnumber [guess]` | Guesses the bot's number between 1 and 100 in up to seven attempts. |
 | `/reaction` | Tests your reaction time with a button that unlocks after a random delay. |
 | `/slots` | 🧪 Spins a three-reel slot machine with weighted symbols and a compact result. |
@@ -90,6 +91,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/work` | 🧪 Works a short shift for **40–110 coins** every 45 minutes. |
 | `/coinbet <amount> <side>` | 🧪 Wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win. |
 | `/slotsbet <amount>` | 🧪 Wagers coins on the slot machine: pairs pay **1.5×** and triples pay **3×–30×**. |
+| `/steal` | 🧪 Tries a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown. |
 | `/mute <member> <duration> [reason]` | Times out a member for **5 minutes to 28 days**, with an audit-log reason. |
 | `/unmute <member> [reason]` | Removes a member's timeout. |
 | `/kick <member> [reason]` | Removes a member from the server with an audit-log reason. |
@@ -112,6 +114,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/uptime` | Seven-day report with one uptime bar per day, availability, average/p95/max latency, monitoring coverage and a detailed incident timeline. |
 | `/weather <location> [units]` | 🧪 Current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units. |
 | `/wikipedia <query>` | 🧪 Searches Wikipedia and posts a summary with a link to the full article. |
+| `/calculate <expression>` | Calculates a maths expression with + - * / % ^ and parentheses. |
 | `/chatgpt <prompt> [private]` | 🧪 Asks OpenAI’s ChatGPT a question with an optional private answer. Moderated, limited to 8 requests per member per 10 minutes, and no conversation history is stored. |
 | `/timestamp [time]` | Builds a Discord timestamp in six styles from now, a duration, a date or a Unix timestamp. |
 | `/poll <question> <options>` | 🧪 Creates a live button poll with 2–5 options. Votes update in place, can be changed or removed, and only the creator can close the poll. |
@@ -128,7 +131,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/changelog` | Shows the current version, update date and release notes. |
 | `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
 
-🧪 marks beta commands. The directory covers **89 commands** across nine tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
+🧪 marks beta commands. The directory covers **92 commands** across nine tabs, and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -136,7 +139,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 
 ## Minigames
 
-`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/blackjack`, `/guessnumber`, `/reaction`, `/wordscramble`, `/memory` and `/typerace` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss, and blackjack lets you hit or stand against a dealer that stands on 17. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Memory hides a symbol sequence after you start and adds one symbol per completed round, while Type Race opens a modal and scores exact phrases in words per minute. Every correct run updates that member's personal best, and `/typeraceleaderboard` shows the ten fastest times in the server. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
+`/trivia`, `/tictactoe`, `/higherlower`, `/hangman`, `/guessnumber`, `/reaction`, `/wordscramble`, `/memory` and `/typerace` are limited to the person who started the round. `/slots` and `/wouldyourather` are open to everyone; the vote buttons stay live for one hour and update the result in place. `/joke` is owner-controlled so the punchline is only revealed by the person who started it. After each trivia answer, the refresh button loads a new question and updates the score in place, up to **five refreshes** per round. Higher or Lower asks for a higher/lower call up to ten times, hangman reveals a six-piece drawing as letters miss. Word Scramble shows a hint and four shuffled choices for each of five rounds, updating the score and showing **Play again** at the end. Memory hides a symbol sequence after you start and adds one symbol per completed round, while Type Race opens a modal and scores exact phrases in words per minute. Every correct run updates that member's personal best, and `/typeraceleaderboard` shows the ten fastest times in the server. Finished games keep a **Play again** control where supported. Guess the Number gives higher/lower feedback across seven attempts, while Reaction unlocks a button after a random 2–5 second delay and reports your click time. Rounds expire after 15 minutes (reaction tests after 10), and tic-tac-toe boards after 20. Game state is held in memory, so an in-progress round ends if the bot restarts; starting the command again creates a fresh round.
 
 ## Images
 
@@ -162,7 +165,7 @@ The level curve starts at **50 XP** for level 1 and grows with each level (`5 ×
 
 ## Economy
 
-Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. Level-ups are the second income source: reaching level 1 pays **25 coins**, every later level adds **5 coins** more, and a single level pays at most **250 coins**. `/work` adds a **40–110 coin** shift every 45 minutes. `/coinbet` wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win; `/slotsbet` pays **1.5×** for a pair and **3×–30×** for a triple. Wagers are settled in one queued write, so a stake is never charged without the result. `/balance` shows a wallet, streak and equipped card.
+Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. Level-ups are the second income source: reaching level 1 pays **25 coins**, every later level adds **5 coins** more, and a single level pays at most **250 coins**. `/work` adds a **40–110 coin** shift every 45 minutes. `/steal` attempts a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown that starts even when the heist fails. `/blackjack` accepts an optional bet of up to **5,000 coins**: the stake is taken when the hand is dealt, a win returns **2×**, a push returns the stake and a loss returns nothing. `/coinbet` wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win; `/slotsbet` pays **1.5×** for a pair and **3×–30×** for a triple. Coin wagers are settled in one queued write, so a stake is never charged without the result; blackjack holds the stake from the deal and credits its payout once at the end. `/balance` shows a wallet, streak and equipped card.
 
 `/shop` lists ten card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight, Candy, Sakura, Cyber, Ember and Frost** at 600–4,400 coins. `/buy theme:<name>` deducts the price atomically and equips the theme; `/inventory` lists everything owned and `/rankcard theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
 
@@ -376,7 +379,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, all rank-card themes, channel-lock restoration, soft-ban ordering, admin coin grants, changelog release notes, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, caption rendering, Reddit card parsing, coin wagers, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, all rank-card themes, channel-lock restoration, soft-ban ordering, admin coin grants, changelog release notes, help tabs, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, caption rendering, Reddit card parsing, coin wagers, blackjack bets, vault heists, calculator parsing, xkcd selection, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -414,6 +417,7 @@ src/
 ├── lib/
 │   ├── blackjack.js             # Cards, hand values and dealer rules
 │   ├── botLists.js              # Optional top.gg / Discord Bot List stats
+│   ├── calculator.js           # Safe arithmetic parser for /calculate
 │   ├── caption.js              # Local caption renderer and style choices
 │   ├── cardThemes.js           # Rank card theme catalog, prices and palettes
 │   ├── channelLocks.js         # Saved channel locks and previous permission state
@@ -463,6 +467,7 @@ src/
 │   ├── warnings.js              # Per-server warning persistence
 │   ├── weather.js               # Open-Meteo geocoding, WMO labels and forecast mapping
 │   ├── wikipedia.js             # Wikipedia search, summaries and fallbacks
+│   ├── xkcd.js                  # Random xkcd comic lookup
 │   ├── timestamps.js            # Discord timestamp parsing and styles
 │   ├── topics.js                # Conversation starters and themes
 │   ├── trivia.js                # Offline trivia question bank
@@ -471,12 +476,14 @@ src/
 └── commands/
     ├── economy/
     │   ├── balance.js
+    │   ├── blackjack.js
     │   ├── buy.js
     │   ├── coinbet.js
     │   ├── daily.js
     │   ├── inventory.js
     │   ├── shop.js
     │   ├── slotsbet.js
+    │   ├── steal.js
     │   └── work.js
     ├── fun/
     │   ├── 8ball.js
@@ -497,7 +504,8 @@ src/
     │   ├── cat.js
     │   ├── dog.js
     │   ├── memegen.js
-    │   └── redditcard.js
+    │   ├── redditcard.js
+    │   └── xkcd.js
     ├── levels/
     │   ├── levelreward.js
     │   ├── levels.js
@@ -520,7 +528,6 @@ src/
     │   ├── warn.js
     │   └── warnings.js
     ├── minigames/
-    │   ├── blackjack.js
     │   ├── coinflip.js
     │   ├── guessnumber.js
     │   ├── hangman.js
@@ -546,6 +553,7 @@ src/
     └── utility/
         ├── avatar.js
         ├── botinfo.js
+        ├── calculate.js
         ├── changelog.js
         ├── chatgpt.js
         ├── helplist.js
@@ -574,6 +582,7 @@ Helper scripts:
 - `scripts/health-check.js` waits for PM2 to report the bot online with a fresh Discord login, then verifies that `DISCORD_TOKEN` belongs to that bot. Run `npm run health` after logon or a restart; it exits `1` when the bot is unhealthy.
 - `scripts/health-check-task.cmd` is the logon wrapper used by the `Zen Bot Health (Freebuff)` scheduled task; it runs the check one minute after sign-in and appends failures to `logs/health-failures.log`.
 - `scripts/release-notes.js` renders a changelog entry for a GitHub release.
+- `scripts/render-branding.js` rasterises the branding SVGs into the tracked PNG sizes with `npm run branding`.
 - `scripts/autostart-pm2.vbs` restores the saved PM2 process list at Windows logon.
 
 ## Data and privacy
@@ -586,7 +595,7 @@ The bot stores only what it needs to provide its features:
 - Reminders in `data/reminders.json` (user, source channel, reminder text, due time and delivery preference).
 - Level records in `data/levels.json` (server and user IDs, display name, XP and last award time).
 - Level reward roles in `data/level-rewards.json` (server ID, role ID and required level).
-- Economy wallets in `data/economy.json` (server and user IDs, coin balance, daily and work timestamps, owned theme IDs and equipped theme).
+- Economy wallets in `data/economy.json` (server and user IDs, coin balance, daily, work and steal timestamps, owned theme IDs and equipped theme).
 - Channel locks in `data/channel-locks.json` (server and channel IDs, the previous **@everyone** SendMessages state, moderator, reason and lock time).
 - Scheduled temporary bans in `data/moderation.json` (server and user IDs, username, moderator ID, reason and unban time).
 - Audit-log channel IDs in `data/moderation-logs.json` (server and channel IDs, the admin who configured it and the update time).
@@ -604,7 +613,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
-- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.3`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.4`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

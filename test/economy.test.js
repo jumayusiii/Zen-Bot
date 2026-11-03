@@ -207,6 +207,86 @@ test('buying a theme deducts coins, equips it and prevents a second purchase', a
   });
 });
 
+test('steal attempts can succeed or fail and always start a 25-minute cooldown', async () => {
+  await withEconomyFile(async () => {
+    const now = Date.UTC(2026, 10, 3, 12, 0, 0);
+    const values = [0.1, 0.5];
+
+    const first = await economy.attemptSteal({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      now,
+      random: () => values.shift() ?? 0,
+    });
+    assert.equal(first.stole, true);
+    assert.equal(first.amount, 50);
+    assert.equal(first.balance, 50);
+    assert.equal(first.nextAt, now + economy.STEAL_COOLDOWN_MS);
+
+    const blocked = await economy.attemptSteal({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      now: now + 5 * 60 * 1000,
+      random: () => 0,
+    });
+    assert.equal(blocked.stole, false);
+    assert.equal(blocked.reason, 'cooldown');
+    assert.equal(blocked.balance, 50);
+    assert.equal(blocked.nextAt, first.nextAt);
+
+    const failed = await economy.attemptSteal({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      now: first.nextAt,
+      random: () => 0.9,
+    });
+    assert.equal(failed.stole, false);
+    assert.equal(failed.reason, undefined);
+    assert.equal(failed.amount, 0);
+    assert.equal(failed.balance, 50);
+    assert.equal(failed.nextAt, first.nextAt + economy.STEAL_COOLDOWN_MS);
+
+    const account = await economy.getAccount('guild-1', 'user-1');
+    assert.equal(account.balance, 50);
+    assert.equal(account.lastStealAt, first.nextAt);
+  });
+});
+
+
+test('creditCoins adds payouts and ignores a zero payout', async () => {
+  await withEconomyFile(async () => {
+    const credited = await economy.creditCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      amount: 250,
+    });
+    assert.equal(credited.amount, 250);
+    assert.equal(credited.balance, 250);
+
+    const zero = await economy.creditCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      amount: 0,
+    });
+    assert.equal(zero.amount, 0);
+    assert.equal(zero.balance, 250);
+
+    await assert.rejects(
+      economy.creditCoins({ guildId: 'guild-1', userId: 'user-1', amount: -1 }),
+      (error) => error.code === 'invalid_amount',
+    );
+  });
+});
+
+test('blackjack payouts return twice the stake on a win and the stake on a push', () => {
+  const { blackjackPayout } = require('../src/lib/economyGames');
+
+  assert.equal(blackjackPayout('win', 100), 200);
+  assert.equal(blackjackPayout('push', 100), 100);
+  assert.equal(blackjackPayout('lose', 100), 0);
+  assert.equal(blackjackPayout('win', 0), 0);
+});
+
 test('equipping a theme requires ownership and stays per server', async () => {
   await withEconomyFile(async (file) => {
     await fs.writeFile(

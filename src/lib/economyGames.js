@@ -1,6 +1,8 @@
 const { evaluateSpin, spinSlots } = require('./slots');
 
 const COINFLIP_MULTIPLIER = 1.9;
+const BLACKJACK_WIN_MULTIPLIER = 2;
+const BLACKJACK_PUSH_MULTIPLIER = 1;
 const SLOTS_PAIR_MULTIPLIER = 1.5;
 const SLOTS_TRIPLE_MULTIPLIERS = Object.freeze({
   Cherry: 4,
@@ -58,10 +60,30 @@ function resolveSlotsBet({ wager, random = Math.random, spin = spinSlots }) {
   };
 }
 
+/**
+ * Maps a finished blackjack hand to its gross payout. The stake is taken when
+ * the hand is dealt, so a win returns twice the stake (stake plus winnings),
+ * a push returns the stake and a loss returns nothing.
+ *
+ * @param {'win'|'lose'|'push'} result
+ * @param {number} bet
+ * @returns {number}
+ */
+function blackjackPayout(result, bet) {
+  const stake = Math.max(0, Math.floor(Number(bet) || 0));
+  if (stake === 0) return 0;
+  if (result === 'win') return stake * BLACKJACK_WIN_MULTIPLIER;
+  if (result === 'push') return stake * BLACKJACK_PUSH_MULTIPLIER;
+  return 0;
+}
+
 module.exports = {
+  BLACKJACK_PUSH_MULTIPLIER,
+  BLACKJACK_WIN_MULTIPLIER,
   COINFLIP_MULTIPLIER,
   SLOTS_PAIR_MULTIPLIER,
   SLOTS_TRIPLE_MULTIPLIERS,
+  blackjackPayout,
   resolveCoinBet,
   resolveSlotsBet,
 };

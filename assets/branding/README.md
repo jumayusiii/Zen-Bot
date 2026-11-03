@@ -1,6 +1,6 @@
 # Zen brand assets
 
-The Zen mark pairs an open ensō ring with a bold Z: calm, continuous and still readable at Discord's smallest avatar sizes. The banner extends the same mark into a wide profile header.
+The Zen mark is a bold geometric Z: one solid white form on a flat black field. It stays readable at Discord's smallest avatar sizes and needs no gradients, shadows or secondary colours. The banner sets the same mark in a thin ring beside the ZEN wordmark.
 
 | File | Use |
 | --- | --- |
@@ -15,18 +15,15 @@ The Zen mark pairs an open ensō ring with a bold Z: calm, continuous and still 
 
 | Role | Hex |
 | --- | --- |
-| Ink | `#0A111D` |
-| Deep ink | `#101B2C` |
-| Mint | `#5EEAD4` |
-| Jade | `#2DD4BF` |
-| Cream | `#FFFFFF` |
-| Ambient violet | `#6D5EFC` |
+| Black | `#000000` |
+| White | `#FFFFFF` |
+| Graphite | `#A3A3A3` |
 
 ## Usage
 
-- Keep the gap in the ensō at the upper right; it is part of the mark.
-- Keep the Z centered and inside the ring.
-- Do not stretch, rotate, outline or recolor the gradients.
-- The mark is designed for Discord's circular avatar crop; preserve the existing padding.
-- Keep the banner's 5:2 composition: ring on the left, wordmark on the right, and the same ink, mint, jade and cream palette.
+- Keep the Z centered on the black field; it is sized for Discord's circular avatar crop.
+- Keep the field solid black and the Z solid white. Do not add gradients, glows, outlines or extra colours.
+- Do not stretch, rotate or rearrange the strokes of the Z.
+- Keep the banner's 5:2 composition: ringed Z on the left, wordmark and tagline on the right.
+- Edit the SVG master, then run `npm run branding` from the project root to regenerate all four PNGs.
 - Upload the PNG through the Discord Developer Portal, or use the file directly with the bot avatar or banner API.

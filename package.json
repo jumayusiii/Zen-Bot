@@ -1,8 +1,8 @@
 {
   "name": "zen-bot",
-  "version": "1.19.0-beta.3",
+  "version": "1.19.0-beta.4",
   "private": true,
-  "description": "Zen is a Discord bot with memes, minigames, social actions, cat and dog photos, editable memes, chat levels and ten rank card themes, moderation with warnings, purge, slowmode, channel locks, soft bans and admin coin grants, audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring, TikTok video previews, live Bluesky, Reddit and YouTube lookups, live weather, Wikipedia summaries, fortune cookies, conversation starters, sequence memory, typing races, a fastest-time leaderboard and a beta ChatGPT command.",
+  "description": "Zen is a Discord bot with memes, animal and xkcd images, editable memes, a calculator, minigames, social actions, chat levels and ten rank card themes, moderation with warnings, purge, slowmode, channel locks, soft bans and admin coin grants, audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring, TikTok video previews, live Bluesky, Reddit and YouTube lookups, live weather, Wikipedia summaries, fortune cookies, conversation starters, sequence memory, typing races, a fastest-time leaderboard, a beta economy with vault heists, coin wagers and blackjack, and a beta ChatGPT command.",
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
@@ -14,6 +14,7 @@
     "deploy:local": "node scripts/deploy-local.js",
     "health": "node scripts/health-check.js",
     "release:notes": "node scripts/release-notes.js",
+    "branding": "node scripts/render-branding.js",
     "test": "node --test"
   },
   "repository": {

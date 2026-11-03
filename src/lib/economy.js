@@ -21,6 +21,10 @@ const MAX_WAGER = 5_000;
 const WORK_COOLDOWN_MS = 45 * 60 * 1000;
 const WORK_MIN = 40;
 const WORK_MAX = 110;
+const STEAL_COOLDOWN_MS = 25 * 60 * 1000;
+const STEAL_SUCCESS_CHANCE = 0.45;
+const STEAL_MIN = 25;
+const STEAL_MAX = 75;
 const MAX_BALANCE = 1_000_000_000;
 const MAX_ENTRIES = 50_000;
 const MAX_STREAK = 3650;
@@ -90,6 +94,7 @@ function normalizeAccount(value) {
     balance: Math.min(MAX_BALANCE, wholeNumber(value.balance)),
     lastDailyAt: wholeNumber(value.lastDailyAt),
     lastWorkAt: wholeNumber(value.lastWorkAt),
+    lastStealAt: wholeNumber(value.lastStealAt),
     dailyStreak: Math.min(MAX_STREAK, wholeNumber(value.dailyStreak)),
     owned,
     theme,
@@ -104,6 +109,7 @@ function emptyAccount(guildId, userId) {
     balance: 0,
     lastDailyAt: 0,
     lastWorkAt: 0,
+    lastStealAt: 0,
     dailyStreak: 0,
     owned: [DEFAULT_THEME_ID],
     theme: DEFAULT_THEME_ID,
@@ -332,6 +338,96 @@ async function claimWork({ guildId, userId, now = Date.now(), random = Math.rand
 }
 
 /**
+ * Attempts a pickpocket run against the server vault with a 25-minute
+ * cooldown. A failed attempt still starts the cooldown, so it cannot be
+ * retried until the timer runs out.
+ *
+ * @param {{guildId: string, userId: string, now?: number, random?: () => number}} input
+ * @returns {Promise<{stole: boolean, amount: number, balance: number, nextAt: number, chance: number, reason?: string}>}
+ */
+async function attemptSteal({ guildId, userId, now = Date.now(), random = Math.random } = {}) {
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to steal coins.');
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+
+  return withQueuedState((state) => {
+    const entry = findOrCreate(state, guildKey, userKey);
+    const nextAt = entry.lastStealAt > 0 ? entry.lastStealAt + STEAL_COOLDOWN_MS : 0;
+
+    if (entry.lastStealAt > 0 && timestamp - entry.lastStealAt < STEAL_COOLDOWN_MS) {
+      return {
+        write: false,
+        value: {
+          stole: false,
+          reason: 'cooldown',
+          amount: 0,
+          balance: entry.balance,
+          nextAt,
+          chance: STEAL_SUCCESS_CHANCE,
+        },
+      };
+    }
+
+    const succeeded = Math.min(0.999999, Math.max(0, Number(random()) || 0)) < STEAL_SUCCESS_CHANCE;
+    const sample = Math.min(0.999999, Math.max(0, Number(random()) || 0));
+    const offered = succeeded
+      ? STEAL_MIN + Math.floor(sample * (STEAL_MAX - STEAL_MIN + 1))
+      : 0;
+    const before = entry.balance;
+
+    entry.balance = Math.min(MAX_BALANCE, entry.balance + offered);
+    entry.lastStealAt = timestamp;
+    entry.updatedAt = timestamp;
+
+    return {
+      value: {
+        stole: succeeded,
+        amount: entry.balance - before,
+        balance: entry.balance,
+        nextAt: timestamp + STEAL_COOLDOWN_MS,
+        chance: STEAL_SUCCESS_CHANCE,
+      },
+    };
+  });
+}
+
+/**
+ * Credits coins to a wallet without an admin grant limit. Used by games that
+ * hold a stake up front, such as blackjack.
+ *
+ * @param {{guildId: string, userId: string, amount: number, now?: number}} input
+ * @returns {Promise<{amount: number, balance: number}>}
+ */
+async function creditCoins({ guildId, userId, amount, now = Date.now() }) {
+  const credit = Math.floor(Number(amount));
+  if (!Number.isFinite(credit) || credit < 0) {
+    throw accountError('invalid_amount', 'The payout must be zero or more coins.');
+  }
+
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to credit coins.');
+
+  if (credit === 0) {
+    const account = await getAccount(guildKey, userKey);
+    return { amount: 0, balance: account.balance };
+  }
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+
+  return withQueuedState((state) => {
+    const entry = findOrCreate(state, guildKey, userKey);
+    const before = entry.balance;
+    entry.balance = Math.min(MAX_BALANCE, entry.balance + credit);
+    entry.updatedAt = timestamp;
+
+    return { value: { amount: entry.balance - before, balance: entry.balance } };
+  });
+}
+
+/**
  * Credits the coins earned by reaching one or more new levels.
  *
  * @param {{guildId: string, userId: string, fromLevel: number, toLevel: number, now?: number}} input
@@ -537,16 +633,22 @@ module.exports = {
   MAX_BALANCE,
   MAX_GRANT,
   MAX_WAGER,
+  STEAL_COOLDOWN_MS,
+  STEAL_MAX,
+  STEAL_MIN,
+  STEAL_SUCCESS_CHANCE,
   STREAK_WINDOW_MS,
   WORK_COOLDOWN_MS,
   WORK_MAX,
   WORK_MIN,
+  attemptSteal,
   awardLevelCoins,
   buyTheme,
   claimDaily,
   claimWork,
   coinsForLevel,
   coinsForLevelRange,
+  creditCoins,
   economyFile,
   getAccount,
   grantCoins,
