@@ -2,6 +2,20 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.6',
+    date: '2026-11-03',
+    title: 'Wallet ranks on /balance',
+    summary: 'Every wallet now shows where it stands on the server rich list.',
+    added: [
+      '`/balance` now shows the member\'s server rank among funded wallets, alongside balance, streak and equipped card theme.',
+    ],
+    improved: [
+      'The rank uses the same ordering as `/ecoleaderboard`, so the two views always agree.',
+      'Zero-balance wallets show **Unranked** instead of a misleading position.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.5',
     date: '2026-11-03',
     title: 'Rich list & a material refresh',

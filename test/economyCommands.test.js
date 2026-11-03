@@ -9,6 +9,7 @@ const buyCommand = require('../src/commands/economy/buy');
 const stealCommand = require('../src/commands/economy/steal');
 const blackjackCommand = require('../src/commands/economy/blackjack');
 const economyLeaderboardCommand = require('../src/commands/economy/ecoleaderboard');
+const balanceCommand = require('../src/commands/economy/balance');
 const rankCardCommand = require('../src/commands/levels/rankcard');
 
 async function withEconomyFile(run) {
@@ -28,7 +29,11 @@ function fakeInteraction(options = {}) {
   return {
     captured,
     guild: options.guild ?? { id: 'guild-1' },
-    user: { id: 'user-1', username: 'tester' },
+    user: options.user ?? {
+      id: 'user-1',
+      username: 'tester',
+      displayAvatarURL: () => 'https://cdn.example/avatar.png',
+    },
     client: {
       user: {
         username: 'TestBot',
@@ -144,6 +149,48 @@ test('/ecoleaderboard ranks wallets and shows member names', async () => {
     assert.match(embed.fields[0].value, /500\*\* coins/);
     assert.match(embed.fields[1].name, /Second/);
     assert.match(embed.fields[1].value, /300\*\* coins/);
+  });
+});
+
+test('/balance shows the wallet balance and server rank', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          { guildId: 'guild-1', userId: 'user-1', balance: 500, owned: ['aurora'], dailyStreak: 3 },
+          { guildId: 'guild-1', userId: 'user-2', balance: 300, owned: ['aurora'] },
+          { guildId: 'guild-2', userId: 'user-3', balance: 9000, owned: ['aurora'] },
+        ],
+      }),
+      'utf8',
+    );
+
+    const interaction = fakeInteraction();
+    await balanceCommand.execute(interaction);
+
+    const embed = interaction.captured.reply.embeds[0].data;
+    const fields = Object.fromEntries(embed.fields.map((field) => [field.name, field.value]));
+    assert.equal(embed.title, "tester's wallet");
+    assert.equal(fields['💰 Balance'], '**500** coins');
+    assert.equal(fields['📊 Server rank'], '**#1** of **2**');
+    assert.equal(fields['🔥 Daily streak'], '**3** days');
+
+    const newcomer = fakeInteraction({
+      user: {
+        id: 'user-9',
+        username: 'newbie',
+        displayAvatarURL: () => 'https://cdn.example/avatar.png',
+      },
+    });
+    await balanceCommand.execute(newcomer);
+
+    const newcomerFields = Object.fromEntries(
+      newcomer.captured.reply.embeds[0].data.fields.map((field) => [field.name, field.value]),
+    );
+    assert.equal(newcomerFields['💰 Balance'], '**0** coins');
+    assert.equal(newcomerFields['📊 Server rank'], '**Unranked**');
   });
 });
 

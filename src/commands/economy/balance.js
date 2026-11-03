@@ -1,7 +1,7 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { getCardTheme } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
-const { getAccount } = require('../../lib/economy');
+const { getAccount, getEconomyLeaderboard } = require('../../lib/economy');
 
 function coins(value) {
   return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
@@ -12,7 +12,7 @@ module.exports = {
 
   data: new SlashCommandBuilder()
     .setName('balance')
-    .setDescription("Check a member's coin balance and daily streak")
+    .setDescription("Check a member's coin balance, server rank and daily streak")
     .addUserOption((option) =>
       option
         .setName('user')
@@ -31,8 +31,14 @@ module.exports = {
     const target = interaction.options.getUser('user') ?? interaction.user;
 
     try {
-      const account = await getAccount(interaction.guild.id, target.id);
+      const [account, board] = await Promise.all([
+        getAccount(interaction.guild.id, target.id),
+        getEconomyLeaderboard(interaction.guild.id, 10, target.id),
+      ]);
       const theme = getCardTheme(account.theme);
+      const rank = board.member && board.member.balance > 0
+        ? `**#${board.member.rank}** of **${coins(board.totalUsers)}**`
+        : '**Unranked**';
       const embed = createEmbed(interaction.client, {
         section: 'Economy',
         title: `${target.username}'s wallet`,
@@ -43,10 +49,11 @@ module.exports = {
         thumbnail: target.displayAvatarURL({ extension: 'png', size: 128, forceStatic: true }),
         fields: [
           { name: '💰 Balance', value: `**${coins(account.balance)}** coins`, inline: true },
+          { name: '📊 Server rank', value: rank, inline: true },
           { name: '🔥 Daily streak', value: `**${account.dailyStreak}** day${account.dailyStreak === 1 ? '' : 's'}`, inline: true },
-          { name: '🎨 Card theme', value: theme.name, inline: true },
+          { name: '🎨 Card theme', value: theme.name, inline: false },
         ],
-        footer: 'Per-server wallet  ·  /daily to earn  ·  /shop to spend',
+        footer: 'Per-server wallet  ·  ranked among funded wallets  ·  /ecoleaderboard',
       });
 
       await interaction.reply({ embeds: [embed] });

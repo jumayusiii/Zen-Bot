@@ -1,6 +1,6 @@
 {
   "name": "zen-bot",
-  "version": "1.19.0-beta.5",
+  "version": "1.19.0-beta.6",
   "private": true,
   "description": "Zen is a Discord bot with memes, animal and xkcd images, editable memes, a calculator, minigames, social actions, chat levels and ten rank card themes, moderation with warnings, purge, slowmode, channel locks, soft bans and admin coin grants, audit logs, welcome and leave messages, dice, choices, Discord timestamps, polls, reminders, tabbed help, invite tools, role and server info, bot-list stats, detailed website uptime monitoring, TikTok video previews, live Bluesky, Reddit and YouTube lookups, live weather, Wikipedia summaries, fortune cookies, conversation starters, sequence memory, typing races, a fastest-time leaderboard, a beta economy with vault heists, coin wagers, blackjack and a rich list, and a beta ChatGPT command.",
   "main": "src/index.js",
