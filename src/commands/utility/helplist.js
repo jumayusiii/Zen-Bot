@@ -19,6 +19,7 @@ module.exports = {
         'overview',
         interaction.user.username,
         language,
+        interaction.user.id,
       ),
     );
   },
@@ -38,6 +39,7 @@ module.exports = {
         view,
         interaction.user.username,
         language,
+        interaction.user.id,
       ),
     );
   },

@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.8** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.9** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin grants and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -319,7 +319,7 @@ SITE_LOGO_URL=https://cdn.habbo.gd/cms/habbo/logo.png
 SITE_MONITOR_INTERVAL_SECONDS=300
 
 # Rich presence.
-PRESENCE_TEXT=I am Legend.
+PRESENCE_TEXT=use /helplist!
 
 # Optional: Discord bot list stats (see docs/bot-listing.md).
 TOPGG_TOKEN=
@@ -341,7 +341,7 @@ OPENAI_MODEL=gpt-6-luna
 | `SITE_NAME` | No | Site hostname | Display name used in status embeds. |
 | `SITE_LOGO_URL` | No | habbo.gd logo | Logo attached to status reports; leave blank to disable. |
 | `SITE_MONITOR_INTERVAL_SECONDS` | No | `300` | Background probe interval, minimum 60 seconds. |
-| `PRESENCE_TEXT` | No | `I am Legend.` | Text shown as the bot's **Playing** activity. |
+| `PRESENCE_TEXT` | No | `use /helplist!` | Text shown as the bot's **Playing** activity. |
 | `TOPGG_TOKEN` | No | — | top.gg API token; enables stats posting. |
 | `DISCORDBOTLIST_TOKEN` | No | — | Discord Bot List API token; enables stats posting. |
 | `OPENAI_API_KEY` | No | — | Enables the beta `/chatgpt` command; keep it server-side. |
@@ -373,7 +373,7 @@ A healthy start looks like:
 ```text
 [commands] Loaded /poll
 [bot] Logged in as Zen#2257 (123456789012345678)
-[bot] Rich presence set: Playing I am Legend.
+[bot] Rich presence set: Playing use /helplist!
 [siteMonitor] Uptime sampling enabled for Zen every 5 min.
 [reminders] Dispatcher enabled (checking every 15s).
 [moderation] Temporary-ban scheduler enabled (checking every 30s).
@@ -625,7 +625,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
-- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.8`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.9`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

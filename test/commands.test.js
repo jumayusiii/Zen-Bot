@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 94);
+  assert.equal(registry.size, 95);
 
   for (const name of [
     'uptime',
@@ -99,6 +99,7 @@ test('all commands load with valid names, descriptions and unique registrations'
     'ecoleaderboard',
     'calculate',
     'xkcd',
+    'devpresence',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -251,4 +252,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('ecoleaderboard').data.toJSON().options.length, 0);
   assert.equal(registry.get('calculate').data.toJSON().options.length, 1);
   assert.equal(registry.get('xkcd').data.toJSON().options.length, 0);
+  assert.equal(registry.get('devpresence').developerOnly, true);
+  assert.equal(registry.get('devpresence').category, 'developers');
+  assert.equal(registry.get('devpresence').data.toJSON().options.length, 5);
 });

@@ -2,6 +2,22 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.9',
+    date: '2026-11-03',
+    title: 'Presence control & a developer console',
+    summary: 'Zen points new members at /helplist from its presence and adds a developer-only tab for changing the bot’s activity and avatar instantly.',
+    added: [
+      'The **Playing** presence now reads **use /helplist!** by default, sending new members straight to the command directory.',
+      'A hidden **Developers** tab appears in `/helplist` for the developer account only; commands flagged `developerOnly` are filtered out for everyone else.',
+      '`/devpresence` switches the activity text, the activity type and an optional stream URL instantly, replaces the bot avatar from an attachment, and restores `PRESENCE_TEXT` with `reset`.',
+    ],
+    improved: [
+      'Presence overrides are saved to `data/presence.json` and reloaded at startup, so the ten-minute refresh and the gateway-resume re-apply keep the developer text instead of reverting to the environment default.',
+      'The developer account is `649645473774436353`, overridable with `DEVELOPER_USER_ID` for forks.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.8',
     date: '2026-11-03',
     title: 'German across every command',

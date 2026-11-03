@@ -14,7 +14,7 @@ test('self-host settings fall back to the habbo.gd defaults', () => {
   assert.equal(config.siteName(), 'habbo.gd');
   assert.equal(config.siteLogoUrl(), 'https://cdn.habbo.gd/cms/habbo/logo.png');
   assert.equal(config.siteLogoFilename(), 'logo.png');
-  assert.equal(config.presenceText(), 'I am Legend.');
+  assert.equal(config.presenceText(), 'use /helplist!');
 });
 
 test('site and presence can be changed without editing code', () => {

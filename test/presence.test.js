@@ -9,7 +9,7 @@ test('buildPresence uses the Playing activity with the configured text', () => {
 
   assert.equal(presence.status, 'online');
   assert.equal(presence.activities.length, 1);
-  assert.equal(presence.activities[0].name, 'I am Legend.');
+  assert.equal(presence.activities[0].name, 'use /helplist!');
   assert.equal(presence.activities[0].type, ActivityType.Playing);
 });
 

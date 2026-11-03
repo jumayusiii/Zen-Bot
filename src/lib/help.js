@@ -1,5 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { COLORS, createEmbed } = require('./embeds');
+const { isDeveloper } = require('./developers');
 const { t } = require('./i18n');
 
 const CATEGORY_META = Object.freeze({
@@ -75,6 +76,15 @@ const CATEGORY_META = Object.freeze({
     color: COLORS.info,
     order: 30,
   },
+  developers: {
+    id: 'developers',
+    label: 'Developers',
+    title: 'Developer controls',
+    emoji: '🛠️',
+    description: 'Owner-only controls for the bot’s presence and identity. Hidden from everyone else.',
+    color: COLORS.danger,
+    order: 90,
+  },
   other: {
     id: 'other',
     label: 'Other',
@@ -103,11 +113,16 @@ function metaFor(command, language = 'en') {
   };
 }
 
-/** Returns `[{ meta, commands }]` sorted in a stable, intentional order. */
-function groupCommands(registry, language = 'en') {
+/**
+ * Returns `[{ meta, commands }]` sorted in a stable, intentional order.
+ * Commands flagged `developerOnly` are only listed for the developer account.
+ */
+function groupCommands(registry, language = 'en', { viewerId = null } = {}) {
   const groups = new Map();
 
   for (const command of registry.values()) {
+    if (command.developerOnly && !isDeveloper(viewerId)) continue;
+
     const meta = metaFor(command, language);
     if (!groups.has(meta.id)) groups.set(meta.id, { meta, commands: [] });
     groups.get(meta.id).commands.push(command);
@@ -232,8 +247,8 @@ function tabButtons(activeId, groups, language) {
  * @param {string} requestedBy
  * @param {string} [language]
  */
-function buildHelpPayload(client, registry, view, requestedBy, language = 'en') {
-  const groups = groupCommands(registry, language);
+function buildHelpPayload(client, registry, view, requestedBy, language = 'en', viewerId = null) {
+  const groups = groupCommands(registry, language, { viewerId });
   const activeGroup = groups.find((group) => group.meta.id === view);
   const activeId = activeGroup ? activeGroup.meta.id : OVERVIEW_META.id;
 

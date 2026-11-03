@@ -1,6 +1,6 @@
 const DEFAULT_SITE_URL = 'https://habbo.gd';
 const DEFAULT_SITE_LOGO_URL = 'https://cdn.habbo.gd/cms/habbo/logo.png';
-const DEFAULT_PRESENCE_TEXT = 'I am Legend.';
+const DEFAULT_PRESENCE_TEXT = 'use /helplist!';
 
 function httpUrl(value) {
   if (!value) return null;

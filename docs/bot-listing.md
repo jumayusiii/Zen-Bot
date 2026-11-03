@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **3 November 2026** · Zen **1.19.0-beta.8** · **94 slash commands**
+Last verified: **3 November 2026** · Zen **1.19.0-beta.9** · **94 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -109,7 +109,7 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.8` |
+| Version | `1.19.0-beta.9` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
