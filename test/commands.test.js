@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 93);
+  assert.equal(registry.size, 94);
 
   for (const name of [
     'uptime',
@@ -45,6 +45,7 @@ test('all commands load with valid names, descriptions and unique registrations'
     'unlock',
     'softban',
     'grantcoins',
+    'language',
     'levelreward',
     'compliment',
     'rate',
@@ -141,6 +142,8 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('typeraceleaderboard').beta, true);
   assert.equal(registry.get('chatgpt').beta, true);
   assert.equal(registry.get('grantcoins').beta, true);
+  assert.equal(registry.get('language').beta, true);
+  assert.equal(registry.get('language').category, 'moderation');
   assert.equal(registry.get('rankcard').beta, true);
   assert.equal(registry.get('balance').beta, true);
   assert.equal(registry.get('daily').beta, true);
@@ -194,6 +197,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('unlock').data.toJSON().options.length, 2);
   assert.equal(registry.get('softban').data.toJSON().options.length, 3);
   assert.equal(registry.get('grantcoins').data.toJSON().options.length, 3);
+  assert.equal(registry.get('language').data.toJSON().options.length, 0);
   assert.equal(registry.get('levelreward').data.toJSON().options.length, 3);
   assert.equal(registry.get('compliment').data.toJSON().options.length, 1);
   assert.equal(registry.get('rate').data.toJSON().options.length, 1);

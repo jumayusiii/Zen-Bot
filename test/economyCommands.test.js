@@ -10,16 +10,19 @@ const stealCommand = require('../src/commands/economy/steal');
 const blackjackCommand = require('../src/commands/economy/blackjack');
 const economyLeaderboardCommand = require('../src/commands/economy/ecoleaderboard');
 const balanceCommand = require('../src/commands/economy/balance');
+const { setGuildLanguage } = require('../src/lib/i18n');
 const rankCardCommand = require('../src/commands/levels/rankcard');
 
 async function withEconomyFile(run) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'zen-economy-commands-'));
   process.env.ECONOMY_FILE = path.join(directory, 'economy.json');
+  process.env.LANGUAGES_FILE = path.join(directory, 'languages.json');
 
   try {
     await run(process.env.ECONOMY_FILE);
   } finally {
     delete process.env.ECONOMY_FILE;
+    delete process.env.LANGUAGES_FILE;
     await fs.rm(directory, { recursive: true, force: true });
   }
 }
@@ -103,7 +106,8 @@ test('/blackjack starts a free hand and refuses a bet the wallet cannot cover', 
     const free = fakeInteraction();
     await blackjackCommand.execute(free);
     assert.equal(free.captured.reply.embeds[0].data.title, 'Blackjack');
-    assert.equal(free.captured.reply.components.length, 1);
+    assert.equal(free.captured.reply.components[0].components.length, 2);
+    assert.ok(free.captured.reply.components.length >= 1);
 
     const tooMuch = fakeInteraction({ bet: 5000 });
     await blackjackCommand.execute(tooMuch);
@@ -191,6 +195,47 @@ test('/balance shows the wallet balance and server rank', async () => {
     );
     assert.equal(newcomerFields['💰 Balance'], '**0** coins');
     assert.equal(newcomerFields['📊 Server rank'], '**Unranked**');
+  });
+});
+
+test('/balance and /ecoleaderboard follow the saved German language', async () => {
+  await withEconomyFile(async (file) => {
+    await fs.writeFile(
+      file,
+      JSON.stringify({
+        version: 1,
+        users: [
+          { guildId: 'guild-1', userId: 'user-1', balance: 500, owned: ['aurora'], dailyStreak: 2 },
+          { guildId: 'guild-1', userId: 'user-2', balance: 300, owned: ['aurora'] },
+        ],
+      }),
+      'utf8',
+    );
+    await setGuildLanguage('guild-1', 'de');
+
+    const guild = {
+      id: 'guild-1',
+      name: 'Test Server',
+      iconURL: () => null,
+      members: { cache: new Map([['user-1', { displayName: 'Tester' }]]) },
+    };
+
+    const wallet = fakeInteraction({ guild });
+    await balanceCommand.execute(wallet);
+
+    const walletEmbed = wallet.captured.reply.embeds[0].data;
+    assert.equal(walletEmbed.title, 'Geldbörse von tester');
+    assert.ok(walletEmbed.fields.some((field) => field.name === '💰 Guthaben'));
+    assert.ok(walletEmbed.fields.some(
+      (field) => field.name === '📊 Server-Rang' && field.value === '**#1** von **2**',
+    ));
+
+    const board = fakeInteraction({ guild });
+    await economyLeaderboardCommand.execute(board);
+
+    const boardEmbed = board.captured.reply.embeds[0].data;
+    assert.equal(boardEmbed.title, 'Rangliste von Test Server');
+    assert.match(boardEmbed.description, /Die \*\*2\*\* reichsten von \*\*2\*\* Geldbörsen/);
   });
 });
 

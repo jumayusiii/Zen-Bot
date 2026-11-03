@@ -119,6 +119,22 @@ test('image commands get their own tab with a dedicated view', () => {
   ]);
 });
 
+test('German localizes the directory chrome and tabs', () => {
+  const payload = buildHelpPayload(client, commands, 'overview', 'Tester', 'de');
+  const embed = payload.embeds[0];
+  const buttons = payload.components[0].components;
+
+  assert.equal(embed.data.title, 'Alles, was der Bot kann');
+  assert.match(embed.data.description, /\*\*5 Befehle\*\*/);
+  assert.match(embed.data.footer.text, /^Angefragt von Tester/);
+  assert.equal(buttons[0].data.label, 'Übersicht');
+  assert.equal(buttons[1].data.label, 'Fun');
+  assert.equal(buttons[4].data.label, 'Werkzeuge');
+
+  const category = buildHelpPayload(client, commands, 'utility', 'Tester', 'de');
+  assert.equal(category.embeds[0].data.title, 'Werkzeuge');
+});
+
 test('an empty registry still renders an overview without tabs', () => {
   const payload = buildHelpPayload(client, new Collection(), 'overview', 'Tester');
 

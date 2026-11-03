@@ -2,9 +2,11 @@ const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { getCardTheme } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getAccount, getEconomyLeaderboard } = require('../../lib/economy');
+const { getGuildLanguage, t } = require('../../lib/i18n');
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 module.exports = {
@@ -31,29 +33,45 @@ module.exports = {
     const target = interaction.options.getUser('user') ?? interaction.user;
 
     try {
-      const [account, board] = await Promise.all([
+      const [account, board, language] = await Promise.all([
         getAccount(interaction.guild.id, target.id),
         getEconomyLeaderboard(interaction.guild.id, 10, target.id),
+        getGuildLanguage(interaction.guild.id),
       ]);
       const theme = getCardTheme(account.theme);
       const rank = board.member && board.member.balance > 0
-        ? `**#${board.member.rank}** of **${coins(board.totalUsers)}**`
-        : '**Unranked**';
+        ? t(language, 'balance.rankOf', {
+          rank: board.member.rank,
+          total: coins(board.totalUsers, language),
+        })
+        : t(language, 'balance.unranked');
+      const streakKey = account.dailyStreak === 1 ? 'balance.day' : 'balance.days';
       const embed = createEmbed(interaction.client, {
         section: 'Economy',
-        title: `${target.username}'s wallet`,
+        title: t(language, 'balance.title', { user: target.username }),
         description: account.balance > 0
-          ? `**${target.username}** has **${coins(account.balance)}** coins ready to spend.`
-          : `**${target.username}** has no coins yet. Claim the first daily reward with \`/daily\`.`,
+          ? t(language, 'balance.description', {
+            user: target.username,
+            coins: coins(account.balance, language),
+          })
+          : t(language, 'balance.empty', { user: target.username }),
         color: COLORS.game,
         thumbnail: target.displayAvatarURL({ extension: 'png', size: 128, forceStatic: true }),
         fields: [
-          { name: '💰 Balance', value: `**${coins(account.balance)}** coins`, inline: true },
-          { name: '📊 Server rank', value: rank, inline: true },
-          { name: '🔥 Daily streak', value: `**${account.dailyStreak}** day${account.dailyStreak === 1 ? '' : 's'}`, inline: true },
-          { name: '🎨 Card theme', value: theme.name, inline: false },
+          {
+            name: `💰 ${t(language, 'balance.balance')}`,
+            value: `**${coins(account.balance, language)}** ${t(language, 'balance.coins')}`,
+            inline: true,
+          },
+          { name: `📊 ${t(language, 'balance.rank')}`, value: rank, inline: true },
+          {
+            name: `🔥 ${t(language, 'balance.streak')}`,
+            value: t(language, streakKey, { count: account.dailyStreak }),
+            inline: true,
+          },
+          { name: `🎨 ${t(language, 'balance.theme')}`, value: theme.name, inline: false },
         ],
-        footer: 'Per-server wallet  ·  ranked among funded wallets  ·  /ecoleaderboard',
+        footer: t(language, 'balance.footer'),
       });
 
       await interaction.reply({ embeds: [embed] });

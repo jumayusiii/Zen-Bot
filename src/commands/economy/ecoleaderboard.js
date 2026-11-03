@@ -1,11 +1,13 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getEconomyLeaderboard } = require('../../lib/economy');
+const { getGuildLanguage, t } = require('../../lib/i18n');
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 
-function coins(value) {
-  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString('en-US');
+function coins(value, language = 'en') {
+  const locale = language === 'de' ? 'de-DE' : 'en-US';
+  return Math.max(0, Math.floor(Number(value) || 0)).toLocaleString(locale);
 }
 
 function rankLabel(rank) {
@@ -33,22 +35,25 @@ module.exports = {
     }
 
     try {
-      const board = await getEconomyLeaderboard(
-        interaction.guild.id,
-        10,
-        interaction.user.id,
-      );
+      const [board, language] = await Promise.all([
+        getEconomyLeaderboard(interaction.guild.id, 10, interaction.user.id),
+        getGuildLanguage(interaction.guild.id),
+      ]);
 
       const fields = board.entries.map((entry) => ({
         name: `${rankLabel(entry.rank)}  ·  ${displayName(interaction.guild, entry.userId)}`,
-        value: `**${coins(entry.balance)}** coins`,
+        value: `**${coins(entry.balance, language)}** ${t(language, 'balance.coins')}`,
         inline: false,
       }));
 
       if (board.member && board.member.rank > board.entries.length) {
         fields.push({
-          name: 'Your rank',
-          value: `**#${board.member.rank}** of **${coins(board.totalUsers)}**  ·  **${coins(board.member.balance)}** coins`,
+          name: t(language, 'leaderboard.rank'),
+          value: t(language, 'leaderboard.rankValue', {
+            rank: board.member.rank,
+            total: coins(board.totalUsers, language),
+            coins: coins(board.member.balance, language),
+          }),
           inline: false,
         });
       }
@@ -56,15 +61,18 @@ module.exports = {
       await interaction.reply({
         embeds: [
           createEmbed(interaction.client, {
-            section: 'Economy',
-            title: `${interaction.guild.name} leaderboard`,
+            section: t(language, 'help.tabs.economy', {}, 'Economy'),
+            title: t(language, 'leaderboard.title', { server: interaction.guild.name }),
             description: board.totalUsers === 0
-              ? 'No one has coins yet. Earn some with `/daily`, `/work` or `/steal`.'
-              : `Top **${board.entries.length}** of **${coins(board.totalUsers)}** funded wallets.`,
+              ? t(language, 'leaderboard.empty')
+              : t(language, 'leaderboard.summary', {
+                shown: board.entries.length,
+                total: coins(board.totalUsers, language),
+              }),
             color: COLORS.game,
             thumbnail: interaction.guild.iconURL({ extension: 'png', size: 128, forceStatic: true }),
             fields,
-            footer: 'Per-server wallets  ·  /daily  ·  /work  ·  /steal  ·  top 10',
+            footer: t(language, 'leaderboard.footer'),
           }),
         ],
         allowedMentions: { parse: [] },

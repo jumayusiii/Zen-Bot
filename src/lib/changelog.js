@@ -2,6 +2,22 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.7',
+    date: '2026-11-03',
+    title: 'Self-healing watchdog & a language menu',
+    summary: 'Zen can now recover itself with a PM2 watchdog, and each server can switch between English and German.',
+    added: [
+      'A watchdog runs the health check every five minutes and restarts the PM2 app after **two consecutive failures**, logging each event to `logs/watchdog.log`.',
+      '`/language` lets server managers switch Zen between **English** and **German** with two buttons; the choice is stored per server in `data/languages.json`.',
+      'German translations for the command directory tabs and category copy, `/balance`, `/ecoleaderboard` and the language menu itself.',
+    ],
+    improved: [
+      'The language menu updates in place, highlights the active language and disables its button.',
+      'The command directory now covers **94 commands** across nine tabs.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.6',
     date: '2026-11-03',
     title: 'Wallet ranks on /balance',

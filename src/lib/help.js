@@ -1,5 +1,6 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { COLORS, createEmbed } = require('./embeds');
+const { t } = require('./i18n');
 
 const CATEGORY_META = Object.freeze({
   fun: {
@@ -91,16 +92,23 @@ const OVERVIEW_META = Object.freeze({
   emoji: '🧭',
 });
 
-function metaFor(command) {
-  return CATEGORY_META[command.category] ?? CATEGORY_META.other;
+function metaFor(command, language = 'en') {
+  const base = CATEGORY_META[command.category] ?? CATEGORY_META.other;
+
+  return {
+    ...base,
+    label: t(language, `help.tabs.${base.id}`, {}, base.label),
+    title: t(language, `help.categories.${base.id}.title`, {}, base.title),
+    description: t(language, `help.categories.${base.id}.description`, {}, base.description),
+  };
 }
 
 /** Returns `[{ meta, commands }]` sorted in a stable, intentional order. */
-function groupCommands(registry) {
+function groupCommands(registry, language = 'en') {
   const groups = new Map();
 
   for (const command of registry.values()) {
-    const meta = metaFor(command);
+    const meta = metaFor(command, language);
     if (!groups.has(meta.id)) groups.set(meta.id, { meta, commands: [] });
     groups.get(meta.id).commands.push(command);
   }
@@ -122,7 +130,7 @@ function signature(command) {
   return `/${data.name}${options.length > 0 ? ` ${options.join(' ')}` : ''}`;
 }
 
-function overviewEmbed(client, groups, requestedBy) {
+function overviewEmbed(client, groups, requestedBy, language) {
   const total = groups.reduce((count, group) => count + group.commands.length, 0);
   const beta = groups.reduce(
     (count, group) => count + group.commands.filter((command) => command.beta).length,
@@ -136,20 +144,20 @@ function overviewEmbed(client, groups, requestedBy) {
   }));
 
   return createEmbed(client, {
-    section: 'Command Directory',
-    title: 'Everything the bot can do',
+    section: t(language, 'help.section', {}, 'Command Directory'),
+    title: t(language, 'help.overviewTitle', {}, 'Everything the bot can do'),
     description: [
-      `**${total} commands**, grouped into tabs. Pick a category below.`,
-      `-# ${beta} beta command${beta === 1 ? '' : 's'}  ·  /changelog for release notes  ·  🧪 marks beta`,
+      t(language, 'help.overviewSummary', { total }, `**${total} commands**, grouped into tabs. Pick a category below.`),
+      `-# ${t(language, 'help.overviewNote', { beta }, `${beta} beta commands · /changelog for release notes · 🧪 marks beta`)}`,
     ].join('\n'),
     color: COLORS.brand,
     thumbnail: client?.user?.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
     fields,
-    footer: `Requested by ${requestedBy}`,
+    footer: t(language, 'help.footer', { user: requestedBy }, `Requested by ${requestedBy}`),
   });
 }
 
-function categoryEmbed(client, group, requestedBy) {
+function categoryEmbed(client, group, requestedBy, language) {
   const beta = group.commands.filter((command) => command.beta).length;
   const shown = group.commands.slice(0, 25);
 
@@ -162,27 +170,41 @@ function categoryEmbed(client, group, requestedBy) {
   const hidden = group.commands.length - shown.length;
   if (hidden > 0) {
     fields.push({
-      name: '…and more',
-      value: `**${hidden}** more command${hidden === 1 ? '' : 's'} are available in this category.`,
+      name: t(language, 'help.more', {}, '…and more'),
+      value: t(
+        language,
+        'help.moreValue',
+        { count: hidden },
+        `**${hidden}** more commands are available in this category.`,
+      ),
       inline: false,
     });
   }
 
   return createEmbed(client, {
-    section: 'Command Directory',
+    section: t(language, 'help.section', {}, 'Command Directory'),
     title: group.meta.title,
     description: [
       group.meta.description,
-      `-# ${group.commands.length} command${group.commands.length === 1 ? '' : 's'}  ·  ${beta} in beta`,
+      `-# ${t(
+        language,
+        'help.categoryCount',
+        { count: group.commands.length, beta },
+        `${group.commands.length} commands · ${beta} in beta`,
+      )}`,
     ].join('\n'),
     color: group.meta.color,
     fields,
-    footer: `Requested by ${requestedBy}`,
+    footer: t(language, 'help.footer', { user: requestedBy }, `Requested by ${requestedBy}`),
   });
 }
 
-function tabButtons(activeId, groups) {
-  const tabs = [OVERVIEW_META, ...groups.map((group) => group.meta)];
+function tabButtons(activeId, groups, language) {
+  const overview = {
+    ...OVERVIEW_META,
+    label: t(language, 'help.tabs.overview', {}, OVERVIEW_META.label),
+  };
+  const tabs = [overview, ...groups.map((group) => group.meta)];
   const rows = [];
 
   // Discord allows five buttons per row, so more than five tabs need a second row.
@@ -208,20 +230,21 @@ function tabButtons(activeId, groups) {
  * @param {import('discord.js').Collection<string, object>} registry
  * @param {string} view `overview` or a category id
  * @param {string} requestedBy
+ * @param {string} [language]
  */
-function buildHelpPayload(client, registry, view, requestedBy) {
-  const groups = groupCommands(registry);
+function buildHelpPayload(client, registry, view, requestedBy, language = 'en') {
+  const groups = groupCommands(registry, language);
   const activeGroup = groups.find((group) => group.meta.id === view);
   const activeId = activeGroup ? activeGroup.meta.id : OVERVIEW_META.id;
 
   const embed = activeGroup
-    ? categoryEmbed(client, activeGroup, requestedBy)
-    : overviewEmbed(client, groups, requestedBy);
+    ? categoryEmbed(client, activeGroup, requestedBy, language)
+    : overviewEmbed(client, groups, requestedBy, language);
 
   const payload = { embeds: [embed], components: [] };
 
   if (registry.size > 0) {
-    payload.components = tabButtons(activeId, groups);
+    payload.components = tabButtons(activeId, groups, language);
   }
 
   return payload;
