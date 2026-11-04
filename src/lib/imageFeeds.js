@@ -1,5 +1,8 @@
 const CAT_API = 'https://api.thecatapi.com/v1/images/search?limit=1&size=med';
 const DOG_API = 'https://dog.ceo/api/breeds/image/random';
+const DUCK_API = 'https://random-d.uk/api/v2/random';
+const FOX_API = 'https://randomfox.ca/floof/';
+const SHIBA_API = 'https://shibe.online/api/shibes?count=1&urls=true&httpsUrls=true';
 const MEMEGEN_BASE = 'https://api.memegen.link/images';
 const ANIMAL_MEME_BASE = 'https://meme-api.com/gimme';
 const MEME_WIDTH = 800;
@@ -128,6 +131,63 @@ async function fetchDogImage({ fetchImpl = globalThis.fetch } = {}) {
     url,
     source: 'Dog CEO',
     breed,
+  };
+}
+
+/**
+ * Fetches one random fox photo from randomfox.ca.
+ *
+ * @param {{fetchImpl?: typeof fetch}} [options]
+ * @returns {Promise<{url: string, source: string, link: string}>}
+ */
+async function fetchFoxImage({ fetchImpl = globalThis.fetch } = {}) {
+  const payload = await fetchJson(FOX_API, fetchImpl);
+  const url = safeImageUrl(payload?.image);
+
+  if (!url) throw new Error('randomfox.ca returned no usable image.');
+
+  return {
+    url,
+    source: 'randomfox.ca',
+    link: safeImageUrl(payload?.link) ?? url,
+  };
+}
+
+/**
+ * Fetches one random duck photo or GIF from random-d.uk.
+ *
+ * @param {{fetchImpl?: typeof fetch}} [options]
+ * @returns {Promise<{url: string, source: string, link: string}>}
+ */
+async function fetchDuckImage({ fetchImpl = globalThis.fetch } = {}) {
+  const payload = await fetchJson(DUCK_API, fetchImpl);
+  const url = safeImageUrl(payload?.url);
+
+  if (!url) throw new Error('random-d.uk returned no usable image.');
+
+  return {
+    url,
+    source: 'random-d.uk',
+    link: url,
+  };
+}
+
+/**
+ * Fetches one random shiba photo from shibe.online.
+ *
+ * @param {{fetchImpl?: typeof fetch}} [options]
+ * @returns {Promise<{url: string, source: string, link: string}>}
+ */
+async function fetchShibaImage({ fetchImpl = globalThis.fetch } = {}) {
+  const payload = await fetchJson(SHIBA_API, fetchImpl);
+  const url = Array.isArray(payload) ? safeImageUrl(payload[0]) : null;
+
+  if (!url) throw new Error('shibe.online returned no usable image.');
+
+  return {
+    url,
+    source: 'shibe.online',
+    link: url,
   };
 }
 
@@ -267,6 +327,8 @@ module.exports = {
   ANIMAL_SUBREDDITS,
   CAT_API,
   DOG_API,
+  DUCK_API,
+  FOX_API,
   MAX_BACKGROUND_URL_LENGTH,
   MAX_MEME_TEXT_LENGTH,
   MEME_COLORS,
@@ -274,10 +336,14 @@ module.exports = {
   MEME_LAYOUTS,
   MEME_TEMPLATES,
   MEMEGEN_BASE,
+  SHIBA_API,
   buildMemeUrl,
   escapeMemeText,
   fetchAnimalMeme,
   fetchCatImage,
   fetchDogImage,
+  fetchDuckImage,
+  fetchFoxImage,
+  fetchShibaImage,
   safeImageUrl,
 };

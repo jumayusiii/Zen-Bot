@@ -81,7 +81,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Developers',
     title: 'Developer controls',
     emoji: '🛠️',
-    description: 'Owner-only controls for the bot’s presence and identity. Hidden from everyone else.',
+    description: 'Owner-only controls for the bot’s presence, avatar, banner and restart. Hidden from everyone else.',
     color: COLORS.danger,
     order: 90,
   },

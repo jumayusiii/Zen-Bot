@@ -7,6 +7,9 @@ const {
   fetchAnimalMeme,
   fetchCatImage,
   fetchDogImage,
+  fetchDuckImage,
+  fetchFoxImage,
+  fetchShibaImage,
   safeImageUrl,
 } = require('../src/lib/imageFeeds');
 
@@ -145,6 +148,56 @@ test('image feeds fail clearly on unusable API payloads', async () => {
         json: async () => ({ status: 'error', message: 'missing' }),
       }),
     }),
+    /no usable image/,
+  );
+});
+
+test('fox, duck and shiba feeds parse their public payloads', async () => {
+  const fox = await fetchFoxImage({
+    fetchImpl: async () => ({
+      ok: true,
+      json: async () => ({
+        image: 'https://randomfox.ca/images/1.jpg',
+        link: 'https://randomfox.ca/?i=1',
+      }),
+    }),
+  });
+  assert.deepEqual(fox, {
+    url: 'https://randomfox.ca/images/1.jpg',
+    source: 'randomfox.ca',
+    link: 'https://randomfox.ca/?i=1',
+  });
+
+  const duck = await fetchDuckImage({
+    fetchImpl: async () => ({
+      ok: true,
+      json: async () => ({ url: 'https://random-d.uk/api/duck.jpg' }),
+    }),
+  });
+  assert.equal(duck.url, 'https://random-d.uk/api/duck.jpg');
+  assert.equal(duck.source, 'random-d.uk');
+
+  const shiba = await fetchShibaImage({
+    fetchImpl: async () => ({
+      ok: true,
+      json: async () => ['https://cdn.example/shiba.jpg'],
+    }),
+  });
+  assert.equal(shiba.url, 'https://cdn.example/shiba.jpg');
+  assert.equal(shiba.source, 'shibe.online');
+
+  await assert.rejects(
+    fetchFoxImage({ fetchImpl: async () => ({ ok: true, json: async () => ({}) }) }),
+    /no usable image/,
+  );
+  await assert.rejects(
+    fetchDuckImage({
+      fetchImpl: async () => ({ ok: true, json: async () => ({ url: 'http://insecure/duck.jpg' }) }),
+    }),
+    /no usable image/,
+  );
+  await assert.rejects(
+    fetchShibaImage({ fetchImpl: async () => ({ ok: true, json: async () => [] }) }),
     /no usable image/,
   );
 });

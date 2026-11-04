@@ -12,7 +12,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 95);
+  assert.equal(registry.size, 105);
 
   for (const name of [
     'uptime',
@@ -100,6 +100,16 @@ test('all commands load with valid names, descriptions and unique registrations'
     'calculate',
     'xkcd',
     'devpresence',
+    'devavatar',
+    'devbanner',
+    'devrestart',
+    'fox',
+    'duck',
+    'shiba',
+    'dadjoke',
+    'riddle',
+    'emojify',
+    'mock',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -254,5 +264,21 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('xkcd').data.toJSON().options.length, 0);
   assert.equal(registry.get('devpresence').developerOnly, true);
   assert.equal(registry.get('devpresence').category, 'developers');
-  assert.equal(registry.get('devpresence').data.toJSON().options.length, 5);
+  assert.equal(registry.get('devpresence').data.toJSON().options.length, 4);
+  assert.equal(registry.get('devavatar').developerOnly, true);
+  assert.equal(registry.get('devavatar').category, 'developers');
+  assert.equal(registry.get('devavatar').data.toJSON().options.length, 2);
+  assert.equal(registry.get('devbanner').developerOnly, true);
+  assert.equal(registry.get('devbanner').data.toJSON().options.length, 3);
+  assert.equal(registry.get('devrestart').developerOnly, true);
+  assert.equal(registry.get('devrestart').data.toJSON().options.length, 2);
+  assert.equal(registry.get('fox').category, 'images');
+  assert.equal(registry.get('fox').data.toJSON().options.length, 0);
+  assert.equal(registry.get('duck').data.toJSON().options.length, 0);
+  assert.equal(registry.get('shiba').data.toJSON().options.length, 0);
+  assert.equal(registry.get('dadjoke').category, 'fun');
+  assert.equal(registry.get('dadjoke').data.toJSON().options.length, 0);
+  assert.equal(registry.get('riddle').data.toJSON().options.length, 0);
+  assert.equal(registry.get('emojify').data.toJSON().options.length, 1);
+  assert.equal(registry.get('mock').data.toJSON().options.length, 1);
 });

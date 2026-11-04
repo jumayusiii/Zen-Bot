@@ -2,6 +2,28 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.10',
+    date: '2026-11-03',
+    title: 'Developer controls, more animals & quick fun',
+    summary: 'Zen splits its developer tools into presence, avatar, banner and restart commands, adds three animal photo feeds and four quick fun commands.',
+    added: [
+      '`/devpresence` now changes only the rich presence: text, activity type and an optional stream link, with `reset` restoring `PRESENCE_TEXT`.',
+      '`/devavatar` replaces the bot avatar from an attachment or a direct https:// link, up to **10 MB**.',
+      '`/devbanner` replaces the bot profile banner, or removes it again with `reset`.',
+      '`/devrestart` restarts the bot from Discord after an optional **0–30 second** delay and writes an optional reason to the log.',
+      '`/fox`, `/duck` and `/shiba` add three no-key animal photo feeds.',
+      '`/dadjoke` and `/riddle` add button-driven jokes and riddles; `/emojify` and `/mock` turn text into emoji letters or alternating case.',
+    ],
+    improved: [
+      'All four developer commands share the hidden Developers tab and refuse anyone except the configured developer account.',
+      'The directory now covers **101 public commands** plus four developer-only commands, **105 in total**.',
+      'The new fun commands answer in English and German like the rest of the Fun tab.',
+    ],
+    fixed: [
+      'Changing the presence can no longer replace the bot avatar, because the two now have separate commands.',
+    ],
+  },
+  {
     version: '1.19.0-beta.9',
     date: '2026-11-03',
     title: 'Presence control & a developer console',
