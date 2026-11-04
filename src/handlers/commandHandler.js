@@ -49,13 +49,32 @@ function loadCommands(registry, commandsDir = DEFAULT_COMMANDS_DIR) {
 }
 
 /**
- * Returns the JSON payload used to register all slash commands with Discord.
+ * Returns the JSON payload used to register the given commands with Discord.
  *
- * @param {import('discord.js').Collection<string, { data: import('discord.js').SlashCommandBuilder }>} registry
+ * @param {Iterable<{ data: import('discord.js').SlashCommandBuilder }>} commands
  * @returns {object[]}
  */
-function getCommandData(registry) {
-  return [...registry.values()].map((command) => command.data.toJSON());
+function getCommandData(commands) {
+  return [...commands].map((command) => command.data.toJSON());
 }
 
-module.exports = { loadCommands, getCommandData };
+/**
+ * Splits developer-only commands from the public set. Discord caps global
+ * commands at 100, so the owner controls are registered in one guild instead.
+ *
+ * @param {import('discord.js').Collection<string, object>} registry
+ * @returns {{publicCommands: object[], developerCommands: object[]}}
+ */
+function splitDeveloperCommands(registry) {
+  const publicCommands = [];
+  const developerCommands = [];
+
+  for (const command of registry.values()) {
+    if (command.developerOnly) developerCommands.push(command);
+    else publicCommands.push(command);
+  }
+
+  return { publicCommands, developerCommands };
+}
+
+module.exports = { loadCommands, getCommandData, splitDeveloperCommands };

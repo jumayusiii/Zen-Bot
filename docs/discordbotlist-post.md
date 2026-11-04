@@ -16,8 +16,8 @@ The editor requires the owner's Discord sign-in.
 | Field | Value |
 | --- | --- |
 | Bot name | Zen |
-| Version | `1.19.0-beta.10` |
-| Commands | 101 |
+| Version | `1.19.0-beta.11` |
+| Commands | 100 |
 | Prefix | `/` (slash commands only) |
 | Help command | `/helplist` |
 | Tags | Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Images, Website |

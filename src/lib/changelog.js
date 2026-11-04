@@ -2,6 +2,22 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.11',
+    date: '2026-11-03',
+    title: 'Owner controls inside Discord’s limit',
+    summary: 'Zen registers its four owner-only commands in the developer server and folds the two text toys into one `/text` command, keeping the public set at Discord’s 100-command ceiling.',
+    added: [
+      '`/text` turns text into emoji letters or mocking case, replacing the separate `/emojify` and `/mock` commands.',
+    ],
+    improved: [
+      'Public commands register globally while the four hidden developer commands register only in the server named by `GUILD_ID`, so the bot stays within Discord’s **100 global command** limit.',
+      '`npm run deploy` reports public and developer registrations separately and refuses a global-only deploy when `GUILD_ID` is missing.',
+    ],
+    fixed: [
+      'The 1.19.0-beta.10 deploy exceeded Discord’s global command limit; the split registration prevents that error.',
+    ],
+  },
+  {
     version: '1.19.0-beta.10',
     date: '2026-11-03',
     title: 'Developer controls, more animals & quick fun',

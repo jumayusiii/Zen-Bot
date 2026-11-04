@@ -677,6 +677,7 @@ const MESSAGES = Object.freeze({
         title: 'Emoji text',
         footer: 'Requested by {user}',
         empty: 'Give me some text to turn into emoji letters.',
+        tooLong: 'Keep it under {max} characters so the emoji text still fits.',
       },
       mock: {
         title: 'Mocking text',
@@ -1725,6 +1726,7 @@ const MESSAGES = Object.freeze({
         title: 'Emoji-Text',
         footer: 'Angefragt von {user}',
         empty: 'Gib mir etwas Text, den ich in Emoji-Buchstaben verwandeln kann.',
+        tooLong: 'Bleib unter {max} Zeichen, damit der Emoji-Text noch hineinpasst.',
       },
       mock: {
         title: 'Spott-Text',

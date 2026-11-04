@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const { Collection } = require('discord.js');
 const test = require('node:test');
 
-const { loadCommands } = require('../src/handlers/commandHandler');
+const { loadCommands, splitDeveloperCommands } = require('../src/handlers/commandHandler');
 
 test('all commands load with valid names, descriptions and unique registrations', () => {
   const registry = new Collection();
@@ -12,7 +12,9 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 105);
+  assert.equal(registry.size, 104);
+  assert.equal(splitDeveloperCommands(registry).publicCommands.length, 100);
+  assert.equal(splitDeveloperCommands(registry).developerCommands.length, 4);
 
   for (const name of [
     'uptime',
@@ -108,8 +110,7 @@ test('all commands load with valid names, descriptions and unique registrations'
     'shiba',
     'dadjoke',
     'riddle',
-    'emojify',
-    'mock',
+    'text',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -279,6 +280,23 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('dadjoke').category, 'fun');
   assert.equal(registry.get('dadjoke').data.toJSON().options.length, 0);
   assert.equal(registry.get('riddle').data.toJSON().options.length, 0);
-  assert.equal(registry.get('emojify').data.toJSON().options.length, 1);
-  assert.equal(registry.get('mock').data.toJSON().options.length, 1);
+  assert.equal(registry.get('text').data.toJSON().options.length, 2);
+});
+
+test('developer-only commands are split from the public registration set', () => {
+  const registry = new Collection();
+  const originalLog = console.log;
+  console.log = () => {};
+  loadCommands(registry);
+  console.log = originalLog;
+
+  const { publicCommands, developerCommands } = splitDeveloperCommands(registry);
+
+  assert.equal(publicCommands.length, 100);
+  assert.equal(developerCommands.length, 4);
+  assert.deepEqual(
+    developerCommands.map((command) => command.data.name).sort(),
+    ['devavatar', 'devbanner', 'devpresence', 'devrestart'],
+  );
+  assert.ok(publicCommands.every((command) => command.developerOnly !== true));
 });

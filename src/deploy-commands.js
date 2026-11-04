@@ -1,7 +1,11 @@
 require('dotenv').config();
 
 const { Collection, REST, Routes } = require('discord.js');
-const { loadCommands, getCommandData } = require('./handlers/commandHandler');
+const {
+  getCommandData,
+  loadCommands,
+  splitDeveloperCommands,
+} = require('./handlers/commandHandler');
 
 const API = 'https://discord.com/api/v10';
 
@@ -61,7 +65,7 @@ async function main() {
     await rest.put(Routes.applicationCommands(clientId), { body: [] });
 
     const registered = await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-      body: getCommandData(commandRegistry),
+      body: getCommandData(commandRegistry.values()),
     });
 
     console.log(
@@ -70,21 +74,42 @@ async function main() {
     return;
   }
 
-  // Production uses one global command set. Remove the guild-scoped copies
-  // from every server first; otherwise each command is listed twice in the
-  // guild command picker.
+  const { publicCommands, developerCommands } = splitDeveloperCommands(commandRegistry);
+  const developerGuildId = process.env.GUILD_ID?.trim();
+
+  if (developerCommands.length > 0 && !developerGuildId) {
+    throw new Error(
+      'GUILD_ID is required: developer-only commands cannot be registered globally because Discord caps global commands at 100.',
+    );
+  }
+
+  // Production uses one global command set for the public commands. Remove the
+  // guild-scoped copies from every server first; otherwise each command is
+  // listed twice in the guild command picker.
   const guildIds = await listGuildIds(token);
   for (const guildId of guildIds) {
     await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] });
   }
 
   const registered = await rest.put(Routes.applicationCommands(clientId), {
-    body: getCommandData(commandRegistry),
+    body: getCommandData(publicCommands),
   });
 
   console.log(
-    `[deploy] Registered ${registered.length} slash command(s) globally. Cleared ${guildIds.length} guild command set(s) so each command appears once.`,
+    `[deploy] Registered ${registered.length} public slash command(s) globally. Cleared ${guildIds.length} guild command set(s).`,
   );
+
+  if (developerCommands.length > 0) {
+    const developerRegistered = await rest.put(
+      Routes.applicationGuildCommands(clientId, developerGuildId),
+      { body: getCommandData(developerCommands) },
+    );
+
+    console.log(
+      `[deploy] Registered ${developerRegistered.length} developer command(s) in guild ${developerGuildId} only.`,
+    );
+  }
+
   console.log('[deploy] Global commands can take up to an hour to appear in every server.');
 }
 
