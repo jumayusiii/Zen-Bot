@@ -76,6 +76,7 @@ function fakeInteraction(guild, user, member) {
     },
     options: {
       getUser: () => null,
+      getString: () => null,
     },
     async deferReply() {
       captured.deferred = true;

@@ -1,5 +1,5 @@
 const { MessageFlags, SlashCommandBuilder } = require('discord.js');
-const { CARD_THEMES } = require('../../lib/cardThemes');
+const { CARD_THEMES, getCardTheme } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const { getAccount } = require('../../lib/economy');
 const { getInteractionLanguage, t } = require('../../lib/i18n');
@@ -29,7 +29,19 @@ module.exports = {
 
     try {
       const account = await getAccount(interaction.guild.id, interaction.user.id);
-      const fields = CARD_THEMES.map((theme) => {
+      const current = getCardTheme(account.theme);
+      const fields = [
+        {
+          name: `🎨 ${t(language, 'economy.inventory.equipped')}`,
+          value: current.name,
+          inline: true,
+        },
+        {
+          name: `💰 ${t(language, 'economy.balance')}`,
+          value: `${coins(account.balance, language)} ${t(language, 'common.coins')}`,
+          inline: true,
+        },
+        ...CARD_THEMES.map((theme) => {
         const owned = account.owned.includes(theme.id);
         const price = theme.price === 0
           ? t(language, 'common.free')
@@ -40,7 +52,8 @@ module.exports = {
           value: t(language, `economy.themes.${theme.id}`, {}, theme.description),
           inline: false,
         };
-      });
+        }),
+      ];
 
       const embed = createEmbed(interaction.client, {
         section: t(language, 'help.tabs.economy'),

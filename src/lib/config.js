@@ -1,5 +1,5 @@
-const DEFAULT_SITE_URL = 'https://habbo.gd';
-const DEFAULT_SITE_LOGO_URL = 'https://cdn.habbo.gd/cms/habbo/logo.png';
+const DEFAULT_SITE_URL = 'https://habbo.si';
+const DEFAULT_SITE_LOGO_URL = 'https://habbo.si/apple-touch-icon.png';
 const DEFAULT_PRESENCE_TEXT = 'use /helplist!';
 
 function httpUrl(value) {
@@ -34,8 +34,8 @@ function siteLogoUrl() {
     return httpUrl(process.env.SITE_LOGO_URL?.trim());
   }
 
-  // Keep the existing habbo.gd branding unless another site is configured.
-  return siteHost() === 'habbo.gd' ? DEFAULT_SITE_LOGO_URL : null;
+  // Keep the existing habbo.si branding unless another site is configured.
+  return siteHost() === 'habbo.si' ? DEFAULT_SITE_LOGO_URL : null;
 }
 
 function siteLogoFilename() {

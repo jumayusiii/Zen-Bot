@@ -164,6 +164,44 @@ test('admin coin grants credit wallets and stop at the balance cap', async () =>
   });
 });
 
+test('admin coin removals deduct wallets and never go below zero', async () => {
+  await withEconomyFile(async () => {
+    await economy.grantCoins({ guildId: 'guild-1', userId: 'user-1', amount: 500 });
+
+    const removed = await economy.removeCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      amount: 200,
+    });
+    assert.equal(removed.requested, 200);
+    assert.equal(removed.amount, 200);
+    assert.equal(removed.balance, 300);
+    assert.equal(removed.shortfall, 0);
+
+    const clamped = await economy.removeCoins({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      amount: 5000,
+    });
+    assert.equal(clamped.amount, 300);
+    assert.equal(clamped.balance, 0);
+    assert.equal(clamped.shortfall, 4700);
+
+    await assert.rejects(
+      economy.removeCoins({ guildId: 'guild-1', userId: 'user-1', amount: 0 }),
+      /at least 1 coin/,
+    );
+    await assert.rejects(
+      economy.removeCoins({
+        guildId: 'guild-1',
+        userId: 'user-1',
+        amount: economy.MAX_GRANT + 1,
+      }),
+      /at most/,
+    );
+  });
+});
+
 test('buying a theme deducts coins, equips it and prevents a second purchase', async () => {
   await withEconomyFile(async (file) => {
     await fs.writeFile(

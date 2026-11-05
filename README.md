@@ -2,22 +2,22 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.12** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.13** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin grants and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin coin grants and removals and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
 ## Highlights
 
 - **Real slash commands** loaded automatically from `src/commands/`.
 - **Tabbed help** with an overview plus Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities tabs, generated from the command modules.
-- **Level system** with chat XP, level-up coin payouts, ten customizable rank card themes, a top-ten server leaderboard and automatic role rewards.
+- **Level system** with chat XP, level-up coin payouts, ten customizable rank card themes, level tools, a top-ten server leaderboard and automatic role rewards.
 - **Moderation** with timed mutes, persistent temporary bans, kicks, reversals, soft bans, channel locks, warnings, purge and slowmode, plus permission and role-hierarchy checks.
 - **Audit logs** with `/modlog`: every moderation action — including locks, soft bans and admin coin grants — and automatic unbans are posted to a channel you choose.
 - **Greetings** with `/welcome` and `/leave`, custom templates, live test previews and compact inline embeds.
 - **More fun** with compliments and roasts, repeatable ratings, a number-guessing round, a reaction test, slots, jokes, word scrambles, fortune cookies, themed conversation starters and a live would-you-rather vote.
 - **Social media** with live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups, plus `/hug`, `/pat` and `/highfive` social actions.
 - **Images** with random cat, dog and animal memes, `/xkcd` for random comics, `/caption` for styled image text, `/redditcard` for live comment cards, and `/memegen` with animal templates, fonts, text colours, layouts and custom backgrounds.
-- **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, `/steal` heists, coin-flip, slot and blackjack wagers, an `/ecoleaderboard` rich list, admin coin grants, a ten-theme shop, an inventory and purchasable rank card wallpapers.
+- **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, `/steal` heists, coin-flip, slot and blackjack wagers, an `/ecoleaderboard` rich list, admin coin grants and removals, a ten-theme shop and purchasable rank card wallpapers.
 - **Languages** with a per-server `/language` switch between **English** and **German** for help, fun, minigames, wallets, the economy, levels and rank cards, moderation and the audit log, and the language menu.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
 - **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
@@ -45,96 +45,96 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/memegen <template> <top> [bottom]` | Creates an editable meme with your own text, optional font, colour, layout, uppercase text and a custom HTTPS background. |
 | `/animalmeme [community]` | Fetches a random meme from public animal communities, with an optional community picker and upvote details. |
 | `/caption <image> [top] [bottom]` | Adds styled top and bottom text to an uploaded image, with four styles, five colours, three sizes and optional uppercase. |
-| `/redditcard <url> [comments] [theme]` | 🧪 Renders a public Reddit thread and up to four comments as a dark, light or sepia image card. |
+| `/redditcard <url> [comments] [theme]` | 👷‍♂️ Renders a public Reddit thread and up to four comments as a dark, light or sepia image card. |
 | `/xkcd` | Posts a random comic from xkcd.com with its alt text, publication date and a link to the original page. |
-| `/tiktok <url>` | 🧪 Downloads a TikTok video and posts it so it plays inline, with creator, duration and engagement details. Oversized, private and photo posts fall back to a cover image and an **Open on TikTok** button. |
-| `/bluesky <handle>` | 🧪 Loads a live Bluesky profile, bio, follower counts and latest public post, with profile and post links. |
-| `/reddit [subreddit]` | 🧪 Reads Reddit’s public Atom feed and posts a random hot item from a curated SFW community. Defaults to `popular`. |
-| `/youtube <url>` | 🧪 Resolves a YouTube video, Shorts or `youtu.be` link into a live title, channel, thumbnail and watch link. |
-| `/8ball <question>` | 🧪 Asks the Magic 8-Ball a question. |
-| `/coinflip [side]` | 🧪 Flips a coin and lets you call heads or tails. |
-| `/rps <choice>` | 🧪 Plays rock-paper-scissors against the bot. |
-| `/roll [dice]` | 🧪 Rolls dice in `1d6`, `2d20` or `4d6+2` notation, up to 20 dice. |
+| `/tiktok <url>` | 👷‍♂️ Downloads a TikTok video and posts it so it plays inline, with creator, duration and engagement details. Oversized, private and photo posts fall back to a cover image and an **Open on TikTok** button. |
+| `/bluesky <handle>` | 👷‍♂️ Loads a live Bluesky profile, bio, follower counts and latest public post, with profile and post links. |
+| `/reddit [subreddit]` | 👷‍♂️ Reads Reddit’s public Atom feed and posts a random hot item from a curated SFW community. Defaults to `popular`. |
+| `/youtube <url>` | 👷‍♂️ Resolves a YouTube video, Shorts or `youtu.be` link into a live title, channel, thumbnail and watch link. |
+| `/8ball <question>` | 👷‍♂️ Asks the Magic 8-Ball a question. |
+| `/coinflip [side]` | 👷‍♂️ Flips a coin and lets you call heads or tails. |
+| `/rps <choice>` | 👷‍♂️ Plays rock-paper-scissors against the bot. |
+| `/roll [dice]` | 👷‍♂️ Rolls dice in `1d6`, `2d20` or `4d6+2` notation, up to 20 dice. |
 | `/choose <options> [question]` | Picks one option from a 2–10 item list, with an optional question. |
 | `/ship <user> [second]` | Calculates a playful, repeatable compatibility score for two members. |
 | `/fact` | Shares a random fun fact with a reroll button. |
-| `/joke` | 🧪 Tells a clean joke with a button that reveals the punchline. |
-| `/fortunecookie` | 🧪 Opens a fortune with a theme and six lucky numbers. |
-| `/topic [theme]` | 🧪 Starts a conversation with a themed prompt and a one-click shuffle. |
+| `/joke` | 👷‍♂️ Tells a clean joke with a button that reveals the punchline. |
+| `/fortunecookie` | 👷‍♂️ Opens a fortune with a theme and six lucky numbers. |
+| `/topic [theme]` | 👷‍♂️ Starts a conversation with a themed prompt and a one-click shuffle. |
 | `/compliment [user]` | Sends a random compliment to a member. |
-| `/roast [user]` | 🧪 Serves a playful, harmless roast with compact target, tone and requester fields. |
+| `/roast [user]` | 👷‍♂️ Serves a playful, harmless roast with compact target, tone and requester fields. |
 | `/rate <thing>` | Gives something a deterministic 0–100 rating with a verdict. |
 | `/hug <user>` | Sends a warm hug to a member. |
 | `/pat <user>` | Gives a member a gentle head pat. |
 | `/highfive <user>` | Celebrates with a member using a high five. |
-| `/trivia` | 🧪 Asks a multiple-choice trivia question with live answer buttons, score tracking and up to five refreshes. |
-| `/tictactoe` | 🧪 Starts a button tic-tac-toe board against the bot. |
-| `/higherlower` | 🧪 Guess whether the next number is higher or lower, up to 10 rounds. |
-| `/hangman` | 🧪 Guess a hidden word one letter at a time, with six wrong guesses. |
-| `/blackjack [bet]` | 🧪 Plays a hand against the dealer with Hit, Stand and Play again. Add a bet of up to **5,000 coins** to win **2×**, or get the stake back on a push. |
+| `/trivia` | 👷‍♂️ Asks a multiple-choice trivia question with live answer buttons, score tracking and up to five refreshes. |
+| `/tictactoe` | 👷‍♂️ Starts a button tic-tac-toe board against the bot. |
+| `/higherlower` | 👷‍♂️ Guess whether the next number is higher or lower, up to 10 rounds. |
+| `/hangman` | 👷‍♂️ Guess a hidden word one letter at a time, with six wrong guesses. |
+| `/blackjack [bet]` | 👷‍♂️ Plays a hand against the dealer with Hit, Stand and Play again. Add a bet of up to **5,000 coins** to win **2×**, or get the stake back on a push. |
 | `/guessnumber [guess]` | Guesses the bot's number between 1 and 100 in up to seven attempts. |
 | `/reaction` | Tests your reaction time with a button that unlocks after a random delay. |
-| `/slots` | 🧪 Spins a three-reel slot machine with weighted symbols and a compact result. |
-| `/wouldyourather` | 🧪 Starts a two-option vote with live inline results and changeable votes. |
-| `/wordscramble` | 🧪 Unscramble five words across five rounds with four answer buttons, a hint and live scoring. |
-| `/memory` | 🧪 Shows a growing symbol sequence, hides it, then scores your repeat. |
-| `/typerace` | 🧪 Opens a typing box, times an exact phrase, reports words per minute and saves a personal best. |
-| `/typeraceleaderboard` | 🧪 Ranks the ten fastest Type Race times in the server and shows your best. |
-| `/rank [user]` | Renders a profile card with level, XP progress, server rank, total XP and the member's selected card theme. |
-| `/rankcard [theme]` | 🧪 Equips an owned wallpaper and colour theme for your rank card, or lists the themes you own. |
+| `/slots` | 👷‍♂️ Spins a three-reel slot machine with weighted symbols and a compact result. |
+| `/wouldyourather` | 👷‍♂️ Starts a two-option vote with live inline results and changeable votes. |
+| `/wordscramble` | 👷‍♂️ Unscramble five words across five rounds with four answer buttons, a hint and live scoring. |
+| `/memory` | 👷‍♂️ Shows a growing symbol sequence, hides it, then scores your repeat. |
+| `/typerace` | 👷‍♂️ Opens a typing box, times an exact phrase, reports words per minute and saves a personal best. |
+| `/typeraceleaderboard` | 👷‍♂️ Ranks the ten fastest Type Race times in the server and shows your best. |
+| `/rank [user] [theme]` | Renders a profile card with level, XP progress, server rank, total XP and the member’s selected card theme. Pass an owned theme to equip it. |
 | `/levels` | Shows the top ten members by chat XP, plus your rank if you are outside the top ten. |
+| `/levelinfo [user]` | Explains the XP rules and shows a member’s level, rank, next-level requirement and role reward. |
+| `/leveladmin <member> <action> [amount] [reason]` | Adds, removes, sets or resets a member’s chat XP. Limited to **Administrator** or the server owner, with an audit-log entry. |
 | `/levelreward [role] [level] [clear]` | Configures a role that members earn automatically when they reach a level. |
-| `/balance [user]` | 🧪 Shows a member's coin balance, server rank, daily streak and equipped card theme. |
-| `/daily` | 🧪 Claims the daily coin reward and advances the streak. |
-| `/shop` | 🧪 Lists the rank card themes, their prices and which ones you own. |
-| `/buy <theme>` | 🧪 Buys a card theme with coins and equips it immediately. |
-| `/inventory` | 🧪 Lists the card themes you own and the one currently equipped. |
-| `/work` | 🧪 Works a short shift for **40–110 coins** every 45 minutes. |
-| `/coinbet <amount> <side>` | 🧪 Wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win. |
-| `/slotsbet <amount>` | 🧪 Wagers coins on the slot machine: pairs pay **1.5×** and triples pay **3×–30×**. |
-| `/steal` | 🧪 Tries a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown. |
-| `/ecoleaderboard` | 🧪 Ranks the ten richest members in the server, with medals and your rank when you are outside the top ten. |
+| `/balance [user]` | 👷‍♂️ Shows a member's coin balance, server rank, daily streak and equipped card theme. |
+| `/daily` | 👷‍♂️ Claims the daily coin reward and advances the streak. |
+| `/shop` | 👷‍♂️ Lists the rank card themes, their prices, the ones you own and the one equipped, with your balance. |
+| `/buy <theme>` | 👷‍♂️ Buys a card theme with coins and equips it immediately. |
+| `/work` | 👷‍♂️ Works a short shift for **40–110 coins** every 45 minutes. |
+| `/coinbet <amount> <side>` | 👷‍♂️ Wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win. |
+| `/slotsbet <amount>` | 👷‍♂️ Wagers coins on the slot machine: pairs pay **1.5×** and triples pay **3×–30×**. |
+| `/steal` | 👷‍♂️ Tries a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown. |
+| `/ecoleaderboard` | 👷‍♂️ Ranks the ten richest members in the server, with medals and your rank when you are outside the top ten. |
 | `/mute <member> <duration> [reason]` | Times out a member for **5 minutes to 28 days**, with an audit-log reason. |
 | `/unmute <member> [reason]` | Removes a member's timeout. |
 | `/kick <member> [reason]` | Removes a member from the server with an audit-log reason. |
 | `/ban <user> <duration> [reason] [delete_messages]` | Bans a user for **1 hour to 30 days** or permanently, optionally deleting recent messages. |
 | `/unban <user_id> [reason]` | Lifts a ban and cancels its scheduled auto-unban. |
 | `/warn <member> <reason>` | Records a persistent warning, sends a DM when possible and writes to the audit log. |
-| `/warnings <member>` | Shows a member's recorded warnings, newest first. Private to moderators. |
-| `/clearwarnings <member> [reason]` | Clears a member's recorded warnings and records the cleanup. |
+| `/warnings <member> [clear] [reason]` | Shows a member's recorded warnings, newest first, or clears them with `clear:true`. Listing is private to moderators; clearing needs **Manage Server**. |
 | `/purge <amount> [user] [channel] [reason]` | Deletes up to 100 recent messages, optionally from one member and channel. |
 | `/slowmode <seconds> [channel] [reason]` | Sets a channel cooldown from 0 seconds to 6 hours. |
 | `/lock [channel] [reason]` | Locks a text channel so @everyone cannot send messages and saves the previous setting. |
 | `/unlock [channel] [reason]` | Restores the @everyone SendMessages setting saved by `/lock`. |
 | `/softban <member> [delete_messages] [reason]` | Bans a member, cleans recent messages (24 hours by default), then immediately lifts the ban. |
-| `/grantcoins <member> <amount> [reason]` | 🧪 Grants up to **100,000 coins** to a member. Limited to **Administrator** or the server owner, with an audit-log entry. |
-| `/modlog [channel] [disable]` | 🧪 Chooses the channel that receives every moderation action and automatic unban. |
-| `/language` | 🧪 Switches Zen between **English** and **German** for this server with two buttons. Requires **Manage Server**. |
+| `/grantcoins <member> <amount> [reason]` | 👷‍♂️ Grants up to **100,000 coins** to a member. Limited to **Administrator** or the server owner, with an audit-log entry. |
+| `/removecoins <member> <amount> [reason]` | 👷‍♂️ Removes up to **100,000 coins** from a member's wallet, stopping at zero. Limited to **Administrator** or the server owner, with an audit-log entry. |
+| `/modlog [channel] [disable]` | 👷‍♂️ Chooses the channel that receives every moderation action and automatic unban. |
+| `/language` | 👷‍♂️ Switches Zen between **English** and **German** for this server with two buttons. Requires **Manage Server**. |
 | `/avatar [user]` | Shows a user avatar with a 64–4096 px size selector and a **Download** button. |
 | `/servericon` | Shows the current server icon with the same size selector and download button. |
 | `/serverbanner` | Shows the current server banner with a download button. |
 | `/sitestatus` | Full live report: HTTP status, response time, TLS, DNS, edge server, page details, security headers and the site logo. Includes uptime summary plus **Refresh**, **Auto-refresh** and a **5 / 15 / 30 minute** interval picker. |
 | `/uptime` | Seven-day report with one uptime bar per day, availability, average/p95/max latency, monitoring coverage and a detailed incident timeline. |
-| `/weather <location> [units]` | 🧪 Current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units. |
-| `/wikipedia <query>` | 🧪 Searches Wikipedia and posts a summary with a link to the full article. |
+| `/weather <location> [units]` | 👷‍♂️ Current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units. |
+| `/wikipedia <query>` | 👷‍♂️ Searches Wikipedia and posts a summary with a link to the full article. |
 | `/calculate <expression>` | Calculates a maths expression with + - * / % ^ and parentheses. |
-| `/chatgpt <prompt> [private]` | 🧪 Asks OpenAI’s ChatGPT a question with an optional private answer. Moderated, limited to 8 requests per member per 10 minutes, and no conversation history is stored. |
+| `/chatgpt <prompt> [private]` | 👷‍♂️ Asks OpenAI’s ChatGPT a question with an optional private answer. Moderated, limited to 8 requests per member per 10 minutes, and no conversation history is stored. |
 | `/timestamp [time]` | Builds a Discord timestamp in six styles from now, a duration, a date or a Unix timestamp. |
-| `/poll <question> <options>` | 🧪 Creates a live button poll with 2–5 options. Votes update in place, can be changed or removed, and only the creator can close the poll. |
-| `/remind <when> <message> [where]` | 🧪 Sets a persistent reminder from 1 minute to 30 days ahead, sent by DM or in the original channel. |
-| `/reminders` | 🧪 Lists your pending reminders and lets you cancel one from a select menu. The list is private. |
+| `/poll <question> <options>` | 👷‍♂️ Creates a live button poll with 2–5 options. Votes update in place, can be changed or removed, and only the creator can close the poll. |
+| `/remind <when> <message> [where]` | 👷‍♂️ Sets a persistent reminder from 1 minute to 30 days ahead, sent by DM or in the original channel. |
+| `/reminders` | 👷‍♂️ Lists your pending reminders and lets you cancel one from a select menu. The list is private. |
 | `/serverinfo` | Shows the server owner, ID, creation date, member/role/channel counts, boosts, verification level and language. |
 | `/userinfo [user]` | Shows a user's display name, ID, account type, creation date, join date, top role, nickname and roles. |
-| `/welcome [channel] [message] [disable] [test]` | 🧪 Configures the join message with placeholders and an optional test preview. |
-| `/leave [channel] [message] [disable] [test]` | 🧪 Configures the leave message with placeholders and an optional test preview. |
-| `/roleinfo <role>` | 🧪 Shows a role's color, position, creation date, permissions, mentionable/hoisted/managed state and icon. |
-| `/botinfo` | 🧪 Shows bot uptime, gateway ping, memory, server/member counts, version and runtime versions. |
+| `/welcome [channel] [message] [disable] [test]` | 👷‍♂️ Configures the join message with placeholders and an optional test preview. |
+| `/leave [channel] [message] [disable] [test]` | 👷‍♂️ Configures the leave message with placeholders and an optional test preview. |
+| `/roleinfo <role>` | 👷‍♂️ Shows a role's color, position, creation date, permissions, mentionable/hoisted/managed state and icon. |
+| `/botinfo` | 👷‍♂️ Shows bot uptime, gateway ping, memory, server/member counts, version and runtime versions. |
 | `/ping` | Shows gateway latency, command round-trip, uptime and connection status. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
 | `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
 
-🧪 marks beta commands. The directory covers **100 public commands** across eight tabs (plus seven developer-only commands for the owner), and is generated from the loaded command modules so it stays accurate when new commands are added.
+👷‍♂️ marks beta commands. The directory covers **100 public commands** across nine tabs (plus seven developer-only commands for the owner), and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -160,7 +160,7 @@ These commands need outbound HTTPS but no API keys. `/hug`, `/pat` and `/highfiv
 
 Every member earns XP by chatting. A message awards **25–35 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts. Each level-up also pays coins into the member's server wallet: **25 coins** at level 1, **5 more** per level and a **250-coin** cap per level, so active chat feeds the economy described below.
 
-`/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. The card uses the member's selected theme — Aurora by default — with matching wallpaper patterns, avatar ring, level pill and progress bar colours. `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten.
+`/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. The card uses the member's selected theme — Aurora by default — with matching wallpaper patterns, avatar ring, level pill and progress bar colours. `/rank theme:<name>` equips another owned theme, and `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten. `/levelinfo [user]` explains the XP rules and shows the member's level, rank, next-level requirement and the server's reward role. `/leveladmin` lets an administrator add, remove, set or reset a member's XP, with every change written to the audit log.
 
 The level curve starts at **50 XP** for level 1 and grows with each level (`5 × level² + 25 × level + 50` XP for the next level), so two awards at the 25 XP minimum unlock the first level. The next thresholds are **80, 120, 170 and 230 XP**. The bot uses the non-privileged **GuildMessages** intent for message events and never reads message content. Rank cards need `@napi-rs/canvas`, which installs prebuilt binaries through npm; if rendering fails, `/rank` falls back to a text embed.
 
@@ -170,9 +170,9 @@ The level curve starts at **50 XP** for level 1 and grows with each level (`5 ×
 
 Coins are **per server**, so the same member has a separate wallet and rank-card collection in each community. `/daily` pays **100 coins** on the first day, then adds **25 coins** for each consecutive day, up to **250 coins** by day seven. The cooldown is 24 hours and a gap of more than 48 hours resets the streak. Level-ups are the second income source: reaching level 1 pays **25 coins**, every later level adds **5 coins** more, and a single level pays at most **250 coins**. `/work` adds a **40–110 coin** shift every 45 minutes. `/steal` attempts a vault heist for **25–75 coins** with a **45%** success rate and a **25-minute** cooldown that starts even when the heist fails. `/blackjack` accepts an optional bet of up to **5,000 coins**: the stake is taken when the hand is dealt, a win returns **2×**, a push returns the stake and a loss returns nothing. `/ecoleaderboard` ranks the ten richest wallets in the server, with medals and your own rank when you are outside the top ten; only wallets with coins are listed. `/coinbet` wagers up to **5,000 coins** on heads or tails and returns **1.9×** on a win; `/slotsbet` pays **1.5×** for a pair and **3×–30×** for a triple. Coin wagers are settled in one queued write, so a stake is never charged without the result; blackjack holds the stake from the deal and credits its payout once at the end. `/balance` shows a wallet, its rank among funded wallets, the streak and the equipped card.
 
-`/shop` lists ten card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight, Candy, Sakura, Cyber, Ember and Frost** at 600–4,400 coins. `/buy theme:<name>` deducts the price atomically and equips the theme; `/inventory` lists everything owned and `/rankcard theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
+`/shop` lists ten card themes: the free **Aurora** plus **Sunset, Ocean, Forest, Midnight, Candy, Sakura, Cyber, Ember and Frost** at 600–4,400 coins. It marks the themes you own and the one equipped, and shows your balance. `/buy theme:<name>` deducts the price atomically and equips the theme; `/rank theme:<name>` switches between owned themes. Wallets are stored in `data/economy.json` and survive restarts.
 
-Server owners and administrators can use `/grantcoins <member> <amount> [reason]` to add **1–100,000 coins** to a wallet. It is limited to the server owner and members with **Administrator**, capped at the **1,000,000,000 coin** wallet maximum, and recorded in the audit log.
+Server owners and administrators can use `/grantcoins <member> <amount> [reason]` to add **1–100,000 coins** to a wallet, or `/removecoins <member> <amount> [reason]` to take them away. Both are limited to the server owner and members with **Administrator**, stop at the wallet limits, and are recorded in the audit log.
 
 ## Languages
 
@@ -185,14 +185,14 @@ Admin commands are grouped in the **Moderation** tab and are hidden from members
 - `/mute <member> <duration> [reason]` times a member out for **5 minutes to 28 days**. `/unmute` clears it early.
 - `/ban <user> <duration> [reason] [delete_messages]` supports **1-hour to 30-day temporary bans**, permanent bans, and message cleanup up to seven days. `/unban <user_id>` lifts a ban.
 - `/kick <member> [reason]` removes a member immediately; Discord does not support timed kicks.
-- `/warn <member> <reason>`, `/warnings <member>` and `/clearwarnings <member> [reason]` manage warnings stored per server in `data/warnings.json`. Warnings are DM'd when possible and recorded in the audit log.
+- `/warn <member> <reason>` and `/warnings <member> [clear] [reason]` manage warnings stored per server in `data/warnings.json`. Listing is private to moderators; clearing needs **Manage Server**. Warnings are DM'd when possible and recorded in the audit log.
 - `/purge <amount> [user] [channel] [reason]` removes up to **100 recent messages**, optionally from one member. Messages older than 14 days are skipped because Discord cannot bulk-delete them.
 - `/lock [channel] [reason]` denies **SendMessages** for **@everyone** and saves the previous setting in `data/channel-locks.json`. `/unlock` restores exactly that setting, so a channel that was already read-only stays read-only.
 - `/softban <member> [delete_messages] [reason]` bans a member, cleans up to seven days of messages, then immediately removes the ban. It refuses users who are already banned so an existing ban is never replaced.
-- `/grantcoins <member> <amount> [reason]` is limited to the server owner and members with **Administrator**. It grants 1–100,000 coins at a time, respects the wallet cap and writes to the audit log.
+- `/grantcoins <member> <amount> [reason]` and `/removecoins <member> <amount> [reason]` are limited to the server owner and members with **Administrator**. They add or remove 1–100,000 coins at a time, respect the wallet limits and write to the audit log.
 - Temporary bans are written to `data/moderation.json`. The scheduler checks every 30 seconds and lifts overdue bans after a restart.
 - Every command checks the caller's permission, the bot's permission, the server owner, the bot's role position and the caller's role position. Depending on the command, the bot needs **Moderate Members**, **Kick Members**, **Ban Members**, **Manage Messages**, **Manage Channels** and **Manage Roles**, and its role must sit above the target's highest role.
-- `/modlog channel:#audit-log` stores a channel in `data/moderation-logs.json`. Mutes, unmutes, kicks, bans, unbans, soft bans, channel locks and unlocks, coin grants, warnings, cleared warnings, purges, slowmode changes and automatic temporary-ban expiry are posted there with the target, moderator, duration, reason and action time. `/modlog` shows the current setting, and `/modlog disable:true` turns it off.
+- `/modlog channel:#audit-log` stores a channel in `data/moderation-logs.json`. Mutes, unmutes, kicks, bans, unbans, soft bans, channel locks and unlocks, coin grants and removals, level XP changes, warnings, cleared warnings, purges, slowmode changes and automatic temporary-ban expiry are posted there with the target, moderator, duration, reason and action time. `/modlog` shows the current setting, and `/modlog disable:true` turns it off.
 
 ## Welcome & leave messages
 
@@ -204,7 +204,7 @@ The bot requests the privileged **Server Members** intent for these events. Enab
 
 ## Site monitoring
 
-Set `SITE_URL` to the page you want to watch. The default is `https://habbo.gd`.
+Set `SITE_URL` to the page you want to watch. The default is `https://habbo.si`.
 
 `/sitestatus` runs a live check and records it. While the bot is online, a background probe also records a sample every five minutes. Samples are kept for seven days in `data/sitestatus-history.json`; restarting the bot does not wipe the history.
 
@@ -313,9 +313,9 @@ GUILD_ID=your-server-id
 CLIENT_ID=1564936469305364480
 
 # Monitored site and display details.
-SITE_URL=https://habbo.gd
-SITE_NAME=habbo.gd
-SITE_LOGO_URL=https://cdn.habbo.gd/cms/habbo/logo.png
+SITE_URL=https://habbo.si
+SITE_NAME=habbo.si
+SITE_LOGO_URL=https://habbo.si/apple-touch-icon.png
 SITE_MONITOR_INTERVAL_SECONDS=300
 
 # Rich presence.
@@ -337,9 +337,9 @@ OPENAI_MODEL=gpt-6-luna
 | `DISCORD_TOKEN` | Yes | — | Bot token from the Developer Portal. |
 | `GUILD_ID` | No | — | Required only by `npm run deploy:guild` for single-server development. |
 | `CLIENT_ID` | No | Read from token | Application ID used during command registration. |
-| `SITE_URL` | No | `https://habbo.gd` | Website watched by `/sitestatus`, `/uptime` and the monitor. |
+| `SITE_URL` | No | `https://habbo.si` | Website watched by `/sitestatus`, `/uptime` and the monitor. |
 | `SITE_NAME` | No | Site hostname | Display name used in status embeds. |
-| `SITE_LOGO_URL` | No | habbo.gd logo | Logo attached to status reports; leave blank to disable. |
+| `SITE_LOGO_URL` | No | habbo.si icon | Logo attached to status reports; leave blank to disable. |
 | `SITE_MONITOR_INTERVAL_SECONDS` | No | `300` | Background probe interval, minimum 60 seconds. |
 | `PRESENCE_TEXT` | No | `use /helplist!` | Text shown as the bot's **Playing** activity. |
 | `TOPGG_TOKEN` | No | — | top.gg API token; enables stats posting. |
@@ -488,8 +488,7 @@ src/
     │   ├── buy.js
     │   ├── coinbet.js
     │   ├── daily.js
-    │   ├── ecoleaderboard.js
-    │   ├── inventory.js
+    │   ├── ecoleaderboard.js
     │   ├── shop.js
     │   ├── slotsbet.js
     │   ├── steal.js
@@ -516,14 +515,15 @@ src/
     │   ├── redditcard.js
     │   └── xkcd.js
     ├── levels/
+    │   ├── leveladmin.js
+    │   ├── levelinfo.js
     │   ├── levelreward.js
     │   ├── levels.js
-    │   ├── rank.js
-    │   └── rankcard.js
+    │   └── rank.js
     ├── moderation/
     │   ├── ban.js
-    │   ├── clearwarnings.js
     │   ├── grantcoins.js
+    │   ├── removecoins.js
     │   ├── kick.js
     │   ├── language.js
     │   ├── lock.js
@@ -625,7 +625,7 @@ No message content is read or stored. Deleting the matching JSON file resets tha
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
-- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.12`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.13`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

@@ -2,6 +2,23 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.13',
+    date: '2026-11-05',
+    title: 'Habbo.si monitoring, level tools & coin removal',
+    summary: 'Zen now watches habbo.si, explains and manages chat XP, lets admins remove coins, and marks beta commands with 👷‍♂️.',
+    added: [
+      '`/sitestatus` and `/uptime` now monitor **habbo.si** and use its name and icon.',
+      '`/levelinfo` explains the XP rules and shows a member’s level, rank, next-level requirement and role reward.',
+      '`/leveladmin` lets admins add, remove, set or reset a member’s chat XP with an audit-log entry.',
+      '`/removecoins` lets admins and server owners remove up to **100,000 coins** from a wallet, stopping at zero.',
+    ],
+    improved: [
+      'Beta commands are marked with **👷‍♂️** instead of 🧪 across `/helplist` and the docs.',
+      '`/rank theme:<name>` replaces `/rankcard`, `/shop` now shows owned and equipped themes instead of `/inventory`, and `/warnings clear` replaces `/clearwarnings`; the public set stays at Discord’s 100-command limit.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.12',
     date: '2026-11-05',
     title: 'Meme mocks, a custom status & owner shutdown',

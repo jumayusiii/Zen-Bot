@@ -13,7 +13,7 @@ const blackjackCommand = require('../src/commands/economy/blackjack');
 const economyLeaderboardCommand = require('../src/commands/economy/ecoleaderboard');
 const balanceCommand = require('../src/commands/economy/balance');
 const { setGuildLanguage } = require('../src/lib/i18n');
-const rankCardCommand = require('../src/commands/levels/rankcard');
+const rankCommand = require('../src/commands/levels/rank');
 
 async function withEconomyFile(run) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'zen-economy-commands-'));
@@ -287,14 +287,12 @@ test('German economy responses localize copy, labels and numbers', async () => {
         && field.value.includes('klassische Zen-Verlauf'),
     ));
 
-    const style = fakeInteraction();
-    await rankCardCommand.execute(style);
-    const styleEmbed = style.captured.reply.embeds[0].data;
-    assert.equal(styleEmbed.title, 'Rank-Card-Stil');
-    assert.ok(styleEmbed.fields.some((field) => field.name === '🖼️ Eigene Themes'));
+    const equipped = fakeInteraction({ theme: 'aurora' });
+    await rankCommand.execute(equipped);
+    assert.equal(equipped.captured.reply.embeds[0].data.title, 'Kartentheme ausgerüstet');
 
     const unowned = fakeInteraction({ theme: 'candy' });
-    await rankCardCommand.execute(unowned);
+    await rankCommand.execute(unowned);
     assert.match(unowned.captured.reply.content, /Du besitzt \*\*Candy\*\* noch nicht/);
 
     const blackjack = fakeInteraction();
@@ -313,7 +311,7 @@ test('German economy responses localize copy, labels and numbers', async () => {
   });
 });
 
-test('/buy purchases a theme and /rankcard refuses unowned themes', async () => {
+test('/buy purchases a theme and /rank refuses unowned themes', async () => {
   await withEconomyFile(async (file) => {
     await fs.writeFile(
       file,
@@ -338,11 +336,11 @@ test('/buy purchases a theme and /rankcard refuses unowned themes', async () => 
     assert.equal(purchase.captured.reply.flags, 64);
 
     const unowned = fakeInteraction({ theme: 'candy' });
-    await rankCardCommand.execute(unowned);
+    await rankCommand.execute(unowned);
     assert.match(unowned.captured.reply.content, /do not own/);
 
     const equip = fakeInteraction({ theme: 'ocean' });
-    await rankCardCommand.execute(equip);
+    await rankCommand.execute(equip);
     assert.equal(equip.captured.reply.embeds[0].data.title, 'Card theme equipped');
     assert.match(equip.captured.reply.embeds[0].data.description, /Ocean/);
   });

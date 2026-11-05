@@ -115,6 +115,56 @@ test('random XP stays between 25 and 35', async () => {
   });
 });
 
+test('admin XP changes add, remove, set and reset a member', async () => {
+  await withLevelsFile(async () => {
+    const now = Date.UTC(2026, 10, 5, 12, 0, 0);
+
+    const added = await levels.adjustXp({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      username: 'Tester',
+      action: 'add',
+      amount: 100,
+      now,
+    });
+    assert.equal(added.afterXp, 100);
+    assert.equal(added.after.level, 1);
+
+    const removed = await levels.adjustXp({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      action: 'remove',
+      amount: 250,
+      now: now + 1,
+    });
+    assert.equal(removed.afterXp, 0);
+
+    const set = await levels.adjustXp({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      action: 'set',
+      amount: 200,
+      now: now + 2,
+    });
+    assert.equal(set.afterXp, 200);
+    assert.equal(set.after.level, 2);
+
+    const reset = await levels.adjustXp({
+      guildId: 'guild-1',
+      userId: 'user-1',
+      action: 'reset',
+      now: now + 3,
+    });
+    assert.equal(reset.afterXp, 0);
+    assert.equal(reset.applied, -200);
+
+    await assert.rejects(
+      levels.adjustXp({ guildId: 'guild-1', userId: 'user-1', action: 'explode' }),
+      /add, remove, set or reset/,
+    );
+  });
+});
+
 test('leaderboard and profile ranks are scoped per guild', async () => {
   await withLevelsFile(async () => {
     const now = Date.UTC(2026, 9, 29, 12, 0, 0);

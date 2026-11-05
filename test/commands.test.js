@@ -79,19 +79,19 @@ test('all commands load with valid names, descriptions and unique registrations'
     'highfive',
     'warn',
     'warnings',
-    'clearwarnings',
     'purge',
     'slowmode',
     'cat',
     'dog',
     'memegen',
     'animalmeme',
-    'rankcard',
+    'levelinfo',
+    'leveladmin',
     'balance',
     'daily',
     'shop',
     'buy',
-    'inventory',
+    'removecoins',
     'caption',
     'redditcard',
     'work',
@@ -159,12 +159,13 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('grantcoins').beta, true);
   assert.equal(registry.get('language').beta, true);
   assert.equal(registry.get('language').category, 'moderation');
-  assert.equal(registry.get('rankcard').beta, true);
+  assert.equal(registry.get('levelinfo').beta, undefined);
+  assert.equal(registry.get('leveladmin').beta, undefined);
+  assert.equal(registry.get('removecoins').beta, true);
   assert.equal(registry.get('balance').beta, true);
   assert.equal(registry.get('daily').beta, true);
   assert.equal(registry.get('shop').beta, true);
   assert.equal(registry.get('buy').beta, true);
-  assert.equal(registry.get('inventory').beta, true);
   assert.equal(registry.get('redditcard').beta, true);
   assert.equal(registry.get('work').beta, true);
   assert.equal(registry.get('coinbet').beta, true);
@@ -201,7 +202,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('fact').data.toJSON().options.length, 0);
   assert.equal(registry.get('hangman').data.toJSON().options.length, 0);
   assert.equal(registry.get('blackjack').data.toJSON().options.length, 1);
-  assert.equal(registry.get('rank').data.toJSON().options.length, 1);
+  assert.equal(registry.get('rank').data.toJSON().options.length, 2);
   assert.equal(registry.get('levels').data.toJSON().options.length, 0);
   assert.equal(registry.get('mute').data.toJSON().options.length, 3);
   assert.equal(registry.get('unmute').data.toJSON().options.length, 2);
@@ -243,20 +244,22 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('pat').data.toJSON().options.length, 1);
   assert.equal(registry.get('highfive').data.toJSON().options.length, 1);
   assert.equal(registry.get('warn').data.toJSON().options.length, 2);
-  assert.equal(registry.get('warnings').data.toJSON().options.length, 1);
-  assert.equal(registry.get('clearwarnings').data.toJSON().options.length, 2);
+  assert.equal(registry.get('warnings').data.toJSON().options.length, 3);
+  assert.equal(registry.get('levelinfo').data.toJSON().options.length, 1);
+  assert.equal(registry.get('leveladmin').data.toJSON().options.length, 4);
+  assert.equal(registry.get('removecoins').data.toJSON().options.length, 3);
   assert.equal(registry.get('purge').data.toJSON().options.length, 4);
   assert.equal(registry.get('slowmode').data.toJSON().options.length, 3);
   assert.equal(registry.get('cat').data.toJSON().options.length, 0);
   assert.equal(registry.get('dog').data.toJSON().options.length, 0);
   assert.equal(registry.get('memegen').data.toJSON().options.length, 8);
   assert.equal(registry.get('animalmeme').data.toJSON().options.length, 1);
-  assert.equal(registry.get('rankcard').data.toJSON().options.length, 1);
+  assert.equal(registry.get('levelinfo').data.toJSON().options.length, 1);
   assert.equal(registry.get('balance').data.toJSON().options.length, 1);
   assert.equal(registry.get('daily').data.toJSON().options.length, 0);
   assert.equal(registry.get('shop').data.toJSON().options.length, 0);
   assert.equal(registry.get('buy').data.toJSON().options.length, 1);
-  assert.equal(registry.get('inventory').data.toJSON().options.length, 0);
+
   assert.equal(registry.get('caption').data.toJSON().options.length, 7);
   assert.equal(registry.get('redditcard').data.toJSON().options.length, 3);
   assert.equal(registry.get('work').data.toJSON().options.length, 0);

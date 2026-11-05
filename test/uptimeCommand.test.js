@@ -25,7 +25,7 @@ test('/uptime renders a valid embed with seven daily rows and many incidents', a
   samples.push({ at: now - 60 * 1000, ok: true, status: 200, ms: 120, error: null });
 
   await fs.writeFile(historyFile, JSON.stringify({
-    site: 'https://habbo.gd',
+    site: 'https://habbo.si',
     createdAt: new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(now).toISOString(),
     samples,

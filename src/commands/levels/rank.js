@@ -3,8 +3,9 @@ const {
   MessageFlags,
   SlashCommandBuilder,
 } = require('discord.js');
+const { CARD_THEMES, getCardTheme } = require('../../lib/cardThemes');
 const { COLORS, createEmbed } = require('../../lib/embeds');
-const { getAccount } = require('../../lib/economy');
+const { getAccount, setCardTheme } = require('../../lib/economy');
 const { getProfile } = require('../../lib/levels');
 const { renderRankCard } = require('../../lib/rankCard');
 const { getInteractionLanguage, t } = require('../../lib/i18n');
@@ -46,11 +47,17 @@ function textEmbed(client, profile, displayName, requestedBy, language, image = 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('rank')
-    .setDescription("Show a member's level and XP rank card")
+    .setDescription("Show a member's rank card or equip an owned card theme")
     .addUserOption((option) =>
       option
         .setName('user')
         .setDescription('The member to show (defaults to you)'),
+    )
+    .addStringOption((option) =>
+      option
+        .setName('theme')
+        .setDescription('Equip an owned card theme instead of showing a card')
+        .addChoices(...CARD_THEMES.map((theme) => ({ name: theme.name, value: theme.id }))),
     ),
 
   async execute(interaction) {
@@ -63,6 +70,56 @@ module.exports = {
     }
 
     const language = await getInteractionLanguage(interaction);
+    const themeId = interaction.options.getString('theme');
+
+    if (themeId) {
+      try {
+        const account = await getAccount(interaction.guild.id, interaction.user.id);
+        if (!account.owned.includes(themeId)) {
+          const theme = getCardTheme(themeId);
+          await interaction.reply({
+            content: t(language, 'levels.card.notOwned', {
+              theme: theme.name,
+              price: formatNumber(theme.price, language),
+            }),
+            flags: MessageFlags.Ephemeral,
+          });
+          return;
+        }
+
+        const result = await setCardTheme({
+          guildId: interaction.guild.id,
+          userId: interaction.user.id,
+          themeId,
+        });
+
+        const embed = createEmbed(interaction.client, {
+          section: t(language, 'help.tabs.levels'),
+          title: t(language, 'levels.card.equippedTitle'),
+          description: t(language, 'levels.card.equippedDescription', { theme: result.theme.name }),
+          color: COLORS.success,
+          fields: [
+            { name: `🎨 ${t(language, 'economy.buy.theme')}`, value: result.theme.name, inline: true },
+            {
+              name: `💰 ${t(language, 'economy.balance')}`,
+              value: `${formatNumber(result.balance, language)} ${t(language, 'common.coins')}`,
+              inline: true,
+            },
+          ],
+          footer: t(language, 'levels.card.equippedFooter'),
+        });
+
+        await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+      } catch (error) {
+        console.error('[levels] /rank theme failed:', error);
+        await interaction.reply({
+          content: t(language, 'levels.card.error'),
+          flags: MessageFlags.Ephemeral,
+        });
+      }
+      return;
+    }
+
     const targetUser = interaction.options.getUser('user') ?? interaction.user;
     await interaction.deferReply();
 

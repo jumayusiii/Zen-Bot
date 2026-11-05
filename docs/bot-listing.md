@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **3 November 2026** · Zen **1.19.0-beta.12** · **100 slash commands**
+Last verified: **5 November 2026** · Zen **1.19.0-beta.13** · **100 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -23,7 +23,7 @@ vote webhooks, and the mistakes that get bots declined.
 | Bot is public | ✅ `bot_public: true` | None |
 | OAuth2 code grant | ❌ enabled | Turn it off in the Developer Portal |
 | Bot is online during review | ✅ PM2 process `zen-bot` | Keep the host running |
-| Slash commands are registered | ✅ 100 public (+4 owner-only) | `npm run deploy` after command changes |
+| Slash commands are registered | ✅ 100 public (+7 owner-only) | `npm run deploy` after command changes |
 | Invite requests Administrator | ✅ no | Keep permissions at `1099780180998` |
 | Help entry point | ✅ `/helplist` | Mention it in reviewer notes |
 | NSFW content on listing | ✅ none | Keep the listing SFW |
@@ -109,7 +109,7 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.12` |
+| Version | `1.19.0-beta.13` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
@@ -159,7 +159,7 @@ social and tidy without reading message content.
   Cyber, Ember and Frost.
 - A beta per-server economy with `/daily` streaks, `/work` shifts, level-up payouts,
   `/steal` heists, coin wagers and blackjack bets, an `/ecoleaderboard` rich list,
-  a theme shop, an inventory and admin-only `/grantcoins`.
+  a theme shop and admin-only `/grantcoins` and `/removecoins`.
 
 ### Moderation and community
 - Timed mutes, temporary and permanent bans, kicks, soft bans, warnings, purge,

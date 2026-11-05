@@ -27,7 +27,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Moderation',
     title: 'Moderation',
     emoji: '🛡️',
-    description: 'Permission-aware tools for mutes, kicks, bans and reversals.',
+    description: 'Permission-aware tools for mutes, kicks, bans, reversals and coin adjustments.',
     color: COLORS.danger,
     order: 15,
   },
@@ -45,7 +45,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Levels',
     title: 'Levels & rank',
     emoji: '📈',
-    description: 'Chat XP, customizable rank cards and the server leaderboard.',
+    description: 'Chat XP, rank cards, level tools, role rewards and the server leaderboard.',
     color: COLORS.success,
     order: 25,
   },
@@ -54,7 +54,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Economy',
     title: 'Economy & shop',
     emoji: '💰',
-    description: 'Daily, work and heist coins, coin wagers, blackjack bets, the rich list, rank card themes and your inventory.',
+    description: 'Daily, work and heist coins, coin wagers, blackjack bets, the rich list and rank card themes.',
     color: COLORS.game,
     order: 26,
   },
@@ -163,7 +163,7 @@ function overviewEmbed(client, groups, requestedBy, language) {
     title: t(language, 'help.overviewTitle', {}, 'Everything the bot can do'),
     description: [
       t(language, 'help.overviewSummary', { total }, `**${total} commands**, grouped into tabs. Pick a category below.`),
-      `-# ${t(language, 'help.overviewNote', { beta }, `${beta} beta commands · /changelog for release notes · 🧪 marks beta`)}`,
+      `-# ${t(language, 'help.overviewNote', { beta }, `${beta} beta commands · /changelog for release notes · 👷‍♂️ marks beta`)}`,
     ].join('\n'),
     color: COLORS.brand,
     thumbnail: client?.user?.displayAvatarURL({ extension: 'png', size: 256, forceStatic: true }),
@@ -177,7 +177,7 @@ function categoryEmbed(client, group, requestedBy, language) {
   const shown = group.commands.slice(0, 25);
 
   const fields = shown.map((command) => ({
-    name: `**${signature(command)}**${command.beta ? '  ·  🧪' : ''}`,
+    name: `**${signature(command)}**${command.beta ? '  ·  👷‍♂️' : ''}`,
     value: command.data.description || 'No description.',
     inline: false,
   }));

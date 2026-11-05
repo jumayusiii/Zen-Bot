@@ -3,17 +3,17 @@ const test = require('node:test');
 
 const config = require('../src/lib/config');
 
-test('self-host settings fall back to the habbo.gd defaults', () => {
+test('self-host settings fall back to the habbo.si defaults', () => {
   delete process.env.SITE_URL;
   delete process.env.SITE_NAME;
   delete process.env.SITE_LOGO_URL;
   delete process.env.PRESENCE_TEXT;
 
-  assert.equal(config.siteUrl(), 'https://habbo.gd');
-  assert.equal(config.siteHost(), 'habbo.gd');
-  assert.equal(config.siteName(), 'habbo.gd');
-  assert.equal(config.siteLogoUrl(), 'https://cdn.habbo.gd/cms/habbo/logo.png');
-  assert.equal(config.siteLogoFilename(), 'logo.png');
+  assert.equal(config.siteUrl(), 'https://habbo.si');
+  assert.equal(config.siteHost(), 'habbo.si');
+  assert.equal(config.siteName(), 'habbo.si');
+  assert.equal(config.siteLogoUrl(), 'https://habbo.si/apple-touch-icon.png');
+  assert.equal(config.siteLogoFilename(), 'apple-touch-icon.png');
   assert.equal(config.presenceText(), 'use /helplist!');
 });
 
@@ -44,7 +44,7 @@ test('a blank logo disables attachments and invalid URLs are ignored', () => {
   assert.equal(config.siteLogoFilename(), null);
 
   process.env.SITE_URL = 'javascript:alert(1)';
-  assert.equal(config.siteUrl(), 'https://habbo.gd');
+  assert.equal(config.siteUrl(), 'https://habbo.si');
 
   delete process.env.SITE_URL;
   delete process.env.SITE_LOGO_URL;

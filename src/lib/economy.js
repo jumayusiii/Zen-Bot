@@ -661,6 +661,45 @@ async function setCardTheme({ guildId, userId, themeId, now = Date.now() }) {
   });
 }
 
+/**
+ * Removes coins from a wallet without letting the balance go below zero.
+ *
+ * @param {{guildId: string, userId: string, amount: number, now?: number}} input
+ * @returns {Promise<{requested: number, amount: number, balance: number, shortfall: number}>}
+ */
+async function removeCoins({ guildId, userId, amount, now = Date.now() }) {
+  const requested = Math.floor(Number(amount));
+  if (!Number.isFinite(requested) || requested <= 0) {
+    throw accountError('invalid_amount', 'Choose at least 1 coin to remove.');
+  }
+  if (requested > MAX_GRANT) {
+    throw accountError('amount_too_large', `A single removal can take at most ${MAX_GRANT} coins.`);
+  }
+
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to remove coins.');
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+
+  return withQueuedState((state) => {
+    const entry = findOrCreate(state, guildKey, userKey);
+    const before = entry.balance;
+    entry.balance = Math.max(0, before - requested);
+    entry.updatedAt = timestamp;
+
+    return {
+      write: entry.balance < before,
+      value: {
+        requested,
+        amount: before - entry.balance,
+        balance: entry.balance,
+        shortfall: requested - (before - entry.balance),
+      },
+    };
+  });
+}
+
 module.exports = {
   DAILY_BASE,
   DAILY_COOLDOWN_MS,
@@ -692,6 +731,7 @@ module.exports = {
   getAccount,
   getEconomyLeaderboard,
   grantCoins,
+  removeCoins,
   setCardTheme,
   settleWager,
 };

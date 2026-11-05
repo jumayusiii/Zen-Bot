@@ -266,6 +266,96 @@ async function awardMessageXp({
   });
 }
 
+const ADMIN_ACTIONS = new Set(['add', 'remove', 'set', 'reset']);
+
+/**
+ * Applies an administrator XP change to one member. Reset is a set to zero.
+ *
+ * @param {{guildId: string, userId: string, username?: string, action: string, amount?: number, now?: number}} input
+ * @returns {Promise<{action: string, requested: number, applied: number, beforeXp: number, afterXp: number, before: object, after: object, entry: object|null}>}
+ */
+async function adjustXp({
+  guildId,
+  userId,
+  username,
+  action = 'add',
+  amount = 0,
+  now = Date.now(),
+}) {
+  const guildKey = cleanText(guildId, 32);
+  const userKey = cleanText(userId, 32);
+  if (!guildKey || !userKey) throw new Error('A guild and user are required to adjust XP.');
+  if (!ADMIN_ACTIONS.has(action)) throw new Error('Choose add, remove, set or reset.');
+
+  const value = Math.floor(Number(amount));
+  if (action !== 'reset' && (!Number.isFinite(value) || value < 0)) {
+    throw new Error('The XP amount must be a whole number of 0 or more.');
+  }
+
+  const timestamp = Number.isFinite(now) ? now : Date.now();
+  const maximumXp = totalXpForLevel(MAX_LEVEL);
+
+  return withQueuedState((state) => {
+    let entry = state.users.find(
+      (candidate) => candidate.guildId === guildKey && candidate.userId === userKey,
+    );
+    const existed = Boolean(entry);
+
+    if (!entry) {
+      if (action === 'remove' || action === 'reset' || (action === 'set' && value === 0)) {
+        const empty = progressFromXp(0);
+        return {
+          write: false,
+          value: {
+            action,
+            requested: action === 'reset' ? 0 : value,
+            applied: 0,
+            beforeXp: 0,
+            afterXp: 0,
+            before: empty,
+            after: empty,
+            entry: null,
+          },
+        };
+      }
+
+      entry = {
+        guildId: guildKey,
+        userId: userKey,
+        username: cleanText(username, 32) || `User ${userKey}`,
+        xp: 0,
+        lastXpAt: 0,
+      };
+      state.users.push(entry);
+    }
+
+    const beforeXp = entry.xp;
+    let afterXp;
+
+    if (action === 'add') afterXp = Math.min(maximumXp, beforeXp + value);
+    else if (action === 'remove') afterXp = Math.max(0, beforeXp - value);
+    else if (action === 'set') afterXp = Math.min(maximumXp, value);
+    else afterXp = 0;
+
+    entry.xp = afterXp;
+    if (username) entry.username = cleanText(username, 32) || entry.username;
+
+    return {
+      write: !existed || afterXp !== beforeXp,
+      value: {
+        action,
+        requested: action === 'reset' ? beforeXp : value,
+        applied: afterXp - beforeXp,
+        beforeXp,
+        afterXp,
+        before: progressFromXp(beforeXp),
+        after: progressFromXp(afterXp),
+        entry: cloneEntry(entry),
+      },
+    };
+  });
+}
+
 /**
  * @param {string} guildId
  * @param {string} userId
@@ -316,6 +406,7 @@ module.exports = {
   MAX_LEVEL,
   MAX_XP,
   MIN_XP,
+  adjustXp,
   awardMessageXp,
   getLeaderboard,
   getProfile,

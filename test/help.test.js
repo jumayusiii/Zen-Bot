@@ -92,7 +92,7 @@ test('a category tab lists its commands and falls back to overview for unknown v
 
   assert.equal(embed.data.title, 'Utilities');
   assert.deepEqual(embed.data.fields.map((field) => field.name), [
-    '**/poll**  ·  🧪',
+    '**/poll**  ·  👷‍♂️',
     '**/sitestatus**',
   ]);
 
