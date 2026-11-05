@@ -1,6 +1,43 @@
 const MAX_EMOJIFY_CHARS = 80;
 const MAX_MOCK_CHARS = 200;
 
+const MOCK_TEMPLATES = Object.freeze({
+  en: {
+    both: [
+      '{user} really said “{message}” 💀',
+      '“{message}” — {user}, everyone 🤡',
+      '{user} actually typed “{message}” and hit send 💀',
+    ],
+    message: [
+      '“{message}” — bold words from someone who asked 💀',
+      'Bro really said “{message}” and thought that was a take 💀',
+      '“{message}” is crazy work 💀',
+    ],
+    user: [
+      '{user} is out here acting like that 💀',
+      'Somebody tell {user} it’s not that deep 🤡',
+      '{user} really woke up and chose this 💀',
+    ],
+  },
+  de: {
+    both: [
+      '{user} hat wirklich „{message}“ geschrieben 💀',
+      '„{message}“ — {user}, ernsthaft? 🤡',
+      '{user} tippt „{message}“ und drückt wirklich auf Senden 💀',
+    ],
+    message: [
+      '„{message}“ — starke Worte für jemanden, der nicht gefragt hat 💀',
+      'Bruder sagt wirklich „{message}“ und denkt, das sei ein Argument 💀',
+      '„{message}“ ist schon wild 💀',
+    ],
+    user: [
+      '{user} benimmt sich wieder so 💀',
+      'Sagt {user} bitte, dass es nicht so tief ist 🤡',
+      '{user} ist heute wieder mutig 💀',
+    ],
+  },
+});
+
 const DAD_JOKES = Object.freeze([
   "I only know 25 letters of the alphabet. I don't know y.",
   'Why did the scarecrow win an award? He was outstanding in his field.',
@@ -107,6 +144,22 @@ function mockText(text) {
     .join('');
 }
 
+/**
+ * Builds the mocking line for /mock from an optional message and user.
+ * The quoted message is returned in alternating case, like the meme.
+ */
+function buildMockLine({ message = '', user = '', language = 'en', random = Math.random } = {}) {
+  const text = String(message ?? '').replace(/\s+/g, ' ').trim().slice(0, MAX_MOCK_CHARS);
+  const mention = String(user ?? '').trim() ? `<@${String(user).trim()}>` : '';
+  if (!text && !mention) return null;
+
+  const templates = MOCK_TEMPLATES[language] ?? MOCK_TEMPLATES.en;
+  const key = text && mention ? 'both' : mention ? 'user' : 'message';
+  const template = randomItem(templates[key], random) ?? templates[key][0];
+
+  return template.replace('{user}', mention).replace('{message}', mockText(text));
+}
+
 module.exports = {
   DAD_JOKES,
   DAD_JOKES_DE,
@@ -114,6 +167,7 @@ module.exports = {
   MAX_MOCK_CHARS,
   RIDDLES,
   RIDDLES_DE,
+  buildMockLine,
   emojify,
   mockText,
   randomDadJoke,

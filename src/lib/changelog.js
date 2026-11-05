@@ -2,6 +2,23 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.12',
+    date: '2026-11-05',
+    title: 'Meme mocks, a custom status & owner shutdown',
+    summary: 'Zen adds a SpongeBob `/mock` card, a developer custom status, an editable bot bio and a shutdown command that keeps the bot offline.',
+    added: [
+      '`/mock` posts a plain yellow embed with the SpongeBob image and a generated mocking line for a message, a mentioned user, or both.',
+      '`/devstatus` sets the bot’s custom status text and emoji beside the rich presence, and `reset` removes it.',
+      '`/devbio` edits the bot’s About Me bio through Discord’s application endpoint.',
+      '`/shutdown` stops the bot through PM2 so it stays offline until it is started again.',
+    ],
+    improved: [
+      'Developer controls now cover presence, custom status, avatar, banner, bio, restart and shutdown — seven owner-only commands.',
+      '`/text` is replaced by `/mock`; the public set stays at Discord’s 100-command limit.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.11',
     date: '2026-11-03',
     title: 'Owner controls inside Discord’s limit',

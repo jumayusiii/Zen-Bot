@@ -684,6 +684,7 @@ const MESSAGES = Object.freeze({
         description: '-# Copy it, or use it to answer the message you are mocking.',
         footer: 'Requested by {user}',
         empty: 'Give me some text to mock.',
+        needTarget: 'Mention a user or give me a message to mock.',
       },
       riddle: {
         title: 'Riddle',
@@ -1733,6 +1734,7 @@ const MESSAGES = Object.freeze({
         description: '-# Kopiere ihn oder nutze ihn als Antwort auf die Nachricht, über die du dich lustig machst.',
         footer: 'Angefragt von {user}',
         empty: 'Gib mir etwas Text zum Nachäffen.',
+        needTarget: 'Erwähne eine Person oder gib mir eine Nachricht zum Nachäffen.',
       },
       riddle: {
         title: 'Rätsel',

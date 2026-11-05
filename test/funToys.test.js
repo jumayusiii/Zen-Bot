@@ -8,6 +8,7 @@ const {
   MAX_MOCK_CHARS,
   RIDDLES,
   RIDDLES_DE,
+  buildMockLine,
   emojify,
   mockText,
   randomDadJoke,
@@ -46,4 +47,22 @@ test('mockText alternates only letters and leaves punctuation alone', () => {
   assert.equal(mockText('123'), '123');
   assert.equal(mockText(''), '');
   assert.equal(MAX_MOCK_CHARS, 200);
+});
+
+test('buildMockLine mocks a message, a user, or both', () => {
+  assert.equal(
+    buildMockLine({ message: 'hello', random: () => 0 }),
+    '“HeLlO” — bold words from someone who asked 💀',
+  );
+  assert.equal(
+    buildMockLine({ user: '123', random: () => 0 }),
+    '<@123> is out here acting like that 💀',
+  );
+  assert.equal(
+    buildMockLine({ user: '123', message: 'hi', random: () => 0 }),
+    '<@123> really said “Hi” 💀',
+  );
+  assert.match(buildMockLine({ message: 'x', language: 'de', random: () => 0 }), /„X“/);
+  assert.equal(buildMockLine({}), null);
+  assert.equal(buildMockLine({ message: '   ' }), null);
 });

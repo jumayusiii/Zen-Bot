@@ -12,9 +12,9 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 104);
+  assert.equal(registry.size, 107);
   assert.equal(splitDeveloperCommands(registry).publicCommands.length, 100);
-  assert.equal(splitDeveloperCommands(registry).developerCommands.length, 4);
+  assert.equal(splitDeveloperCommands(registry).developerCommands.length, 7);
 
   for (const name of [
     'uptime',
@@ -105,12 +105,15 @@ test('all commands load with valid names, descriptions and unique registrations'
     'devavatar',
     'devbanner',
     'devrestart',
+    'devstatus',
+    'devbio',
+    'shutdown',
     'fox',
     'duck',
     'shiba',
     'dadjoke',
     'riddle',
-    'text',
+    'mock',
   ]) {
     assert.ok(registry.has(name), `expected /${name} to load`);
   }
@@ -280,7 +283,15 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('dadjoke').category, 'fun');
   assert.equal(registry.get('dadjoke').data.toJSON().options.length, 0);
   assert.equal(registry.get('riddle').data.toJSON().options.length, 0);
-  assert.equal(registry.get('text').data.toJSON().options.length, 2);
+  assert.equal(registry.get('mock').data.toJSON().options.length, 2);
+  assert.equal(registry.get('devstatus').developerOnly, true);
+  assert.equal(registry.get('devstatus').category, 'developers');
+  assert.equal(registry.get('devstatus').data.toJSON().options.length, 3);
+  assert.equal(registry.get('devbio').developerOnly, true);
+  assert.equal(registry.get('devbio').data.toJSON().options.length, 1);
+  assert.equal(registry.get('shutdown').developerOnly, true);
+  assert.equal(registry.get('shutdown').category, 'developers');
+  assert.equal(registry.get('shutdown').data.toJSON().options.length, 0);
 });
 
 test('developer-only commands are split from the public registration set', () => {
@@ -293,10 +304,10 @@ test('developer-only commands are split from the public registration set', () =>
   const { publicCommands, developerCommands } = splitDeveloperCommands(registry);
 
   assert.equal(publicCommands.length, 100);
-  assert.equal(developerCommands.length, 4);
+  assert.equal(developerCommands.length, 7);
   assert.deepEqual(
     developerCommands.map((command) => command.data.name).sort(),
-    ['devavatar', 'devbanner', 'devpresence', 'devrestart'],
+    ['devavatar', 'devbanner', 'devbio', 'devpresence', 'devrestart', 'devstatus', 'shutdown'],
   );
   assert.ok(publicCommands.every((command) => command.developerOnly !== true));
 });

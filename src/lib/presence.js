@@ -5,7 +5,10 @@ const { presenceText } = require('./config');
 
 const REFRESH_MS = 10 * 60 * 1000;
 const DEFAULT_FILE = path.join(__dirname, '..', '..', 'data', 'presence.json');
+const DEFAULT_STATUS_FILE = path.join(__dirname, '..', '..', 'data', 'status.json');
 const MAX_TEXT_LENGTH = 128;
+const MAX_STATUS_LENGTH = 128;
+const MAX_EMOJI_LENGTH = 32;
 
 const ACTIVITY_TYPES = Object.freeze({
   playing: ActivityType.Playing,
@@ -24,6 +27,7 @@ const ACTIVITY_LABELS = Object.freeze({
 });
 
 let override = null;
+let customStatus = null;
 let presenceQueue = Promise.resolve();
 
 function presenceFile() {
@@ -32,8 +36,33 @@ function presenceFile() {
     : DEFAULT_FILE;
 }
 
+function statusFile() {
+  return process.env.STATUS_FILE
+    ? path.resolve(process.env.STATUS_FILE)
+    : DEFAULT_STATUS_FILE;
+}
+
 function cleanText(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, MAX_TEXT_LENGTH);
+}
+
+function normalizeCustomStatus(value) {
+  if (!value || typeof value !== 'object') return null;
+
+  const text = cleanText(value.text).slice(0, MAX_STATUS_LENGTH);
+  if (!text) return null;
+
+  return {
+    text,
+    emoji: String(value.emoji ?? '').trim().slice(0, MAX_EMOJI_LENGTH),
+    updatedAt: Number(value.updatedAt) || 0,
+    updatedBy: String(value.updatedBy ?? '').slice(0, 32),
+  };
+}
+
+/** The custom status is shown beside the rich presence, or null when unset. */
+function customStatusState() {
+  return customStatus ? { ...customStatus } : null;
 }
 
 function normalizeType(value) {
@@ -87,11 +116,25 @@ function activityFor(state) {
   return activity;
 }
 
+function customActivityFor(status) {
+  const activity = {
+    name: 'Custom Status',
+    type: ActivityType.Custom,
+    state: status.text,
+  };
+
+  if (status.emoji) activity.emoji = { name: status.emoji };
+  return activity;
+}
+
 /** The presence payload used both at login and by the refresh helper. */
 function buildPresence() {
+  const activities = [activityFor(presenceState())];
+  if (customStatus) activities.push(customActivityFor(customStatus));
+
   return {
     status: 'online',
-    activities: [activityFor(presenceState())],
+    activities,
   };
 }
 
@@ -133,6 +176,26 @@ async function writeOverrideFile() {
 
   try {
     await fs.writeFile(temporary, `${JSON.stringify(override, null, 2)}\n`, 'utf8');
+    await fs.rename(temporary, file);
+  } catch (error) {
+    await fs.rm(temporary, { force: true }).catch(() => {});
+    throw error;
+  }
+}
+
+async function writeStatusFile() {
+  const file = statusFile();
+
+  if (!customStatus) {
+    await fs.rm(file, { force: true }).catch(() => {});
+    return;
+  }
+
+  const temporary = `${file}.${process.pid}.tmp`;
+  await fs.mkdir(path.dirname(file), { recursive: true });
+
+  try {
+    await fs.writeFile(temporary, `${JSON.stringify(customStatus, null, 2)}\n`, 'utf8');
     await fs.rename(temporary, file);
   } catch (error) {
     await fs.rm(temporary, { force: true }).catch(() => {});
@@ -192,6 +255,49 @@ async function clearPresenceOverride() {
 }
 
 /**
+ * Sets a developer custom status. Discord shows it beside the rich presence,
+ * so the Playing activity remains visible at the same time.
+ *
+ * @param {{text?: string, emoji?: string, userId?: string}} [options]
+ * @returns {Promise<object|null>}
+ */
+async function setCustomStatus({ text, emoji = '', userId = '' } = {}) {
+  const nextText = cleanText(text);
+  if (!nextText) throw new Error('The custom status text cannot be empty.');
+
+  customStatus = {
+    text: nextText,
+    emoji: String(emoji ?? '').trim().slice(0, MAX_EMOJI_LENGTH),
+    updatedAt: Date.now(),
+    updatedBy: String(userId ?? '').slice(0, 32),
+  };
+
+  await queueWrite(writeStatusFile);
+  return customStatusState();
+}
+
+/** Removes the custom status and deletes the saved file. */
+async function clearCustomStatus() {
+  customStatus = null;
+  await queueWrite(writeStatusFile);
+  return null;
+}
+
+/** Reads the saved custom status at startup, keeping the rich presence intact. */
+async function loadCustomStatus() {
+  try {
+    customStatus = normalizeCustomStatus(JSON.parse(await fs.readFile(statusFile(), 'utf8')));
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      console.warn(`[presence] Could not read ${statusFile()}: ${error.message}`);
+    }
+    customStatus = null;
+  }
+
+  return customStatusState();
+}
+
+/**
  * Reads a saved override at startup. A missing or unreadable file keeps the
  * configured default, so a broken file can never leave the bot without a presence.
  *
@@ -229,6 +335,11 @@ function startPresence(client, { intervalMs = REFRESH_MS, logger = console } = {
   logger.log(
     `[bot] Rich presence set: ${ACTIVITY_LABELS[state.type] ?? 'Playing'} ${state.text}`,
   );
+  if (customStatus) {
+    logger.log(
+      `[bot] Custom status set: ${customStatus.emoji ? `${customStatus.emoji} ` : ''}${customStatus.text}`,
+    );
+  }
 
   const timer = setInterval(() => {
     applyPresence(client, logger);
@@ -243,10 +354,15 @@ module.exports = {
   REFRESH_MS,
   applyPresence,
   buildPresence,
+  clearCustomStatus,
   clearPresenceOverride,
+  customStatusState,
+  loadCustomStatus,
   loadPresenceOverride,
   presenceFile,
   presenceState,
+  setCustomStatus,
   setPresenceOverride,
   startPresence,
+  statusFile,
 };

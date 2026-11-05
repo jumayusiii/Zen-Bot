@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const { startBotListSync } = require('../lib/botLists');
-const { applyPresence, loadPresenceOverride, startPresence } = require('../lib/presence');
+const { applyPresence, loadCustomStatus, loadPresenceOverride, startPresence } = require('../lib/presence');
 const { startModerationScheduler } = require('../lib/moderation');
 const { startReminderScheduler } = require('../lib/reminders');
 const { startSiteMonitor } = require('../lib/siteMonitor');
@@ -14,6 +14,7 @@ module.exports = {
 
     // A saved developer override wins over PRESENCE_TEXT until it is cleared.
     await loadPresenceOverride();
+    await loadCustomStatus();
     startPresence(client);
     client.on(Events.ShardResume, () => applyPresence(client));
 

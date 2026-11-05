@@ -10,10 +10,13 @@ const { buildHelpPayload, groupCommands } = require('../src/lib/help');
 const presence = require('../src/lib/presence');
 const { MAX_IMAGE_BYTES, readAttachment, readImage } = require('../src/lib/botIdentity');
 const { isSupervised, parseDelay, scheduleRestart } = require('../src/lib/restart');
+const { scheduleShutdown } = require('../src/lib/shutdown');
 const devPresence = require('../src/commands/developers/presence');
 const devAvatar = require('../src/commands/developers/avatar');
 const devBanner = require('../src/commands/developers/banner');
 const devRestart = require('../src/commands/developers/restart');
+const devStatus = require('../src/commands/developers/status');
+const devBio = require('../src/commands/developers/bio');
 
 const DEVELOPER_ID = DEFAULT_DEVELOPER_USER_ID;
 const STRANGER_ID = '123456789012345678';
@@ -38,12 +41,24 @@ const client = {
 };
 
 function fakeInteraction({ userId = DEVELOPER_ID, options = {} } = {}) {
-  const captured = { presence: null, reply: null, edit: null, avatar: null, banner: null };
+  const captured = {
+    presence: null,
+    reply: null,
+    edit: null,
+    avatar: null,
+    banner: null,
+    application: null,
+  };
 
   return {
     captured,
     user: { id: userId, username: 'Tester' },
     client: {
+      application: {
+        async edit(patch) {
+          captured.application = patch;
+        },
+      },
       user: {
         username: 'TestBot',
         displayAvatarURL: () => 'https://cdn.example/bot.png',
@@ -67,6 +82,7 @@ function fakeInteraction({ userId = DEVELOPER_ID, options = {} } = {}) {
       getBoolean: (name) => (name in options ? options[name] : null),
       getAttachment: (name) => (name in options ? options[name] : null),
       getInteger: (name) => (name in options ? options[name] : null),
+      getUser: (name) => (name in options ? options[name] : null),
     },
     async reply(payload) {
       captured.reply = payload;
@@ -81,12 +97,15 @@ function fakeInteraction({ userId = DEVELOPER_ID, options = {} } = {}) {
 async function withPresenceFile(run) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'zen-presence-'));
   process.env.PRESENCE_FILE = path.join(directory, 'presence.json');
+  process.env.STATUS_FILE = path.join(directory, 'status.json');
 
   try {
     await run();
   } finally {
     await presence.clearPresenceOverride();
+    await presence.clearCustomStatus();
     delete process.env.PRESENCE_FILE;
+    delete process.env.STATUS_FILE;
     await fs.rm(directory, { recursive: true, force: true });
   }
 }
@@ -179,7 +198,7 @@ test('a saved override changes the payload, survives a reload and clears cleanly
 });
 
 test('everyone except the developer is refused by every developer command', async () => {
-  for (const command of [devPresence, devAvatar, devBanner, devRestart]) {
+  for (const command of [devPresence, devAvatar, devBanner, devRestart, devStatus, devBio]) {
     const stranger = fakeInteraction({
       userId: STRANGER_ID,
       options: { text: 'hijacked', reset: false, url: 'https://cdn.example/new.png' },
@@ -192,6 +211,7 @@ test('everyone except the developer is refused by every developer command', asyn
     assert.equal(stranger.captured.edit, null);
     assert.equal(stranger.captured.avatar, null);
     assert.equal(stranger.captured.banner, null);
+    assert.equal(stranger.captured.application, null);
   }
 });
 
