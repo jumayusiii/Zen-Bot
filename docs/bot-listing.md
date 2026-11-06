@@ -8,6 +8,34 @@ This is the complete launch playbook for getting Zen discovered: pre-flight fixe
 the directories worth submitting to, ready-to-paste listing copy, stats APIs,
 vote webhooks, and the mistakes that get bots declined.
 
+## Latest beta — 1.19.0-beta.13 (5 November 2026)
+
+Zen’s current public beta monitors **habbo.si**, adds level inspection and admin
+XP controls, and lets admins remove coins. The public set is exactly **100 slash
+commands**; 7 owner-only commands are registered only in the developer guild.
+
+| Change | Command | Who can use it |
+| --- | --- | --- |
+| Site monitoring switched to habbo.si | `/sitestatus`, `/uptime` | Everyone |
+| XP rules, current level and next reward | `/levelinfo` | Everyone |
+| Add, remove, set or reset XP (audit-logged) | `/leveladmin` | Administrator / server owner |
+| Remove coins, stopping at zero (audit-logged) | `/removecoins` | Administrator / server owner |
+| Beta marker changed to 👷‍♂️ | `/helplist` | Everyone |
+
+To stay within Discord’s 100 global command limit, `/rankcard` became
+`/rank theme:<name>`, `/inventory` became `/shop`, and `/clearwarnings` became
+`/warnings clear:true`. No feature was removed.
+
+Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.13> ·
+Changelog: `src/lib/changelog.js`
+
+## Quick submission path
+
+1. Clear the code-grant blocker below, then verify a fresh invite.
+2. Submit to top.gg (section 5), then update Discord Bot List (section 6).
+3. After approval, add `TOPGG_TOKEN` and `DISCORDBOTLIST_TOKEN`, restart and
+   confirm both stats posts return HTTP 200.
+
 > [!IMPORTANT]
 > **Zen currently has OAuth2 code grant enabled.** The Discord application API
 > reports `bot_require_code_grant: true`. Most bot lists require a public,
@@ -263,6 +291,10 @@ https://github.com/jumayusiii/Zen-Bot/issues.
 
 ## 5. top.gg — full submission
 
+Before you start: the bot must be public, invitable and online during review;
+the main features must work; `/helplist` must be an obvious entry point; and the
+invite must not request Administrator. These are top.gg’s published bot rules.
+
 1. Sign in at <https://top.gg> with Discord, then open <https://top.gg/bot/new>.
 2. Paste the **Application ID** `1564936469305364480` and select **Find Bot**.
 3. Confirm the bot is public and code grant is **off**. If you just changed it,
@@ -325,6 +357,10 @@ in section 8.
 Zen already has a live listing at
 <https://discordbotlist.com/bots/juma-habbo>. The public slug stays `juma-habbo`;
 change the display name to **Zen** and replace the old copy.
+
+DBL renders the long description as Markdown and expects a substantial profile
+(at least 200 words is a good target). Use the long description in section 4,
+keep the page SFW, and fill the tags, help command, GitHub and invite fields.
 
 1. Sign in at <https://discordbotlist.com> with the owner's Discord account.
 2. Open <https://discordbotlist.com/bots/juma-habbo/edit>, or
