@@ -107,9 +107,8 @@ module.exports = {
 
       await message.channel
         .send({
-          content: `<@${message.author.id}>`,
           embeds: [embed],
-          allowedMentions: { users: [message.author.id] },
+          allowedMentions: { parse: [] },
         })
         .catch((error) => {
           console.warn(`[levels] Could not announce a level up: ${error.message}`);

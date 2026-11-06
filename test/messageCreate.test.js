@@ -52,7 +52,7 @@ function fakeMessage({ userId = 'user-xp-1', bot = false, guildId = 'guild-xp-1'
   };
 }
 
-test('a message awards XP once and a level up is announced with coins', async () => {
+test('a message awards XP once and a level up is announced without a ping', async () => {
   await withLevelsFile(async (file, economyFile) => {
     await fs.writeFile(
       file,
@@ -81,7 +81,8 @@ test('a message awards XP once and a level up is announced with coins', async ()
     assert.ok(entry.lastXpAt > 0);
 
     assert.equal(message.sent.length, 1);
-    assert.equal(message.sent[0].content, '<@user-xp-2>');
+    assert.equal(message.sent[0].content, undefined);
+    assert.deepEqual(message.sent[0].allowedMentions, { parse: [] });
     assert.equal(message.sent[0].embeds[0].data.title, 'Level up');
     assert.match(message.sent[0].embeds[0].data.description, /level 1/);
     assert.match(message.sent[0].embeds[0].data.description, /\+25 coins/);
