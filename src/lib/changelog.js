@@ -2,6 +2,18 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.14',
+    date: '2026-11-06',
+    title: 'Global progression reset',
+    summary: 'A guarded maintenance command clears every server’s chat XP and coin wallets after an unexpected level reading.',
+    added: [
+      '`npm run reset:progression` previews every XP record and wallet that would be cleared; add `--confirm` to save timestamped backups and reset all servers to zero.',
+      'The reset touches only `data/levels.json` and `data/economy.json`; server settings, reward-role configuration, moderation history, reminders and other data stay intact.',
+    ],
+    improved: [],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.13',
     date: '2026-11-05',
     title: 'Habbo.si monitoring, level tools & coin removal',

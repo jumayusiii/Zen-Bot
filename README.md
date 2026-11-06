@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.13** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.14** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin coin grants and removals and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -590,6 +590,7 @@ Helper scripts:
 
 - `scripts/deploy-local.js` syncs the checkout, registers commands and restarts PM2.
 - `scripts/health-check.js` waits for PM2 to report the bot online with a fresh Discord login, then verifies that `DISCORD_TOKEN` belongs to that bot. Run `npm run health` after logon or a restart; it exits `1` when the bot is unhealthy.
+- `scripts/reset-progression.js` previews every XP record and wallet in both progression files; add `--confirm` to back them up and clear all servers at once.
 - `scripts/health-check-task.cmd` is the logon wrapper used by the `Zen Bot Health (Freebuff)` scheduled task; it runs the check one minute after sign-in and appends failures to `logs/health-failures.log`.
 - `scripts/watchdog.js` runs the health check every five minutes and restarts the PM2 app after **two consecutive failures**. The `Zen Bot Watchdog (Freebuff)` scheduled task runs `scripts/watchdog-task.cmd`; events go to `logs/watchdog.log` and early failures to `logs/watchdog-task.log`.
 - `scripts/release-notes.js` renders a changelog entry for a GitHub release.
@@ -619,6 +620,8 @@ The bot stores only what it needs to provide its features:
 - Weather locations, Wikipedia searches and returned metadata are processed in memory only; no search history is stored.
 
 No message content is read or stored. Deleting the matching JSON file resets that feature; deleting the `data/` folder resets everything. Poll voter IDs, reminder text and moderation reasons can be removed by deleting the relevant data files.
+
+To reset only chat progression, stop the bot and run `npm run reset:progression` to preview the counts. Re-run it with `--confirm` to write timestamped backups beside `data/levels.json` and `data/economy.json`, then clear every server’s XP and wallets. Server settings, reward-role configuration, moderation history, reminders and other data are untouched.
 
 ## Deployment notes
 
