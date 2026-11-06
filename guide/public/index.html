@@ -32,7 +32,7 @@
     "url": "https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/",
     "description": "Zen 1.19.0-beta.13 is live: habbo.si monitoring, level tools, coin removal and 100 slash commands, plus a tested top.gg and Discord Bot List submission guide.",
     "datePublished": "2026-11-01",
-    "dateModified": "2026-11-05",
+    "dateModified": "2026-11-06",
     "about": {
       "@type": "SoftwareApplication",
       "name": "Zen",
@@ -80,8 +80,9 @@
           <a href="#stats"><span>08</span>Stats &amp; votes</a>
           <a href="#review"><span>09</span>Review rules</a>
           <a href="#checklist"><span>10</span>Launch checklist</a>
-          <a href="#privacy"><span>11</span>Privacy policy</a>
-          <a href="#sources"><span>12</span>Sources</a>
+          <a href="#terms"><span>11</span>Terms of service</a>
+          <a href="#privacy"><span>12</span>Privacy policy</a>
+          <a href="#sources"><span>13</span>Sources</a>
         </nav>
 
         <div class="sidebar-card">
@@ -98,7 +99,7 @@
     <main id="main">
       <section class="hero" id="top">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Public beta 1.19.0-beta.13 · verified 5 November 2026</p>
+          <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Public beta 1.19.0-beta.13 · verified 6 November 2026</p>
           <h1>Put <span class="gradient-text">Zen</span> in front of every Discord community.</h1>
           <p class="lead">Everything you need to publish Zen 1.19.0-beta.13: what changed in the latest beta, the exact copy to paste, and the shortest safe path onto top.gg and Discord Bot List — plus the review rules that get bots declined.</p>
           <div class="hero-actions">
@@ -129,6 +130,7 @@
             <li><span class="dot dot-good" aria-hidden="true"></span>100 commands registered<strong>Ready</strong></li>
             <li><span class="dot dot-good" aria-hidden="true"></span>Listing copy<strong>Ready</strong></li>
             <li><span class="dot dot-good" aria-hidden="true"></span>Privacy policy<strong>This page</strong></li>
+            <li><span class="dot dot-good" aria-hidden="true"></span>Terms of service<strong>This page</strong></li>
           </ul>
           <p class="readiness-note">One setting stands between Zen and the submission forms. Clear it first, then work top to bottom.</p>
         </div>
@@ -295,8 +297,8 @@
             <span role="cell"><span class="tag tag-good">Ready</span></span>
           </div>
           <div class="status-row" role="row">
-            <span role="cell">Public privacy URL</span>
-            <span role="cell">Use <a href="#privacy">this page’s privacy section</a></span>
+            <span role="cell">Public policy URLs</span>
+            <span role="cell">Use this page’s <a href="#terms">terms</a> and <a href="#privacy">privacy</a></span>
             <span role="cell"><span class="tag tag-good">Ready</span></span>
           </div>
           <div class="status-row" role="row">
@@ -666,7 +668,7 @@ The bot will stay online during review.</code></pre>
             <div class="step"><span class="step-num">5</span><div><h3>Set the prefix</h3><p>Use <code>/</code>. A wrong prefix is a documented rejection reason because reviewers cannot invoke the bot.</p></div></div>
             <div class="step"><span class="step-num">6</span><div><h3>Add tags</h3><p>top.gg allows up to 12 categories. Type each tag and press Enter. Do not include <code>#</code> or stuff unrelated keywords.</p></div></div>
             <div class="step"><span class="step-num">7</span><div><h3>Set language and invite</h3><p>Language: English. Use the invite URL below. Do not request Administrator.</p></div></div>
-            <div class="step"><span class="step-num">8</span><div><h3>Add links</h3><p>Support: GitHub Issues. Source: GitHub repository. Privacy: this page’s <a href="#privacy">privacy section</a>.</p></div></div>
+            <div class="step"><span class="step-num">8</span><div><h3>Add links</h3><p>Support: GitHub Issues. Source: GitHub repository. Privacy and terms: this page’s <a href="#privacy">privacy</a> and <a href="#terms">terms</a> sections.</p></div></div>
             <div class="step"><span class="step-num">9</span><div><h3>Paste the reviewer note</h3><p>Use the private note from the listing kit. It explains the slash-only entry point, permissions and the optional ChatGPT key.</p></div></div>
             <div class="step"><span class="step-num">10</span><div><h3>Submit and stay online</h3><p>Tick the confirmation, submit, and keep PM2 running for the entire review. Do not change the bot’s public behavior mid-review.</p></div></div>
           </div>
@@ -905,7 +907,7 @@ Authorization: &lt;token&gt;
             <label class="check"><input type="checkbox" data-check="public"><span class="box" aria-hidden="true"></span><span><strong>Confirm the bot is public and invitable</strong><small>Use a fresh Discord account or incognito browser.</small></span></label>
             <label class="check"><input type="checkbox" data-check="commands"><span class="box" aria-hidden="true"></span><span><strong>Register all 100 slash commands</strong><small>Run <code>npm run deploy</code> after any command change.</small></span></label>
             <label class="check"><input type="checkbox" data-check="helplist"><span class="box" aria-hidden="true"></span><span><strong>Test <code>/helplist</code> from a clean account</strong><small>Confirm the directory opens and the main tabs work.</small></span></label>
-            <label class="check"><input type="checkbox" data-check="privacy"><span class="box" aria-hidden="true"></span><span><strong>Use this page as the public privacy URL</strong><small>Link directly to <code>#privacy</code> in every listing.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="privacy"><span class="box" aria-hidden="true"></span><span><strong>Use this page for both public policy URLs</strong><small>Paste the <code>#terms</code> and <code>#privacy</code> links in the application and listings.</small></span></label>
             <label class="check"><input type="checkbox" data-check="links"><span class="box" aria-hidden="true"></span><span><strong>Check the support and invite URLs</strong><small>GitHub Issues and the no-Administrator invite.</small></span></label>
             <label class="check"><input type="checkbox" data-check="assets"><span class="box" aria-hidden="true"></span><span><strong>Prepare the icon and banner</strong><small>1024×1024 avatar and 1500×600 banner.</small></span></label>
             <label class="check"><input type="checkbox" data-check="copy"><span class="box" aria-hidden="true"></span><span><strong>Copy the short description, long description, tags and reviewer note</strong><small>All four are in the listing kit.</small></span></label>
@@ -937,10 +939,58 @@ Authorization: &lt;token&gt;
         </div>
       </section>
 
-      <section class="section" id="privacy">
+      <section class="section" id="terms">
         <div class="section-head">
           <div>
             <p class="eyebrow">11 · Public policy</p>
+            <h2>Terms of service</h2>
+            <p>These terms cover use of Zen. Discord’s own <a href="https://discord.com/terms" rel="noopener">Terms of Service</a> and <a href="https://discord.com/guidelines" rel="noopener">Community Guidelines</a> also apply.</p>
+          </div>
+          <span class="time-chip">Effective 6 Nov 2026</span>
+        </div>
+
+        <div class="policy">
+          <p class="policy-intro">By adding Zen to a server or using its commands, you agree to these terms. If you do not agree, remove the bot and stop using it. Questions go to <a href="https://github.com/jumayusiii/Zen-Bot/issues" rel="noopener">GitHub Issues</a>.</p>
+
+          <h3>Using Zen</h3>
+          <p>Zen is a Discord bot offered in public beta. You may use it in servers where it is installed, subject to Discord’s rules and applicable law. You are responsible for the permissions you grant and for how the bot is configured in your server.</p>
+
+          <h3>Acceptable use</h3>
+          <p>Do not use Zen to:</p>
+          <ul>
+            <li>Harass, threaten, spam or break Discord’s Community Guidelines.</li>
+            <li>Violate applicable law or infringe another person’s rights.</li>
+            <li>Exploit bugs, bypass rate limits or interfere with the bot or its host.</li>
+            <li>Run scams, distribute malware or attempt to obtain another user’s data.</li>
+          </ul>
+          <p>We may restrict or remove access when these rules are broken or when required by Discord.</p>
+
+          <h3>Server administration</h3>
+          <p>Server owners and administrators decide which features are enabled. Moderation, welcome, level and audit-log features require appropriate Discord permissions and role hierarchy. You must have the authority to configure those features before enabling them.</p>
+
+          <h3>Virtual items and beta features</h3>
+          <p>XP, levels, coins, card themes and similar items are virtual, have no cash value and cannot be transferred or redeemed. Zen is a beta service: balances, features and data formats may change or reset. We do not sell virtual items for real money.</p>
+
+          <h3>Availability and changes</h3>
+          <p>We aim to keep Zen online, but we do not guarantee uninterrupted availability, error-free operation or permanent data retention. Features may be changed, suspended or removed, and maintenance may interrupt service. Do not rely on the bot for irreplaceable data.</p>
+
+          <h3>Privacy</h3>
+          <p>Our <a href="#privacy">privacy policy</a> explains what Zen stores, what it does not read and how to request deletion. It forms part of these terms.</p>
+
+          <h3>Disclaimer and liability</h3>
+          <p>To the maximum extent permitted by law, Zen is provided “as is” and without warranties of any kind. We are not liable for indirect, incidental or consequential losses, lost data or lost profits arising from use of the bot. Nothing in these terms limits liability that cannot legally be limited.</p>
+
+          <h3>Changes and contact</h3>
+          <p>If these terms change, the effective date at the top of this section will change. Continued use after an update means you accept the revised terms. For questions or takedown requests, open an issue at <a href="https://github.com/jumayusiii/Zen-Bot/issues" rel="noopener">github.com/jumayusiii/Zen-Bot/issues</a>.</p>
+
+          <p class="policy-foot">Effective <strong>6 November 2026</strong> · Zen <strong>1.19.0-beta.13</strong></p>
+        </div>
+      </section>
+
+      <section class="section" id="privacy">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">12 · Public policy</p>
             <h2>Privacy policy</h2>
             <p>Use this page as Zen’s public privacy URL. It describes what the bot stores, what it never reads, and how to request deletion.</p>
           </div>
@@ -985,7 +1035,7 @@ Authorization: &lt;token&gt;
       <section class="section" id="sources">
         <div class="section-head">
           <div>
-            <p class="eyebrow">12 · Receipts</p>
+            <p class="eyebrow">13 · Receipts</p>
             <h2>Sources &amp; further reading</h2>
             <p>Directory forms and policies change. These were checked on 5 November 2026; if a page is login-gated or moved, use the directory’s current Add Bot flow.</p>
           </div>
@@ -1056,7 +1106,7 @@ Authorization: &lt;token&gt;
         <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
       </div>
     </div>
-    <p class="footer-note">Verified 5 November 2026. Directory forms and policies can change; always confirm the current Add Bot flow.</p>
+    <p class="footer-note">Verified 6 November 2026. Directory forms and policies can change; always confirm the current Add Bot flow.</p>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>

@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **5 November 2026** · Zen **1.19.0-beta.13** · **100 slash commands**
+Last verified: **6 November 2026** · Zen **1.19.0-beta.13** · **100 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -58,14 +58,14 @@ Changelog: `src/lib/changelog.js`
 | Vote-locked commands | ✅ none | Do not gate most commands |
 | Icon | ✅ 1024×1024 | `assets/branding/zen-avatar-1024.png` |
 | Banner | ✅ 1500×600 | `assets/branding/zen-banner-1500x600.png` |
-| Public privacy policy URL | ✅ live in this guide | Use the [privacy section](https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/#privacy) |
+| Public policy URLs | ✅ set on the Discord application | [Terms](https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/#terms) and [Privacy](https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/#privacy) |
 | Support URL | ✅ GitHub Issues | Add a support server if you have one |
 | Directory stats tokens | ❌ not configured | Add tokens after approval |
 | Vote webhooks | ❌ not implemented | Optional; add only if rewarding votes |
 | top.gg listing | ❌ not submitted | Submit after the code-grant fix |
 | Discord Bot List | ✅ live at old slug | Update the copy and display name |
 
-The only hard blocker is **code grant**. The public privacy URL is live in this
+The only hard blocker is **code grant**. The public terms and privacy URLs are live in this
 guide, so everything else can ship today.
 
 ## 2. What the directories actually are
