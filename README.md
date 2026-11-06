@@ -237,13 +237,13 @@ Each `/sitestatus` report can update itself without spamming the channel.
 
 The complete launch guide — current directories, per-site steps, Zen's copy, stats APIs, vote webhooks and review checks — is in [docs/bot-listing.md](docs/bot-listing.md) and published at [Zen Bot List Guide](https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page). The public page source is in [guide/](guide/).
 
-> **Before submitting:** turn off **Requires OAuth2 Code Grant** in the Developer Portal under **Bot → Authorization Flow**. The current application reports it as enabled. Most directories require a public, invitable bot, and top.gg explicitly requires the setting to be off when code grant is not used.
+> **Before submitting:** **Requires OAuth2 Code Grant** is already off, and the application is public. The invite is ready; open it once in a fresh window before submitting. Most directories require a public, invitable bot.
 
 Zen is live on [Discord Bot List](https://discordbotlist.com/bots/juma-habbo). The listing URL keeps its `juma-habbo` slug; update its display name and copy from [section 6 of the guide](docs/bot-listing.md#6-discord-bot-list--full-submission). The [listing editor](https://discordbotlist.com/bots/juma-habbo/edit) requires the owner's Discord sign-in.
 
-[top.gg](https://top.gg/bot/new) is the primary directory target. Submit it after the code-grant fix, then add the other Tier 1 listings from the guide.
+[top.gg](https://top.gg/bot/new) is the primary directory target. Submit it now; code grant is off. Then add the other Tier 1 listings from the guide.
 
-1. Fix code grant and keep the bot online during review. The guide's [privacy policy](https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/#privacy) is the public privacy URL.
+1. Keep the bot online during review; code grant is off. The guide's [privacy policy](https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page/#privacy) is the public privacy URL.
 2. Update or submit the listings with the ready-to-paste copy.
 3. Create API tokens — top.gg under **Integrations & API**, Discord Bot List on the bot's admin page.
 4. Add `TOPGG_TOKEN` and/or `DISCORDBOTLIST_TOKEN` to `.env`, then restart.

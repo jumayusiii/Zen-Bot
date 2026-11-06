@@ -109,7 +109,7 @@
           <ul class="hero-stats" aria-label="Guide facts">
             <li><strong>6</strong><span>Tier 1 targets</span></li>
             <li><strong>100</strong><span>Slash commands</span></li>
-            <li><strong>1</strong><span>Blocker to clear</span></li>
+            <li><strong>0</strong><span>Blockers left</span></li>
           </ul>
         </div>
 
@@ -117,22 +117,22 @@
           <div class="readiness-head">
             <div>
               <p class="mini-label">Launch readiness</p>
-              <strong>Almost ready</strong>
+              <strong>Ready to submit</strong>
             </div>
-            <span class="status-pill status-warn">1 action</span>
+            <span class="status-pill status-good">Ready</span>
           </div>
-          <div class="meter" role="img" aria-label="90 percent ready">
-            <span class="meter-fill" data-width="90"></span>
+          <div class="meter" role="img" aria-label="100 percent ready">
+            <span class="meter-fill" data-width="100"></span>
           </div>
           <ul class="readiness-list">
             <li><span class="dot dot-good" aria-hidden="true"></span>Public and invitable<strong>Ready</strong></li>
-            <li><span class="dot dot-bad" aria-hidden="true"></span>OAuth2 code grant<strong>Turn off</strong></li>
+            <li><span class="dot dot-good" aria-hidden="true"></span>OAuth2 code grant<strong>Off</strong></li>
             <li><span class="dot dot-good" aria-hidden="true"></span>100 commands registered<strong>Ready</strong></li>
             <li><span class="dot dot-good" aria-hidden="true"></span>Listing copy<strong>Ready</strong></li>
             <li><span class="dot dot-good" aria-hidden="true"></span>Privacy policy<strong>This page</strong></li>
             <li><span class="dot dot-good" aria-hidden="true"></span>Terms of service<strong>This page</strong></li>
           </ul>
-          <p class="readiness-note">One setting stands between Zen and the submission forms. Clear it first, then work top to bottom.</p>
+          <p class="readiness-note">All pre-flight checks are green. Start with top.gg, then update the Discord Bot List entry.</p>
         </div>
       </section>
 
@@ -189,10 +189,10 @@
                   <span class="mini-label">Publish it</span>
                   <h3>Two listings, one afternoon</h3>
                 </div>
-                <span class="tag tag-warn">Code grant first</span>
+                <span class="tag tag-good">Ready to submit</span>
               </div>
               <div class="step-list">
-                <div class="step"><span class="step-num">1</span><div><h3>Clear the one blocker</h3><p>In the <a href="https://discord.com/developers/applications/1564936469305364480/bot" rel="noopener">Developer Portal</a>, switch <strong>Requires OAuth2 Code Grant</strong> off. Wait about 30 minutes, then test the invite in an incognito window.</p></div></div>
+                <div class="step"><span class="step-num">1</span><div><h3>Confirm the public install</h3><p>Code grant is off and the application is public. Open the invite once in a fresh window, then continue.</p></div></div>
                 <div class="step"><span class="step-num">2</span><div><h3>Submit to top.gg</h3><p>Sign in, open <a href="https://top.gg/bot/new" rel="noopener">top.gg/bot/new</a>, find Zen by application ID, then paste the short description, long description, tags, invite and reviewer note from the <a href="#listing-kit">listing kit</a>. Stay online through review.</p></div></div>
                 <div class="step"><span class="step-num">3</span><div><h3>Update Discord Bot List</h3><p>Open the <a href="https://discordbotlist.com/bots/juma-habbo/edit" rel="noopener">existing listing editor</a>, set the display name to Zen, paste the current copy and links, then generate a stats token and add it to <code>.env</code> as <code>DISCORDBOTLIST_TOKEN</code>.</p></div></div>
               </div>
@@ -231,17 +231,17 @@
           <span class="time-chip">About 10 minutes</span>
         </div>
 
-        <div class="callout callout-danger">
+        <div class="callout callout-info">
           <div class="callout-mark" aria-hidden="true">!</div>
           <div class="callout-body">
-            <h3>First: turn off OAuth2 code grant.</h3>
-            <p>Zen’s application currently reports <code>bot_require_code_grant: true</code>. Most lists require a public, invitable bot, and top.gg explicitly asks you to disable code grant when you are not using it. This is the only hard blocker.</p>
-            <ol class="compact-steps">
-              <li>Open the <a href="https://discord.com/developers/applications/1564936469305364480/bot" rel="noopener">Discord Developer Portal → Bot</a>.</li>
-              <li>Under <strong>Authorization Flow</strong>, switch <strong>Requires OAuth2 Code Grant</strong> to <strong>Off</strong>.</li>
-              <li>Wait about 30 minutes, then test a fresh invite in an incognito window.</li>
-            </ol>
-            <a class="btn btn-small btn-danger" href="https://discord.com/developers/applications/1564936469305364480/bot" rel="noopener">Open Bot settings <span aria-hidden="true">↗</span></a>
+            <h3>OAuth2 code grant is off.</h3>
+            <p>Zen’s application reports <code>bot_require_code_grant: false</code> as of 6 November 2026. The public invite is ready; test it once in a fresh window before submitting.</p>
+
+
+
+
+
+            <a class="btn btn-small btn-primary" href="https://discord.com/oauth2/authorize?client_id=1564936469305364480&amp;permissions=1099780180998&amp;scope=bot%20applications.commands" rel="noopener">Test the public invite <span aria-hidden="true">↗</span></a>
           </div>
         </div>
 
@@ -258,8 +258,8 @@
           </div>
           <div class="status-row" role="row">
             <span role="cell">OAuth2 code grant</span>
-            <span role="cell">Reported as enabled</span>
-            <span role="cell"><span class="tag tag-bad">Fix first</span></span>
+            <span role="cell"><code>bot_require_code_grant: false</code></span>
+            <span role="cell"><span class="tag tag-good">Ready</span></span>
           </div>
           <div class="status-row" role="row">
             <span role="cell">Online during review</span>
@@ -663,7 +663,7 @@ The bot will stay online during review.</code></pre>
           <div class="step-list">
             <div class="step"><span class="step-num">1</span><div><h3>Sign in and start</h3><p>Sign in to <a href="https://top.gg" rel="noopener">top.gg</a> with Discord, then open <a href="https://top.gg/bot/new" rel="noopener">top.gg/bot/new</a>.</p></div></div>
             <div class="step"><span class="step-num">2</span><div><h3>Find the bot</h3><p>Paste application ID <code>1564936469305364480</code> and choose <strong>Find Bot</strong>.</p></div></div>
-            <div class="step"><span class="step-num">3</span><div><h3>Clear the blocker</h3><p>Confirm the bot is public and code grant is <strong>off</strong>. If you just changed it, wait about 30 minutes before inviting.</p></div></div>
+            <div class="step"><span class="step-num">3</span><div><h3>Confirm the install</h3><p>The bot is public and code grant is <strong>off</strong>. Open the invite once in a fresh window, then continue.</p></div></div>
             <div class="step"><span class="step-num">4</span><div><h3>Paste the descriptions</h3><p>Use the short description (under 140 characters) and the Markdown long description from the <a href="#listing-kit">listing kit</a>.</p></div></div>
             <div class="step"><span class="step-num">5</span><div><h3>Set the prefix</h3><p>Use <code>/</code>. A wrong prefix is a documented rejection reason because reviewers cannot invoke the bot.</p></div></div>
             <div class="step"><span class="step-num">6</span><div><h3>Add tags</h3><p>top.gg allows up to 12 categories. Type each tag and press Enter. Do not include <code>#</code> or stuff unrelated keywords.</p></div></div>
@@ -858,7 +858,7 @@ Authorization: &lt;token&gt;
         </div>
 
         <div class="rule-grid">
-          <article class="rule"><span class="rule-number">01</span><h3>Offline, private or code-granted</h3><p>Keep Zen online and invitable for the whole review. Turn code grant off before you submit.</p></article>
+          <article class="rule"><span class="rule-number">01</span><h3>Offline, private or code-granted</h3><p>Keep Zen online and invitable for the whole review. Zen’s code grant is already off.</p></article>
           <article class="rule"><span class="rule-number">02</span><h3>Wrong prefix</h3><p>Zen is <code>/</code>, not a text prefix. Reviewers need to invoke it immediately.</p></article>
           <article class="rule"><span class="rule-number">03</span><h3>Requests Administrator</h3><p>Not allowed. Zen’s invite uses permissions <code>1099780180998</code> and does not include it.</p></article>
           <article class="rule"><span class="rule-number">04</span><h3>No clear entry point</h3><p><code>/helplist</code> is the directory. Put it in the listing and the reviewer note.</p></article>
@@ -903,7 +903,7 @@ Authorization: &lt;token&gt;
 
           <div class="checklist-group">
             <h3><span>Before submitting</span><span class="group-count">10</span></h3>
-            <label class="check"><input type="checkbox" data-check="code-grant"><span class="box" aria-hidden="true"></span><span><strong>Turn off Requires OAuth2 Code Grant</strong><small>Developer Portal → Bot → Authorization Flow. Wait 30 minutes, then test an invite.</small></span></label>
+            <label class="check"><input type="checkbox" data-check="code-grant"><span class="box" aria-hidden="true"></span><span><strong>Confirm the public invite</strong><small>Code grant is off. Open the invite once in a fresh window before submitting.</small></span></label>
             <label class="check"><input type="checkbox" data-check="public"><span class="box" aria-hidden="true"></span><span><strong>Confirm the bot is public and invitable</strong><small>Use a fresh Discord account or incognito browser.</small></span></label>
             <label class="check"><input type="checkbox" data-check="commands"><span class="box" aria-hidden="true"></span><span><strong>Register all 100 slash commands</strong><small>Run <code>npm run deploy</code> after any command change.</small></span></label>
             <label class="check"><input type="checkbox" data-check="helplist"><span class="box" aria-hidden="true"></span><span><strong>Test <code>/helplist</code> from a clean account</strong><small>Confirm the directory opens and the main tabs work.</small></span></label>

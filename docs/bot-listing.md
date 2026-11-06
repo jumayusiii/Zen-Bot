@@ -31,25 +31,24 @@ Changelog: `src/lib/changelog.js`
 
 ## Quick submission path
 
-1. Clear the code-grant blocker below, then verify a fresh invite.
+1. Verify the public invite; code grant is already off.
 2. Submit to top.gg (section 5), then update Discord Bot List (section 6).
 3. After approval, add `TOPGG_TOKEN` and `DISCORDBOTLIST_TOKEN`, restart and
    confirm both stats posts return HTTP 200.
 
 > [!IMPORTANT]
-> **Zen currently has OAuth2 code grant enabled.** The Discord application API
-> reports `bot_require_code_grant: true`. Most bot lists require a public,
-> invitable bot, and top.gg explicitly asks you to turn code grant off when you
-> are not using it. Fix this **before** submitting:
-> **Developer Portal → your app → Bot → Authorization Flow → Requires OAuth2
-> Code Grant → Off**. Then wait about 30 minutes before retrying an invite.
+> **Zen’s OAuth2 code grant is off.** The Discord application API
+> reports `bot_require_code_grant: false` (verified 6 November 2026). The public
+> invite is ready; test it in a fresh window before submitting. No portal
+> change is required.
+
 
 ## 1. Release readiness
 
 | Check | Zen status | Action |
 | --- | --- | --- |
 | Bot is public | ✅ `bot_public: true` | None |
-| OAuth2 code grant | ❌ enabled | Turn it off in the Developer Portal |
+| OAuth2 code grant | ✅ `bot_require_code_grant: false` | None |
 | Bot is online during review | ✅ PM2 process `zen-bot` | Keep the host running |
 | Slash commands are registered | ✅ 100 public (+7 owner-only) | `npm run deploy` after command changes |
 | Invite requests Administrator | ✅ no | Keep permissions at `1099780180998` |
@@ -62,10 +61,10 @@ Changelog: `src/lib/changelog.js`
 | Support URL | ✅ GitHub Issues | Add a support server if you have one |
 | Directory stats tokens | ❌ not configured | Add tokens after approval |
 | Vote webhooks | ❌ not implemented | Optional; add only if rewarding votes |
-| top.gg listing | ❌ not submitted | Submit after the code-grant fix |
+| top.gg listing | ❌ not submitted | Submit now |
 | Discord Bot List | ✅ live at old slug | Update the copy and display name |
 
-The only hard blocker is **code grant**. The public terms and privacy URLs are live in this
+No hard blockers remain. The public terms and privacy URLs are live in this
 guide, so everything else can ship today.
 
 ## 2. What the directories actually are
@@ -297,8 +296,8 @@ invite must not request Administrator. These are top.gg’s published bot rules.
 
 1. Sign in at <https://top.gg> with Discord, then open <https://top.gg/bot/new>.
 2. Paste the **Application ID** `1564936469305364480` and select **Find Bot**.
-3. Confirm the bot is public and code grant is **off**. If you just changed it,
-   wait about 30 minutes.
+3. Confirm the bot is public and code grant is **off** (verified 6 November
+   2026). Open the invite once in a fresh window, then continue.
 4. Paste the **short description** from section 4 (under 140 characters).
 5. Paste the **long description** (Markdown is supported).
 6. Set **Prefix** to `/`. A wrong prefix is a rejection reason.
@@ -528,7 +527,7 @@ resubmit second.
 
 ### Before submitting
 
-- [ ] Turn **Requires OAuth2 Code Grant** off.
+- [x] Confirm **Requires OAuth2 Code Grant** is off.
 - [ ] Confirm the bot is public and invitable.
 - [ ] Deploy all 100 public slash commands: `npm run deploy`.
 - [ ] Confirm `/helplist` works from a clean account.
