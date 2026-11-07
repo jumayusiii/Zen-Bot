@@ -110,15 +110,15 @@
   <rect width="1500" height="600" fill="#070911" />
   <rect width="1500" height="600" fill="url(#bannerBg)" />
 
-  <circle cx="235" cy="45" r="330" fill="#9B76FF" opacity="0.11" />
-  <circle cx="1165" cy="300" r="360" fill="url(#bannerHalo)" />
-  <circle cx="1165" cy="300" r="326" fill="none" stroke="url(#matRing)" stroke-opacity="0.15" stroke-width="2" />
+  <circle cx="300" cy="35" r="300" fill="#9B76FF" opacity="0.11" />
+  <circle cx="1107" cy="300" r="320" fill="url(#bannerHalo)" />
+  <circle cx="1107" cy="300" r="282" fill="none" stroke="url(#matRing)" stroke-opacity="0.15" stroke-width="2" />
 
   <g filter="url(#panelShadow)">
-    <rect x="930" y="56" width="470" height="488" rx="150" fill="url(#bannerPanel)" stroke="#FFFFFF" stroke-opacity="0.13" stroke-width="2" />
+    <rect x="920" y="112" width="374" height="376" rx="120" fill="url(#bannerPanel)" stroke="#FFFFFF" stroke-opacity="0.13" stroke-width="2" />
   </g>
 
-  <g transform="translate(817 0) scale(0.68)">
+  <g transform="translate(841 77) scale(0.52)">
     <g id="zenBotMark">
       <circle cx="512" cy="230" r="60" fill="url(#matGlow)" />
       <line x1="512" y1="355" x2="512" y2="254" stroke="url(#matAntennaLine)" stroke-width="14" stroke-linecap="round" />
@@ -157,6 +157,6 @@
     </g>
   </g>
 
-  <text x="112" y="382" fill="url(#bannerWord)" font-family="Arial, Helvetica, sans-serif" font-size="226" font-weight="800" letter-spacing="22">ZEN</text>
-  <rect x="124" y="418" width="390" height="4" rx="2" fill="url(#bannerRule)" />
+  <text x="230" y="345" fill="url(#bannerWord)" font-family="Arial, Helvetica, sans-serif" font-size="174" font-weight="800" letter-spacing="18">ZEN</text>
+  <rect x="242" y="381" width="315" height="3" rx="1.5" fill="url(#bannerRule)" />
 </svg>
