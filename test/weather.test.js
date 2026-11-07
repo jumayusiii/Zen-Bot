@@ -1,5 +1,8 @@
 const assert = require('node:assert/strict');
-const test = require('node:test');
+const fs = require('node:fs/promises');
+const os = require('node:os');
+const path = require('node:path');
+const { after, before, test } = require('node:test');
 const { ApplicationCommandOptionType, MessageFlags } = require('discord.js');
 
 const {
@@ -15,6 +18,19 @@ const {
 } = require('../src/lib/weather');
 
 const weatherCommand = require('../src/commands/utility/weather');
+const weatherPreferences = require('../src/lib/weatherPreferences');
+
+let preferenceDirectory;
+
+before(async () => {
+  preferenceDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'zen-weather-'));
+  process.env.WEATHER_PREFERENCES_FILE = path.join(preferenceDirectory, 'weather-preferences.json');
+});
+
+after(async () => {
+  delete process.env.WEATHER_PREFERENCES_FILE;
+  await fs.rm(preferenceDirectory, { recursive: true, force: true });
+});
 
 const PLACE_PAYLOAD = {
   results: [
@@ -158,7 +174,7 @@ test('formatDay renders a stable forecast label', () => {
   assert.equal(formatDay('not-a-date'), 'not-a-date');
 });
 
-async function runWeatherCommand(privateMode) {
+async function runWeatherCommand(privateMode, userId = '400000000000000001') {
   let deferredReply;
   let editedReply;
   const originalWarn = console.warn;
@@ -177,6 +193,7 @@ async function runWeatherCommand(privateMode) {
           return privateMode;
         },
       },
+      user: { id: userId },
       deferReply: async (payload) => {
         deferredReply = payload;
       },
@@ -196,16 +213,43 @@ test('/weather exposes a private boolean switch', () => {
   assert.ok(privateOption);
   assert.equal(privateOption.type, ApplicationCommandOptionType.Boolean);
   assert.equal(privateOption.required, false);
+  assert.match(privateOption.description, /remembered/i);
+});
+
+test('/weather remembers private replies per member until turned off', async () => {
+  const userId = '400000000000000021';
+  const otherId = '400000000000000022';
+
+  let result = await runWeatherCommand(undefined, userId);
+  assert.deepEqual(result.deferredReply, {});
+  assert.equal(await weatherPreferences.isWeatherPrivate(userId), false);
+
+  result = await runWeatherCommand(true, userId);
+  assert.equal(result.deferredReply.flags, MessageFlags.Ephemeral);
+  assert.equal(await weatherPreferences.isWeatherPrivate(userId), true);
+
+  result = await runWeatherCommand(undefined, userId);
+  assert.equal(result.deferredReply.flags, MessageFlags.Ephemeral);
+
+  result = await runWeatherCommand(undefined, otherId);
+  assert.deepEqual(result.deferredReply, {});
+
+  result = await runWeatherCommand(false, userId);
+  assert.deepEqual(result.deferredReply, {});
+  assert.equal(await weatherPreferences.isWeatherPrivate(userId), false);
+
+  result = await runWeatherCommand(undefined, userId);
+  assert.deepEqual(result.deferredReply, {});
 });
 
 test('/weather defers an ephemeral reply when private is enabled', async () => {
-  const { deferredReply, editedReply } = await runWeatherCommand(true);
+  const { deferredReply, editedReply } = await runWeatherCommand(true, '400000000000000011');
   assert.equal(deferredReply.flags, MessageFlags.Ephemeral);
   assert.match(editedReply.content, /between 2 and 100 characters/);
 });
 
 test('/weather keeps public replies when private is off', async () => {
-  const { deferredReply, editedReply } = await runWeatherCommand(false);
+  const { deferredReply, editedReply } = await runWeatherCommand(false, '400000000000000012');
   assert.deepEqual(deferredReply, {});
   assert.match(editedReply.content, /between 2 and 100 characters/);
 });

@@ -1,72 +1,162 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600" role="img" aria-labelledby="zenBannerTitle zenBannerDesc">
-  <title id="zenBannerTitle">Zen banner</title>
-  <desc id="zenBannerDesc">A rounded black Z on a raised white disc beside the ZEN wordmark on a black field.</desc>
+  <title id="zenBannerTitle">Zen Discord bot banner</title>
+  <desc id="zenBannerDesc">The ZEN wordmark beside the Zen robot mark in a rounded material card on a deep indigo background.</desc>
 
   <defs>
-    <radialGradient id="bannerHalo" cx="22%" cy="45%" r="55%">
-      <stop offset="0" stop-color="#2E2E2E" />
-      <stop offset="0.6" stop-color="#121212" />
-      <stop offset="1" stop-color="#000000" />
+    <radialGradient id="matBg" cx="32%" cy="24%" r="92%">
+      <stop offset="0" stop-color="#402C6E" />
+      <stop offset="0.42" stop-color="#211C45" />
+      <stop offset="0.78" stop-color="#111326" />
+      <stop offset="1" stop-color="#070911" />
     </radialGradient>
 
-    <linearGradient id="bannerDisc" x1="0.2" y1="0" x2="0.8" y2="1">
-      <stop offset="0" stop-color="#FFFFFF" />
-      <stop offset="0.58" stop-color="#F5F5F5" />
-      <stop offset="1" stop-color="#DEDEDE" />
+    <linearGradient id="matRing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A88BFF" />
+      <stop offset="0.55" stop-color="#6B7DFF" />
+      <stop offset="1" stop-color="#5CE7FF" />
     </linearGradient>
 
-    <filter id="bannerShadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000000" flood-opacity="0.55" />
+    <linearGradient id="matMark" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.58" stop-color="#F8F5FF" />
+      <stop offset="1" stop-color="#DCD5F2" />
+    </linearGradient>
+
+    <linearGradient id="matEar" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D7D0EF" />
+      <stop offset="1" stop-color="#9D91C8" />
+    </linearGradient>
+
+    <linearGradient id="matVisor" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#332A57" />
+      <stop offset="0.6" stop-color="#1A1B39" />
+      <stop offset="1" stop-color="#101326" />
+    </linearGradient>
+
+    <radialGradient id="matEye" cx="34%" cy="28%" r="78%">
+      <stop offset="0" stop-color="#E0FDFF" />
+      <stop offset="0.28" stop-color="#8DF1FF" />
+      <stop offset="0.68" stop-color="#29BDE8" />
+      <stop offset="1" stop-color="#0A5D8D" />
+    </radialGradient>
+
+    <linearGradient id="matAntenna" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#81EDFF" />
+      <stop offset="0.55" stop-color="#6A9DFF" />
+      <stop offset="1" stop-color="#9B72FF" />
+    </linearGradient>
+
+    <linearGradient id="matAntennaLine" x1="512" y1="355" x2="512" y2="254" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9B72FF" />
+      <stop offset="0.55" stop-color="#6A9DFF" />
+      <stop offset="1" stop-color="#81EDFF" />
+    </linearGradient>
+
+    <linearGradient id="matChip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#79E9FF" />
+      <stop offset="1" stop-color="#8E6BFF" />
+    </linearGradient>
+
+    <radialGradient id="matGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#69E8FF" stop-opacity="0.26" />
+      <stop offset="1" stop-color="#4B7DFF" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="matShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="24" stdDeviation="26" flood-color="#02040A" flood-opacity="0.55" />
+    </filter>
+
+    <radialGradient id="matVignette" cx="50%" cy="46%" r="66%">
+      <stop offset="0.52" stop-color="#000000" stop-opacity="0" />
+      <stop offset="1" stop-color="#04050A" stop-opacity="0.62" />
+    </radialGradient>
+  </defs>
+
+  <defs>
+    <linearGradient id="bannerBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#251A43" />
+      <stop offset="0.43" stop-color="#131326" />
+      <stop offset="1" stop-color="#070911" />
+    </linearGradient>
+
+    <linearGradient id="bannerPanel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.1" />
+      <stop offset="0.55" stop-color="#7D61C9" stop-opacity="0.055" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.025" />
+    </linearGradient>
+
+    <linearGradient id="bannerRule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#67E8FF" />
+      <stop offset="0.58" stop-color="#8E6BFF" />
+      <stop offset="1" stop-color="#8E6BFF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="bannerWord" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.7" stop-color="#F4F0FF" />
+      <stop offset="1" stop-color="#DCD3F4" />
+    </linearGradient>
+
+    <radialGradient id="bannerHalo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#62E9FF" stop-opacity="0.18" />
+      <stop offset="1" stop-color="#5B74FF" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="panelShadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="24" stdDeviation="32" flood-color="#02030A" flood-opacity="0.55" />
     </filter>
   </defs>
 
-  <rect width="1500" height="600" fill="#000000" />
-  <rect width="1500" height="600" fill="url(#bannerHalo)" />
+  <rect width="1500" height="600" fill="#070911" />
+  <rect width="1500" height="600" fill="url(#bannerBg)" />
 
-  <circle
-    cx="280"
-    cy="300"
-    r="206"
-    fill="none"
-    stroke="#FFFFFF"
-    stroke-opacity="0.08"
-    stroke-width="2"
-  />
+  <circle cx="235" cy="45" r="330" fill="#9B76FF" opacity="0.11" />
+  <circle cx="1165" cy="300" r="360" fill="url(#bannerHalo)" />
+  <circle cx="1165" cy="300" r="326" fill="none" stroke="url(#matRing)" stroke-opacity="0.15" stroke-width="2" />
 
-  <circle cx="280" cy="300" r="168" fill="url(#bannerDisc)" filter="url(#bannerShadow)" />
-
-  <g transform="translate(3.5 23.5) scale(0.54)">
-    <path
-      d="M 356 356 H 668 L 356 668 H 668"
-      fill="none"
-      stroke="#000000"
-      stroke-width="96"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
+  <g filter="url(#panelShadow)">
+    <rect x="930" y="56" width="470" height="488" rx="150" fill="url(#bannerPanel)" stroke="#FFFFFF" stroke-opacity="0.13" stroke-width="2" />
   </g>
 
-  <text
-    x="1040"
-    y="330"
-    text-anchor="middle"
-    fill="#FFFFFF"
-    font-family="Segoe UI, Arial, Helvetica, sans-serif"
-    font-size="168"
-    font-weight="700"
-    letter-spacing="16"
-  >ZEN</text>
+  <g transform="translate(817 0) scale(0.68)">
+    <g id="zenBotMark">
+      <circle cx="512" cy="230" r="60" fill="url(#matGlow)" />
+      <line x1="512" y1="355" x2="512" y2="254" stroke="url(#matAntennaLine)" stroke-width="14" stroke-linecap="round" />
+      <circle cx="512" cy="230" r="30" fill="url(#matAntenna)" />
+      <circle cx="502" cy="219" r="7" fill="#FFFFFF" opacity="0.78" />
 
-  <line x1="880" y1="370" x2="1200" y2="370" stroke="#FFFFFF" stroke-opacity="0.24" stroke-width="2" />
+      <rect x="232" y="455" width="84" height="150" rx="42" fill="url(#matEar)" />
+      <rect x="708" y="455" width="84" height="150" rx="42" fill="url(#matEar)" />
+      <rect x="252" y="486" width="42" height="90" rx="21" fill="#7E6EAD" opacity="0.42" />
+      <rect x="730" y="486" width="42" height="90" rx="21" fill="#7E6EAD" opacity="0.42" />
 
-  <text
-    x="1040"
-    y="418"
-    text-anchor="middle"
-    fill="#A3A3A3"
-    font-family="Segoe UI, Arial, sans-serif"
-    font-size="23"
-    font-weight="600"
-    letter-spacing="11"
-  >DISCORD BOT</text>
+      <rect x="292" y="355" width="440" height="330" rx="125" fill="url(#matMark)" filter="url(#matShadow)" />
+      <rect x="292" y="355" width="440" height="330" rx="125" fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2" />
+      <rect x="330" y="382" width="150" height="24" rx="12" fill="#FFFFFF" opacity="0.38" />
+
+      <rect x="348" y="430" width="328" height="152" rx="66" fill="url(#matVisor)" />
+      <rect x="348" y="430" width="328" height="152" rx="66" fill="none" stroke="#FFFFFF" stroke-opacity="0.09" stroke-width="2" />
+      <rect x="366" y="446" width="292" height="50" rx="25" fill="#FFFFFF" opacity="0.045" />
+
+      <rect x="406" y="460" width="70" height="88" rx="35" fill="#62E6FF" opacity="0.12" />
+      <rect x="548" y="460" width="70" height="88" rx="35" fill="#62E6FF" opacity="0.12" />
+      <rect x="414" y="468" width="54" height="72" rx="27" fill="url(#matEye)" />
+      <rect x="556" y="468" width="54" height="72" rx="27" fill="url(#matEye)" />
+      <rect x="426" y="481" width="13" height="24" rx="6.5" fill="#FFFFFF" opacity="0.82" />
+      <rect x="568" y="481" width="13" height="24" rx="6.5" fill="#FFFFFF" opacity="0.82" />
+
+      <rect x="382" y="608" width="42" height="18" rx="9" fill="#FF9AC8" opacity="0.16" />
+      <rect x="600" y="608" width="42" height="18" rx="9" fill="#FF9AC8" opacity="0.16" />
+      <path d="M 468 632 C 488 650 536 650 556 632" fill="none" stroke="#2B2449" stroke-width="12" stroke-linecap="round" />
+      <path d="M 482 646 C 500 656 524 656 542 646" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.3" />
+
+      <g transform="translate(494 378)">
+        <rect width="36" height="36" rx="12" fill="url(#matChip)" />
+        <path d="M 9 10 H 27 L 9 26 H 27" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+    </g>
+  </g>
+
+  <text x="112" y="382" fill="url(#bannerWord)" font-family="Arial, Helvetica, sans-serif" font-size="226" font-weight="800" letter-spacing="22">ZEN</text>
+  <rect x="124" y="418" width="390" height="4" rx="2" fill="url(#bannerRule)" />
 </svg>

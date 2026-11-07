@@ -2,6 +2,22 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.16',
+    date: '2026-11-07',
+    title: 'Weather privacy memory & a cleaner banner',
+    summary: 'A beta hotfix remembers private weather replies per member and reduces the bot banner to its wordmark and robot mark.',
+    added: [
+      '`/weather private:true` now remembers the choice for that user ID across later commands and restarts.',
+      '`/weather private:false` turns the saved private mode off; omitting `private` reuses the saved choice, defaulting to public when nothing is saved.',
+    ],
+    improved: [
+      'The bot banner now uses only the ZEN wordmark and robot icon with a cleaner, quieter layout.',
+    ],
+    fixed: [
+      'Private weather replies no longer reset to public when `private` is omitted on a later `/weather` command.',
+    ],
+  },
+  {
     version: '1.19.0-beta.15',
     date: '2026-11-07',
     title: 'Private weather replies',

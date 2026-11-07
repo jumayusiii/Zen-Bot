@@ -6,6 +6,7 @@ const {
   formatDay,
   placeLabel,
 } = require('../../lib/weather');
+const { isWeatherPrivate, setWeatherPrivate } = require('../../lib/weatherPreferences');
 
 function valueWithUnit(value, unit, digits = 0) {
   if (!Number.isFinite(value)) return '—';
@@ -16,7 +17,7 @@ function percent(value) {
   return Number.isFinite(value) ? `${Math.round(value)}%` : '—';
 }
 
-function buildEmbed(client, weather, requestedBy) {
+function buildEmbed(client, weather, requestedBy, privateMode) {
   const { place, current, daily, units } = weather;
   const today = daily[0];
   const forecast = daily.length > 0
@@ -47,7 +48,7 @@ function buildEmbed(client, weather, requestedBy) {
       { name: '🕒 Timezone', value: place.timezone || 'Unknown', inline: true },
       { name: `📅 Next days (${units.temperature})`, value: forecast, inline: false },
     ],
-    footer: `Requested by ${requestedBy}  ·  Data from Open-Meteo`,
+    footer: `Requested by ${requestedBy}  ·  Data from Open-Meteo${privateMode ? '  ·  Private to you' : ''}`,
   });
 }
 
@@ -76,20 +77,35 @@ module.exports = {
     .addBooleanOption((option) =>
       option
         .setName('private')
-        .setDescription('Only show the weather to you'),
+        .setDescription('Only show the weather to you; remembered until you set private:false'),
     ),
 
   async execute(interaction) {
     const location = interaction.options.getString('location', true);
     const units = interaction.options.getString('units') ?? 'metric';
-    const privateMode = interaction.options.getBoolean('private') === true;
+    const requestedPrivate = interaction.options.getBoolean('private');
+    const userId = interaction.user?.id;
+    let privateMode = requestedPrivate;
+
+    if (privateMode === null || privateMode === undefined) {
+      privateMode = userId
+        ? await isWeatherPrivate(userId).catch((error) => {
+          console.warn(`[weather] Could not read the private preference: ${error.message}`);
+          return false;
+        })
+        : false;
+    } else if (userId) {
+      await setWeatherPrivate(userId, privateMode).catch((error) => {
+        console.warn(`[weather] Could not save the private preference: ${error.message}`);
+      });
+    }
 
     await interaction.deferReply(privateMode ? { flags: MessageFlags.Ephemeral } : {});
 
     try {
       const weather = await fetchWeather(location, { units });
       await interaction.editReply({
-        embeds: [buildEmbed(interaction.client, weather, interaction.user.username)],
+        embeds: [buildEmbed(interaction.client, weather, interaction.user.username, privateMode)],
       });
     } catch (error) {
       console.warn(`[weather] Could not load ${location}: ${error.message}`);
