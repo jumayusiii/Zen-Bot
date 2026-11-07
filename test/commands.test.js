@@ -232,7 +232,7 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('bluesky').data.toJSON().options.length, 1);
   assert.equal(registry.get('reddit').data.toJSON().options.length, 1);
   assert.equal(registry.get('youtube').data.toJSON().options.length, 1);
-  assert.equal(registry.get('weather').data.toJSON().options.length, 2);
+  assert.equal(registry.get('weather').data.toJSON().options.length, 3);
   assert.equal(registry.get('wikipedia').data.toJSON().options.length, 1);
   assert.equal(registry.get('fortunecookie').data.toJSON().options.length, 0);
   assert.equal(registry.get('topic').data.toJSON().options.length, 1);

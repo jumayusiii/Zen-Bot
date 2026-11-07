@@ -2,6 +2,17 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.15',
+    date: '2026-11-07',
+    title: 'Private weather replies',
+    summary: 'The weather command now has a private switch that keeps a forecast visible only to the member who asked for it.',
+    added: [
+      '`/weather ... private:true` sends the current conditions and four-day forecast as an ephemeral reply, so other members cannot see it.',
+    ],
+    improved: [],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.14',
     date: '2026-11-06',
     title: 'Global progression reset',

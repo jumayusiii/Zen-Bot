@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.14** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.15** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin coin grants and removals and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -28,7 +28,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Release automation**: pushing a `v*` tag tests the tree and publishes the matching changelog entry as a GitHub release, with beta versions marked as pre-releases.
 - **TikTok previews**: `/tiktok` attaches a TikTok video so it plays inline in Discord, with creator and engagement details plus an **Open on TikTok** fallback for oversized or private posts.
 - **Social feeds**: `/bluesky`, `/reddit` and `/youtube` connect to live public feeds with profile, post, community and video details.
-- **Weather**: `/weather` looks up any city and posts current conditions plus a four-day forecast from [Open-Meteo](https://open-meteo.com/), in Celsius or Fahrenheit. No API key needed.
+- **Weather**: `/weather` looks up any city and posts current conditions plus a four-day forecast from [Open-Meteo](https://open-meteo.com/), in Celsius or Fahrenheit. Set `private` to keep the reply visible only to you. No API key needed.
 - **Knowledge**: `/wikipedia` searches Wikipedia and posts a clean summary, article image and a **Read on Wikipedia** button.
 - **ChatGPT beta**: `/chatgpt` sends a moderated question to OpenAI and posts the answer, with an optional private reply and **8 requests per 10 minutes**. Requires `OPENAI_API_KEY`; prompts are not stored by Zen.
 - **Type Race records**: every exact run updates a per-server personal best, and `/typeraceleaderboard` ranks the ten fastest members.
@@ -115,7 +115,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/serverbanner` | Shows the current server banner with a download button. |
 | `/sitestatus` | Full live report: HTTP status, response time, TLS, DNS, edge server, page details, security headers and the site logo. Includes uptime summary plus **Refresh**, **Auto-refresh** and a **5 / 15 / 30 minute** interval picker. |
 | `/uptime` | Seven-day report with one uptime bar per day, availability, average/p95/max latency, monitoring coverage and a detailed incident timeline. |
-| `/weather <location> [units]` | 👷‍♂️ Current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units. |
+| `/weather <location> [units] [private]` | 👷‍♂️ Current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units. Set `private` to keep it visible only to you. |
 | `/wikipedia <query>` | 👷‍♂️ Searches Wikipedia and posts a summary with a link to the full article. |
 | `/calculate <expression>` | Calculates a maths expression with + - * / % ^ and parentheses. |
 | `/chatgpt <prompt> [private]` | 👷‍♂️ Asks OpenAI’s ChatGPT a question with an optional private answer. Moderated, limited to 8 requests per member per 10 minutes, and no conversation history is stored. |

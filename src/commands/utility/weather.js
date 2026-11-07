@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { MessageFlags, SlashCommandBuilder } = require('discord.js');
 const { COLORS, createEmbed } = require('../../lib/embeds');
 const {
   WeatherError,
@@ -72,13 +72,19 @@ module.exports = {
           { name: 'Celsius (default)', value: 'metric' },
           { name: 'Fahrenheit', value: 'imperial' },
         ),
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName('private')
+        .setDescription('Only show the weather to you'),
     ),
 
   async execute(interaction) {
     const location = interaction.options.getString('location', true);
     const units = interaction.options.getString('units') ?? 'metric';
+    const privateMode = interaction.options.getBoolean('private') === true;
 
-    await interaction.deferReply();
+    await interaction.deferReply(privateMode ? { flags: MessageFlags.Ephemeral } : {});
 
     try {
       const weather = await fetchWeather(location, { units });

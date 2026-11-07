@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
+const { ApplicationCommandOptionType, MessageFlags } = require('discord.js');
 
 const {
   WeatherError,
@@ -12,6 +13,8 @@ const {
   placeLabel,
   weatherInfo,
 } = require('../src/lib/weather');
+
+const weatherCommand = require('../src/commands/utility/weather');
 
 const PLACE_PAYLOAD = {
   results: [
@@ -153,4 +156,56 @@ test('fetchWeather reports invalid, missing and failed lookups', async () => {
 test('formatDay renders a stable forecast label', () => {
   assert.match(formatDay('2026-10-29'), /Oct 29/);
   assert.equal(formatDay('not-a-date'), 'not-a-date');
+});
+
+async function runWeatherCommand(privateMode) {
+  let deferredReply;
+  let editedReply;
+  const originalWarn = console.warn;
+  console.warn = () => {};
+
+  try {
+    await weatherCommand.execute({
+      options: {
+        getString(name) {
+          if (name === 'location') return ' ';
+          if (name === 'units') return 'metric';
+          assert.fail(`unexpected string option: ${name}`);
+        },
+        getBoolean(name) {
+          assert.equal(name, 'private');
+          return privateMode;
+        },
+      },
+      deferReply: async (payload) => {
+        deferredReply = payload;
+      },
+      editReply: async (payload) => {
+        editedReply = payload;
+      },
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+
+  return { deferredReply, editedReply };
+}
+
+test('/weather exposes a private boolean switch', () => {
+  const privateOption = weatherCommand.data.toJSON().options.find((option) => option.name === 'private');
+  assert.ok(privateOption);
+  assert.equal(privateOption.type, ApplicationCommandOptionType.Boolean);
+  assert.equal(privateOption.required, false);
+});
+
+test('/weather defers an ephemeral reply when private is enabled', async () => {
+  const { deferredReply, editedReply } = await runWeatherCommand(true);
+  assert.equal(deferredReply.flags, MessageFlags.Ephemeral);
+  assert.match(editedReply.content, /between 2 and 100 characters/);
+});
+
+test('/weather keeps public replies when private is off', async () => {
+  const { deferredReply, editedReply } = await runWeatherCommand(false);
+  assert.deepEqual(deferredReply, {});
+  assert.match(editedReply.content, /between 2 and 100 characters/);
 });
