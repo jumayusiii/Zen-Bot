@@ -12,17 +12,15 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 107);
-  assert.equal(splitDeveloperCommands(registry).publicCommands.length, 100);
+  assert.equal(registry.size, 105);
+  assert.equal(splitDeveloperCommands(registry).publicCommands.length, 98);
   assert.equal(splitDeveloperCommands(registry).developerCommands.length, 7);
 
   for (const name of [
-    'uptime',
     'poll',
     'remind',
     'reminders',
     'roleinfo',
-    'sitestatus',
     'helplist',
     'trivia',
     'tictactoe',
@@ -185,7 +183,6 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('timestamp').beta, undefined);
   assert.equal(registry.get('serverbanner').beta, undefined);
   assert.equal(registry.get('invite').beta, undefined);
-  assert.equal(registry.get('uptime').beta, undefined);
   assert.equal(registry.get('poll').data.toJSON().options.length, 2);
   assert.equal(registry.get('remind').data.toJSON().options.length, 3);
   assert.equal(registry.get('reminders').data.toJSON().options.length, 0);
@@ -306,7 +303,7 @@ test('developer-only commands are split from the public registration set', () =>
 
   const { publicCommands, developerCommands } = splitDeveloperCommands(registry);
 
-  assert.equal(publicCommands.length, 100);
+  assert.equal(publicCommands.length, 98);
   assert.equal(developerCommands.length, 7);
   assert.deepEqual(
     developerCommands.map((command) => command.data.name).sort(),

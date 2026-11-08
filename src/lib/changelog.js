@@ -2,6 +2,20 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.17',
+    date: '2026-11-08',
+    title: 'Leaner commands & faster language lookups',
+    summary: 'A beta hotfix removes the website-monitoring commands and their background checks, and caches per-server language lookups so commands spend less time on disk work.',
+    added: [],
+    improved: [
+      'Per-server language lookups are cached for 30 seconds and refreshed immediately when `/language` changes, removing a disk read from most localized command responses.',
+      'The five-minute site probe and its history writes no longer run, so idle time no longer performs unnecessary outbound requests or disk work.',
+    ],
+    fixed: [
+      'Removed `/sitestatus` and `/uptime`, along with the now-unused monitoring configuration and documentation.',
+    ],
+  },
+  {
     version: '1.19.0-beta.16',
     date: '2026-11-07',
     title: 'Weather privacy memory & a cleaner banner',

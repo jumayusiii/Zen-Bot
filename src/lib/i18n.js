@@ -6,6 +6,8 @@ const DEFAULT_FILE = path.join(__dirname, '..', '..', 'data', 'languages.json');
 const DEFAULT_LANGUAGE = 'en';
 const SUPPORTED_LANGUAGES = Object.freeze(['en', 'de']);
 const RETRYABLE_RENAME_CODES = new Set(['EPERM', 'EBUSY', 'EACCES']);
+const LANGUAGE_CACHE_TTL_MS = 30_000;
+const LANGUAGE_CACHE_MAX_ENTRIES = 5_000;
 
 const LANGUAGES = Object.freeze([
   { id: 'en', native: 'English', flag: '🇬🇧' },
@@ -77,7 +79,7 @@ const MESSAGES = Object.freeze({
         },
         utility: {
           title: 'Utilities',
-          description: 'Server tools, image grabbers, reminders, monitoring and diagnostics.',
+          description: 'Server tools, image grabbers, reminders and diagnostics.',
         },
         other: {
           title: 'Other commands',
@@ -1186,7 +1188,7 @@ const MESSAGES = Object.freeze({
         },
         utility: {
           title: 'Werkzeuge',
-          description: 'Servertools, Bildabrufe, Erinnerungen, Monitoring und Diagnose.',
+          description: 'Servertools, Bildabrufe, Erinnerungen und Diagnose.',
         },
         other: {
           title: 'Weitere Befehle',
@@ -2234,11 +2236,35 @@ const MESSAGES = Object.freeze({
 });
 
 let stateQueue = Promise.resolve();
+const languageCache = new Map();
 
 function languagesFile() {
   return process.env.LANGUAGES_FILE
     ? path.resolve(process.env.LANGUAGES_FILE)
     : DEFAULT_FILE;
+}
+
+function languageCacheKey(file, guildId) {
+  return `${file}::${guildId}`;
+}
+
+function getCachedLanguage(file, guildId) {
+  const key = languageCacheKey(file, guildId);
+  const cached = languageCache.get(key);
+  if (!cached) return null;
+  if (cached.expiresAt <= Date.now()) {
+    languageCache.delete(key);
+    return null;
+  }
+  return cached.language;
+}
+
+function cacheLanguage(file, guildId, language) {
+  if (languageCache.size >= LANGUAGE_CACHE_MAX_ENTRIES) languageCache.clear();
+  languageCache.set(languageCacheKey(file, guildId), {
+    language,
+    expiresAt: Date.now() + LANGUAGE_CACHE_TTL_MS,
+  });
 }
 
 function cleanText(value, maxLength) {
@@ -2379,9 +2405,15 @@ async function getGuildLanguage(guildId) {
   const key = cleanText(guildId, 32);
   if (!key) return DEFAULT_LANGUAGE;
 
+  const file = languagesFile();
+  const cached = getCachedLanguage(file, key);
+  if (cached) return cached;
+
   const state = await readState();
   const entry = state.guilds.find((candidate) => candidate.guildId === key);
-  return entry?.language ?? DEFAULT_LANGUAGE;
+  const language = entry?.language ?? DEFAULT_LANGUAGE;
+  cacheLanguage(file, key, language);
+  return language;
 }
 
 /**
@@ -2403,11 +2435,14 @@ async function setGuildLanguage(guildId, language, { updatedBy = null, now = Dat
     updatedAt: Number.isFinite(now) ? now : Date.now(),
   };
 
-  return withState((state) => {
+  const file = languagesFile();
+  const saved = await withState((state) => {
     state.guilds = state.guilds.filter((candidate) => candidate.guildId !== key);
     state.guilds.push(entry);
     return { ...entry };
   });
+  cacheLanguage(file, key, saved.language);
+  return saved;
 }
 
 async function getInteractionLanguage(interaction) {

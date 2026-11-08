@@ -72,7 +72,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Utilities',
     title: 'Utilities',
     emoji: '🧰',
-    description: 'Server tools, image grabbers, reminders, monitoring and diagnostics.',
+    description: 'Server tools, image grabbers, reminders and diagnostics.',
     color: COLORS.info,
     order: 30,
   },

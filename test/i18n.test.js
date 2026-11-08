@@ -45,6 +45,30 @@ test('translations interpolate placeholders and fall back to English', () => {
   assert.equal(t('de', 'not.a.key', {}, 'Fallback'), 'Fallback');
 });
 
+test('language lookups are cached and writes refresh the cache', async () => {
+  await withLanguageFile(async () => {
+    await setGuildLanguage('guild-cache', 'de');
+
+    const originalReadFile = fs.readFile;
+    let reads = 0;
+    fs.readFile = (...args) => {
+      reads += 1;
+      return originalReadFile(...args);
+    };
+
+    try {
+      assert.equal(await getGuildLanguage('guild-cache'), 'de');
+      assert.equal(await getGuildLanguage('guild-cache'), 'de');
+      assert.equal(reads, 0);
+    } finally {
+      fs.readFile = originalReadFile;
+    }
+
+    await setGuildLanguage('guild-cache', 'en');
+    assert.equal(await getGuildLanguage('guild-cache'), 'en');
+  });
+});
+
 test('language settings default to English and stay per server', async () => {
   await withLanguageFile(async (file) => {
     assert.equal(await getGuildLanguage('guild-1'), 'en');

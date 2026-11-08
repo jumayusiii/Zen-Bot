@@ -2,9 +2,9 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.16** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.17** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
-A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin coin grants and removals and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, detailed website uptime monitoring, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
+A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin coin grants and removals and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
 ## Highlights
 
@@ -20,8 +20,6 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Economy** with per-server wallets, `/daily` and `/work` income, level-up coin payouts, `/steal` heists, coin-flip, slot and blackjack wagers, an `/ecoleaderboard` rich list, admin coin grants and removals, a ten-theme shop and purchasable rank card wallpapers.
 - **Languages** with a per-server `/language` switch between **English** and **German** for help, fun, minigames, wallets, the economy, levels and rank cards, moderation and the audit log, and the language menu.
 - **Timestamp builder** for six Discord styles, from relative or absolute input and Unix timestamps.
-- **Site monitoring** for a configurable website, with HTTP, TLS, DNS, page, security-header and logo checks.
-- **Uptime history** sampled every five minutes, with availability, latency, daily bars and incident timelines.
 - **Live polls** with buttons, vote switching and a creator-only close control.
 - **Persistent reminders** delivered by DM or in the channel where they were created.
 - **Directory ready**: optional top.gg and Discord Bot List stat posting, with submission copy in `docs/`.
@@ -33,7 +31,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **ChatGPT beta**: `/chatgpt` sends a moderated question to OpenAI and posts the answer, with an optional private reply and **8 requests per 10 minutes**. Requires `OPENAI_API_KEY`; prompts are not stored by Zen.
 - **Type Race records**: every exact run updates a per-server personal best, and `/typeraceleaderboard` ranks the ten fastest members.
 - **Modern embeds** with a shared palette, plain titles, branded headers, timestamps and clamped text limits.
-- **Self-host friendly**: configurable site details, no hardcoded guild IDs or tokens, and no message content access. The **Server Members** intent is used for greetings.
+- **Self-host friendly**: configurable presence and settings, no hardcoded guild IDs or tokens, and no message content access. The **Server Members** intent is used for greetings.
 
 ## Commands
 
@@ -113,8 +111,6 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/avatar [user]` | Shows a user avatar with a 64–4096 px size selector and a **Download** button. |
 | `/servericon` | Shows the current server icon with the same size selector and download button. |
 | `/serverbanner` | Shows the current server banner with a download button. |
-| `/sitestatus` | Full live report: HTTP status, response time, TLS, DNS, edge server, page details, security headers and the site logo. Includes uptime summary plus **Refresh**, **Auto-refresh** and a **5 / 15 / 30 minute** interval picker. |
-| `/uptime` | Seven-day report with one uptime bar per day, availability, average/p95/max latency, monitoring coverage and a detailed incident timeline. |
 | `/weather <location> [units] [private]` | 👷‍♂️ Current conditions and a four-day forecast from Open-Meteo, with Celsius or Fahrenheit units. Set `private:true` to keep replies private to you until you set `private:false`; the choice is remembered per user. |
 | `/wikipedia <query>` | 👷‍♂️ Searches Wikipedia and posts a summary with a link to the full article. |
 | `/calculate <expression>` | Calculates a maths expression with + - * / % ^ and parentheses. |
@@ -134,7 +130,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/changelog` | Shows the current version, update date and release notes. |
 | `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
 
-👷‍♂️ marks beta commands. The directory covers **100 public commands** across nine tabs (plus seven developer-only commands for the owner), and is generated from the loaded command modules so it stays accurate when new commands are added.
+👷‍♂️ marks beta commands. The directory covers **98 public commands** across nine tabs (plus seven developer-only commands for the owner), and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -201,37 +197,6 @@ Admin commands are grouped in the **Moderation** tab and are hidden from members
 The templates support `{user}` (mention), `{username}` (display name), `{server}`, `{count}`, `{created}` (account age) and `{joined}` (join age). Settings are stored per server in `data/greetings.json` and survive restarts. Both commands require **Manage Server**, and the bot needs **View Channel**, **Send Messages** and **Embed Links** in the selected channel.
 
 The bot requests the privileged **Server Members** intent for these events. Enable it under **Bot → Privileged Gateway Intents** in the Developer Portal. It never requests message content.
-
-## Site monitoring
-
-Set `SITE_URL` to the page you want to watch. The default is `https://habbo.si`.
-
-`/sitestatus` runs a live check and records it. While the bot is online, a background probe also records a sample every five minutes. Samples are kept for seven days in `data/sitestatus-history.json`; restarting the bot does not wipe the history.
-
-`/uptime` reads that history and shows:
-
-- **Daily bars** for the last seven UTC calendar days, one row per day.
-- **Availability** for the whole window and successful/total checks.
-- **Latency** average, 95th percentile and maximum.
-- **Coverage**, the configured probe interval and the last check time.
-- **Incident timeline** with start/end times, duration, status or network error, and the number of failed checks.
-
-A day without samples is shown as `no data` rather than 0%, so a new install does not look like an outage. Changing `SITE_URL` starts a clean history instead of mixing two sites.
-
-Set `SITE_NAME` to control the name shown in embeds. Set `SITE_LOGO_URL` to an image URL, or leave it blank to disable the logo in `/sitestatus`. The default monitoring interval is 300 seconds; `SITE_MONITOR_INTERVAL_SECONDS` accepts 60 or more.
-
-Older `/sitestatus` messages created before the control changes only have the buttons they were created with. Run the command again to get the current controls.
-
-## Auto-refreshing reports
-
-Each `/sitestatus` report can update itself without spamming the channel.
-
-- **Refresh** reruns the check and replaces the report in place. It has a 15-second cooldown and resets the auto-refresh countdown.
-- **Auto-refresh** toggles the five-minute default on or off.
-- The **interval picker** offers every 5, 15 or 30 minutes. Choosing an interval while auto-refresh is off starts it; changing it while active reschedules immediately.
-- Only the person who ran the command can use its controls.
-- Up to 50 reports can auto-refresh at once. Subscriptions persist in `data/sitestatus-autorefresh.json` and resume after a restart.
-- A report stops refreshing automatically if its message or channel is deleted.
 
 ## Discord bot lists
 
@@ -312,12 +277,6 @@ GUILD_ID=your-server-id
 # Optional: defaults to the application ID read from the token.
 CLIENT_ID=1564936469305364480
 
-# Monitored site and display details.
-SITE_URL=https://habbo.si
-SITE_NAME=habbo.si
-SITE_LOGO_URL=https://habbo.si/apple-touch-icon.png
-SITE_MONITOR_INTERVAL_SECONDS=300
-
 # Rich presence.
 PRESENCE_TEXT=use /helplist!
 
@@ -337,10 +296,6 @@ OPENAI_MODEL=gpt-6-luna
 | `DISCORD_TOKEN` | Yes | — | Bot token from the Developer Portal. |
 | `GUILD_ID` | No | — | Required only by `npm run deploy:guild` for single-server development. |
 | `CLIENT_ID` | No | Read from token | Application ID used during command registration. |
-| `SITE_URL` | No | `https://habbo.si` | Website watched by `/sitestatus`, `/uptime` and the monitor. |
-| `SITE_NAME` | No | Site hostname | Display name used in status embeds. |
-| `SITE_LOGO_URL` | No | habbo.si icon | Logo attached to status reports; leave blank to disable. |
-| `SITE_MONITOR_INTERVAL_SECONDS` | No | `300` | Background probe interval, minimum 60 seconds. |
 | `PRESENCE_TEXT` | No | `use /helplist!` | Text shown as the bot's **Playing** activity. |
 | `TOPGG_TOKEN` | No | — | top.gg API token; enables stats posting. |
 | `DISCORDBOTLIST_TOKEN` | No | — | Discord Bot List API token; enables stats posting. |
@@ -374,7 +329,6 @@ A healthy start looks like:
 [commands] Loaded /poll
 [bot] Logged in as Zen#2257 (123456789012345678)
 [bot] Rich presence set: Playing use /helplist!
-[siteMonitor] Uptime sampling enabled for Zen every 5 min.
 [reminders] Dispatcher enabled (checking every 15s).
 [moderation] Temporary-ban scheduler enabled (checking every 30s).
 ```
@@ -386,7 +340,7 @@ npm test
 npm run dev
 ```
 
-The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, all rank-card themes, channel-lock restoration, soft-ban ordering, admin coin grants, changelog release notes, help tabs, language catalogs and per-server settings, uptime aggregation, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, caption rendering, Reddit card parsing, coin wagers, blackjack bets, vault heists, economy leaderboards, calculator parsing, xkcd selection, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
+The test suite uses the built-in Node.js test runner and covers command loading, guild resolution, tic-tac-toe rules, trivia data and refresh rounds, dice notation, choice parsing, timestamp parsing and Discord markup, higher-or-lower, hangman and blackjack rules, ship scores, facts, compliments, ratings, number-guess rules, reaction bands, level math and persistence, level-up coin rewards, level reward configuration and assignment, all rank-card themes, channel-lock restoration, soft-ban ordering, admin coin grants, changelog release notes, help tabs, language catalogs and per-server settings, poll voting and persistence, reminder parsing/delivery/cancellation, moderation durations and scheduled unbans, warning persistence, purge filtering and slowmode formatting, audit-log configuration and delivery, greeting templates and delivery, slots, jokes, would-you-rather voting, roasts, word scramble rounds, fortune cookies, conversation topics, memory sequences, typing races, Type Race personal-best persistence and ranking, social actions, social-media feed parsing, image feed parsing, caption rendering, Reddit card parsing, coin wagers, blackjack bets, vault heists, economy leaderboards, calculator parsing, xkcd selection, ChatGPT response parsing, moderation, errors and quotas, TikTok link parsing, metadata mapping and download limits, weather geocoding and forecast mapping, Wikipedia search and summary parsing, presence payloads, bot-list payloads and embed limits. GitHub Actions runs it on Node 20 and 22.
 
 Add a command by creating a file under `src/commands/<category>/`:
 
@@ -431,7 +385,7 @@ src/
 │   ├── changelog.js             # Versioned release notes
 │   ├── chatgpt.js               # OpenAI moderation, Responses API and error mapping
 │   ├── choices.js               # /choose parsing and random pick
-│   ├── config.js                # Environment-backed site and presence settings
+│   ├── config.js                # Environment-backed presence settings
 │   ├── dice.js                  # Dice notation parsing and rolling
 │   ├── economy.js              # Wallets, work, daily and level-up rewards, wagers and shop
 │   ├── economyGames.js         # Coin-flip and slot payout rules
@@ -461,9 +415,6 @@ src/
 │   ├── polls.js                 # Persistent button-poll state
 │   ├── presence.js              # Playing rich presence and periodic refresh
 │   ├── reminders.js             # Persistent reminders and dispatcher
-│   ├── siteAutoRefresh.js       # Persisted auto-refresh subscriptions
-│   ├── siteHistory.js           # Uptime samples, summaries and daily buckets
-│   ├── siteMonitor.js           # Background site probe
 │   ├── slots.js                 # Weighted slot symbols and result rules
 │   ├── social.js                # Social action lines and definitions
 │   ├── socialCommand.js         # Shared /hug, /pat and /highfive builder
@@ -577,9 +528,7 @@ src/
         ├── serverbanner.js
         ├── servericon.js
         ├── serverinfo.js
-        ├── sitestatus.js
         ├── timestamp.js
-        ├── uptime.js
         ├── userinfo.js
         ├── weather.js
         ├── welcome.js
@@ -601,8 +550,6 @@ Helper scripts:
 
 The bot stores only what it needs to provide its features:
 
-- Uptime samples in `data/sitestatus-history.json` (timestamp, success, HTTP status, latency, error code).
-- Auto-refresh subscriptions in `data/sitestatus-autorefresh.json` (message, channel and owner IDs, interval, next run).
 - Poll state in `data/polls.json` (question, options, voter user IDs, owner, timestamps).
 - Reminders in `data/reminders.json` (user, source channel, reminder text, due time and delivery preference).
 - Level records in `data/levels.json` (server and user IDs, display name, XP and last award time).
@@ -625,7 +572,7 @@ To reset only chat progression, stop the bot and run `npm run reset:progression`
 
 ## Deployment notes
 
-- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, uptime, level, scheduled-ban and Type Race best state.
+- Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
 - Pushing a tag that matches `package.json` (for example `v1.19.0-beta.13`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
@@ -642,7 +589,6 @@ To reset only chat progression, stop the bot and run `npm run reset:progression`
 - **Every command appears twice** — both global and guild registrations exist. Run `npm run deploy`; it clears the guild copies before registering the single global set.
 - **`401 Unauthorized`** — the token is wrong or has been reset.
 - **`Missing Access` / `Unknown Guild` during deploy** — the bot is not in the guild, or `GUILD_ID` is incorrect.
-- **Logo missing from `/sitestatus`** — `SITE_LOGO_URL` is blank or the remote image could not be downloaded. The rest of the report still works.
 - **Reminder not delivered** — check that the bot can DM the user or still has access to the original channel. Closed DMs fall back to that channel.
 - **Meme fetch fails** — the command automatically falls back to Imgflip; if both APIs are down it replies with a friendly error.
 - **TikTok posts only a cover and link** — the video is private, region-locked, over the **8 MB** upload limit, or TikTok's media CDN refused the download. The metadata service is unofficial, so retry later; check that the host can reach TikTok and `www.tikwm.com`.

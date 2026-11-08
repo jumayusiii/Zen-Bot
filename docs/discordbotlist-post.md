@@ -16,11 +16,11 @@ The editor requires the owner's Discord sign-in.
 | Field | Value |
 | --- | --- |
 | Bot name | Zen |
-| Version | `1.19.0-beta.13` |
-| Commands | 100 |
+| Version | `1.19.0-beta.17` |
+| Commands | 98 |
 | Prefix | `/` (slash commands only) |
 | Help command | `/helplist` |
-| Tags | Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Images, Website |
+| Tags | Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Images |
 | Library | discord.js v14 · JavaScript · Node.js |
 | GitHub | <https://github.com/jumayusiii/Zen-Bot> |
 | Issues | <https://github.com/jumayusiii/Zen-Bot/issues> |

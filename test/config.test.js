@@ -3,49 +3,17 @@ const test = require('node:test');
 
 const config = require('../src/lib/config');
 
-test('self-host settings fall back to the habbo.si defaults', () => {
-  delete process.env.SITE_URL;
-  delete process.env.SITE_NAME;
-  delete process.env.SITE_LOGO_URL;
-  delete process.env.PRESENCE_TEXT;
+test('presence defaults to the command directory and can be overridden', () => {
+  const previous = process.env.PRESENCE_TEXT;
 
-  assert.equal(config.siteUrl(), 'https://habbo.si');
-  assert.equal(config.siteHost(), 'habbo.si');
-  assert.equal(config.siteName(), 'habbo.si');
-  assert.equal(config.siteLogoUrl(), 'https://habbo.si/apple-touch-icon.png');
-  assert.equal(config.siteLogoFilename(), 'apple-touch-icon.png');
-  assert.equal(config.presenceText(), 'use /helplist!');
-});
+  try {
+    delete process.env.PRESENCE_TEXT;
+    assert.equal(config.presenceText(), 'use /helplist!');
 
-test('site and presence can be changed without editing code', () => {
-  process.env.SITE_URL = 'https://Example.com/community/';
-  process.env.SITE_NAME = 'Example Community';
-  process.env.SITE_LOGO_URL = 'https://example.com/assets/mark.webp';
-  process.env.PRESENCE_TEXT = 'Playing with the community';
-
-  assert.equal(config.siteUrl(), 'https://example.com/community');
-  assert.equal(config.siteHost(), 'example.com');
-  assert.equal(config.siteName(), 'Example Community');
-  assert.equal(config.siteLogoUrl(), 'https://example.com/assets/mark.webp');
-  assert.equal(config.siteLogoFilename(), 'mark.webp');
-  assert.equal(config.presenceText(), 'Playing with the community');
-
-  delete process.env.SITE_URL;
-  delete process.env.SITE_NAME;
-  delete process.env.SITE_LOGO_URL;
-  delete process.env.PRESENCE_TEXT;
-});
-
-test('a blank logo disables attachments and invalid URLs are ignored', () => {
-  process.env.SITE_URL = 'https://example.com';
-  process.env.SITE_LOGO_URL = '';
-
-  assert.equal(config.siteLogoUrl(), null);
-  assert.equal(config.siteLogoFilename(), null);
-
-  process.env.SITE_URL = 'javascript:alert(1)';
-  assert.equal(config.siteUrl(), 'https://habbo.si');
-
-  delete process.env.SITE_URL;
-  delete process.env.SITE_LOGO_URL;
+    process.env.PRESENCE_TEXT = '  Playing with the community  ';
+    assert.equal(config.presenceText(), 'Playing with the community');
+  } finally {
+    if (previous === undefined) delete process.env.PRESENCE_TEXT;
+    else process.env.PRESENCE_TEXT = previous;
+  }
 });

@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **6 November 2026** · Zen **1.19.0-beta.13** · **100 slash commands**
+Last verified: **8 November 2026** · Zen **1.19.0-beta.17** · **98 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -8,25 +8,22 @@ This is the complete launch playbook for getting Zen discovered: pre-flight fixe
 the directories worth submitting to, ready-to-paste listing copy, stats APIs,
 vote webhooks, and the mistakes that get bots declined.
 
-## Latest beta — 1.19.0-beta.13 (5 November 2026)
+## Latest beta — 1.19.0-beta.17 (8 November 2026)
 
-Zen’s current public beta monitors **habbo.si**, adds level inspection and admin
-XP controls, and lets admins remove coins. The public set is exactly **100 slash
-commands**; 7 owner-only commands are registered only in the developer guild.
+Zen’s current public beta removes the website-monitoring commands and their
+background probes, and caches per-server language lookups so command replies
+spend less time on disk work. The public set is **98 slash commands**; 7
+owner-only commands are registered only in the developer guild.
 
 | Change | Command | Who can use it |
 | --- | --- | --- |
-| Site monitoring switched to habbo.si | `/sitestatus`, `/uptime` | Everyone |
+| Removed website monitoring | `/sitestatus`, `/uptime` | No longer available |
+| Cached language lookups | All localized commands | Everyone |
 | XP rules, current level and next reward | `/levelinfo` | Everyone |
 | Add, remove, set or reset XP (audit-logged) | `/leveladmin` | Administrator / server owner |
 | Remove coins, stopping at zero (audit-logged) | `/removecoins` | Administrator / server owner |
-| Beta marker changed to 👷‍♂️ | `/helplist` | Everyone |
 
-To stay within Discord’s 100 global command limit, `/rankcard` became
-`/rank theme:<name>`, `/inventory` became `/shop`, and `/clearwarnings` became
-`/warnings clear:true`. No feature was removed.
-
-Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.13> ·
+Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.17> ·
 Changelog: `src/lib/changelog.js`
 
 ## Quick submission path
@@ -50,7 +47,7 @@ Changelog: `src/lib/changelog.js`
 | Bot is public | ✅ `bot_public: true` | None |
 | OAuth2 code grant | ✅ `bot_require_code_grant: false` | None |
 | Bot is online during review | ✅ PM2 process `zen-bot` | Keep the host running |
-| Slash commands are registered | ✅ 100 public (+7 owner-only) | `npm run deploy` after command changes |
+| Slash commands are registered | ✅ 98 public (+7 owner-only) | `npm run deploy` after command changes |
 | Invite requests Administrator | ✅ no | Keep permissions at `1099780180998` |
 | Help entry point | ✅ `/helplist` | Mention it in reviewer notes |
 | NSFW content on listing | ✅ none | Keep the listing SFW |
@@ -136,11 +133,11 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.13` |
+| Version | `1.19.0-beta.17` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
-| Commands | 100 |
+| Commands | 98 |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
 | Source | <https://github.com/jumayusiii/Zen-Bot> |
 | Support | <https://github.com/jumayusiii/Zen-Bot/issues> |
@@ -152,13 +149,13 @@ server, not the bot.
 **Under 140 characters** — use this on top.gg and as the default short field:
 
 ```text
-Memes, minigames, levels, economy, moderation and live social feeds — 100 clean slash commands for your server.
+Memes, minigames, levels, economy, moderation and live social feeds — 98 clean slash commands for your server.
 ```
 
 Alternative, 115 characters:
 
 ```text
-A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 100 slash commands.
+A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 98 slash commands.
 ```
 
 Do not pad this field with keywords. top.gg lists keyword stuffing as a
@@ -201,18 +198,15 @@ social and tidy without reading message content.
 - Live `/bluesky`, `/reddit`, `/youtube` and `/tiktok` lookups.
 - `/weather` forecasts from Open-Meteo, `/wikipedia` summaries, `/xkcd` comics and
   a `/calculate` maths parser.
-- `/sitestatus` and `/uptime` for website monitoring, TLS, DNS, headers and
-  incident history.
 
 ### Built for clean servers
-- 100 slash commands, no prefix and no message-content access.
-- Persistent polls, reminders, levels, warnings, greetings, channel locks and
-  uptime history.
+- 98 slash commands, no prefix and no message-content access.
+- Persistent polls, reminders, levels, warnings, greetings and channel locks.
 - Optional beta `/chatgpt`; works only when the owner configures an OpenAI key,
   and Zen does not store prompts.
 
 **Try it:** add Zen, run `/helplist`, then try `/rank`, `/cat`, `/animalmeme`,
-`/weather Tokyo`, `/wikipedia Jupiter`, `/typerace` or `/sitestatus`.
+`/weather Tokyo`, `/wikipedia Jupiter`, `/typerace` or `/calculate`.
 
 **Source and issues:** [GitHub](https://github.com/jumayusiii/Zen-Bot) ·
 [Report a bug](https://github.com/jumayusiii/Zen-Bot/issues)
@@ -223,7 +217,7 @@ social and tidy without reading message content.
 Use the closest available matches; do not add a tag the bot does not satisfy.
 
 ```text
-Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Images, Website
+Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Images
 ```
 
 - **Languages:** English.
@@ -236,12 +230,12 @@ Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Im
 Paste this into the private reviewer-notes field:
 
 ```text
-Zen is slash-command only. Start with /helplist for the full 100-command directory.
+Zen is slash-command only. Start with /helplist for the full 98-command directory.
 No Administrator permission is requested.
 
 Good quick tests:
 /rank (after a few messages), /cat, /animalmeme, /weather Tokyo,
-/wikipedia Jupiter, /typerace, /slots, /poll, /sitestatus.
+/wikipedia Jupiter, /typerace, /slots, /poll, /calculate.
 
 /chatgpt is optional and may reply with setup instructions if OPENAI_API_KEY is
 not configured; every other public command works without it.
@@ -274,7 +268,7 @@ Zen's data handling:
 Zen stores only the data needed for its features. That can include Discord
 server, channel and user IDs, display names, XP and coin balances, owned card
 themes, warnings and moderation settings, audit-log channel IDs, polls, reminder
-text, greeting templates, uptime samples, Type Race bests and channel-lock
+text, greeting templates, Type Race bests and channel-lock
 restore state.
 
 Zen does not read or store message content. The Server Members intent is used
@@ -529,7 +523,7 @@ resubmit second.
 
 - [x] Confirm **Requires OAuth2 Code Grant** is off.
 - [ ] Confirm the bot is public and invitable.
-- [ ] Deploy all 100 public slash commands: `npm run deploy`.
+- [ ] Deploy all 98 public slash commands: `npm run deploy`.
 - [ ] Confirm `/helplist` works from a clean account.
 - [ ] Publish a public privacy-policy URL.
 - [ ] Check the support URL and invite URL.

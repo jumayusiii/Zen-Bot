@@ -30,7 +30,7 @@ function registry(...commands) {
 const commands = registry(
   fakeCommand('meme', 'fun'),
   fakeCommand('trivia', 'minigames', { beta: true }),
-  fakeCommand('sitestatus', 'utility'),
+  fakeCommand('weather', 'utility'),
   fakeCommand('poll', 'utility', { beta: true }),
   fakeCommand('rank', 'levels'),
 );
@@ -40,7 +40,7 @@ test('groupCommands sorts categories and omits empty groups', () => {
 
   assert.deepEqual(groups.map((group) => group.meta.id), ['fun', 'minigames', 'levels', 'utility']);
   assert.deepEqual(groups[2].commands.map((command) => command.data.name), ['rank']);
-  assert.deepEqual(groups[3].commands.map((command) => command.data.name), ['poll', 'sitestatus']);
+  assert.deepEqual(groups[3].commands.map((command) => command.data.name), ['poll', 'weather']);
 });
 
 test('signature renders required and optional options', () => {
@@ -74,7 +74,7 @@ test('more than five tabs wrap onto a second button row', () => {
     fakeCommand('meme', 'fun'),
     fakeCommand('ban', 'moderation'),
     fakeCommand('trivia', 'minigames', { beta: true }),
-    fakeCommand('sitestatus', 'utility'),
+    fakeCommand('weather', 'utility'),
     fakeCommand('rank', 'levels'),
   );
   const payload = buildHelpPayload(client, withModeration, 'overview', 'Tester');
@@ -93,7 +93,7 @@ test('a category tab lists its commands and falls back to overview for unknown v
   assert.equal(embed.data.title, 'Utilities');
   assert.deepEqual(embed.data.fields.map((field) => field.name), [
     '**/poll**  ·  👷‍♂️',
-    '**/sitestatus**',
+    '**/weather**',
   ]);
 
   const fallback = buildHelpPayload(client, commands, 'nope', 'Tester');

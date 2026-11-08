@@ -3,7 +3,6 @@ const { startBotListSync } = require('../lib/botLists');
 const { applyPresence, loadCustomStatus, loadPresenceOverride, startPresence } = require('../lib/presence');
 const { startModerationScheduler } = require('../lib/moderation');
 const { startReminderScheduler } = require('../lib/reminders');
-const { startSiteMonitor } = require('../lib/siteMonitor');
 
 module.exports = {
   name: Events.ClientReady,
@@ -18,16 +17,8 @@ module.exports = {
     startPresence(client);
     client.on(Events.ShardResume, () => applyPresence(client));
 
-    startSiteMonitor(client);
     startReminderScheduler(client);
     startModerationScheduler(client);
     startBotListSync(client);
-
-    const siteStatusCommand = client.commands.get('sitestatus');
-    if (typeof siteStatusCommand?.resumeAutoRefresh === 'function') {
-      siteStatusCommand.resumeAutoRefresh(client).catch((error) => {
-        console.error('[sitestatus] Could not resume auto-refreshing reports:', error);
-      });
-    }
   },
 };
