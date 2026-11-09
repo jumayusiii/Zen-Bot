@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **8 November 2026** · Zen **1.19.0-beta.17** · **98 slash commands**
+Last verified: **9 November 2026** · Zen **1.19.0-beta.18** · **98 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -8,22 +8,20 @@ This is the complete launch playbook for getting Zen discovered: pre-flight fixe
 the directories worth submitting to, ready-to-paste listing copy, stats APIs,
 vote webhooks, and the mistakes that get bots declined.
 
-## Latest beta — 1.19.0-beta.17 (8 November 2026)
+## Latest beta — 1.19.0-beta.18 (9 November 2026)
 
-Zen’s current public beta removes the website-monitoring commands and their
-background probes, and caches per-server language lookups so command replies
-spend less time on disk work. The public set is **98 slash commands**; 7
+Zen’s current public beta moves the first rank-card canvas initialization to
+startup, before the Discord gateway connects. A cold render can no longer
+freeze live command handling and turn unrelated interactions into
+`Unknown interaction` errors. The public set stays at **98 slash commands**; 7
 owner-only commands are registered only in the developer guild.
 
 | Change | Command | Who can use it |
 | --- | --- | --- |
-| Removed website monitoring | `/sitestatus`, `/uptime` | No longer available |
-| Cached language lookups | All localized commands | Everyone |
-| XP rules, current level and next reward | `/levelinfo` | Everyone |
-| Add, remove, set or reset XP (audit-logged) | `/leveladmin` | Administrator / server owner |
-| Remove coins, stopping at zero (audit-logged) | `/removecoins` | Administrator / server owner |
+| Canvas and font warm-up before login | `/rank`, `/caption`, `/redditcard` | Everyone |
+| Startup timing in the log | Startup | Host operator |
 
-Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.17> ·
+Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.18> ·
 Changelog: `src/lib/changelog.js`
 
 ## Quick submission path
@@ -133,7 +131,7 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.17` |
+| Version | `1.19.0-beta.18` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |

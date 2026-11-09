@@ -2,6 +2,19 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.18',
+    date: '2026-11-09',
+    title: 'Canvas warm-up before login',
+    summary: 'A beta hotfix moves the first rank-card canvas initialization to startup, so a cold render can no longer stall live command handling.',
+    added: [],
+    improved: [
+      'Startup now reports how long the canvas warm-up took before the bot connects to Discord.',
+    ],
+    fixed: [
+      'The first `/rank` render no longer blocks the event loop for several seconds; canvas and system-font initialization now completes before login, preventing unrelated commands from timing out with `Unknown interaction`.',
+    ],
+  },
+  {
     version: '1.19.0-beta.17',
     date: '2026-11-08',
     title: 'Leaner commands & faster language lookups',
