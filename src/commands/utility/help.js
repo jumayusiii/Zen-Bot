@@ -4,7 +4,7 @@ const { getGuildLanguage } = require('../../lib/i18n');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('helplist')
+    .setName('help')
     .setDescription('Browse every command by category'),
 
   async execute(interaction) {

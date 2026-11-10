@@ -6,6 +6,17 @@ const test = require('node:test');
 
 const levels = require('../src/lib/levels');
 
+test('level command guard covers every level command', () => {
+  for (const command of ['rank', 'levels', 'levelinfo', 'leveladmin', 'levelreward']) {
+    assert.equal(levels.isLevelCommandDisabled(command, 'guild-1'), false);
+  }
+
+  assert.equal(levels.isLevelCommandDisabled('ping', 'guild-1'), false);
+  assert.equal(levels.isLevelSystemDisabled('guild-1'), false);
+  assert.equal(levels.isLevelSystemDisabled(null), false);
+  assert.equal(levels.isLevelSystemDisabled(undefined), false);
+});
+
 async function withLevelsFile(run) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'legend-levels-'));
   process.env.LEVELS_FILE = path.join(directory, 'levels.json');

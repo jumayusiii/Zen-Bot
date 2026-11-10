@@ -12,8 +12,8 @@ test('all commands load with valid names, descriptions and unique registrations'
   console.log = originalLog;
 
   assert.equal(count, registry.size);
-  assert.equal(registry.size, 105);
-  assert.equal(splitDeveloperCommands(registry).publicCommands.length, 98);
+  assert.equal(registry.size, 106);
+  assert.equal(splitDeveloperCommands(registry).publicCommands.length, 99);
   assert.equal(splitDeveloperCommands(registry).developerCommands.length, 7);
 
   for (const name of [
@@ -21,7 +21,7 @@ test('all commands load with valid names, descriptions and unique registrations'
     'remind',
     'reminders',
     'roleinfo',
-    'helplist',
+    'help',
     'trivia',
     'tictactoe',
     'roll',
@@ -47,6 +47,7 @@ test('all commands load with valid names, descriptions and unique registrations'
     'grantcoins',
     'language',
     'levelreward',
+    'levelsystem',
     'compliment',
     'rate',
     'guessnumber',
@@ -284,6 +285,9 @@ test('all commands load with valid names, descriptions and unique registrations'
   assert.equal(registry.get('dadjoke').data.toJSON().options.length, 0);
   assert.equal(registry.get('riddle').data.toJSON().options.length, 0);
   assert.equal(registry.get('mock').data.toJSON().options.length, 2);
+  assert.equal(registry.get('help').data.toJSON().name, 'help');
+  assert.equal(registry.get('levelsystem').category, 'moderation');
+  assert.equal(registry.get('levelsystem').data.toJSON().options[0].name, 'enabled');
   assert.equal(registry.get('devstatus').developerOnly, true);
   assert.equal(registry.get('devstatus').category, 'developers');
   assert.equal(registry.get('devstatus').data.toJSON().options.length, 3);
@@ -303,7 +307,7 @@ test('developer-only commands are split from the public registration set', () =>
 
   const { publicCommands, developerCommands } = splitDeveloperCommands(registry);
 
-  assert.equal(publicCommands.length, 98);
+  assert.equal(publicCommands.length, 99);
   assert.equal(developerCommands.length, 7);
   assert.deepEqual(
     developerCommands.map((command) => command.data.name).sort(),

@@ -1,4 +1,5 @@
 const { Events, MessageFlags } = require('discord.js');
+const { isLevelCommandDisabled } = require('../lib/levels');
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -23,6 +24,16 @@ async function handleCommand(interaction) {
   const command = interaction.client.commands.get(interaction.commandName);
   if (!command) {
     console.warn(`[interactions] Unknown command /${interaction.commandName}`);
+    return;
+  }
+
+  if (isLevelCommandDisabled(interaction.commandName, interaction.guildId)) {
+    await interaction.reply({
+      content: 'The level system is disabled in this server.',
+      flags: MessageFlags.Ephemeral,
+    }).catch((error) => {
+      console.warn(`[interactions] Could not deliver the level-system notice: ${error.message}`);
+    });
     return;
   }
 

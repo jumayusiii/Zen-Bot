@@ -19,6 +19,7 @@ const ACTIONS = Object.freeze({
   lock: { title: '🔒 Channel locked', color: COLORS.warning },
   unlock: { title: '🔓 Channel unlocked', color: COLORS.success },
   grantcoins: { title: '🪙 Coins granted', color: COLORS.game },
+  levelsystem: { title: '📈 Level system updated', color: COLORS.warning },
   warn: { title: '⚠️ Member warned', color: COLORS.warning },
   clearwarnings: { title: '🧹 Warnings cleared', color: COLORS.success },
   purge: { title: '🧹 Messages purged', color: COLORS.neutral },

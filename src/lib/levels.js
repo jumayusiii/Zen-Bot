@@ -1,8 +1,16 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { setTimeout: delay } = require('node:timers/promises');
+const { isLevelSystemDisabled } = require('./levelSettings');
 
 const DEFAULT_FILE = path.join(__dirname, '..', '..', 'data', 'levels.json');
+const LEVEL_COMMANDS = new Set([
+  'rank',
+  'levels',
+  'levelinfo',
+  'leveladmin',
+  'levelreward',
+]);
 const MAX_LEVEL = 500;
 const MAX_ENTRIES = 50_000;
 const COOLDOWN_MS = 60 * 1000;
@@ -16,6 +24,10 @@ function levelsFile() {
   return process.env.LEVELS_FILE
     ? path.resolve(process.env.LEVELS_FILE)
     : DEFAULT_FILE;
+}
+
+function isLevelCommandDisabled(commandName, guildId) {
+  return LEVEL_COMMANDS.has(String(commandName ?? '')) && isLevelSystemDisabled(guildId);
 }
 
 function cleanText(value, maxLength) {
@@ -410,6 +422,8 @@ module.exports = {
   awardMessageXp,
   getLeaderboard,
   getProfile,
+  isLevelCommandDisabled,
+  isLevelSystemDisabled,
   levelsFile,
   progressFromXp,
   totalXpForLevel,

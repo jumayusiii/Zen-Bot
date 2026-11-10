@@ -1,6 +1,6 @@
 # Zen brand assets
 
-Zen's identity is a modern Material-style bot icon: a rounded white robot head with a dark visor, bright cyan eyes, a slim antenna, and a small Z badge. The avatar is a compact icon for Discord's circular crop; the banner keeps the focus on the ZEN wordmark and the same robot mark in a rounded material card.
+Zen's identity is a calm, precision-built mark: a luminous white **Z** inside an open **ensō** ring, set on an obsidian disc with restrained violet and cyan orbital light. The avatar keeps the mark inside Discord's circular safe area; the banner uses the same mark in a quiet orbital field with **no wordmark or copy**.
 
 | File | Use |
 | --- | --- |
@@ -15,23 +15,19 @@ Zen's identity is a modern Material-style bot icon: a rounded white robot head w
 
 | Role | Hex |
 | --- | --- |
-| Background ink | `#070911` |
-| Deep indigo | `#111326` |
-| Material plum | `#211C45` |
-| Violet field | `#402C6E` |
-| Bot shell | `#FFFFFF` |
-| Shell shade | `#DCD5F2` |
-| Visor | `#1A1B39` |
-| Eye highlight | `#8DF1FF` |
-| Eye cyan | `#29BDE8` |
-| Accent blue | `#6A9DFF` |
+| Background ink | `#05070D` |
+| Deep indigo | `#10172C` |
+| Disc highlight | `#1D2647` |
+| Ice white | `#F4F1FF` |
+| Soft lavender | `#C9BFEA` |
 | Accent violet | `#8E6BFF` |
-| Body text | `#D6CEF0` |
+| Accent blue | `#6D8DFF` |
+| Accent cyan | `#5CE7FF` |
 
 ## Usage
 
-- Keep the robot's visor, both eyes and forehead Z badge inside the central safe area for Discord's circular avatar crop.
-- Preserve the rounded shell, dark visor, cyan eyes, antenna and layered indigo/violet background; these carry the Material bot identity.
-- Keep the banner's 5:2 composition: the ZEN wordmark on the left and the robot icon card on the right, with no additional copy.
+- Keep the Z and the ensō ring inside the central safe area so both survive Discord's circular avatar crop.
+- Preserve the open ring, the rounded Z stroke and the obsidian disc; these carry the Zen identity.
+- Keep the banner text-free. It should read as a calm orbital field around the mark, not as a wordmark.
 - Edit the SVG masters, then run `npm run branding` from the project root to regenerate all four PNGs.
 - Upload the PNG through the Discord Developer Portal, or use the file directly with the bot avatar or banner API.

@@ -228,7 +228,7 @@ function tabButtons(activeId, groups, language) {
       new ActionRowBuilder().addComponents(
         tabs.slice(index, index + 5).map((tab) =>
           new ButtonBuilder()
-            .setCustomId(`helplist:view:${tab.id}`)
+            .setCustomId(`help:view:${tab.id}`)
             .setLabel(tab.label)
             .setEmoji(tab.emoji)
             .setStyle(tab.id === activeId ? ButtonStyle.Primary : ButtonStyle.Secondary),

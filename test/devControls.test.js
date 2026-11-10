@@ -72,7 +72,7 @@ test('the status command sets a custom status beside the rich presence', async (
     await devStatus.execute(interaction);
 
     assert.equal(interaction.captured.presence.activities.length, 2);
-    assert.equal(interaction.captured.presence.activities[0].name, 'use /helplist!');
+    assert.equal(interaction.captured.presence.activities[0].name, 'use /help!');
     assert.equal(interaction.captured.presence.activities[1].name, 'Custom Status');
     assert.equal(interaction.captured.presence.activities[1].type, 4);
     assert.equal(

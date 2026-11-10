@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **9 November 2026** · Zen **1.19.0-beta.18** · **98 slash commands**
+Last verified: **10 November 2026** · Zen **1.19.0-beta.19** · **99 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -8,20 +8,22 @@ This is the complete launch playbook for getting Zen discovered: pre-flight fixe
 the directories worth submitting to, ready-to-paste listing copy, stats APIs,
 vote webhooks, and the mistakes that get bots declined.
 
-## Latest beta — 1.19.0-beta.18 (9 November 2026)
+## Latest beta — 1.19.0-beta.19 (10 November 2026)
 
-Zen’s current public beta moves the first rank-card canvas initialization to
-startup, before the Discord gateway connects. A cold render can no longer
-freeze live command handling and turn unrelated interactions into
-`Unknown interaction` errors. The public set stays at **98 slash commands**; 7
-owner-only commands are registered only in the developer guild.
+Zen’s current public beta brings the new text-free Z/ensō identity, shortens
+`/helplist` to `/help`, and adds a per-server level switch for admins and
+server owners. `/levelsystem enabled:false` pauses chat XP, level-ups, rank
+cards and every level command without deleting existing progress; `enabled:true`
+resumes them. The public set is now **99 slash commands**; 7 owner-only commands
+are registered only in the developer guild.
 
 | Change | Command | Who can use it |
 | --- | --- | --- |
-| Canvas and font warm-up before login | `/rank`, `/caption`, `/redditcard` | Everyone |
-| Startup timing in the log | Startup | Host operator |
+| New avatar and text-free banner | Profile | Everyone |
+| Shorter help entry point | `/help` | Everyone |
+| Per-server level system switch | `/levelsystem enabled:<true\|false>` | Admins and server owners |
 
-Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.18> ·
+Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.19> ·
 Changelog: `src/lib/changelog.js`
 
 ## Quick submission path
@@ -45,9 +47,9 @@ Changelog: `src/lib/changelog.js`
 | Bot is public | ✅ `bot_public: true` | None |
 | OAuth2 code grant | ✅ `bot_require_code_grant: false` | None |
 | Bot is online during review | ✅ PM2 process `zen-bot` | Keep the host running |
-| Slash commands are registered | ✅ 98 public (+7 owner-only) | `npm run deploy` after command changes |
+| Slash commands are registered | ✅ 99 public (+7 owner-only) | `npm run deploy` after command changes |
 | Invite requests Administrator | ✅ no | Keep permissions at `1099780180998` |
-| Help entry point | ✅ `/helplist` | Mention it in reviewer notes |
+| Help entry point | ✅ `/help` | Mention it in reviewer notes |
 | NSFW content on listing | ✅ none | Keep the listing SFW |
 | Vote-locked commands | ✅ none | Do not gate most commands |
 | Icon | ✅ 1024×1024 | `assets/branding/zen-avatar-1024.png` |
@@ -131,29 +133,29 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.18` |
+| Version | `1.19.0-beta.19` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |
-| Commands | 98 |
+| Commands | 99 |
 | Invite | `https://discord.com/oauth2/authorize?client_id=1564936469305364480&permissions=1099780180998&scope=bot%20applications.commands` |
 | Source | <https://github.com/jumayusiii/Zen-Bot> |
 | Support | <https://github.com/jumayusiii/Zen-Bot/issues> |
 | Directory page | <https://discordbotlist.com/bots/juma-habbo> |
-| Help | `/helplist` |
+| Help | `/help` |
 
 ### Short description
 
 **Under 140 characters** — use this on top.gg and as the default short field:
 
 ```text
-Memes, minigames, levels, economy, moderation and live social feeds — 98 clean slash commands for your server.
+Memes, minigames, levels, economy, moderation and live social feeds — 99 clean slash commands for your server.
 ```
 
 Alternative, 115 characters:
 
 ```text
-A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 98 slash commands.
+A friendly all-in-one Discord bot with memes, games, levels, economy, moderation and live feeds. 99 slash commands.
 ```
 
 Do not pad this field with keywords. top.gg lists keyword stuffing as a
@@ -198,12 +200,12 @@ social and tidy without reading message content.
   a `/calculate` maths parser.
 
 ### Built for clean servers
-- 98 slash commands, no prefix and no message-content access.
+- 99 slash commands, no prefix and no message-content access.
 - Persistent polls, reminders, levels, warnings, greetings and channel locks.
 - Optional beta `/chatgpt`; works only when the owner configures an OpenAI key,
   and Zen does not store prompts.
 
-**Try it:** add Zen, run `/helplist`, then try `/rank`, `/cat`, `/animalmeme`,
+**Try it:** add Zen, run `/help`, then try `/rank`, `/cat`, `/animalmeme`,
 `/weather Tokyo`, `/wikipedia Jupiter`, `/typerace` or `/calculate`.
 
 **Source and issues:** [GitHub](https://github.com/jumayusiii/Zen-Bot) ·
@@ -221,14 +223,14 @@ Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Im
 - **Languages:** English.
 - **Prefix:** `/` (slash commands only).
 - **NSFW:** off.
-- **Help command:** `/helplist`.
+- **Help command:** `/help`.
 
 ### Reviewer note
 
 Paste this into the private reviewer-notes field:
 
 ```text
-Zen is slash-command only. Start with /helplist for the full 98-command directory.
+Zen is slash-command only. Start with /help for the full 99-command directory.
 No Administrator permission is requested.
 
 Good quick tests:
@@ -283,7 +285,7 @@ https://github.com/jumayusiii/Zen-Bot/issues.
 ## 5. top.gg — full submission
 
 Before you start: the bot must be public, invitable and online during review;
-the main features must work; `/helplist` must be an obvious entry point; and the
+the main features must work; `/help` must be an obvious entry point; and the
 invite must not request Administrator. These are top.gg’s published bot rules.
 
 1. Sign in at <https://top.gg> with Discord, then open <https://top.gg/bot/new>.
@@ -356,7 +358,7 @@ keep the page SFW, and fill the tags, help command, GitHub and invite fields.
 1. Sign in at <https://discordbotlist.com> with the owner's Discord account.
 2. Open <https://discordbotlist.com/bots/juma-habbo/edit>, or
    <https://discordbotlist.com/bots/add> for a new bot.
-3. Set the name to **Zen**, the prefix to `/`, the help command to `/helplist`
+3. Set the name to **Zen**, the prefix to `/`, the help command to `/help`
    and the tags from section 4.
 4. Paste the short and long descriptions.
 5. Add the GitHub repository, issues page and invite URL.
@@ -494,7 +496,7 @@ These are the highest-value checks from top.gg's published guidelines:
    invitable throughout review.
 2. **Wrong prefix.** Zen is `/`, not a text prefix.
 3. **Requires Administrator.** Not allowed. Zen's invite does not request it.
-4. **No clear entry point.** `/helplist` is Zen's. Put it in the listing.
+4. **No clear entry point.** `/help` is Zen's. Put it in the listing.
 5. **Vote-locking most commands.** Keep this to no more than 3–5 commands, or do
    not vote-lock at all.
 6. **Owner commands not locked.** Zen has no public eval/status command.
@@ -521,8 +523,8 @@ resubmit second.
 
 - [x] Confirm **Requires OAuth2 Code Grant** is off.
 - [ ] Confirm the bot is public and invitable.
-- [ ] Deploy all 98 public slash commands: `npm run deploy`.
-- [ ] Confirm `/helplist` works from a clean account.
+- [ ] Deploy all 99 public slash commands: `npm run deploy`.
+- [ ] Confirm `/help` works from a clean account.
 - [ ] Publish a public privacy-policy URL.
 - [ ] Check the support URL and invite URL.
 - [ ] Prepare the 1024 icon and 1500×600 banner.

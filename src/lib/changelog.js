@@ -2,6 +2,22 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.19',
+    date: '2026-11-10',
+    title: 'A new Zen identity, /help & per-server levels',
+    summary: 'Zen has a cleaner text-free brand, a shorter /help directory, and a server setting that lets admins pause chat levels without deleting progress.',
+    added: [
+      'A new obsidian Z/ensō avatar and a text-free banner, rebuilt from refreshed SVG masters and synced to the public guide.',
+      '`/levelsystem enabled:false` lets administrators and server owners pause chat XP, level-ups, rank cards and every level command for their server; existing XP, levels and reward settings are preserved. `/levelsystem enabled:true` resumes them.',
+    ],
+    improved: [
+      '`/helplist` is now `/help`, keeping the same tabbed directory with a shorter entry point.',
+      'The temporary hardcoded level-system gate is replaced by persistent per-server settings in `data/level-settings.json`.',
+      'The public command set is now **99 slash commands**, leaving one slot under Discord’s 100-command limit.',
+    ],
+    fixed: [],
+  },
+  {
     version: '1.19.0-beta.18',
     date: '2026-11-09',
     title: 'Canvas warm-up before login',

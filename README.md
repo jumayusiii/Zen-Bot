@@ -2,7 +2,7 @@
 
 ![Zen banner](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.18** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+**Public beta · v1.19.0-beta.19** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin coin grants and removals and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -107,6 +107,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/grantcoins <member> <amount> [reason]` | 👷‍♂️ Grants up to **100,000 coins** to a member. Limited to **Administrator** or the server owner, with an audit-log entry. |
 | `/removecoins <member> <amount> [reason]` | 👷‍♂️ Removes up to **100,000 coins** from a member's wallet, stopping at zero. Limited to **Administrator** or the server owner, with an audit-log entry. |
 | `/modlog [channel] [disable]` | 👷‍♂️ Chooses the channel that receives every moderation action and automatic unban. |
+| `/levelsystem enabled:<true\|false>` | Pauses or resumes chat XP, level-ups and every level command for this server. Limited to **Administrator** or the server owner; existing progression is kept. |
 | `/language` | 👷‍♂️ Switches Zen between **English** and **German** for this server with two buttons. Requires **Manage Server**. |
 | `/avatar [user]` | Shows a user avatar with a 64–4096 px size selector and a **Download** button. |
 | `/servericon` | Shows the current server icon with the same size selector and download button. |
@@ -128,9 +129,9 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/ping` | Shows gateway latency, command round-trip, uptime and connection status. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
-| `/helplist` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
+| `/help` | Opens a tabbed directory — Overview, Fun, Images, Moderation, Minigames, Levels, Economy, Social and Utilities — with every command, its usage and a beta marker. |
 
-👷‍♂️ marks beta commands. The directory covers **98 public commands** across nine tabs (plus seven developer-only commands for the owner), and is generated from the loaded command modules so it stays accurate when new commands are added.
+👷‍♂️ marks beta commands. The directory covers **99 public commands** across nine tabs (plus seven developer-only commands for the owner), and is generated from the loaded command modules so it stays accurate when new commands are added.
 
 ## Guild context
 
@@ -157,6 +158,8 @@ These commands need outbound HTTPS but no API keys. `/hug`, `/pat` and `/highfiv
 Every member earns XP by chatting. A message awards **25–35 XP**, with one award per user per server every **60 seconds**. XP is stored per server in `data/levels.json` and survives restarts. Each level-up also pays coins into the member's server wallet: **25 coins** at level 1, **5 more** per level and a **250-coin** cap per level, so active chat feeds the economy described below.
 
 `/rank [user]` renders a **900 × 280 rank card** locally with the member's avatar, display name, level, server rank, total XP and a progress bar to the next level. The card uses the member's selected theme — Aurora by default — with matching wallpaper patterns, avatar ring, level pill and progress bar colours. `/rank theme:<name>` equips another owned theme, and `/levels` shows the top ten members by XP, with medals for the podium and the caller's rank when outside the top ten. `/levelinfo [user]` explains the XP rules and shows the member's level, rank, next-level requirement and the server's reward role. `/leveladmin` lets an administrator add, remove, set or reset a member's XP, with every change written to the audit log.
+
+`/levelsystem enabled:false` lets an administrator or the server owner pause chat XP, level-ups, rank cards and every level command for their server; `enabled:true` resumes them. The switch is stored in `data/level-settings.json`, and existing XP, levels and reward settings are kept.
 
 The level curve starts at **50 XP** for level 1 and grows with each level (`5 × level² + 25 × level + 50` XP for the next level), so two awards at the 25 XP minimum unlock the first level. The next thresholds are **80, 120, 170 and 230 XP**. The bot uses the non-privileged **GuildMessages** intent for message events and never reads message content. Rank cards need `@napi-rs/canvas`, which installs prebuilt binaries through npm; if rendering fails, `/rank` falls back to a text embed.
 
@@ -186,6 +189,7 @@ Admin commands are grouped in the **Moderation** tab and are hidden from members
 - `/lock [channel] [reason]` denies **SendMessages** for **@everyone** and saves the previous setting in `data/channel-locks.json`. `/unlock` restores exactly that setting, so a channel that was already read-only stays read-only.
 - `/softban <member> [delete_messages] [reason]` bans a member, cleans up to seven days of messages, then immediately removes the ban. It refuses users who are already banned so an existing ban is never replaced.
 - `/grantcoins <member> <amount> [reason]` and `/removecoins <member> <amount> [reason]` are limited to the server owner and members with **Administrator**. They add or remove 1–100,000 coins at a time, respect the wallet limits and write to the audit log.
+- `/levelsystem enabled:<true\|false>` lets admins or the server owner pause or resume chat XP, level-ups, rank cards and every level command without deleting progress. The setting is stored in `data/level-settings.json`.
 - Temporary bans are written to `data/moderation.json`. The scheduler checks every 30 seconds and lifts overdue bans after a restart.
 - Every command checks the caller's permission, the bot's permission, the server owner, the bot's role position and the caller's role position. Depending on the command, the bot needs **Moderate Members**, **Kick Members**, **Ban Members**, **Manage Messages**, **Manage Channels** and **Manage Roles**, and its role must sit above the target's highest role.
 - `/modlog channel:#audit-log` stores a channel in `data/moderation-logs.json`. Mutes, unmutes, kicks, bans, unbans, soft bans, channel locks and unlocks, coin grants and removals, level XP changes, warnings, cleared warnings, purges, slowmode changes and automatic temporary-ban expiry are posted there with the target, moderator, duration, reason and action time. `/modlog` shows the current setting, and `/modlog disable:true` turns it off.
@@ -278,7 +282,7 @@ GUILD_ID=your-server-id
 CLIENT_ID=1564936469305364480
 
 # Rich presence.
-PRESENCE_TEXT=use /helplist!
+PRESENCE_TEXT=use /help!
 
 # Optional: Discord bot list stats (see docs/bot-listing.md).
 TOPGG_TOKEN=
@@ -296,7 +300,7 @@ OPENAI_MODEL=gpt-6-luna
 | `DISCORD_TOKEN` | Yes | — | Bot token from the Developer Portal. |
 | `GUILD_ID` | No | — | Required only by `npm run deploy:guild` for single-server development. |
 | `CLIENT_ID` | No | Read from token | Application ID used during command registration. |
-| `PRESENCE_TEXT` | No | `use /helplist!` | Text shown as the bot's **Playing** activity. |
+| `PRESENCE_TEXT` | No | `use /help!` | Text shown as the bot's **Playing** activity. |
 | `TOPGG_TOKEN` | No | — | top.gg API token; enables stats posting. |
 | `DISCORDBOTLIST_TOKEN` | No | — | Discord Bot List API token; enables stats posting. |
 | `OPENAI_API_KEY` | No | — | Enables the beta `/chatgpt` command; keep it server-side. |
@@ -328,7 +332,7 @@ A healthy start looks like:
 ```text
 [commands] Loaded /poll
 [bot] Logged in as Zen#2257 (123456789012345678)
-[bot] Rich presence set: Playing use /helplist!
+[bot] Rich presence set: Playing use /help!
 [reminders] Dispatcher enabled (checking every 15s).
 [moderation] Temporary-ban scheduler enabled (checking every 30s).
 ```
@@ -404,6 +408,7 @@ src/
 │   ├── images.js                # Size selector / download button helpers
 │   ├── imageFeeds.js            # Cat, dog, animal meme and styled meme helpers
 │   ├── levels.js                # Per-server XP, level maths and persistence
+│   ├── levelSettings.js         # Per-server level-system switch and persistence
 │   ├── levelRewards.js          # Per-server reward roles and safe assignment
 │   ├── memory.js                # Symbol sequences and step rules
 │   ├── moderation.js            # Durations, hierarchy checks and scheduled unbans
@@ -478,6 +483,7 @@ src/
     │   ├── kick.js
     │   ├── language.js
     │   ├── lock.js
+    │   ├── levelsystem.js
     │   ├── modlog.js
     │   ├── mute.js
     │   ├── purge.js
@@ -517,7 +523,7 @@ src/
         ├── calculate.js
         ├── changelog.js
         ├── chatgpt.js
-        ├── helplist.js
+        ├── help.js
         ├── invite.js
         ├── leave.js
         ├── ping.js
@@ -554,6 +560,7 @@ The bot stores only what it needs to provide its features:
 - Reminders in `data/reminders.json` (user, source channel, reminder text, due time and delivery preference).
 - Level records in `data/levels.json` (server and user IDs, display name, XP and last award time).
 - Level reward roles in `data/level-rewards.json` (server ID, role ID and required level).
+- Level-system settings in `data/level-settings.json` (server ID, enabled state, who changed it and when).
 - Economy wallets in `data/economy.json` (server and user IDs, coin balance, daily, work and steal timestamps, owned theme IDs and equipped theme).
 - The chosen bot language in `data/languages.json` (server ID, language, who changed it and when).
 - Channel locks in `data/channel-locks.json` (server and channel IDs, the previous **@everyone** SendMessages state, moderator, reason and lock time).
@@ -575,7 +582,7 @@ To reset only chat progression, stop the bot and run `npm run reset:progression`
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
-- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.13`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.19`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

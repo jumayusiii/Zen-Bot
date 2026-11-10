@@ -2,7 +2,7 @@ const { Events } = require('discord.js');
 const { awardLevelCoins } = require('../lib/economy');
 const { COLORS, createEmbed } = require('../lib/embeds');
 const { applyLevelReward } = require('../lib/levelRewards');
-const { COOLDOWN_MS, awardMessageXp } = require('../lib/levels');
+const { COOLDOWN_MS, awardMessageXp, isLevelSystemDisabled } = require('../lib/levels');
 
 const lastAward = new Map();
 
@@ -15,6 +15,9 @@ module.exports = {
 
   async execute(message) {
     if (!message.inGuild?.() || message.author?.bot || message.system) return;
+
+    // This guild is excluded from chat XP, level-ups and rank cards.
+    if (isLevelSystemDisabled(message.guildId)) return;
 
     const now = Date.now();
     const key = cooldownKey(message.guildId, message.author.id);

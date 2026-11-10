@@ -16,10 +16,10 @@ The editor requires the owner's Discord sign-in.
 | Field | Value |
 | --- | --- |
 | Bot name | Zen |
-| Version | `1.19.0-beta.18` |
-| Commands | 98 |
+| Version | `1.19.0-beta.19` |
+| Commands | 99 |
 | Prefix | `/` (slash commands only) |
-| Help command | `/helplist` |
+| Help command | `/help` |
 | Tags | Fun, Games, Leveling, Moderation, Memes, Social, Utility, Economy, Community, Images |
 | Library | discord.js v14 · JavaScript · Node.js |
 | GitHub | <https://github.com/jumayusiii/Zen-Bot> |
@@ -54,7 +54,7 @@ from the Discord bot token and must never be committed.
 
 - [ ] Display name set to Zen.
 - [ ] Current short and long descriptions pasted.
-- [ ] Help command set to `/helplist`.
+- [ ] Help command set to `/help`.
 - [ ] Tags updated.
 - [ ] GitHub and issues links added.
 - [ ] SFW setting retained.

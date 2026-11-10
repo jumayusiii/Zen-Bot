@@ -8,7 +8,7 @@ test('presence defaults to the command directory and can be overridden', () => {
 
   try {
     delete process.env.PRESENCE_TEXT;
-    assert.equal(config.presenceText(), 'use /helplist!');
+    assert.equal(config.presenceText(), 'use /help!');
 
     process.env.PRESENCE_TEXT = '  Playing with the community  ';
     assert.equal(config.presenceText(), 'Playing with the community');

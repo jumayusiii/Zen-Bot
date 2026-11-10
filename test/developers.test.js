@@ -158,7 +158,7 @@ test('a saved override changes the payload, survives a reload and clears cleanly
   await withPresenceFile(async () => {
     delete process.env.PRESENCE_TEXT;
 
-    assert.equal(presence.buildPresence().activities[0].name, 'use /helplist!');
+    assert.equal(presence.buildPresence().activities[0].name, 'use /help!');
     assert.equal(presence.buildPresence().activities[0].type, 0);
 
     await presence.setPresenceOverride({
@@ -189,7 +189,7 @@ test('a saved override changes the payload, survives a reload and clears cleanly
     assert.equal(presence.buildPresence().activities[0].url, 'https://twitch.tv/zen');
 
     await presence.clearPresenceOverride();
-    assert.equal(presence.buildPresence().activities[0].name, 'use /helplist!');
+    assert.equal(presence.buildPresence().activities[0].name, 'use /help!');
     await assert.rejects(
       () => fs.readFile(process.env.PRESENCE_FILE, 'utf8'),
       { code: 'ENOENT' },
@@ -227,7 +227,7 @@ test('the presence command applies text live and reset restores the default', as
 
     const reset = fakeInteraction({ options: { reset: true } });
     await devPresence.execute(reset);
-    assert.equal(reset.captured.presence.activities[0].name, 'use /helplist!');
+    assert.equal(reset.captured.presence.activities[0].name, 'use /help!');
   });
 });
 
