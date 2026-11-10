@@ -22,12 +22,13 @@ function buildEmbed(client, weather, requestedBy, privateMode) {
   const today = daily[0];
   const forecast = daily.length > 0
     ? daily
+      .slice(0, 4)
       .map((day, index) => {
         const label = index === 0 ? 'Today' : formatDay(day.date);
-        return `**${label}** · ${day.emoji} ${valueWithUnit(day.max, units.temperature)} / ${valueWithUnit(day.min, units.temperature)} · ${percent(day.precipitationChance)} rain`;
+        return `**${label}** · ${day.emoji} ${valueWithUnit(day.max, units.temperature)} / ${valueWithUnit(day.min, units.temperature)}`;
       })
       .join('\n')
-    : 'No daily forecast available.';
+    : 'No forecast available.';
 
   return createEmbed(client, {
     section: 'Weather',
@@ -37,18 +38,16 @@ function buildEmbed(client, weather, requestedBy, privateMode) {
     description: `**${current.emoji} ${current.label}**  ·  **${valueWithUnit(current.temperature, units.temperature)}**`,
     fields: [
       {
-        name: '🌡️ Temperature',
-        value: `**${valueWithUnit(current.temperature, units.temperature)}**\nFeels like **${valueWithUnit(current.feelsLike, units.temperature)}**`,
+        name: '🌡️ Feels like',
+        value: `**${valueWithUnit(current.feelsLike, units.temperature)}**`,
         inline: true,
       },
       { name: '💧 Humidity', value: percent(current.humidity), inline: true },
       { name: '💨 Wind', value: valueWithUnit(current.windSpeed, ` ${units.wind}`), inline: true },
-      { name: '🌧️ Precipitation', value: valueWithUnit(current.precipitation, ` ${units.precipitation}`, 1), inline: true },
       { name: '☔ Rain chance', value: today ? percent(today.precipitationChance) : '—', inline: true },
-      { name: '🕒 Timezone', value: place.timezone || 'Unknown', inline: true },
-      { name: `📅 Next days (${units.temperature})`, value: forecast, inline: false },
+      { name: '📅 Forecast', value: forecast, inline: false },
     ],
-    footer: `Requested by ${requestedBy}  ·  Data from Open-Meteo${privateMode ? '  ·  Private to you' : ''}`,
+    footer: `Requested by ${requestedBy}  ·  Open-Meteo${privateMode ? '  ·  Private' : ''}`,
   });
 }
 

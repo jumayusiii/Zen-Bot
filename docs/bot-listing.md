@@ -1,6 +1,6 @@
 # Releasing Zen on Discord bot lists
 
-Last verified: **10 November 2026** · Zen **1.19.0-beta.19** · **99 slash commands**
+Last verified: **11 November 2026** · Zen **1.19.0-beta.20** · **99 slash commands**
 
 Public guide: https://site-e6edf6fc47c8417fbd4cd9fc08cf507d.freebuff.page
 
@@ -8,22 +8,26 @@ This is the complete launch playbook for getting Zen discovered: pre-flight fixe
 the directories worth submitting to, ready-to-paste listing copy, stats APIs,
 vote webhooks, and the mistakes that get bots declined.
 
-## Latest beta — 1.19.0-beta.19 (10 November 2026)
+## Latest beta — 1.19.0-beta.20 (11 November 2026)
 
-Zen’s current public beta brings the new text-free Z/ensō identity, shortens
-`/helplist` to `/help`, and adds a per-server level switch for admins and
-server owners. `/levelsystem enabled:false` pauses chat XP, level-ups, rank
-cards and every level command without deleting existing progress; `enabled:true`
-resumes them. The public set is now **99 slash commands**; 7 owner-only commands
-are registered only in the developer guild.
+Every command reply now uses a quieter shared card: the repeated bot author
+line and footer icon are gone, blank space is collapsed, empty fields are
+omitted and text stays clamped. `/botinfo`, `/serverinfo` and `/weather` show
+only their most useful fields, while `/help` keeps its tabbed directory with
+shorter copy. The watchdog now discovers stale or duplicate PM2 daemons,
+restarts a wedged supervisor and verifies the Discord login. The public set
+stays at **99 slash commands**; 7 owner-only commands are registered only in
+the developer guild.
 
-| Change | Command | Who can use it |
+| Change | Where | Who can use it |
 | --- | --- | --- |
-| New avatar and text-free banner | Profile | Everyone |
-| Shorter help entry point | `/help` | Everyone |
-| Per-server level system switch | `/levelsystem enabled:<true\|false>` | Admins and server owners |
+| Compact reply cards | Every embed | Everyone |
+| Fewer, tighter fields | `/botinfo`, `/serverinfo`, `/weather` | Everyone |
+| Shorter directory copy | `/help` | Everyone |
+| PM2 recovery and login check | `npm run watchdog` | Host |
+| New Zeni avatar and banner | Profile | Everyone |
 
-Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.19> ·
+Release: <https://github.com/jumayusiii/Zen-Bot/releases/tag/v1.19.0-beta.20> ·
 Changelog: `src/lib/changelog.js`
 
 ## Quick submission path
@@ -133,7 +137,7 @@ server, not the bot.
 | --- | --- |
 | Name | Zen |
 | Application ID | `1564936469305364480` |
-| Version | `1.19.0-beta.19` |
+| Version | `1.19.0-beta.20` |
 | Status | Public beta |
 | Prefix | Slash commands only (`/`) |
 | Library | discord.js v14 · JavaScript · Node.js |

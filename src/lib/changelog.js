@@ -2,6 +2,25 @@ const { version: BOT_VERSION } = require('../../package.json');
 
 const RELEASES = [
   {
+    version: '1.19.0-beta.20',
+    date: '2026-11-11',
+    title: 'Quieter cards & a watchdog that recovers PM2',
+    summary: 'Every command reply is more compact, the busiest info commands carry fewer fields, and the watchdog now recovers a stale or wedged PM2 supervisor.',
+    added: [
+      'New Zeni artwork: the Ensō Guardian avatar and the text-free banner were rebuilt from refreshed SVG masters and synced to the public guide.',
+      'The watchdog now discovers stale and duplicate PM2 daemons, force-stops a wedged supervisor, starts a fresh daemon and verifies the Discord login before reporting success.',
+    ],
+    improved: [
+      'Every embed now uses the shared compact card: the repeated bot author line and footer icon are gone, accidental blank lines are collapsed, empty fields are omitted and long text stays clamped.',
+      '`/botinfo`, `/serverinfo` and `/weather` now show only their most useful fields; `/weather` keeps a four-day forecast without repeating the current temperature.',
+      '`/help` keeps its tabbed directory with shorter category copy, 12-command overviews and descriptions capped at 90 characters.',
+      'PM2 recovery calls now time out and log instead of hanging, overlapping watchdog runs are locked out, and the public set stays at **99 slash commands**.',
+    ],
+    fixed: [
+      'A stale `pm2.pid` or multiple PM2 daemons can no longer leave the bot offline when the watchdog runs.',
+    ],
+  },
+  {
     version: '1.19.0-beta.19',
     date: '2026-11-10',
     title: 'A new Zen identity, /help & per-server levels',

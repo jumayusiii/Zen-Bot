@@ -1,8 +1,10 @@
 # Zen
 
-![Zen banner](assets/branding/zen-banner-750x300.png)
+![Zeni, the Ensō Guardian, beside an open ensō ring](assets/branding/zen-banner-750x300.png)
 
-**Public beta · v1.19.0-beta.19** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
+*Zeni, the Ensō Guardian — Zen's original celestial mascot.*
+
+**Public beta · v1.19.0-beta.20** · [GitHub release](https://github.com/jumayusiii/Zen-Bot/releases) · [Discord Bot List](https://discordbotlist.com/bots/juma-habbo) · [MIT license](LICENSE)
 
 A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v14. It uses a recursive command handler, an event handler, and slash commands only. The bot covers memes, animal memes, customizable image captions, Reddit thread cards, social actions, cat and dog photos, styleable memes, button minigames, dice, decision picks, per-server levels with ten customizable rank card themes, a beta coin economy with work shifts, coin wagers, admin coin grants and removals and a card-theme shop, a Discord timestamp builder, profile-image tools, live polls, persistent reminders, moderation with warnings, purge, slowmode, channel locks, soft bans and audit logs, welcome and leave messages, a tabbed help directory, invite tools, role and server diagnostics, directory stats posting, TikTok video previews that play inline, live Bluesky, Reddit and YouTube lookups, live weather forecasts, Wikipedia summaries, fortune cookies, themed conversation starters, sequence memory, modal typing races, a per-server Type Race leaderboard and a beta ChatGPT assistant.
 
@@ -30,7 +32,7 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 - **Knowledge**: `/wikipedia` searches Wikipedia and posts a clean summary, article image and a **Read on Wikipedia** button.
 - **ChatGPT beta**: `/chatgpt` sends a moderated question to OpenAI and posts the answer, with an optional private reply and **8 requests per 10 minutes**. Requires `OPENAI_API_KEY`; prompts are not stored by Zen.
 - **Type Race records**: every exact run updates a per-server personal best, and `/typeraceleaderboard` ranks the ten fastest members.
-- **Modern embeds** with a shared palette, plain titles, branded headers, timestamps and clamped text limits.
+- **Compact embeds** with a shared palette, no repeated bot header or footer icon, collapsed spacing, trimmed fields and clamped text limits.
 - **Self-host friendly**: configurable presence and settings, no hardcoded guild IDs or tokens, and no message content access. The **Server Members** intent is used for greetings.
 
 ## Commands
@@ -120,12 +122,12 @@ A Discord bot written in JavaScript with [discord.js](https://discord.js.org/) v
 | `/poll <question> <options>` | 👷‍♂️ Creates a live button poll with 2–5 options. Votes update in place, can be changed or removed, and only the creator can close the poll. |
 | `/remind <when> <message> [where]` | 👷‍♂️ Sets a persistent reminder from 1 minute to 30 days ahead, sent by DM or in the original channel. |
 | `/reminders` | 👷‍♂️ Lists your pending reminders and lets you cancel one from a select menu. The list is private. |
-| `/serverinfo` | Shows the server owner, ID, creation date, member/role/channel counts, boosts, verification level and language. |
+| `/serverinfo` | Shows the server owner, creation date, member and channel counts, boosts and verification level. |
 | `/userinfo [user]` | Shows a user's display name, ID, account type, creation date, join date, top role, nickname and roles. |
 | `/welcome [channel] [message] [disable] [test]` | 👷‍♂️ Configures the join message with placeholders and an optional test preview. |
 | `/leave [channel] [message] [disable] [test]` | 👷‍♂️ Configures the leave message with placeholders and an optional test preview. |
 | `/roleinfo <role>` | 👷‍♂️ Shows a role's color, position, creation date, permissions, mentionable/hoisted/managed state and icon. |
-| `/botinfo` | 👷‍♂️ Shows bot uptime, gateway ping, memory, server/member counts, version and runtime versions. |
+| `/botinfo` | 👷‍♂️ Shows servers, members, commands, gateway ping, uptime and memory, with runtime versions in the footer. |
 | `/ping` | Shows gateway latency, command round-trip, uptime and connection status. |
 | `/invite` | Builds an install link with the permissions the bot needs plus a source-code link. |
 | `/changelog` | Shows the current version, update date and release notes. |
@@ -547,7 +549,7 @@ Helper scripts:
 - `scripts/health-check.js` waits for PM2 to report the bot online with a fresh Discord login, then verifies that `DISCORD_TOKEN` belongs to that bot. Run `npm run health` after logon or a restart; it exits `1` when the bot is unhealthy.
 - `scripts/reset-progression.js` previews every XP record and wallet in both progression files; add `--confirm` to back them up and clear all servers at once.
 - `scripts/health-check-task.cmd` is the logon wrapper used by the `Zen Bot Health (Freebuff)` scheduled task; it runs the check one minute after sign-in and appends failures to `logs/health-failures.log`.
-- `scripts/watchdog.js` runs the health check every five minutes and restarts the PM2 app after **two consecutive failures**. The `Zen Bot Watchdog (Freebuff)` scheduled task runs `scripts/watchdog-task.cmd`; events go to `logs/watchdog.log` and early failures to `logs/watchdog-task.log`.
+- `scripts/watchdog.js` runs the health check every five minutes, locks against overlapping runs and restarts the PM2 app after **two consecutive failures**. If PM2 itself is unresponsive, it discovers and force-stops every stale PM2 daemon and managed app PID, starts a fresh PM2 daemon, and verifies the Discord login before clearing the failure counter. The `Zen Bot Watchdog (Freebuff)` scheduled task runs `scripts/watchdog-task.cmd`; events go to `logs/watchdog.log` and early failures to `logs/watchdog-task.log`.
 - `scripts/release-notes.js` renders a changelog entry for a GitHub release.
 - `scripts/render-branding.js` rasterises the branding SVGs into the tracked PNG sizes with `npm run branding`.
 - `scripts/autostart-pm2.vbs` restores the saved PM2 process list at Windows logon.
@@ -582,7 +584,7 @@ To reset only chat progression, stop the bot and run `npm run reset:progression`
 - Run the bot as a long-lived Node.js process with a persistent disk. Serverless platforms without a writable filesystem will lose poll, reminder, level, scheduled-ban and Type Race best state.
 - Trivia, tic-tac-toe, Higher or Lower, hangman, blackjack, Guess the Number, Reaction, Memory, Type Race and Would You Rather rounds are in memory and intentionally reset when the process restarts. Welcome, leave and audit-log settings persist in `data/`, and Type Race personal bests persist in `data/typerace.json`.
 - Do not commit `.env`, logs or `data/*.json`.
-- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.19`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
+- Pushing a tag that matches `package.json` (for example `v1.19.0-beta.20`) runs `.github/workflows/release.yml`, tests the tree and publishes a GitHub release from the matching changelog entry. Beta tags are marked as pre-releases.
 - For a public bot, register commands globally and configure **Public Bot** and **Requires OAuth2 Code Grant** in the Developer Portal.
 - Set `TOPGG_TOKEN` / `DISCORDBOTLIST_TOKEN` after a directory listing is approved; stats post on startup and every 30 minutes.
 - `/tiktok` needs outbound HTTPS access to TikTok and `www.tikwm.com`. It posts the video as an attachment, so the host must allow uploads up to **8 MB**.

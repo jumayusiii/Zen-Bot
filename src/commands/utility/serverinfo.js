@@ -46,36 +46,31 @@ module.exports = {
         channel.type === ChannelType.GuildVoice || channel.type === ChannelType.GuildStageVoice,
     ).size;
     const boostCount = guild.premiumSubscriptionCount || 0;
+    const description = [contextNote, guild.description?.slice(0, 300)].filter(Boolean).join('\n\n');
 
     const embed = createEmbed(interaction.client, {
-      section: 'Server Overview',
       title: guild.name,
       color: guild.members.me?.displayColor || COLORS.brand,
       thumbnail: guild.iconURL({ extension: 'png', size: 256, forceStatic: true }),
       image: guild.bannerURL({ extension: 'png', size: 1024, forceStatic: true }),
-      description: [
-        contextNote,
-        guild.description?.slice(0, 1000) || 'A snapshot of this server and its setup.',
-      ].filter(Boolean).join('\n\n'),
-      footer: `Requested by ${interaction.user.username}`,
+      description: description || undefined,
+      footer: `ID ${guild.id}  ·  Requested by ${interaction.user.username}`,
       fields: [
         {
           name: '👑 Owner',
           value: owner ? owner.toString() : `<@${guild.ownerId}>`,
           inline: true,
         },
-        { name: '🆔 Server ID', value: `\`${guild.id}\``, inline: true },
-        { name: '📅 Created', value: timestamp(guild.createdTimestamp), inline: true },
         { name: '👥 Members', value: guild.memberCount.toLocaleString('en-US'), inline: true },
-        { name: '🎭 Roles', value: guild.roles.cache.size.toLocaleString('en-US'), inline: true },
+        { name: '📅 Created', value: timestamp(guild.createdTimestamp), inline: true },
         {
           name: '💬 Channels',
-          value: `${channels.size.toLocaleString('en-US')} total\n${textChannels} text · ${voiceChannels} voice`,
+          value: `${textChannels} text · ${voiceChannels} voice`,
           inline: true,
         },
         {
           name: '🚀 Boosts',
-          value: `Level ${guild.premiumTier} · ${boostCount.toLocaleString('en-US')} boost${boostCount === 1 ? '' : 's'}`,
+          value: `Level ${guild.premiumTier} · ${boostCount.toLocaleString('en-US')}`,
           inline: true,
         },
         {
@@ -83,7 +78,6 @@ module.exports = {
           value: VERIFICATION_LEVELS[guild.verificationLevel] ?? 'Unknown',
           inline: true,
         },
-        { name: '🌐 Language', value: guild.preferredLocale || 'Unknown', inline: true },
       ],
     });
 

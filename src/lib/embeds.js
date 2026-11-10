@@ -28,6 +28,16 @@ function clamp(text, max) {
   return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }
 
+/** Remove leading/trailing noise and collapse accidental blank lines. */
+function compactText(text) {
+  if (typeof text !== 'string') return text;
+  return text
+    .replace(/\r\n?/g, '\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 function botIcon(client) {
   return client?.user?.displayAvatarURL({
     extension: 'png',
@@ -42,17 +52,18 @@ function normalizeFields(fields) {
   return fields
     .filter((field) => field && field.name != null && field.value != null)
     .map((field) => ({
-      name: clamp(String(field.name), LIMITS.fieldName) || '\u200b',
-      value: clamp(String(field.value), LIMITS.fieldValue) || '\u200b',
+      name: clamp(compactText(String(field.name)), LIMITS.fieldName),
+      value: clamp(compactText(String(field.value)), LIMITS.fieldValue),
       inline: Boolean(field.inline),
     }))
+    .filter((field) => field.name && field.value)
     .slice(0, LIMITS.fields);
 }
 
 /**
- * Creates a branded embed with the shared palette, bot identity and timestamp.
- * The author line carries the bot name and section, so the footer only needs
- * the command's own context plus the running version.
+ * Creates a compact branded embed with the shared palette and timestamp.
+ * The bot author header is intentionally omitted; commands can still opt into
+ * one with `author`, but the default card starts with its title or description.
  *
  * @param {import('discord.js').Client} client
  * @param {object} [options]
@@ -60,8 +71,7 @@ function normalizeFields(fields) {
  * @param {string} [options.description]
  * @param {number} [options.color]
  * @param {string} [options.url]
- * @param {object|string|null} [options.author]
- * @param {string} [options.section] Small label shown beside the bot name
+ * @param {object|string|null} [options.author] Optional author override
  * @param {string|null} [options.thumbnail]
  * @param {string|null} [options.image]
  * @param {object[]} [options.fields]
@@ -74,8 +84,11 @@ function createEmbed(client, options = {}) {
     .setColor(options.color ?? COLORS.brand)
     .setTimestamp(options.timestamp ?? Date.now());
 
-  if (options.title) embed.setTitle(clamp(options.title, LIMITS.title));
-  if (options.description) embed.setDescription(clamp(options.description, LIMITS.description));
+  const title = options.title ? compactText(options.title) : '';
+  const description = options.description ? compactText(options.description) : '';
+
+  if (title) embed.setTitle(clamp(title, LIMITS.title));
+  if (description) embed.setDescription(clamp(description, LIMITS.description));
   if (options.url) embed.setURL(options.url);
   if (options.thumbnail) embed.setThumbnail(options.thumbnail);
   if (options.image) embed.setImage(options.image);
@@ -83,37 +96,37 @@ function createEmbed(client, options = {}) {
   const fields = normalizeFields(options.fields);
   if (fields.length > 0) embed.addFields(fields);
 
-  const iconURL = botIcon(client);
-  if (options.author !== null) {
-    const author = options.author
-      ? (typeof options.author === 'string' ? { name: options.author } : { ...options.author })
-      : (client?.user
-        ? {
-            name: clamp(
-              `${client.user.username}${options.section ? ` • ${options.section}` : ''}`,
-              LIMITS.author,
-            ),
-          }
-        : null);
-
-    if (author) {
-      if (!author.iconURL && iconURL) author.iconURL = iconURL;
-      embed.setAuthor(author);
+  if (options.author) {
+    const author = typeof options.author === 'string'
+      ? { name: options.author }
+      : { ...options.author };
+    if (!author.name) {
+      author.name = client?.user?.username ?? 'Zen';
     }
+    author.name = clamp(compactText(author.name), LIMITS.author);
+
+    const iconURL = botIcon(client);
+    if (!author.iconURL && iconURL) author.iconURL = iconURL;
+    embed.setAuthor(author);
   }
 
   if (options.footer !== false) {
     const parts = [];
-    if (options.footer) parts.push(options.footer);
+    if (options.footer) parts.push(compactText(options.footer));
     parts.push(`v${BOT_VERSION}`);
 
     embed.setFooter({
       text: clamp(parts.join('  •  '), LIMITS.footer),
-      ...(iconURL ? { iconURL } : {}),
     });
   }
 
   return embed;
 }
 
-module.exports = { BOT_VERSION, COLORS, LIMITS, createEmbed };
+module.exports = {
+  BOT_VERSION,
+  COLORS,
+  LIMITS,
+  compactText,
+  createEmbed,
+};

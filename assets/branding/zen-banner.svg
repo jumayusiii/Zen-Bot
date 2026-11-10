@@ -1,123 +1,361 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 600" width="1500" height="600" role="img" aria-labelledby="zenBannerTitle zenBannerDesc">
-  <title id="zenBannerTitle">Zen Discord bot banner</title>
-  <desc id="zenBannerDesc">The Zen Z and ensō mark on an obsidian disc, centered in a quiet orbital field with no text.</desc>
+  <title id="zenBannerTitle">Zeni, the Ensō Guardian</title>
+  <desc id="zenBannerDesc">Zeni, an original celestial magical guardian, stands beside a luminous open ensō ring on a deep indigo starfield with no text.</desc>
 
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1B1534" />
-      <stop offset="0.4" stop-color="#0C1021" />
-      <stop offset="0.72" stop-color="#070A15" />
+    <radialGradient id="bg" cx="28%" cy="16%" r="98%">
+      <stop offset="0" stop-color="#3A2868" />
+      <stop offset="0.3" stop-color="#1A1C3D" />
+      <stop offset="0.66" stop-color="#0A0E1E" />
       <stop offset="1" stop-color="#04060C" />
-    </linearGradient>
-
-    <radialGradient id="disc" cx="34%" cy="22%" r="92%">
-      <stop offset="0" stop-color="#1D2647" />
-      <stop offset="0.48" stop-color="#10172C" />
-      <stop offset="0.82" stop-color="#090E1D" />
-      <stop offset="1" stop-color="#060A14" />
     </radialGradient>
 
-    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#B39BFF" />
-      <stop offset="0.48" stop-color="#756BFF" />
-      <stop offset="0.76" stop-color="#5CE7FF" />
-      <stop offset="1" stop-color="#9270FF" />
-    </linearGradient>
-
-    <linearGradient id="ring" x1="0.08" y1="0" x2="0.92" y2="1">
-      <stop offset="0" stop-color="#F0ECFF" />
-      <stop offset="0.32" stop-color="#A98CFF" />
-      <stop offset="0.7" stop-color="#6D8DFF" />
-      <stop offset="1" stop-color="#5CE7FF" />
-    </linearGradient>
-
-    <linearGradient id="z" x1="0.1" y1="0" x2="0.9" y2="1">
-      <stop offset="0" stop-color="#FFFFFF" />
-      <stop offset="0.55" stop-color="#F4F1FF" />
-      <stop offset="1" stop-color="#C9BFEA" />
-    </linearGradient>
-
-    <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#8E6BFF" stop-opacity="0" />
-      <stop offset="0.22" stop-color="#A98CFF" stop-opacity="0.5" />
-      <stop offset="0.72" stop-color="#6D8DFF" stop-opacity="0.5" />
-      <stop offset="1" stop-color="#5CE7FF" stop-opacity="0" />
-    </linearGradient>
-
-    <linearGradient id="horizon" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#5CE7FF" stop-opacity="0" />
-      <stop offset="0.35" stop-color="#7D7BFF" stop-opacity="0.18" />
-      <stop offset="0.7" stop-color="#B39BFF" stop-opacity="0.12" />
-      <stop offset="1" stop-color="#B39BFF" stop-opacity="0" />
-    </linearGradient>
-
     <radialGradient id="bloomA" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#754CFF" stop-opacity="0.2" />
+      <stop offset="0" stop-color="#754CFF" stop-opacity="0.25" />
       <stop offset="1" stop-color="#754CFF" stop-opacity="0" />
     </radialGradient>
 
     <radialGradient id="bloomB" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#31D9FF" stop-opacity="0.14" />
+      <stop offset="0" stop-color="#31D9FF" stop-opacity="0.18" />
       <stop offset="1" stop-color="#31D9FF" stop-opacity="0" />
     </radialGradient>
 
     <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#61E8FF" stop-opacity="0.16" />
-      <stop offset="0.55" stop-color="#6878FF" stop-opacity="0.05" />
-      <stop offset="1" stop-color="#6878FF" stop-opacity="0" />
+      <stop offset="0" stop-color="#C9BFEA" stop-opacity="0.19" />
+      <stop offset="0.56" stop-color="#8E6BFF" stop-opacity="0.08" />
+      <stop offset="1" stop-color="#8E6BFF" stop-opacity="0" />
     </radialGradient>
 
-    <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
-      <stop offset="0.48" stop-color="#000000" stop-opacity="0" />
-      <stop offset="1" stop-color="#02040A" stop-opacity="0.62" />
+    <linearGradient id="ring" x1="0.08" y1="0" x2="0.92" y2="1">
+      <stop offset="0" stop-color="#F0ECFF" />
+      <stop offset="0.3" stop-color="#B39BFF" />
+      <stop offset="0.68" stop-color="#6D8DFF" />
+      <stop offset="1" stop-color="#5CE7FF" />
+    </linearGradient>
+
+    <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.45" stop-color="#DCD6F7" />
+      <stop offset="1" stop-color="#8E6BFF" />
+    </linearGradient>
+
+    <linearGradient id="hairBack" x1="0.18" y1="0" x2="0.82" y2="1">
+      <stop offset="0" stop-color="#30295F" />
+      <stop offset="0.36" stop-color="#1A1C43" />
+      <stop offset="0.76" stop-color="#0F122B" />
+      <stop offset="1" stop-color="#090C1D" />
+    </linearGradient>
+
+    <linearGradient id="hairFront" x1="0.15" y1="0" x2="0.8" y2="0.95">
+      <stop offset="0" stop-color="#3A3172" />
+      <stop offset="0.35" stop-color="#211F4F" />
+      <stop offset="0.78" stop-color="#151735" />
+      <stop offset="1" stop-color="#0D1026" />
+    </linearGradient>
+
+    <linearGradient id="hairShine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C9B9FF" stop-opacity="0.7" />
+      <stop offset="0.5" stop-color="#8E6BFF" stop-opacity="0.2" />
+      <stop offset="1" stop-color="#8E6BFF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="skin" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0" stop-color="#FFF4F6" />
+      <stop offset="0.6" stop-color="#FBE7EE" />
+      <stop offset="1" stop-color="#F0D2E1" />
+    </linearGradient>
+
+    <linearGradient id="iris" x1="0.3" y1="0" x2="0.7" y2="1">
+      <stop offset="0" stop-color="#2A1D5E" />
+      <stop offset="0.36" stop-color="#5947B8" />
+      <stop offset="0.7" stop-color="#8E6BFF" />
+      <stop offset="1" stop-color="#5CE7FF" />
+    </linearGradient>
+
+    <linearGradient id="white" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="0.62" stop-color="#F7F2FF" />
+      <stop offset="1" stop-color="#DCD3F6" />
+    </linearGradient>
+
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#252A60" />
+      <stop offset="0.55" stop-color="#151A3C" />
+      <stop offset="1" stop-color="#0B0E23" />
+    </linearGradient>
+
+    <linearGradient id="collarTrim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F0ECFF" />
+      <stop offset="0.45" stop-color="#B39BFF" />
+      <stop offset="1" stop-color="#5CE7FF" />
+    </linearGradient>
+
+    <radialGradient id="vignette" cx="50%" cy="45%" r="70%">
+      <stop offset="0.52" stop-color="#000000" stop-opacity="0" />
+      <stop offset="1" stop-color="#02040A" stop-opacity="0.7" />
     </radialGradient>
 
-    <filter id="discShadow" x="-40%" y="-40%" width="180%" height="190%">
-      <feDropShadow dx="0" dy="28" stdDeviation="34" flood-color="#01030A" flood-opacity="0.7" />
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="14" />
     </filter>
 
-    <filter id="zGlow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="23" />
+    <filter id="starGlow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="4" />
     </filter>
   </defs>
 
+  <defs>
+    <linearGradient id="bannerBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#241844" />
+      <stop offset="0.36" stop-color="#11152E" />
+      <stop offset="0.72" stop-color="#080C1A" />
+      <stop offset="1" stop-color="#04060C" />
+    </linearGradient>
+
+    <radialGradient id="bannerBloomA" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#754CFF" stop-opacity="0.25" />
+      <stop offset="1" stop-color="#754CFF" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="bannerBloomB" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#31D9FF" stop-opacity="0.17" />
+      <stop offset="1" stop-color="#31D9FF" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="bannerBacklight" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#C9BFEA" stop-opacity="0.18" />
+      <stop offset="0.5" stop-color="#8E6BFF" stop-opacity="0.08" />
+      <stop offset="1" stop-color="#8E6BFF" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="bannerOrbit" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8E6BFF" stop-opacity="0" />
+      <stop offset="0.25" stop-color="#B39BFF" stop-opacity="0.38" />
+      <stop offset="0.72" stop-color="#6D8DFF" stop-opacity="0.32" />
+      <stop offset="1" stop-color="#5CE7FF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="bannerHorizon" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5CE7FF" stop-opacity="0" />
+      <stop offset="0.32" stop-color="#7D7BFF" stop-opacity="0.16" />
+      <stop offset="0.7" stop-color="#B39BFF" stop-opacity="0.1" />
+      <stop offset="1" stop-color="#B39BFF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="thread" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5CE7FF" stop-opacity="0.1" />
+      <stop offset="0.35" stop-color="#B9F7FF" stop-opacity="0.72" />
+      <stop offset="0.7" stop-color="#B39BFF" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#8E6BFF" stop-opacity="0" />
+    </linearGradient>
+
+    <radialGradient id="bannerVignette" cx="50%" cy="50%" r="72%">
+      <stop offset="0.5" stop-color="#000000" stop-opacity="0" />
+      <stop offset="1" stop-color="#02040A" stop-opacity="0.66" />
+    </radialGradient>
+  </defs>
+
   <rect width="1500" height="600" fill="#04060C" />
-  <rect width="1500" height="600" fill="url(#bg)" />
+  <rect width="1500" height="600" fill="url(#bannerBg)" />
+  <circle cx="168" cy="48" r="500" fill="url(#bannerBloomA)" />
+  <circle cx="1360" cy="580" r="480" fill="url(#bannerBloomB)" />
+  <circle cx="1120" cy="316" r="330" fill="url(#bannerBacklight)" />
 
-  <circle cx="170" cy="46" r="460" fill="url(#bloomA)" />
-  <circle cx="1320" cy="566" r="440" fill="url(#bloomB)" />
-
-  <rect x="80" y="299" width="1340" height="2" fill="url(#horizon)" />
-
-  <ellipse cx="750" cy="300" rx="520" ry="204" fill="none" stroke="url(#orbit)" stroke-width="1.5" stroke-opacity="0.5" transform="rotate(-8 750 300)" />
-  <ellipse cx="750" cy="300" rx="420" ry="166" fill="none" stroke="url(#orbit)" stroke-width="1.2" stroke-opacity="0.32" stroke-dasharray="3 12" transform="rotate(10 750 300)" />
-  <ellipse cx="750" cy="300" rx="610" ry="248" fill="none" stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1.2" transform="rotate(-3 750 300)" />
-
-  <circle cx="235" cy="372" r="4" fill="#B7A4FF" opacity="0.72" />
-  <circle cx="1265" cy="228" r="3.5" fill="#9CF3FF" opacity="0.7" />
-  <circle cx="1164" cy="373" r="3" fill="#A98CFF" opacity="0.62" />
-  <circle cx="746" cy="548" r="2.5" fill="#9CF3FF" opacity="0.5" />
-
-  <circle cx="750" cy="300" r="284" fill="none" stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="1.5" />
-  <circle cx="750" cy="300" r="244" fill="none" stroke="url(#ring)" stroke-opacity="0.14" stroke-width="1.5" stroke-dasharray="2 14" />
-
-  <circle cx="750" cy="300" r="248" fill="url(#halo)" />
-
-  <g transform="translate(750 300) scale(0.42) translate(-512 -512)">
-    <circle cx="512" cy="512" r="414" fill="url(#disc)" stroke="url(#rim)" stroke-opacity="0.58" stroke-width="3" filter="url(#discShadow)" />
-    <circle cx="512" cy="512" r="398" fill="none" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="2" />
-    <circle cx="512" cy="512" r="300" fill="none" stroke="url(#ring)" stroke-opacity="0.82" stroke-width="22" stroke-linecap="round" stroke-dasharray="1720 165" transform="rotate(-58 512 512)" />
-    <circle cx="671" cy="258" r="8" fill="#9CF3FF" opacity="0.9" />
-    <circle cx="671" cy="258" r="20" fill="#5CE7FF" opacity="0.12" />
-    <path d="M 404 392 H 620 L 404 632 H 620" fill="none" stroke="#5CE7FF" stroke-opacity="0.2" stroke-width="112" stroke-linecap="round" stroke-linejoin="round" filter="url(#zGlow)" />
-    <path d="M 404 392 H 620 L 404 632 H 620" fill="none" stroke="url(#z)" stroke-width="78" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M 424 370 H 596" fill="none" stroke="#FFFFFF" stroke-opacity="0.38" stroke-width="4" stroke-linecap="round" />
+  <g fill="#F4F1FF">
+    <circle cx="208" cy="104" r="2.1" opacity="0.44" />
+    <circle cx="282" cy="486" r="1.8" opacity="0.35" />
+    <circle cx="694" cy="96" r="1.6" opacity="0.32" />
+    <circle cx="824" cy="518" r="2" opacity="0.38" />
+    <circle cx="956" cy="122" r="1.7" opacity="0.4" />
+    <circle cx="1358" cy="180" r="2.2" opacity="0.45" />
+    <circle cx="1436" cy="356" r="1.6" opacity="0.34" />
+    <circle cx="1264" cy="524" r="1.9" opacity="0.3" />
+    <circle cx="522" cy="552" r="1.7" opacity="0.28" />
+    <circle cx="110" cy="334" r="1.5" opacity="0.26" />
   </g>
 
-  <circle cx="342" cy="188" r="1.8" fill="#FFFFFF" opacity="0.45" />
-  <circle cx="1192" cy="454" r="2.2" fill="#9CF3FF" opacity="0.5" />
-  <circle cx="214" cy="452" r="1.6" fill="#B7A4FF" opacity="0.36" />
-  <circle cx="1308" cy="148" r="1.8" fill="#FFFFFF" opacity="0.3" />
+  <rect x="76" y="314" width="1348" height="2" fill="url(#bannerHorizon)" />
+  <ellipse cx="760" cy="306" rx="650" ry="240" fill="none" stroke="url(#bannerOrbit)" stroke-width="1.5" transform="rotate(-6 760 306)" />
+  <ellipse cx="760" cy="306" rx="540" ry="196" fill="none" stroke="url(#bannerOrbit)" stroke-width="1.2" stroke-dasharray="3 13" transform="rotate(9 760 306)" opacity="0.8" />
+  <ellipse cx="760" cy="306" rx="704" ry="270" fill="none" stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1.2" transform="rotate(-2 760 306)" />
 
-  <rect width="1500" height="600" fill="url(#vignette)" />
+  <circle cx="430" cy="300" r="252" fill="url(#bannerBacklight)" />
+  <circle cx="430" cy="300" r="234" fill="none" stroke="#FFFFFF" stroke-opacity="0.055" stroke-width="1.3" />
+  <circle cx="430" cy="300" r="216" fill="none" stroke="url(#ring)" stroke-opacity="0.12" stroke-width="1.3" stroke-dasharray="2 15" />
+  <path d="M 613 233 A 195 195 0 1 1 512 123" fill="none" stroke="url(#ring)" stroke-opacity="0.92" stroke-width="15" stroke-linecap="round" />
+  <path d="M 613 233 A 195 195 0 1 1 512 123" fill="none" stroke="#5CE7FF" stroke-opacity="0.2" stroke-width="42" stroke-linecap="round" filter="url(#softGlow)" />
+
+  <g transform="translate(574 168)">
+    <circle r="18" fill="#5CE7FF" opacity="0.16" filter="url(#starGlow)" />
+    <path d="M 0 -22 C 2.6 -6 6 -2.6 22 0 C 6 2.6 2.6 6 0 22 C -2.6 6 -6 2.6 -22 0 C -6 -2.6 -2.6 -6 0 -22 Z" fill="#D6FAFF" />
+    <circle cx="-11" cy="11" r="5" fill="#B39BFF" opacity="0.9" />
+  </g>
+
+  <path d="M 574 168 C 706 124 884 164 1018 260" fill="none" stroke="url(#thread)" stroke-width="18" stroke-linecap="round" opacity="0.18" filter="url(#softGlow)" />
+  <path d="M 574 168 C 706 124 884 164 1018 260" fill="none" stroke="url(#thread)" stroke-width="2.5" stroke-linecap="round" />
+  <g fill="#D6FAFF">
+    <circle cx="710" cy="153" r="2.5" opacity="0.8" />
+    <circle cx="846" cy="174" r="2" opacity="0.65" />
+    <circle cx="936" cy="214" r="2.8" opacity="0.7" />
+  </g>
+
+  <g transform="translate(750 0) scale(0.72) rotate(-2 512 512)">
+    <g id="zeni">
+    <!-- Back hair -->
+    <path d="M 512 226 C 638 226 706 304 712 418 C 716 496 700 558 726 624 C 754 696 806 756 806 844 C 806 916 778 976 748 1024 L 276 1024 C 246 976 218 916 218 844 C 218 756 270 696 298 624 C 324 558 308 496 312 418 C 318 304 386 226 512 226 Z" fill="url(#hairBack)" />
+    <path d="M 306 410 C 294 512 320 578 282 664 C 252 730 232 806 248 900 C 258 956 276 992 290 1024 L 348 1024 C 318 948 316 872 342 788 C 374 686 358 596 372 506 C 382 438 386 382 376 332 Z" fill="#0B0E22" opacity="0.45" />
+    <path d="M 704 370 C 714 476 690 566 732 650 C 770 726 784 808 762 900 C 752 950 738 990 724 1024 L 672 1024 C 700 938 700 858 670 780 C 636 692 660 594 646 500 C 638 436 632 376 644 330 Z" fill="#080B1A" opacity="0.38" />
+    <path d="M 346 270 C 404 242 474 242 516 286" fill="none" stroke="url(#hairShine)" stroke-width="18" stroke-linecap="round" opacity="0.55" />
+    <path d="M 636 284 C 684 322 704 376 708 438" fill="none" stroke="url(#hairShine)" stroke-width="13" stroke-linecap="round" opacity="0.38" />
+    <path d="M 326 492 C 310 612 334 690 306 768" fill="none" stroke="#8E6BFF" stroke-opacity="0.16" stroke-width="3" stroke-linecap="round" />
+    <path d="M 710 470 C 724 590 700 678 730 762" fill="none" stroke="#5CE7FF" stroke-opacity="0.15" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Neck and shoulders -->
+    <path d="M 468 612 L 468 728 C 488 748 536 748 556 728 L 556 612 C 542 645 482 645 468 612 Z" fill="#EAC8D8" />
+    <path d="M 468 666 C 488 692 536 692 556 666 L 556 728 C 536 748 488 748 468 728 Z" fill="#D5A4BE" opacity="0.7" />
+    <path d="M 438 700 C 390 724 332 758 304 832 C 286 884 294 952 316 1024 H 708 C 730 952 738 884 720 832 C 692 758 634 724 586 700 C 562 742 462 742 438 700 Z" fill="url(#navy)" />
+    <path d="M 462 716 C 432 744 400 790 392 850 L 414 1024 H 610 L 632 850 C 624 790 592 744 562 716 C 540 744 484 744 462 716 Z" fill="url(#white)" />
+    <path d="M 466 718 L 512 764 L 558 718 L 550 800 L 512 832 L 474 800 Z" fill="#11162F" />
+    <path d="M 460 704 C 462 742 484 770 512 790 L 476 828 L 408 770 L 418 740 Z" fill="url(#white)" />
+    <path d="M 564 704 C 562 742 540 770 512 790 L 548 828 L 616 770 L 606 740 Z" fill="url(#white)" />
+    <path d="M 460 706 C 462 742 484 770 512 788 L 506 798 C 480 778 456 746 450 712 Z" fill="url(#collarTrim)" opacity="0.9" />
+    <path d="M 564 706 C 562 742 540 770 512 788 L 518 798 C 544 778 568 746 574 712 Z" fill="url(#collarTrim)" opacity="0.9" />
+    <path d="M 438 704 C 392 728 344 762 316 824 L 370 862 C 402 798 442 762 478 746 Z" fill="#20265A" />
+    <path d="M 586 704 C 632 728 680 762 708 824 L 654 862 C 622 798 582 762 546 746 Z" fill="#161B42" />
+    <path d="M 317 824 L 370 862" fill="none" stroke="#5CE7FF" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+    <path d="M 707 824 L 654 862" fill="none" stroke="#8E6BFF" stroke-width="3" stroke-linecap="round" opacity="0.75" />
+    <path d="M 398 826 C 430 776 466 748 500 736" fill="none" stroke="#B39BFF" stroke-opacity="0.25" stroke-width="2" />
+    <path d="M 626 826 C 594 776 558 748 524 736" fill="none" stroke="#F0ECFF" stroke-opacity="0.18" stroke-width="2" />
+
+    <!-- Ears -->
+    <path d="M 398 466 C 382 456 374 480 379 516 C 382 544 391 560 402 558 C 414 555 418 536 418 512 C 418 487 412 473 398 466 Z" fill="url(#skin)" stroke="#DBA9C1" stroke-width="1.5" />
+    <path d="M 626 466 C 642 456 650 480 645 516 C 642 544 633 560 622 558 C 610 555 606 536 606 512 C 606 487 612 473 626 466 Z" fill="url(#skin)" stroke="#DBA9C1" stroke-width="1.5" />
+    <path d="M 391 486 C 388 502 391 520 400 531" fill="none" stroke="#DCA8C0" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+    <path d="M 633 486 C 636 502 633 520 624 531" fill="none" stroke="#DCA8C0" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+
+    <!-- Face -->
+    <path d="M 512 302 C 573 302 620 343 626 414 C 632 484 615 552 584 599 C 560 635 534 663 512 663 C 490 663 464 635 440 599 C 409 552 392 484 398 414 C 404 343 451 302 512 302 Z" fill="url(#skin)" />
+    <path d="M 512 302 C 573 302 620 343 626 414 C 628 437 627 459 624 480 C 604 436 570 403 512 390 C 454 403 420 436 400 480 C 397 459 396 437 398 414 C 404 343 451 302 512 302 Z" fill="#D9A7C1" opacity="0.16" />
+    <path d="M 404 512 C 412 566 436 608 470 640 C 446 628 426 606 414 578 C 405 558 400 536 404 512 Z" fill="#D79DB9" opacity="0.18" />
+    <path d="M 620 512 C 612 566 588 608 554 640 C 578 628 598 606 610 578 C 619 558 624 536 620 512 Z" fill="#D79DB9" opacity="0.14" />
+
+    <!-- Eye whites -->
+    <path d="M 424 480 C 430 455 459 442 485 452 C 498 458 504 472 502 490 C 499 509 480 522 459 520 C 438 518 424 502 424 480 Z" fill="#FFFBFF" />
+    <path d="M 600 480 C 594 455 565 442 539 452 C 526 458 520 472 522 490 C 525 509 544 522 565 520 C 586 518 600 502 600 480 Z" fill="#FFFBFF" />
+
+    <clipPath id="eyeLeft"><path d="M 424 480 C 430 455 459 442 485 452 C 498 458 504 472 502 490 C 499 509 480 522 459 520 C 438 518 424 502 424 480 Z" /></clipPath>
+    <clipPath id="eyeRight"><path d="M 600 480 C 594 455 565 442 539 452 C 526 458 520 472 522 490 C 525 509 544 522 565 520 C 586 518 600 502 600 480 Z" /></clipPath>
+
+    <g clip-path="url(#eyeLeft)">
+      <ellipse cx="465" cy="487" rx="21" ry="29" fill="url(#iris)" />
+      <ellipse cx="465" cy="487" rx="21" ry="29" fill="none" stroke="#24184E" stroke-width="2.6" />
+      <ellipse cx="465" cy="491" rx="9" ry="17" fill="#17102F" />
+      <ellipse cx="465" cy="500" rx="6" ry="9" fill="#5CE7FF" opacity="0.38" />
+      <circle cx="457" cy="474" r="7.5" fill="#FFFFFF" />
+      <circle cx="472" cy="498" r="3.5" fill="#D6FAFF" />
+      <path d="M 470 464 L 472 468 L 476 470 L 472 472 L 470 476 L 468 472 L 464 470 L 468 468 Z" fill="#FFFFFF" opacity="0.9" />
+    </g>
+    <g clip-path="url(#eyeRight)">
+      <ellipse cx="559" cy="487" rx="21" ry="29" fill="url(#iris)" />
+      <ellipse cx="559" cy="487" rx="21" ry="29" fill="none" stroke="#24184E" stroke-width="2.6" />
+      <ellipse cx="559" cy="491" rx="9" ry="17" fill="#17102F" />
+      <ellipse cx="559" cy="500" rx="6" ry="9" fill="#5CE7FF" opacity="0.38" />
+      <circle cx="551" cy="474" r="7.5" fill="#FFFFFF" />
+      <circle cx="566" cy="498" r="3.5" fill="#D6FAFF" />
+      <path d="M 564 464 L 566 468 L 570 470 L 566 472 L 564 476 L 562 472 L 558 470 L 562 468 Z" fill="#FFFFFF" opacity="0.9" />
+    </g>
+
+    <!-- Upper lashes and brows -->
+    <path d="M 420 479 C 429 452 459 441 487 452" fill="none" stroke="#18122D" stroke-width="8" stroke-linecap="round" />
+    <path d="M 424 478 C 414 469 410 459 410 450" fill="none" stroke="#18122D" stroke-width="6" stroke-linecap="round" />
+    <path d="M 484 452 C 494 456 500 465 502 476" fill="none" stroke="#18122D" stroke-width="4" stroke-linecap="round" />
+    <path d="M 604 479 C 595 452 565 441 537 452" fill="none" stroke="#18122D" stroke-width="8" stroke-linecap="round" />
+    <path d="M 600 478 C 610 469 614 459 614 450" fill="none" stroke="#18122D" stroke-width="6" stroke-linecap="round" />
+    <path d="M 540 452 C 530 456 524 465 522 476" fill="none" stroke="#18122D" stroke-width="4" stroke-linecap="round" />
+    <path d="M 431 442 C 450 431 479 431 493 442" fill="none" stroke="#2A214B" stroke-width="4" stroke-linecap="round" opacity="0.9" />
+    <path d="M 593 442 C 574 431 545 431 531 442" fill="none" stroke="#2A214B" stroke-width="4" stroke-linecap="round" opacity="0.9" />
+    <path d="M 432 458 C 448 449 475 451 490 460" fill="none" stroke="#B8698D" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+    <path d="M 592 458 C 576 449 549 451 534 460" fill="none" stroke="#B8698D" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+    <path d="M 430 501 C 442 518 476 524 499 504" fill="none" stroke="#A95279" stroke-width="2.2" stroke-linecap="round" opacity="0.55" />
+    <path d="M 594 501 C 582 518 548 524 525 504" fill="none" stroke="#A95279" stroke-width="2.2" stroke-linecap="round" opacity="0.55" />
+
+    <!-- Nose, mouth, blush -->
+    <path d="M 508 551 Q 514 557 522 554" fill="none" stroke="#C387A2" stroke-width="2.4" stroke-linecap="round" />
+    <path d="M 512 570 Q 508 579 513 582" fill="none" stroke="#D293AC" stroke-width="1.5" stroke-linecap="round" opacity="0.55" />
+    <path d="M 493 600 Q 512 614 531 600" fill="none" stroke="#B75C7D" stroke-width="3.8" stroke-linecap="round" />
+    <path d="M 499 609 Q 512 618 525 609" fill="#E996AF" opacity="0.55" />
+    <path d="M 496 601 C 506 606 518 606 528 601" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.4" />
+    <ellipse cx="426" cy="572" rx="30" ry="12" fill="#F18BA8" opacity="0.2" />
+    <ellipse cx="598" cy="572" rx="30" ry="12" fill="#F18BA8" opacity="0.2" />
+    <path d="M 413 568 L 422 573 M 419 562 L 427 568" stroke="#D86E91" stroke-width="1.8" stroke-linecap="round" opacity="0.38" />
+    <path d="M 611 568 L 602 573 M 605 562 L 597 568" stroke="#D86E91" stroke-width="1.8" stroke-linecap="round" opacity="0.38" />
+    <path d="M 504 637 Q 512 642 520 637" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.25" />
+
+    <!-- Side locks -->
+    <path d="M 404 354 C 370 412 360 484 366 552 C 371 614 360 674 334 734 C 370 708 398 670 408 618 C 421 548 420 448 450 392 Z" fill="url(#hairFront)" />
+    <path d="M 620 354 C 654 412 664 484 658 552 C 653 614 664 674 690 734 C 654 708 626 670 616 618 C 603 548 604 448 574 392 Z" fill="url(#hairFront)" />
+    <path d="M 404 382 C 382 438 380 510 388 570" fill="none" stroke="url(#hairShine)" stroke-width="8" stroke-linecap="round" opacity="0.48" />
+    <path d="M 618 390 C 640 446 642 512 634 570" fill="none" stroke="#8E6BFF" stroke-opacity="0.22" stroke-width="6" stroke-linecap="round" />
+    <path d="M 366 548 C 372 604 362 656 344 704" fill="none" stroke="#5CE7FF" stroke-opacity="0.25" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 658 548 C 652 604 662 656 680 704" fill="none" stroke="#B39BFF" stroke-opacity="0.3" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Bangs -->
+    <path d="M 512 252 C 604 254 656 296 664 382 C 648 370 634 359 618 350 C 630 378 631 405 623 433 C 600 398 578 368 548 347 C 566 384 571 415 562 449 C 537 406 512 372 480 349 C 500 325 508 292 512 252 Z" fill="url(#hairFront)" />
+    <path d="M 512 252 C 453 254 418 290 398 350 C 393 383 397 417 407 452 C 420 421 435 399 455 381 C 446 415 446 442 452 464 C 470 421 487 388 512 362 C 507 324 505 286 512 252 Z" fill="url(#hairFront)" />
+    <path d="M 496 300 C 524 337 532 383 515 430 C 540 400 558 375 577 359 C 548 383 526 420 512 469 C 500 420 484 380 462 349 C 483 335 493 319 496 300 Z" fill="#1A1B40" opacity="0.65" />
+    <path d="M 516 272 C 566 281 610 310 633 354" fill="none" stroke="url(#hairShine)" stroke-width="12" stroke-linecap="round" opacity="0.62" />
+    <path d="M 478 274 C 436 293 412 328 405 374" fill="none" stroke="#B39BFF" stroke-opacity="0.25" stroke-width="7" stroke-linecap="round" />
+    <path d="M 545 348 C 566 377 572 407 566 441" fill="none" stroke="#5CE7FF" stroke-opacity="0.2" stroke-width="2.2" stroke-linecap="round" />
+    <path d="M 468 350 C 451 385 447 419 453 451" fill="none" stroke="#B39BFF" stroke-opacity="0.2" stroke-width="2.2" stroke-linecap="round" />
+    <path d="M 618 350 C 630 378 631 405 623 433" fill="none" stroke="#5CE7FF" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round" />
+    <path d="M 407 452 C 420 421 435 399 455 381" fill="none" stroke="#F0ECFF" stroke-opacity="0.13" stroke-width="2" stroke-linecap="round" />
+
+    <!-- Ensō hairpin -->
+    <g transform="translate(380 355) rotate(-28)">
+      <circle r="48" fill="#8E6BFF" opacity="0.08" filter="url(#softGlow)" />
+      <circle r="40" fill="none" stroke="url(#silver)" stroke-width="6" stroke-linecap="round" stroke-dasharray="198 54" />
+      <path d="M 35 -21 L 39 -11 L 49 -7 L 39 -3 L 35 7 L 31 -3 L 21 -7 L 31 -11 Z" fill="#B9F7FF" />
+      <circle cx="35" cy="-7" r="12" fill="#5CE7FF" opacity="0.17" filter="url(#starGlow)" />
+      <circle cx="4" cy="40" r="4" fill="#C9B9FF" opacity="0.8" />
+      <path d="M -31 27 L -13 39" stroke="#DCD6F7" stroke-width="3.5" stroke-linecap="round" opacity="0.8" />
+    </g>
+
+    <!-- Star earrings -->
+    <g fill="url(#silver)">
+      <path d="M 382 548 L 386 558 L 396 562 L 386 566 L 382 576 L 378 566 L 368 562 L 378 558 Z" />
+      <path d="M 642 548 L 646 558 L 656 562 L 646 566 L 642 576 L 638 566 L 628 562 L 638 558 Z" />
+    </g>
+    <path d="M 382 534 L 382 546 M 642 534 L 642 546" stroke="#DCD6F7" stroke-width="1.4" opacity="0.75" />
+
+    <!-- Chest ensō brooch -->
+    <g transform="translate(512 838)">
+      <circle r="54" fill="#0B0F24" opacity="0.4" />
+      <circle r="42" fill="none" stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="1.2" />
+      <circle r="37" fill="none" stroke="url(#collarTrim)" stroke-width="5" stroke-linecap="round" stroke-dasharray="174 58" transform="rotate(-48)" />
+      <path d="M 31 -17 L 35 -7 L 45 -3 L 35 1 L 31 11 L 27 1 L 17 -3 L 27 -7 Z" fill="#B9F7FF" />
+      <circle cx="31" cy="-3" r="11" fill="#5CE7FF" opacity="0.22" filter="url(#starGlow)" />
+      <circle cx="-4" cy="36" r="4" fill="#B39BFF" />
+    </g>
+    <path d="M 481 886 C 490 914 500 942 500 970" fill="none" stroke="#B39BFF" stroke-opacity="0.28" stroke-width="2" />
+    <path d="M 544 886 C 536 914 526 942 526 970" fill="none" stroke="#5CE7FF" stroke-opacity="0.24" stroke-width="2" />
+
+    <!-- Hair rim light -->
+    <path d="M 348 306 C 388 254 446 230 512 226" fill="none" stroke="#B39BFF" stroke-opacity="0.32" stroke-width="4" stroke-linecap="round" />
+    <path d="M 684 318 C 702 360 712 402 714 448" fill="none" stroke="#5CE7FF" stroke-opacity="0.34" stroke-width="3" stroke-linecap="round" />
+    <path d="M 708 500 C 716 582 706 654 732 728" fill="none" stroke="#5CE7FF" stroke-opacity="0.16" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 316 510 C 306 588 316 656 300 722" fill="none" stroke="#B39BFF" stroke-opacity="0.2" stroke-width="2.5" stroke-linecap="round" />
+  </g>
+
+  </g>
+
+  <g fill="#F4F1FF">
+    <circle cx="654" cy="284" r="2.1" opacity="0.55" />
+    <circle cx="864" cy="430" r="1.8" opacity="0.38" />
+    <circle cx="1440" cy="508" r="2" opacity="0.38" />
+    <circle cx="1010" cy="88" r="1.6" opacity="0.4" />
+  </g>
+  <path d="M 336 95 L 339 105 L 349 108 L 339 111 L 336 121 L 333 111 L 323 108 L 333 105 Z" fill="#B9F7FF" opacity="0.6" />
+  <path d="M 832 540 L 835 549 L 844 552 L 835 555 L 832 564 L 829 555 L 820 552 L 829 549 Z" fill="#C9B9FF" opacity="0.55" />
+
+  <rect width="1500" height="600" fill="url(#bannerVignette)" />
 </svg>

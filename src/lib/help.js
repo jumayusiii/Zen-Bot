@@ -18,7 +18,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Images',
     title: 'Images',
     emoji: '🖼️',
-    description: 'Animal memes, xkcd comics, editable captions and Reddit thread cards, with fonts, colours and themes.',
+    description: 'Animal memes, xkcd, captions and Reddit cards.',
     color: COLORS.game,
     order: 12,
   },
@@ -27,7 +27,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Moderation',
     title: 'Moderation',
     emoji: '🛡️',
-    description: 'Permission-aware tools for mutes, kicks, bans, reversals and coin adjustments.',
+    description: 'Mutes, kicks, bans, reversals and coin controls.',
     color: COLORS.danger,
     order: 15,
   },
@@ -36,7 +36,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Minigames',
     title: 'Minigames',
     emoji: '🎮',
-    description: 'Playable rounds against the bot, with live buttons.',
+    description: 'Quick button games against the bot.',
     color: COLORS.game,
     order: 20,
   },
@@ -45,7 +45,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Levels',
     title: 'Levels & rank',
     emoji: '📈',
-    description: 'Chat XP, rank cards, level tools, role rewards and the server leaderboard.',
+    description: 'Chat XP, rank cards, rewards and leaderboards.',
     color: COLORS.success,
     order: 25,
   },
@@ -54,7 +54,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Economy',
     title: 'Economy & shop',
     emoji: '💰',
-    description: 'Daily, work and heist coins, coin wagers, blackjack bets, the rich list and rank card themes.',
+    description: 'Daily coins, wagers, blackjack, shop and rich list.',
     color: COLORS.game,
     order: 26,
   },
@@ -63,7 +63,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Social',
     title: 'Social & media',
     emoji: '📱',
-    description: 'Hugs, head pats, high fives and live Bluesky, Reddit, TikTok and YouTube lookups.',
+    description: 'Hugs, pats, high fives and live social lookups.',
     color: COLORS.fun,
     order: 28,
   },
@@ -72,7 +72,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Utilities',
     title: 'Utilities',
     emoji: '🧰',
-    description: 'Server tools, image grabbers, reminders and diagnostics.',
+    description: 'Server tools, image grabs, reminders and diagnostics.',
     color: COLORS.info,
     order: 30,
   },
@@ -81,7 +81,7 @@ const CATEGORY_META = Object.freeze({
     label: 'Developers',
     title: 'Developer controls',
     emoji: '🛠️',
-    description: 'Owner-only controls for the bot’s presence, custom status, avatar, banner, bio, restart and shutdown. Hidden from everyone else.',
+    description: 'Owner-only presence, assets and process controls.',
     color: COLORS.danger,
     order: 90,
   },
@@ -136,6 +136,11 @@ function groupCommands(registry, language = 'en', { viewerId = null } = {}) {
     }));
 }
 
+function compactLine(text, max = 90) {
+  const line = String(text || '').replace(/\s+/g, ' ').trim();
+  return line.length > max ? `${line.slice(0, max - 1)}…` : line;
+}
+
 function signature(command) {
   const data = command.data.toJSON();
   const options = (data.options || []).map(
@@ -154,7 +159,10 @@ function overviewEmbed(client, groups, requestedBy, language) {
 
   const fields = groups.map((group) => ({
     name: `${group.meta.emoji} ${group.meta.label}  ·  ${group.commands.length}`,
-    value: group.commands.map((command) => `\`/${command.data.name}\``).join('  ·  '),
+    value: [
+      ...group.commands.slice(0, 12).map((command) => `\`/${command.data.name}\``),
+      group.commands.length > 12 ? `+${group.commands.length - 12}` : null,
+    ].filter(Boolean).join('  ·  '),
     inline: false,
   }));
 
@@ -178,7 +186,7 @@ function categoryEmbed(client, group, requestedBy, language) {
 
   const fields = shown.map((command) => ({
     name: `**${signature(command)}**${command.beta ? '  ·  👷‍♂️' : ''}`,
-    value: command.data.description || 'No description.',
+    value: compactLine(command.data.description || 'No description.'),
     inline: false,
   }));
 
